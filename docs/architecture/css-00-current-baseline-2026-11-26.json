@@ -1,0 +1,503 @@
+{
+  "schema": "MobiliPresenter2D.CSS00CurrentBaseline/1",
+  "readbackUTC": "2026-11-26T08:34:09Z",
+  "completion": "partial",
+  "method": {
+    "plan": "Design System docs/architecture/MOBILIPRESENTER2D_PLANO_DIRETOR_CONSOLIDADO_v0.9.md",
+    "planBlob": "59bb530b14172eb9772b9f89bb62272173f4381c",
+    "planSteps": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ]
+  },
+  "refs": {
+    "productMain": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+    "productDevelopment": "eff75d93655cb2796f1823ab3b9789c0aa9c591c",
+    "designSystemMain": "2f898c59dc4554d1ea2fea21c05711e70405c5f8",
+    "productMainTree": "c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8",
+    "productDevelopmentTree": "ec3467b8cbd57b365762cfec28c74e9f980db58a"
+  },
+  "repositoryInventory": {
+    "mainCssPathCount": 9,
+    "developmentCssPathCount": 18,
+    "developmentAppCssPathCount": 9,
+    "mainAppCssPathCount": 9,
+    "files": [
+      {
+        "path": "app/about/about.css",
+        "main": "c1d0b0c01bc2de069f6cf4b8271c2734363aacc8",
+        "development": "c1d0b0c01bc2de069f6cf4b8271c2734363aacc8",
+        "class": "runtime"
+      },
+      {
+        "path": "app/admin/admin.css",
+        "main": "81b115d4a15409d5c46ba5590a19ef587d785a0f",
+        "development": "a0649f7c42071200f83617592251e4698951245a",
+        "class": "runtime"
+      },
+      {
+        "path": "app/design-system/vis002c-long-copy-light-v0.3.0.css",
+        "main": "9e7f243039a717d02f897d7320a4c383856f8fa0",
+        "development": "9e7f243039a717d02f897d7320a4c383856f8fa0",
+        "class": "runtime-imported"
+      },
+      {
+        "path": "app/how-it-works/how-it-works.css",
+        "main": "938fb6986bb0a210689b20320cda99aac8eeee80",
+        "development": "435e23287921d1d45b5ab0e75ee2c6759f8aa957",
+        "class": "runtime"
+      },
+      {
+        "path": "app/landing/landing.css",
+        "main": "e5696eb85aff84d585f18cd953dbd0d20a67102b",
+        "development": "ba7986155558b09b335f506da9cc125ed84f8ac7",
+        "class": "runtime"
+      },
+      {
+        "path": "app/public-theme.css",
+        "main": "b8122a6a02cd1be67e2bedf9a0ce3b55dbc47b40",
+        "development": "b8122a6a02cd1be67e2bedf9a0ce3b55dbc47b40",
+        "class": "runtime"
+      },
+      {
+        "path": "app/styles.css",
+        "main": "eb346a41ad91f6dc53875cb954e9018fdc1dd713",
+        "development": "02c82a1a925c5b672a2e625b861b4a79f2630f43",
+        "class": "runtime"
+      },
+      {
+        "path": "app/ui-theme.css",
+        "main": "c1ca2a4c36e9195f15cd9045c64ef1857f9af07e",
+        "development": "aa0d160110fc1a3bde187bfab4ea97f26290e143",
+        "class": "runtime"
+      },
+      {
+        "path": "app/viewer/viewer.css",
+        "main": "5dd315b4a5a277ebca3c2493c8febe7a4e44c9b5",
+        "development": "5dd315b4a5a277ebca3c2493c8febe7a4e44c9b5",
+        "class": "runtime"
+      },
+      {
+        "path": "design-system/pins/vis-002/v0.1.0/approved-palette-reference.css",
+        "main": null,
+        "development": "4a2329955e8c4bb7d3ddca558407145b32724db4",
+        "class": "reference-not-runtime"
+      },
+      {
+        "path": "docs/design-system/review-lab/tools/_fixture/app/admin/admin.css",
+        "main": null,
+        "development": "d4507c1fe29183a573af423b41c76f8838d80878",
+        "class": "fixture"
+      },
+      {
+        "path": "docs/design-system/review-lab/tools/_fixture/app/styles.css",
+        "main": null,
+        "development": "fb2d51a3fe4c22c182e53c28bb79c827c59bb0a7",
+        "class": "fixture"
+      },
+      {
+        "path": "docs/design-system/review-lab/tools/_fixture/app/ui-theme.css",
+        "main": null,
+        "development": "bfb011dac0cfa8452c0361e9f6d34ca4272f9f36",
+        "class": "fixture"
+      },
+      {
+        "path": "docs/reconciliation/ci-v5-nav-clean/source/app/styles.css",
+        "main": null,
+        "development": "eb55a9b5cb92d2e76ae70e0e41ac9fdf8b366616",
+        "class": "historical-source-snapshot"
+      },
+      {
+        "path": "docs/reconciliation/main-authority/public-legacy/viewer-editorial/app/viewer/viewer.css",
+        "main": null,
+        "development": "8368805ef5a5c82a5d1a16cee5c06b97bd7e6883",
+        "class": "historical-source-snapshot"
+      },
+      {
+        "path": "docs/reconciliation/ux04-main-authority/legacy/app/admin/admin.css",
+        "main": null,
+        "development": "98abb4350ba05a4eacbb0834e830a94b1b00404f",
+        "class": "historical-source-snapshot"
+      },
+      {
+        "path": "docs/reconciliation/ux04-main-authority/legacy/app/styles.css",
+        "main": null,
+        "development": "2229bc0b4471fa81f071d9752446dcb9b3a7b020",
+        "class": "historical-source-snapshot"
+      },
+      {
+        "path": "docs/reconciliation/vis002/legacy/audit/evidence/visual/public-text-contrast-candidate-v1.css",
+        "main": null,
+        "development": "8bc0188732309d4a903d7b3a72d040c730fef50c",
+        "class": "historical-evidence"
+      }
+    ]
+  },
+  "routeLoadOrder": [
+    {
+      "route": "/",
+      "shell": "app/index.html",
+      "mainShellBlob": "b056993103b8aa4fe75020206fd40c4f84874860",
+      "developmentShellBlob": "a31beed14383005a2fc88514c002c95c931f316d",
+      "main": [
+        "/public-theme.css?v=gold-system-r1",
+        "/landing/landing.css?v=home-video-inline-v21",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "development": [
+        "/public-theme.css?v=gold-system-r1",
+        "/landing/landing.css?v=home-video-inline-v21",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "class": "public",
+      "inlineStyleBlocks": 0,
+      "styleAttributes": 0
+    },
+    {
+      "route": "/about/",
+      "shell": "app/about/index.html",
+      "mainShellBlob": "0a13c02c185dc54526f8ec6e3001954857dfad6f",
+      "developmentShellBlob": "78f644b7a6c4e2d6d6507fbbfe602e6217ae9085",
+      "main": [
+        "../public-theme.css",
+        "/landing/landing.css",
+        "/about/about.css",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "development": [
+        "../public-theme.css",
+        "/landing/landing.css",
+        "/about/about.css",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "class": "public",
+      "inlineStyleBlocks": 0,
+      "styleAttributes": 0
+    },
+    {
+      "route": "/how-it-works/",
+      "shell": "app/how-it-works/index.html",
+      "mainShellBlob": "9c5ccf607f0cb82d7914093e517e605f93e9d33d",
+      "developmentShellBlob": "b4eb9711c5369f41c87ea96b64e2677aa7fe544e",
+      "main": [
+        "../public-theme.css?v=gold-system-r1",
+        "../landing/landing.css?v=home-video-inline-v21",
+        "how-it-works.css?v=home-video-fullscreen-overlay-v4",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "development": [
+        "../public-theme.css?v=gold-system-r1",
+        "../landing/landing.css?v=home-video-inline-v21",
+        "how-it-works.css?v=home-video-fullscreen-overlay-v4",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "class": "public",
+      "inlineStyleBlocks": 0,
+      "styleAttributes": 0
+    },
+    {
+      "route": "/viewer/",
+      "shell": "app/viewer/index.html",
+      "mainShellBlob": "6c88ea5654b939585bb142f0f86ea754aee16585",
+      "developmentShellBlob": "c737119749cac07d7da77f81020e8c39eb0931eb",
+      "main": [
+        "../public-theme.css?v=gold-system-r1",
+        "viewer.css?v=viewer-scene-error-v1",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "development": [
+        "../public-theme.css?v=gold-system-r1",
+        "viewer.css?v=viewer-scene-error-v1",
+        "/ui-theme.css?v=ds01-theme-v1"
+      ],
+      "class": "public",
+      "inlineStyleBlocks": 0,
+      "styleAttributes": 0
+    },
+    {
+      "route": "/config/",
+      "shell": "app/config/index.html",
+      "mainShellBlob": "ba684d31cf3f79c7bf00c7c669d786f734927acb",
+      "developmentShellBlob": "82b4e9cdff677693f0a34c68f727087d8a4d8d43",
+      "main": [
+        "styles.css?v=runtime-v40",
+        "/ui-theme.css?v=private-header-nav005-v2"
+      ],
+      "development": [
+        "styles.css?v=runtime-v40",
+        "/ui-theme.css?v=arc03-fnd01-v1"
+      ],
+      "class": "private-token-gated",
+      "inlineStyleBlocks": 1,
+      "styleAttributes": 1
+    },
+    {
+      "route": "/admin.html",
+      "shell": "app/admin.html",
+      "mainShellBlob": "28e57028e235944dfd581820ed90078866af93bc",
+      "developmentShellBlob": "2f98dd33beb95b7ddb8558df1e41e785815d0168",
+      "main": [
+        "admin/admin.css?v=viewer-price-main-v1",
+        "/ui-theme.css?v=private-header-nav005-v2"
+      ],
+      "development": [
+        "admin/admin.css?v=viewer-price-main-v1",
+        "/ui-theme.css?v=arc03-fnd01-v1"
+      ],
+      "class": "Identity-authenticated",
+      "inlineStyleBlocks": 0,
+      "styleAttributes": 1
+    },
+    {
+      "route": "/access/",
+      "shell": "app/access/index.html",
+      "mainShellBlob": "869db1be19d808e30ee5fe5202ef6b174b5b5417",
+      "developmentShellBlob": "2bde509caba4ce55a7f45c39909eaf5264fd9dce",
+      "main": [
+        "/public-theme.css",
+        "/ui-theme.css?v=private-header-nav005-v2"
+      ],
+      "development": [
+        "/public-theme.css",
+        "/ui-theme.css?v=private-header-nav005-v2"
+      ],
+      "class": "Identity-authenticated",
+      "inlineStyleBlocks": 1,
+      "styleAttributes": 1
+    },
+    {
+      "route": "/access/manage.html",
+      "shell": "app/access/manage.html",
+      "mainShellBlob": "835682c1f55e793e936acb5e62debac24f2b8d1d",
+      "developmentShellBlob": "eeaf9736b89f068e3fd6c401854ec9c37ef7fee5",
+      "main": [
+        "/public-theme.css",
+        "/ui-theme.css?v=private-header-nav005-v2"
+      ],
+      "development": [
+        "/public-theme.css",
+        "/ui-theme.css?v=private-header-nav005-v2"
+      ],
+      "class": "Identity-authenticated",
+      "inlineStyleBlocks": 1,
+      "styleAttributes": 1
+    }
+  ],
+  "importAndGeneration": {
+    "importedCss": [
+      {
+        "from": "app/landing/landing.css",
+        "fromBlobMain": "e5696eb85aff84d585f18cd953dbd0d20a67102b",
+        "fromBlobDevelopment": "ba7986155558b09b335f506da9cc125ed84f8ac7",
+        "to": "/design-system/vis002c-long-copy-light-v0.3.0.css?v=vis002c-0.3.0",
+        "productBlob": "9e7f243039a717d02f897d7320a4c383856f8fa0",
+        "designSystemPath": "dist/vis002c-long-copy-light-v0.3.0.css",
+        "designSystemBlob": "9e7f243039a717d02f897d7320a4c383856f8fa0",
+        "runtimeRoutes": [
+          "/",
+          "/about/",
+          "/how-it-works/"
+        ]
+      }
+    ],
+    "generatedHtml": {
+      "compilerDevelopmentBlob": "767c46cde2756ba8c589060c734a3a53083fa4d6",
+      "manifestMainBlob": "7b1d669a4916727d918944f4bac05e4ba5c7b4e0",
+      "manifestDevelopmentBlob": "3f0f1b2573525f5cb3e0c5689ac9ca5c9fade1e2",
+      "sources": [
+        "architecture/pages/root.page.html",
+        "architecture/pages/about.page.html",
+        "architecture/pages/how-it-works.page.html"
+      ],
+      "outputs": [
+        "app/index.html",
+        "app/about/index.html",
+        "app/how-it-works/index.html"
+      ]
+    },
+    "build": {
+      "packageDevelopmentBlob": "5710c2142740f86b72819d76c6d5f43dc3e35111",
+      "command": "npm run build",
+      "generates": [
+        "three primary-page HTML outputs",
+        "Admin/access/private-navigation JavaScript bundles"
+      ],
+      "generatesCss": false,
+      "notes": "The checked-in build command compiles HTML and bundles JavaScript; CSS files remain raw assets. Bundle outputs are build products and are not present as tracked files in the development Git tree."
+    }
+  },
+  "dynamicStyleOwners": [
+    {
+      "file": "app/core/ui-theme.js",
+      "mainBlob": "afe45eca6fda4f3303c25e15c358a40019eb5e90",
+      "developmentBlob": "8c212061cf6c8f46099f23c28cf297cfb48ce50d",
+      "surface": "theme/color-scheme state; links theme variants"
+    },
+    {
+      "file": "app/core/stone.js",
+      "mainBlob": "bbe9531e2d5371f4c9cdfc7631a75a86391e26c5",
+      "developmentBlob": "bbe9531e2d5371f4c9cdfc7631a75a86391e26c5",
+      "surface": "mask and scene z-index/style injection"
+    },
+    {
+      "file": "app/core/scene-component.js",
+      "mainBlob": "6fa00bb31d2ecd3eeccb1d0e5eabcf410acdcab6",
+      "developmentBlob": "6fa00bb31d2ecd3eeccb1d0e5eabcf410acdcab6",
+      "surface": "scene bounds, mask, finish, and background inline styles"
+    },
+    {
+      "file": "app/admin/admin.js",
+      "mainBlob": "79925345e43096df77bef54fe257e483f922edd8",
+      "developmentBlob": "0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833",
+      "surface": "material and texture swatch style values; source bundled by build"
+    },
+    {
+      "file": "app/app.js",
+      "mainBlob": "a635ef55864019f44a026fa9b1e86b2ced836377",
+      "developmentBlob": "1a029524d8f7fb65f1870c159d5842fbb037bf84",
+      "surface": "scene crop geometry and swatch values"
+    },
+    {
+      "file": "app/landing/landing.js",
+      "mainBlob": "6d096a57c0ba6b5c3d608e9f13fe0fd2e393c99e",
+      "developmentBlob": "43af31f8a4a47636abf292c3d59264ffb133c724",
+      "surface": "hero phone screen/image geometry"
+    },
+    {
+      "file": "app/viewer/viewer.js",
+      "mainBlob": "17c8cca26aecfd70d154a71c6bb1ee176e2527bd",
+      "developmentBlob": "bd26be7d4050b8a61e98cf7aee453bcaf8554a34",
+      "surface": "view-count CSS custom property"
+    }
+  ],
+  "cssDiffs": {
+    "changed": [
+      {
+        "path": "app/admin/admin.css",
+        "kind": "runtime layout/appearance",
+        "mainToDevelopment": [
+          "removes duplicate .visually-hidden declarations",
+          "adds policy-note layout rules",
+          "adds checkbox accent-color"
+        ]
+      },
+      {
+        "path": "app/how-it-works/how-it-works.css",
+        "kind": "runtime responsive appearance",
+        "mainToDevelopment": [
+          "adds max-width 290px hero copy padding and heading-size rules"
+        ]
+      },
+      {
+        "path": "app/landing/landing.css",
+        "kind": "runtime interaction/appearance",
+        "mainToDevelopment": [
+          "intro splash pointer-events and exit-keyframe changes"
+        ]
+      },
+      {
+        "path": "app/styles.css",
+        "kind": "shared utility ownership consolidation",
+        "mainToDevelopment": [
+          "removes duplicate .visually-hidden declaration; same declaration is owned by ui-theme.css in development"
+        ]
+      },
+      {
+        "path": "app/ui-theme.css",
+        "kind": "runtime tokens/accessibility/responsive appearance",
+        "mainToDevelopment": [
+          "focus outline values use --ui-theme-focus",
+          "owns shared .visually-hidden utility",
+          "narrow public theme-toggle sizing/label rules"
+        ]
+      }
+    ],
+    "identical": [
+      "app/about/about.css",
+      "app/design-system/vis002c-long-copy-light-v0.3.0.css",
+      "app/public-theme.css",
+      "app/viewer/viewer.css"
+    ],
+    "caveat": "The compare API listed viewer.css as touched, but exact final tree blob SHAs are identical; classification follows final-tree content."
+  },
+  "mainHistory": {
+    "note": "Path history identifies main-side changes; this is not a claim that every selector or every PR diff has been semantically reviewed.",
+    "commits": [
+      {
+        "path": "app/admin/admin.css",
+        "sha": "9452184f7d46751f2d07604b1fba0c77f3b44bb3",
+        "subject": "fix(ds04): batch measured contrast corrections (#271)"
+      },
+      {
+        "path": "app/styles.css",
+        "sha": "9452184f7d46751f2d07604b1fba0c77f3b44bb3",
+        "subject": "fix(ds04): batch measured contrast corrections (#271)"
+      },
+      {
+        "path": "app/ui-theme.css",
+        "sha": "9452184f7d46751f2d07604b1fba0c77f3b44bb3",
+        "subject": "fix(ds04): batch measured contrast corrections (#271)"
+      },
+      {
+        "path": "app/how-it-works/how-it-works.css",
+        "sha": "d715f8e27a81aee2dfb74584ebc40d084130258e",
+        "subject": "fix(nav005): preserve compact public header contract"
+      },
+      {
+        "path": "app/how-it-works/how-it-works.css",
+        "sha": "efc40584c3f3ca940cf6cbca408f8fda31e3e1c9",
+        "subject": "fix(video): adicionar saída da tela cheia nas duas páginas"
+      },
+      {
+        "path": "app/how-it-works/how-it-works.css",
+        "sha": "46a52e76a0eeae4bed4b567b12da5311ed90b475",
+        "subject": "fix(public): corrigir hero, vídeo e imagens comparativas"
+      },
+      {
+        "path": "app/landing/landing.css",
+        "sha": "d715f8e27a81aee2dfb74584ebc40d084130258e",
+        "subject": "fix(nav005): preserve compact public header contract"
+      },
+      {
+        "path": "app/landing/landing.css",
+        "sha": "efc40584c3f3ca940cf6cbca408f8fda31e3e1c9",
+        "subject": "fix(video): adicionar saída da tela cheia nas duas páginas"
+      },
+      {
+        "path": "app/landing/landing.css",
+        "sha": "64d934dabc7cfb8175dfe2f0a5d04fe1669a41ba",
+        "subject": "fix(home): corrigir moldura do hero e nomear grupo de links"
+      },
+      {
+        "path": "app/ui-theme.css",
+        "sha": "d715f8e27a81aee2dfb74584ebc40d084130258e",
+        "subject": "fix(nav005): preserve compact public header contract"
+      }
+    ]
+  },
+  "selectorConsumerCrosswalk": {
+    "status": "incomplete",
+    "mapped": "shell→stylesheet order, theme owner files, top-level runtime style owners, and selected route JS source owners",
+    "remaining": "Complete per-selector mapping to stylesheet, route, theme/state, and recursively resolved source consumer; classify classes generated from templates, JS-created DOM, and bundled outputs without treating lexical matches as semantic ownership.",
+    "lexicalCounts": "Not recorded as closure: scans can find candidates but do not prove semantic consumer ownership and do not correspond to the separate historical 98-ID inventory."
+  },
+  "accessAndRuntimeLimits": {
+    "themeStates": "Light/dark theme is controlled by app/core/ui-theme.js; no exact-head CSSOM/browser runtime evidence was observed in this audit.",
+    "authStates": "Admin/Access routes require Netlify Identity; Config is token-gated. No exact authenticated/token fixture was used here, so those states remain inaccessible/UNKNOWN for this receipt.",
+    "exactHeadChecks": "UNKNOWN. Existing theme-contract/browser/focus and navigation-causality checks are scoped and no CSS-00-specific exact-head run receipt was found.",
+    "generatedDom": "Dynamic geometry, masks, swatches, video/hero, and view-count style surfaces are listed under dynamicStyleOwners; complete route/state coverage remains open."
+  },
+  "summary": "At these exact refs, the eight active Product shells load ui-theme.css last; the VIS-002C export is runtime-loaded indirectly by landing.css on three public routes. Main has nine CSS paths, all runtime app assets; development has those same nine plus nine reference/fixture/historical CSS paths. Five app CSS files differ by final blob: admin, how-it-works, landing, styles, and ui-theme; four are byte-identical. Static build compiles three authored HTML pages and JS bundles, not CSS. The selector→consumer matrix and exact-head runtime/gate evidence are incomplete, so CSS-00 remains partial."
+}
