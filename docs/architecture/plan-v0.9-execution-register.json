@@ -90,7 +90,7 @@
           "detail": "O Design System main atual é 4c075fc8f8653b5d87f1f07f7471959718b106b2, mas HANDOVER_CURRENT.md ainda reporta Product development@eff75d93655cb2796f1823ab3b9789c0aa9c591c; o Product development live é 212796fcab4b610ffa0bd721a26b823a05191a5c. O próprio documento diz que a captura é de 08:20 UTC e requer nova leitura. Reconciliar o handover, sem tratar esse retrato como evidência atual."
         }
       ],
-      "nextAction": "Atualizar HANDOVER_CURRENT no Design System com o Product development@212796fc e refs atuais; depois varrer os demais ponteiros de autoridade ainda atuais. Preservar registros históricos e revalidar refs antes de cada integração."
+      "nextAction": "Refresh HANDOVER_CURRENT in the Design System from current refs (Product main 5c6e652693bd30218e6915bf8cb160bde03ac719, development 65fab1a5e04e50cedb4d2e177d56736d74a7a343; Design System main 026c6c4f4d9a6d29102a241862afdb50c35de147), then scan remaining current-authority pointers. Preserve dated handovers as historical records and revalidate refs before integration."
     },
     {
       "order": 4,
@@ -1971,9 +1971,14 @@
           "source": "Current main ARC-13 candidate inventory at exact Product main HEAD",
           "sha": "01ded2c100fbfd8b16897e26113dc5068a83e429",
           "detail": "Inventory blob 951a2a61ca4d6f646c757cedd3081ec92fbd36dd; SHA-256 beb8f9e9554fca6bdf0f8f884982406a34c99d442768d4374212603ab484667e. Schema v4; Acorn 8.19.0; 609 HTML occurrences, 417 JS sink sites, 360 source records, 1,026 unreviewed occurrences, zero parse errors, 66 source files, and 420 primary-page authoring mappings. All 11 generator-input hashes and all 66 source-file hashes were independently recomputed and matched. This inventory is distinct from development's current source tree."
+        },
+        {
+          "source": "Product development ARC-13 inventory at exact HEAD after PR #489",
+          "sha": "65fab1a5e04e50cedb4d2e177d56736d74a7a343",
+          "detail": "The exact development tree references inventory blob 5142f95856d88d8bd8a2349cd477627596e92723, SHA-256 E9AE76D0E7B3ED016734C2753D790FA8DDF36918C31D9D902F544FE8D94BE8DE. Schema v4; 609 HTML occurrences, 432 JS sink sites, 347 source records, 1,021 unreviewed occurrences, 0 parse errors, 68 source files, 420 primary-page mappings, 0 unresolved mappings. The corrected inventory was generated twice with identical SHA-256 and the exact blob is present at this development HEAD. Main remains a separate snapshot at 5c6e652; keep reconciliation partial."
         }
       ],
-      "nextAction": "Reconcile the 1,041 development candidates and 1,026 main candidates by stable source/consumer identity; preserve unreviewed state until authority, sink, content owner, and consumer are resolved. Do not transfer positional IDs across snapshots."
+      "nextAction": "Reconcile development's 1,021 candidates and main's 1,026 candidates by stable source/consumer identity; preserve unreviewed state until authority, sink, content owner, and consumer are resolved. Do not transfer positional IDs across snapshots."
     },
     {
       "order": 101,
@@ -2160,6 +2165,11 @@
           "source": "Product PR #487; 11 gates exatos e readback em development",
           "sha": "212796fcab4b610ffa0bd721a26b823a05191a5c",
           "detail": "PR #487 head e58afb1e1cd34c6e0cbfeeb5b2370bec9391a523 moveu rótulos compartilhados de paginação para uiCopy.admin.pagination, verificou dois pagers e limites desabilitados, e atualizou manifest/ARC-13. Os 11 workflows aplicáveis passaram no head exato; integração por squash confirmada no development atual. Não foi promovida a main. LOC-006 continua parcial para as famílias Admin/Config ainda não fechadas."
+        },
+        {
+          "source": "Product PR #489; exact-head gates and post-merge development readback",
+          "sha": "65fab1a5e04e50cedb4d2e177d56736d74a7a343",
+          "detail": "PR #489 head 29835e84c6902d64a36d984d3616347943342ff9 moved fixed Admin publication and isolated Puxadores persistence feedback into uiCopy.admin.publication, preserving wording and behavior. The Admin browser assertions cover compatible and blocked publication plus isolated v3 Puxadores persistence. The exact head passed all 13 applicable workflow checks; Supabase Preview was skipped because project preview branches are disabled. Local build, page check, theme contract, ARC-03C source-authority tests, syntax checks, and the deterministic ARC-13 inventory generation passed. Squash readback confirms development at 65fab1a5e04e50cedb4d2e177d56736d74a7a343; main remains 5c6e652693bd30218e6915bf8cb160bde03ac719 and unchanged. LOC-006 remains partial for remaining Admin/Configurator families."
         }
       ],
       "nextAction": "Usar o ARC-13 atual para localizar a próxima família restante de texto fixo em Admin/Config, classificar separadamente conteúdo dinâmico e comercial, e fechar esse lote com consumidores e assertions. Não repetir famílias já integradas; manter main estável até fechar a DoD completa."
