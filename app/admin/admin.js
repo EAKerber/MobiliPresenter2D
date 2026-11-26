@@ -31,6 +31,7 @@ const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
 const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const materialAvailabilityCopy = uiCopy.admin.materials;
 const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
+const rulesCopy = uiCopy.admin.rules;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -1145,47 +1146,55 @@ function entityOptions() {
 }
 
 function eventTriggerOptions() {
-  return [...entityOptions(), ...catalog.services.map((item) => [item.id, item.title]), ["stone-skirting", "Rodapé de pedra"]];
+  return [...entityOptions(), ...catalog.services.map((item) => [item.id, item.title])];
 }
 
 function renderDependencies() {
+  byId("dependenciesHeading").textContent = rulesCopy.dependenciesHeading;
+  byId("dependenciesHint").textContent = rulesCopy.dependenciesHint;
+  byId("addDependencyButton").textContent = rulesCopy.addDependency;
   dependenciesList.replaceChildren();
   const entities = entityOptions();
   model.dependencies.forEach((rule) => {
     const card = document.createElement("article"); card.className = "editor-card material-rule-card"; card.dataset.dependencyId = rule.id;
-    const heading = document.createElement("h2"); heading.textContent = "Item dependente";
-    card.append(heading, makeRuleSelect("Este item", rule.dependentId, "dependencyDependent", entities), makeRuleSelect("Requer todos estes itens", rule.requires, "dependencyRequires", entities, true));
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove rule-wide"; remove.textContent = "Remover dependência"; remove.dataset.removeDependency = rule.id; card.append(remove);
+    const heading = document.createElement("h2"); heading.textContent = rulesCopy.dependencyItemHeading;
+    card.append(heading, makeRuleSelect(rulesCopy.dependencyEntityLabel, rule.dependentId, "dependencyDependent", entities), makeRuleSelect(rulesCopy.dependencyRequirementsLabel, rule.requires, "dependencyRequires", entities, true));
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove rule-wide"; remove.textContent = rulesCopy.removeDependency; remove.dataset.removeDependency = rule.id; card.append(remove);
     dependenciesList.append(card);
   });
 }
 
 function renderEvents() {
+  byId("eventsHeading").textContent = rulesCopy.eventsHeading;
+  byId("eventsHint").textContent = rulesCopy.eventsHint;
+  byId("addEventButton").textContent = rulesCopy.addEvent;
   eventsList.replaceChildren();
   const entities = eventTriggerOptions();
   model.events.forEach((rule) => {
     const card = document.createElement("article"); card.className = "editor-card material-rule-card"; card.dataset.eventId = rule.id;
     const legacyDepth = rule.action === "set-depth";
     const stateChange = rule.action === "set-enabled";
-    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? "Ajuste legado de profundidade" : stateChange ? "Ativar ou desativar item" : "Ajuste de dimensão";
+    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? rulesCopy.eventHeadings.legacyDepth : stateChange ? rulesCopy.eventHeadings.stateChange : rulesCopy.eventHeadings.dimension;
     card.append(heading,
-      makeRuleSelect("Ação", rule.action || "set-dimension", "eventAction", [["set-dimension", "Alterar dimensão de módulo"], ["set-enabled", "Ativar ou desativar módulo ou serviço"], ["set-depth", "Profundidade fixa do Módulo 07"]]),
-      makeRuleSelect("Quando este item", rule.triggerId, "eventTrigger", entities),
-      makeRuleSelect("Estiver", rule.when, "eventWhen", [["enabled", "Ativado"], ["disabled", "Desativado"]]));
+      makeRuleSelect(rulesCopy.eventActionLabel, rule.action || "set-dimension", "eventAction", [["set-dimension", rulesCopy.eventActions.setDimension], ["set-enabled", rulesCopy.eventActions.setEnabled], ["set-depth", rulesCopy.eventActions.setDepth]]),
+      makeRuleSelect(rulesCopy.eventTriggerLabel, rule.triggerId, "eventTrigger", entities),
+      makeRuleSelect(rulesCopy.eventConditionLabel, rule.when, "eventWhen", [["enabled", rulesCopy.eventConditions.enabled], ["disabled", rulesCopy.eventConditions.disabled]]));
     if (legacyDepth) {
-      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Aplicar ao Módulo 07 · Profundidade em mm"));
+      const target = document.createElement("label"); target.className = "rule-field";
+      const targetLabel = entities.find(([id]) => id === (rule.targetId || "module-07"))?.[1] || "";
+      target.append(document.createTextNode(rulesCopy.legacyDepthTargetLabel.replace("{target}", () => targetLabel)));
       const value = document.createElement("input"); value.type = "number"; value.min = "300"; value.max = "700"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventDepth = "true"; target.append(value); card.append(target);
     } else if (stateChange) {
-      card.append(makeRuleSelect("Aplicar a", rule.targetId || "module-07", "eventTarget", entities));
-      card.append(makeRuleSelect("Definir estado", String(Boolean(rule.enabled)), "eventEnabled", [["true", "Ativado"], ["false", "Desativado"]]));
+      card.append(makeRuleSelect(rulesCopy.eventTargetLabel, rule.targetId || "module-07", "eventTarget", entities));
+      card.append(makeRuleSelect(rulesCopy.eventStateLabel, String(Boolean(rule.enabled)), "eventEnabled", [["true", rulesCopy.eventStates.enabled], ["false", rulesCopy.eventStates.disabled]]));
     } else {
       const modules = catalog.modules.map((item) => [item.entityId, `${item.referenceLabel} · ${model.objects[item.entityId]?.title || item.title}`]);
-      card.append(makeRuleSelect("Aplicar ao módulo", rule.targetId || "module-07", "eventTarget", modules));
-      card.append(makeRuleSelect("Dimensão", rule.dimension || "depth", "eventDimension", [["width", "Largura"], ["height", "Altura"], ["depth", "Profundidade"]]));
-      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Valor em mm"));
+      card.append(makeRuleSelect(rulesCopy.eventModuleLabel, rule.targetId || "module-07", "eventTarget", modules));
+      card.append(makeRuleSelect(rulesCopy.eventDimensionLabel, rule.dimension || "depth", "eventDimension", [["width", rulesCopy.eventDimensions.width], ["height", rulesCopy.eventDimensions.height], ["depth", rulesCopy.eventDimensions.depth]]));
+      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode(rulesCopy.eventValueMmLabel));
       const value = document.createElement("input"); value.type = "number"; value.min = "1"; value.max = "5000"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventValue = "true"; target.append(value); card.append(target);
     }
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = "Remover evento"; remove.dataset.removeEvent = rule.id; card.append(remove);
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = rulesCopy.removeEvent; remove.dataset.removeEvent = rule.id; card.append(remove);
     eventsList.append(card);
   });
 }

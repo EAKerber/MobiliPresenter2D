@@ -206,6 +206,88 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  await page.locator('[data-admin-tab="rules"]').click();
+  await page.waitForSelector('[data-admin-panel="rules"]:not([hidden])');
+  const rulesCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.rules);
+  assert.deepEqual(rulesCopy, {
+    dependenciesHeading: "Regras de dependência",
+    dependenciesHint: "Um objeto pode exigir outros módulos ou itens visíveis para ser habilitado.",
+    addDependency: "Adicionar dependência",
+    dependencyItemHeading: "Item dependente",
+    dependencyEntityLabel: "Este item",
+    dependencyRequirementsLabel: "Requer todos estes itens",
+    removeDependency: "Remover dependência",
+    eventsHeading: "Eventos de configuração",
+    eventsHint: "Altere dimensões ou ative/desative um módulo ou serviço quando outro item for ligado ou desligado.",
+    addEvent: "Adicionar evento",
+    eventHeadings: { legacyDepth: "Ajuste legado de profundidade", stateChange: "Ativar ou desativar item", dimension: "Ajuste de dimensão" },
+    eventActionLabel: "Ação",
+    eventActions: { setDimension: "Alterar dimensão de módulo", setEnabled: "Ativar ou desativar módulo ou serviço", setDepth: "Profundidade fixa" },
+    eventTriggerLabel: "Quando este item",
+    eventConditionLabel: "Estiver",
+    eventConditions: { enabled: "Ativado", disabled: "Desativado" },
+    eventTargetLabel: "Aplicar a",
+    eventStateLabel: "Definir estado",
+    eventStates: { enabled: "Ativado", disabled: "Desativado" },
+    eventModuleLabel: "Aplicar ao módulo",
+    eventDimensionLabel: "Dimensão",
+    eventDimensions: { width: "Largura", height: "Altura", depth: "Profundidade" },
+    eventValueMmLabel: "Valor em mm",
+    legacyDepthTargetLabel: "Aplicar ao {target} · Profundidade em mm",
+    removeEvent: "Remover evento"
+  }, "dependency and event UI copy stays in its own canonical catalog family");
+  assert.equal(await page.locator("#dependenciesHeading").textContent(), rulesCopy.dependenciesHeading);
+  assert.equal(await page.locator("#dependenciesHint").textContent(), rulesCopy.dependenciesHint);
+  assert.equal(await page.locator("#addDependencyButton").textContent(), rulesCopy.addDependency);
+  const dependencyCard = page.locator("#dependenciesList [data-dependency-id]").first();
+  assert.equal(await dependencyCard.locator("h2").textContent(), rulesCopy.dependencyItemHeading);
+  assert.ok((await dependencyCard.locator('label:has([data-dependency-dependent])').textContent()).startsWith(rulesCopy.dependencyEntityLabel));
+  assert.ok((await dependencyCard.locator('label:has([data-dependency-requires])').textContent()).startsWith(rulesCopy.dependencyRequirementsLabel));
+  assert.equal(await dependencyCard.locator("[data-remove-dependency]").textContent(), rulesCopy.removeDependency);
+  const dependentId = await dependencyCard.locator("[data-dependency-dependent]").inputValue();
+  assert.equal(await dependencyCard.locator(`[data-dependency-dependent] option[value="${dependentId}"]`).textContent(), scene.entities.find((entity) => entity.id === dependentId).label, "dependency entity names remain scene-backed");
+  assert.equal(await page.locator("#eventsHeading").textContent(), rulesCopy.eventsHeading);
+  assert.equal(await page.locator("#eventsHint").textContent(), rulesCopy.eventsHint);
+  assert.equal(await page.locator("#addEventButton").textContent(), rulesCopy.addEvent);
+  const eventCard = page.locator("#eventsList [data-event-id]").first();
+  assert.equal(await eventCard.locator("h2").textContent(), rulesCopy.eventHeadings.legacyDepth, "default legacy depth event remains supported");
+  assert.deepEqual(await eventCard.locator("[data-event-action] option").evaluateAll((options) => options.map((option) => [option.value, option.textContent])), [
+    ["set-dimension", rulesCopy.eventActions.setDimension],
+    ["set-enabled", rulesCopy.eventActions.setEnabled],
+    ["set-depth", rulesCopy.eventActions.setDepth]
+  ], "event action values and order remain stable while labels come from the catalog");
+  assert.equal(await eventCard.locator("[data-event-action]").inputValue(), "set-depth");
+  assert.ok((await eventCard.locator('label:has([data-event-action])').textContent()).startsWith(rulesCopy.eventActionLabel));
+  assert.ok((await eventCard.locator('label:has([data-event-trigger])').textContent()).startsWith(rulesCopy.eventTriggerLabel));
+  assert.ok((await eventCard.locator('label:has([data-event-when])').textContent()).startsWith(rulesCopy.eventConditionLabel));
+  assert.deepEqual(await eventCard.locator("[data-event-when] option").evaluateAll((options) => options.map((option) => [option.value, option.textContent])), [
+    ["enabled", rulesCopy.eventConditions.enabled],
+    ["disabled", rulesCopy.eventConditions.disabled]
+  ], "event condition enum values remain unchanged");
+  assert.equal(await eventCard.locator("[data-remove-event]").textContent(), rulesCopy.removeEvent);
+  const module07Trigger = await eventCard.locator('[data-event-trigger] option[value="module-07"]').textContent();
+  assert.equal(await eventCard.locator('label:has([data-event-depth])').textContent(), rulesCopy.legacyDepthTargetLabel.replace("{target}", module07Trigger), "legacy target wording keeps its entity name data-backed");
+  assert.deepEqual(await eventCard.locator("[data-event-trigger] option").evaluateAll((options) => options.map((option) => option.value).filter((id) => id === "stone-skirting").length), 1, "service trigger options do not duplicate the catalog-backed stone-skirting item");
+  await eventCard.locator("[data-event-action]").selectOption("set-dimension");
+  const dimensionEvent = page.locator("#eventsList [data-event-id]").first();
+  assert.equal(await dimensionEvent.locator("h2").textContent(), rulesCopy.eventHeadings.dimension);
+  assert.ok((await dimensionEvent.locator('label:has([data-event-target])').textContent()).startsWith(rulesCopy.eventModuleLabel));
+  assert.ok((await dimensionEvent.locator('label:has([data-event-dimension])').textContent()).startsWith(rulesCopy.eventDimensionLabel));
+  assert.deepEqual(await dimensionEvent.locator("[data-event-dimension] option").evaluateAll((options) => options.map((option) => [option.value, option.textContent])), [
+    ["width", rulesCopy.eventDimensions.width],
+    ["height", rulesCopy.eventDimensions.height],
+    ["depth", rulesCopy.eventDimensions.depth]
+  ], "dimension enum values remain stable while labels come from the catalog");
+  assert.ok((await dimensionEvent.locator('label:has([data-event-value])').textContent()).startsWith(rulesCopy.eventValueMmLabel));
+  await dimensionEvent.locator("[data-event-action]").selectOption("set-enabled");
+  const stateEvent = page.locator("#eventsList [data-event-id]").first();
+  assert.equal(await stateEvent.locator("h2").textContent(), rulesCopy.eventHeadings.stateChange);
+  assert.ok((await stateEvent.locator('label:has([data-event-target])').textContent()).startsWith(rulesCopy.eventTargetLabel));
+  assert.ok((await stateEvent.locator('label:has([data-event-enabled])').textContent()).startsWith(rulesCopy.eventStateLabel));
+  assert.equal(putCount, 0, "reviewing rule copy and switching event editor variants performs no save");
+  await page.reload({ waitUntil: "networkidle" });
+  await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+
   await page.locator('[data-admin-tab="objects"]').click();
   await page.waitForSelector('[data-admin-panel="objects"]:not([hidden])');
   assert.deepEqual(
