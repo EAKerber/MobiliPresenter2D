@@ -1993,12 +1993,17 @@
           "detail": "Nominal-dimension labels, guidance, accessible-name template, and validation copy use uiCopy.admin.nominalDimensions; dimensions, bounds, validation, draft model path, and explicit-save behavior remain unchanged. Exact PR head c58bf795bb2bffa3a92b1e72d1490865cccc8c68 passed all 12 applicable GitHub workflows and local build, page/theme/browser/model/projection/ARC-13 gates. Squash-integrated into development as 23485dc9d6dd7ea5a3a871360c6f423da7dbc2de after confirming the exact base; live main stayed at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f. LOC-006 remains partial."
         },
         {
-          "source": "Product LOC-006 Admin authentication copy — local candidate",
-          "sha": "664AC8947DB583CDD2B0A2240089F9C2F2D3A7CCC45536D4791C7F8BA01159AA",
-          "detail": "Fixed login, denied-access, invitation, password-recovery, status, and reveal-control text now uses uiCopy.admin.authentication. Provider errors and user/session/token data stay outside the catalog; Identity calls and timing are unchanged. Local Admin browser covers denied-role copy, provider-error pass-through, generic recovery confirmation, login fields and aria-live, invite/recovery branches, and existing editor contracts. Build, page/theme, ARC-03C and auth logic tests pass; ARC-13 generated twice with identical hash, 1021 candidates, 0 parse errors, 420 mapped and 0 unresolved primary-page occurrences. Exact PR gates and development integration remain pending. LOC-006 stays partial."
+          "source": "Product PR #474; exact-head gates and development readback",
+          "sha": "c26b5b4018f7a2e23206d16a9bf68a23e5bdb941",
+          "detail": "Fixed login, denied-access, invitation, password-recovery, status, and reveal-control text now uses uiCopy.admin.authentication. Provider errors and user/session/token data stay outside the catalog; Identity calls and timing are unchanged. Exact PR head da9cd50c32739d3f7b5a74d108901a3de9c659a2 passed 15 check-runs; Supabase Preview was skipped because project preview branches are disabled. Squash-integrated into development as c26b5b4018f7a2e23206d16a9bf68a23e5bdb941; live main stayed at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f."
+        },
+        {
+          "source": "Product LOC-006 Admin scene asset copy — local candidate",
+          "sha": "DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0",
+          "detail": "Moves only fixed heading, field labels, default option, image alt, preview error, and empty-preview copy for existing Admin scene-asset selectors into uiCopy.admin.objectAssets. Scene and asset paths, mask behavior, values, save/publication path, and commercial content remain unchanged. Local build, page compiler, theme contract, scene core, ARC-03C and auth recovery tests pass. ARC-13 inventory ran twice with identical SHA DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0: 1,021 unreviewed occurrences, 0 parse errors, 420 primary-page authoring occurrences mapped, 0 unresolved. Local Admin browser is unavailable because Playwright is not installed in this checkout; exact PR browser gates remain pending. LOC-006 remains partial."
         }
       ],
-      "nextAction": "Integrar em development a família de cópia de autenticação do Admin após os gates do head exato; manter main estável e mapear a próxima família LOC-006 com estados, consumidores e testes próprios."
+      "nextAction": "Concluir os gates da família de cópia de arquivos de cena do Admin e integrá-la em development; depois mapear a próxima família com seus estados, consumidores e contratos, mantendo main estável e sem migrar conteúdo comercial."
     },
     {
       "order": 107,

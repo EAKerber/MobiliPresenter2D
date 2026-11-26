@@ -27,7 +27,7 @@ const uiCopy = window.CASA_UI_COPY;
 const initialStateCopy = uiCopy.admin.initialState;
 const finishAvailabilityCopy = uiCopy.admin.finishes;
 const stageAvailabilityCopy = uiCopy.admin.stages;
-const objectAssetPolicyCopy = uiCopy.admin.objectAssets;
+const objectAssetsCopy = uiCopy.admin.objectAssets;
 const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const materialAvailabilityCopy = uiCopy.admin.materials;
 const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
@@ -851,14 +851,15 @@ function renderObjectAssets(id, label) {
   objectAssetsList.replaceChildren();
   const assets = model.objectAssets[id] || { imageAsset: "", detailImageAsset: "", maskAsset: "" };
   const card = document.createElement("article"); card.className = "editor-card"; card.dataset.assetObjectId = id;
-  const heading = document.createElement("h2"); heading.textContent = `${label} · arquivos da cena`;
+  const heading = document.createElement("h2"); heading.textContent = objectAssetsCopy.heading.replace("{item}", label);
   card.append(heading);
   const hasSceneEntity = scene.entities.some((entity) => entity.id === id);
   const noteId = `object-asset-policy-${id}`;
-  [["imageAsset", "Imagem da cena", assetChoices("imageAsset")], ["detailImageAsset", "Imagem dos detalhes", assetChoices("imageAsset")], ["maskAsset", "Máscara de acabamento", assetChoices("maskAsset")]].forEach(([field, title, choices]) => {
+  [["imageAsset", "sceneImage", assetChoices("imageAsset")], ["detailImageAsset", "detailImage", assetChoices("imageAsset")], ["maskAsset", "finishMask", assetChoices("maskAsset")]].forEach(([field, copyKey, choices]) => {
+    const title = objectAssetsCopy.fields[copyKey];
     const labelNode = document.createElement("label"); labelNode.className = "data-field"; labelNode.append(document.createTextNode(title));
     const select = document.createElement("select"); select.dataset.objectAsset = field;
-    const empty = document.createElement("option"); empty.value = ""; empty.textContent = "Usar o padrão / sem máscara"; select.append(empty);
+    const empty = document.createElement("option"); empty.value = ""; empty.textContent = objectAssetsCopy.defaultSelection; select.append(empty);
     choices.forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; select.append(option); });
     select.value = assets[field] || ""; select.disabled = !hasSceneEntity;
     if (select.disabled) select.setAttribute("aria-describedby", noteId);
@@ -866,13 +867,13 @@ function renderObjectAssets(id, label) {
     const previewPath = assets[field] || (field !== "maskAsset" ? scene.entities.find((entity) => entity.id === id)?.asset || "" : "");
     const preview = document.createElement("div"); preview.className = `asset-preview${field === "maskAsset" ? " asset-preview--mask" : ""}`;
     if (previewPath) {
-      const image = document.createElement("img"); image.src = previewPath; image.alt = `${title} · ${label}`; image.loading = "lazy"; image.decoding = "async";
-      image.addEventListener("error", () => { preview.textContent = "Prévia indisponível"; }, { once: true }); preview.append(image);
-    } else { const empty = document.createElement("span"); empty.textContent = "Sem máscara · usar o recorte padrão"; preview.append(empty); }
+      const image = document.createElement("img"); image.src = previewPath; image.alt = objectAssetsCopy.previewAlt.replace("{asset}", title).replace("{item}", label); image.loading = "lazy"; image.decoding = "async";
+      image.addEventListener("error", () => { preview.textContent = objectAssetsCopy.previewUnavailable; }, { once: true }); preview.append(image);
+    } else { const empty = document.createElement("span"); empty.textContent = objectAssetsCopy.emptyPreview; preview.append(empty); }
     labelNode.append(preview); card.append(labelNode);
   });
   const note = document.createElement("p"); note.className = "admin-note"; note.id = noteId;
-  note.textContent = hasSceneEntity ? objectAssetPolicyCopy.sceneEntityPolicy : objectAssetPolicyCopy.nonSceneEntityPolicy;
+  note.textContent = hasSceneEntity ? objectAssetsCopy.sceneEntityPolicy : objectAssetsCopy.nonSceneEntityPolicy;
   card.append(note); objectAssetsList.append(card);
 }
 

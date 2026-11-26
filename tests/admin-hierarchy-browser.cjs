@@ -350,6 +350,15 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   }
   await page.locator("#objectSelector").selectOption("0");
   const visualObjectAssets = page.locator(`[data-asset-object-id="${catalog.modules[0].entityId}"]`);
+  const objectAssetsCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.objectAssets);
+  const firstObjectLabel = `${catalog.modules[0].referenceLabel} · ${catalog.modules[0].title}`;
+  assert.equal(await visualObjectAssets.locator("h2").textContent(),
+    objectAssetsCopy.heading.replace("{item}", firstObjectLabel),
+    "scene asset heading is catalog-backed while the object name remains authored data");
+  assert.deepEqual(await visualObjectAssets.locator("label.data-field").evaluateAll((labels) =>
+    labels.map((label) => label.firstChild?.textContent)),
+  [objectAssetsCopy.fields.sceneImage, objectAssetsCopy.fields.detailImage, objectAssetsCopy.fields.finishMask],
+  "scene asset labels come from the shared catalog");
   assert.equal(await visualObjectAssets.locator("#object-asset-policy-" + catalog.modules[0].entityId).textContent(),
     "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
     "scene-backed asset selectors explain their bounded file list");
@@ -357,7 +366,12 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     const selector = page.locator(`[data-asset-object-id="${catalog.modules[0].entityId}"] [data-object-asset="${field}"]`);
     assert.equal(await selector.isEnabled(), true, `${field} remains editable when an object has a scene entity`);
     assert.equal(await selector.getAttribute("aria-describedby"), null, `${field} exposes no disabled reason while enabled`);
+    assert.equal(await selector.locator("option").first().textContent(), objectAssetsCopy.defaultSelection,
+      `${field} keeps the catalog-backed default choice`);
   }
+  assert.equal(await visualObjectAssets.locator("img").first().getAttribute("alt"),
+    objectAssetsCopy.previewAlt.replace("{asset}", objectAssetsCopy.fields.sceneImage).replace("{item}", firstObjectLabel),
+    "scene asset preview alternative text keeps the authored object name");
 
   await page.locator('[data-admin-tab="stages"]').click();
   await page.waitForSelector('[data-admin-panel="stages"]:not([hidden])');

@@ -56,6 +56,16 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.stages)), {
   emptyAvailabilityPolicy: "Adicione pelo menos um item antes de ativar esta etapa."
 });
 assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.objectAssets)), {
+  heading: "{item} · arquivos da cena",
+  fields: {
+    sceneImage: "Imagem da cena",
+    detailImage: "Imagem dos detalhes",
+    finishMask: "Máscara de acabamento"
+  },
+  defaultSelection: "Usar o padrão / sem máscara",
+  previewAlt: "{asset} · {item}",
+  previewUnavailable: "Prévia indisponível",
+  emptyPreview: "Sem máscara · usar o recorte padrão",
   sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
   nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
 });
@@ -153,7 +163,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-auth-copy-1"
+      ? "arc13-loc006-admin-scene-assets-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

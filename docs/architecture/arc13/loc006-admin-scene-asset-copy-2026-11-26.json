@@ -1,0 +1,63 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-002", "LOC-006"],
+  "family": "admin-scene-asset-fixed-copy",
+  "status": "candidate-implemented",
+  "evidence": {
+    "baseRevision": "c26b5b4018f7a2e23206d16a9bf68a23e5bdb941",
+    "implementationBranch": "codex/loc006-admin-assets-copy-20261126",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "0a2ec1f5c7d92a11e4ff702f07f6f5527dfbe833",
+    "sourceSha256": "828F5E96B620F0D4435CCF5405E5523A29D57506C966D01913389F1CC3F6BAA8",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "bf459fc644bdb7d82c6de5a444d40ae4e4207a95",
+    "sharedCatalogSha256": "FC1FD0D99031E8F0FC7A04CFC12AAA32FAEA7EB477CB61A241F01D4652FA056D",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestGitBlob": "3f0f1b2573525f5cb3e0c5689ac9ca5c9fade1e2",
+    "generatedPrimaryPageManifestSha256": "C736F521E76B2225EDC8734014D5A7E62A27FBAFF4AB403B972778C3DCC8B5D2"
+  },
+  "state": {
+    "consumer": "Admin object scene-image, detail-image, and finish-mask labels, defaults, preview alternatives, and preview states",
+    "meaning": "Catalogs fixed interface copy only for existing scene-asset selectors.",
+    "catalogPrefix": "admin.objectAssets",
+    "preservedContracts": [
+      "Scene entity membership and allowed image or mask paths",
+      "Asset selections and the default / no-mask option value",
+      "Mask fallback, preview loading, and broken-image behavior",
+      "Admin persistence, publication, and server validation",
+      "Product, editorial, and commercial content remain data-backed"
+    ]
+  },
+  "validation": {
+    "passed": [
+      "npm run build",
+      "npm run pages:check",
+      "node tests/ui-theme-contract.cjs",
+      "node app/tools/test-core.js",
+      "node --test tests/arc03c-source-authority.test.mjs tests/auth-first-login-recovery.test.mjs: 17 passed",
+      "tests/arc13_line_ending_normalization_test.py: 3 passed",
+      "ARC-13 inventory generated twice with identical SHA-256"
+    ],
+    "arc13Inventory": {
+      "runs": 2,
+      "sameSha256": true,
+      "unreviewedOccurrences": 1021,
+      "javascriptParseErrors": 0,
+      "primaryPageAuthoringMappedOccurrences": 420,
+      "primaryPageAuthoringUnresolvedOccurrences": 0,
+      "unassignedOwnerSites": 0,
+      "unassignedRouteSites": 0
+    },
+    "adminBrowser": "Not run locally: Playwright is not installed in this checkout; exact-head GitHub browser gate pending.",
+    "developmentPullRequestGates": "Pending for the exact PR head"
+  },
+  "limits": [
+    "No mask content, mask geometry, source asset, selection value, upload capability, or rendering behavior is changed.",
+    "No Netlify Identity, authorization, persistence, or deployment behavior is changed.",
+    "LOC-006 and the global ARC-13 candidate inventory remain partial/unreviewed; this receipt covers only the named Admin scene-asset fixed-copy family."
+  ]
+}

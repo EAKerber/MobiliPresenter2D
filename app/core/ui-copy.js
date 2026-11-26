@@ -208,6 +208,16 @@
         invalidValueMessage: "Informe uma medida nominal entre 1 e 5.000 mm, com até uma casa decimal."
       }),
       objectAssets: Object.freeze({
+        heading: "{item} · arquivos da cena",
+        fields: Object.freeze({
+          sceneImage: "Imagem da cena",
+          detailImage: "Imagem dos detalhes",
+          finishMask: "Máscara de acabamento"
+        }),
+        defaultSelection: "Usar o padrão / sem máscara",
+        previewAlt: "{asset} · {item}",
+        previewUnavailable: "Prévia indisponível",
+        emptyPreview: "Sem máscara · usar o recorte padrão",
         sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
         nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
       }),
