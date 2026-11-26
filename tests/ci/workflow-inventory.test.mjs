@@ -1,9 +1,11 @@
-import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { countDispatchOnlyWorkflows, definition } from '../../tools/ci/build-workflow-inventory.mjs';
+import { buildInventory, countDispatchOnlyWorkflows, definition } from '../../tools/ci/build-workflow-inventory.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -45,7 +47,7 @@ test('dispatch-only count uses each workflow development definition pin', () => 
 });
 
 
-test('TST-001 inventory reads exact development push and pull request heads', () => {
+test('TST-001 pins stable development separately from the PR candidate', () => {
   const source = readFileSync(path.join(root, '.github/workflows/development-test-impact-plan.yml'), 'utf8');
   const workflow = definition(source, '.github/workflows/development-test-impact-plan.yml', 'blob-sha');
   const push = workflow.events.find(({ name }) => name === 'push');
@@ -54,12 +56,12 @@ test('TST-001 inventory reads exact development push and pull request heads', ()
   assert(pullRequest);
   assert.deepEqual(push.branches, ['development']);
   assert.deepEqual(pullRequest.branches, ['development']);
-  assert.match(source, /ref: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.sha \}\}/,
-    'the inventory job checks out the PR head, falling back to the push SHA');
+  assert.match(source, /ref: \\$\\{\\{ github\\.event\\.pull_request\\.head\\.sha \\}\\}/,
+    'the checkout is the candidate tree, while the inventory separately reads the exact base SHA');
   assert(push.paths.includes('.github/workflows/**'));
   assert(push.paths.includes('tools/ci/build-workflow-inventory.mjs'));
   assert.equal(workflow.events.some(({ name }) => name === 'workflow_dispatch'), false,
-    'the development-only workflow must not advertise the inaccessible default-branch dispatch path');
+    'the development-only workflow must not advertise an inaccessible default-branch dispatch path');
 
   const inventory = workflow.jobs.find(({ id }) => id === 'inventory');
   assert(inventory);
@@ -67,19 +69,107 @@ test('TST-001 inventory reads exact development push and pull request heads', ()
   const capture = workflow.commands.find(({ jobId, step }) =>
     jobId === 'inventory' && step === 'Capture exact inventory refs and open PRs');
   assert(capture);
-  assert.match(capture.command, /expected_development_sha="\$GITHUB_SHA"/);
-  assert.match(capture.command, /test "\$development_sha" = "\$expected_development_sha"/);
-  assert.match(capture.command, /GITHUB_EVENT_NAME.*pull_request/);
-  assert.match(capture.command, /github\.event\.pull_request\.head\.sha/);
+  assert.match(capture.command, /development_sha="\\$GITHUB_SHA"/,
+    'push inventories pin the exact development event SHA');
+  assert.match(capture.command, /development_sha="\\$BASE_SHA"/,
+    'PR inventories pin stable development to the event base SHA');
+  assert.match(capture.command, /candidate_sha="\\$HEAD_SHA"/,
+    'PR-head definitions remain a separate candidate layer');
+  assert.match(capture.command, /candidate_tree=/);
+  assert.match(capture.command, /isDraft/);
   assert.match(capture.command, /gh pr list --state open --limit 1000/);
   const generate = workflow.commands.find(({ jobId, step }) =>
     jobId === 'inventory' && step === 'Generate SHA-pinned workflow inventory');
   assert(generate);
   assert.match(generate.command, /--main-sha/);
-  assert.match(generate.command, /--development-pin/);
+  assert.match(generate.command, /--development-sha/);
   assert.match(generate.command, /--development-tree/);
+  assert.match(generate.command, /--candidate-head-sha/);
+  assert.match(generate.command, /--candidate-tree/);
   assert.match(generate.command, /--open-prs-json/);
   assert(inventory.actions.includes('actions/upload-artifact@v4'));
+});
+
+test('TST-001 fixture keeps main, exact development, and candidate workflow definitions distinct', () => {
+  const repoRoot = mkdtempSync(path.join(tmpdir(), 'tst001-ref-fixture-'));
+  const git = (args) => execFileSync('git', args, { cwd: repoRoot, encoding: 'utf8' }).trim();
+  const writeWorkflow = (name, content) => {
+    const file = path.join(repoRoot, '.github', 'workflows', name);
+    mkdirSync(path.dirname(file), { recursive: true });
+    writeFileSync(file, `name: ${name}
+on:
+  push:
+    branches: [development]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify fixture
+        run: echo ${content}
+`);
+  };
+  try {
+    git(['init', '-b', 'main']);
+    git(['config', 'user.name', 'TST-001 fixture']);
+    git(['config', 'user.email', 'tst001@example.invalid']);
+    writeWorkflow('shared.yml', 'main');
+    writeWorkflow('main-only.yml', 'main-only');
+    git(['add', '.']);
+    git(['commit', '-m', 'fixture main']);
+    const mainSha = git(['rev-parse', 'HEAD']);
+
+    git(['checkout', '-b', 'development']);
+    writeWorkflow('shared.yml', 'development');
+    rmSync(path.join(repoRoot, '.github', 'workflows', 'main-only.yml'));
+    writeWorkflow('development-only.yml', 'development-only');
+    git(['add', '-A']);
+    git(['commit', '-m', 'fixture development']);
+    const developmentSha = git(['rev-parse', 'HEAD']);
+    const expectedDevelopmentTree = git(['rev-parse', 'HEAD^{tree}']);
+
+    git(['checkout', '-b', 'candidate']);
+    writeWorkflow('shared.yml', 'candidate');
+    writeWorkflow('candidate-only.yml', 'candidate-only');
+    git(['add', '.']);
+    git(['commit', '-m', 'fixture candidate']);
+    const candidateHeadSha = git(['rev-parse', 'HEAD']);
+    const expectedCandidateTree = git(['rev-parse', 'HEAD^{tree}']);
+
+    const inventory = buildInventory({
+      mainSha,
+      developmentSha,
+      expectedDevelopmentTree,
+      candidateHeadSha,
+      expectedCandidateTree,
+      candidatePrNumber: 42,
+      candidateIsDraft: true,
+      openPrs: [{ number: 42, isDraft: true, headRefOid: candidateHeadSha }],
+      repoRoot
+    });
+    assert.equal(inventory.source.developmentSha, developmentSha);
+    assert.equal(inventory.source.candidateHeadSha, candidateHeadSha);
+    assert.equal(inventory.source.candidateIsDraft, true);
+    assert.equal(inventory.summary.mainWorkflowCount, 2);
+    assert.equal(inventory.summary.developmentWorkflowCount, 2);
+    assert.deepEqual(inventory.summary.mainOnly, ['.github/workflows/main-only.yml']);
+    assert.deepEqual(inventory.summary.developmentOnly, ['.github/workflows/development-only.yml']);
+    assert.deepEqual(inventory.prHeadCandidate.workflows.map(({ path: file, change }) => [file, change]), [
+      ['.github/workflows/candidate-only.yml', 'added'],
+      ['.github/workflows/development-only.yml', 'removed'],
+      ['.github/workflows/shared.yml', 'modified']
+    ]);
+    assert.equal(inventory.prHeadCandidate.workflows.find(({ path: file }) =>
+      file.endsWith('/shared.yml')).developmentDefinition !==
+      inventory.prHeadCandidate.workflows.find(({ path: file }) =>
+        file.endsWith('/shared.yml')).candidateDefinition, true);
+    assert.throws(() => buildInventory({
+      mainSha, developmentSha, expectedDevelopmentTree: 'incorrect-tree', repoRoot
+    }), /Development tree mismatch/);
+    const pushInventory = buildInventory({ mainSha, developmentSha, expectedDevelopmentTree, repoRoot });
+    assert.equal(pushInventory.prHeadCandidate, null);
+  } finally {
+    rmSync(repoRoot, { recursive: true, force: true });
+  }
 });
 
 test('the inventory job emits the exact JSON to readable logs and uniquely named artifacts', () => {
