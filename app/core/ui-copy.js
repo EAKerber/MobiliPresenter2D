@@ -144,6 +144,33 @@
         removeStage: "Remover etapa",
         emptyStageHint: "Etapa vazia. Adicione um item disponível para criar o primeiro grupo e seção."
       }),
+      rules: Object.freeze({
+        dependenciesHeading: "Regras de dependência",
+        dependenciesHint: "Um objeto pode exigir outros módulos ou itens visíveis para ser habilitado.",
+        addDependency: "Adicionar dependência",
+        dependencyItemHeading: "Item dependente",
+        dependencyEntityLabel: "Este item",
+        dependencyRequirementsLabel: "Requer todos estes itens",
+        removeDependency: "Remover dependência",
+        eventsHeading: "Eventos de configuração",
+        eventsHint: "Altere dimensões ou ative/desative um módulo ou serviço quando outro item for ligado ou desligado.",
+        addEvent: "Adicionar evento",
+        eventHeadings: Object.freeze({ legacyDepth: "Ajuste legado de profundidade", stateChange: "Ativar ou desativar item", dimension: "Ajuste de dimensão" }),
+        eventActionLabel: "Ação",
+        eventActions: Object.freeze({ setDimension: "Alterar dimensão de módulo", setEnabled: "Ativar ou desativar módulo ou serviço", setDepth: "Profundidade fixa" }),
+        eventTriggerLabel: "Quando este item",
+        eventConditionLabel: "Estiver",
+        eventConditions: Object.freeze({ enabled: "Ativado", disabled: "Desativado" }),
+        eventTargetLabel: "Aplicar a",
+        eventStateLabel: "Definir estado",
+        eventStates: Object.freeze({ enabled: "Ativado", disabled: "Desativado" }),
+        eventModuleLabel: "Aplicar ao módulo",
+        eventDimensionLabel: "Dimensão",
+        eventDimensions: Object.freeze({ width: "Largura", height: "Altura", depth: "Profundidade" }),
+        eventValueMmLabel: "Valor em mm",
+        legacyDepthTargetLabel: "Aplicar ao {target} · Profundidade em mm",
+        removeEvent: "Remover evento"
+      }),
       objectAssets: Object.freeze({
         sceneEntityPolicy: "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos.",
         nonSceneEntityPolicy: "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais."
