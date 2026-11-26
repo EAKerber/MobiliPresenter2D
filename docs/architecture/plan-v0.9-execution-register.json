@@ -847,12 +847,12 @@
           "detail": "PR #477 passou os 10 workflows no head exato e foi integrada em development; o gate de pin VIS-002C passou. O registro/pin ainda declara PREVIEW_PENDING; não foi feita verificação runtime em preview exato. DS está em main@9261c57. O contrato DS→Product continua parcial até atualizar o recibo de preview e reconciliar o pin."
         },
         {
-          "source": "Live Product/Design System and Netlify readback 2026-11-26; supporting source-pin gate in this PR",
-          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-          "detail": "Design System PR #52 merged at 9324bbcff78839a5c2b8e715c40654ea7c3f4c54; Product PR #241 merged at 818f165bf0b11b53f5fbaba1417560066bf03637. Product main@5c6e652 and development@60de033 both import the same VIS-002C candidate; exact Product Production deploy 6b07bd0f17cb2fd1e0d65b34 is ready at main@5c6e652. Live source artifacts, mapping and manifest in Product match the Design System blobs at source commit 2f11ecf8948c779706a0ce0795e088d29633fb7e. PIN remains SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED / PREVIEW_PENDING, so approvalPublication stays unknown pending explicit runtime-state reconciliation. This PR adds source-checkout comparison and CRLF-stable Git blob hashing; exact-head workflow evidence is pending."
+          "source": "Product PR #495 merged into development; exact-head VIS-002C gate",
+          "sha": "a7f34f593e7d7f82d17c0165e9de7c80455ee240",
+          "detail": "PR #495 head dee6a492384049fbb6a864c72fc41ca6cf0f9ef5 foi integrado por squash em Product development no SHA registrado; o gate exato 45827718711 passou nos jobs verify-pinned-consumers e scoped-raster. O gate verificou o checkout DS exato 2f11ecf8948c779706a0ce0795e088d29633fb7e, o blob da decisão e a igualdade dos blobs do CSS, mapping e manifesto entre repos; passou o teste de hash com fixture CRLF. O run também recompilou as páginas e passou a contenção raster e browser image fallback. Main permaneceu em 5c6e652; não houve mudança de CSS/runtime. TOK-00 segue partial porque PIN mantém PREVIEW_PENDING em conflito com a presença do artefato no deploy Production e ainda falta o mecanismo completo de distinção entre referência, candidato e integração runtime autorizada."
         }
       ],
-      "nextAction": "Confirm exact-head CI for this source-to-copy gate. Then reconcile the stale PREVIEW_PENDING field against current production and exact runtime evidence; implement explicit mechanical handling for reference-only, scoped candidate and runtime-authorized states before closing TOK-00. Keep main unchanged while this remains partial."
+      "nextAction": "Reconciliar o estado PREVIEW_PENDING contra evidência runtime exata do Production e registrar a autoridade que permite transição de estado. Completar o gate para rejeitar mecanicamente imports de artefatos reference-only e validar a estrutura exigida por uma integração runtime autorizada; só então reavaliar o DoD de TOK-00. Manter main inalterada enquanto houver conflito."
     },
     {
       "order": 39,
@@ -2526,10 +2526,10 @@
   "baselineReadback": {
     "capturedAt": "2026-11-26",
     "productMainSha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-    "productDevelopmentSha": "60de03305b29cecd52f3bb58ffe83f496fbfef78",
+    "productDevelopmentSha": "a7f34f593e7d7f82d17c0165e9de7c80455ee240",
     "designSystemMainSha": "026c6c4f4d9a6d29102a241862afdb50c35de147",
     "productMainTree": "c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8",
-    "productDevelopmentTree": "36dba0807963fb743e24bc56725cd100bc32f0d0",
-    "meaning": "Live readback 2026-11-26T13:15Z: Product main@5c6e652693bd30218e6915bf8cb160bde03ac719 (tree c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8) remains stable; development@60de03305b29cecd52f3bb58ffe83f496fbfef78 (tree 36dba0807963fb743e24bc56725cd100bc32f0d0) includes CSS-00 and CMP-001 documentation batches. Design System main@026c6c4f4d9a6d29102a241862afdb50c35de147. Product compare remains non-linear; do not merge the full tree. Product has three refs (main, development, codex/v09-loc006-register-correction-20261126), and no open Product PRs were found. Netlify Production deploy 6b07bd0f17cb2fd1e0d65b34 is ready at exact Product main SHA. This readback exposed TOK-00 runtimeStatus conflict: source deploy includes the candidate while PIN says PREVIEW_PENDING. CSS-00 and TOK-00 remain partial; do not treat branch/deploy state as decision approval."
+    "productDevelopmentTree": "6e0e9ab858d398dfe257bc5dbcec1fe45ef6f9b3",
+    "meaning": "Live readback 2026-11-26T13:21Z: Product main@5c6e652693bd30218e6915bf8cb160bde03ac719 (tree c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8) remains stable; development@a7f34f593e7d7f82d17c0165e9de7c80455ee240 (tree 6e0e9ab858d398dfe257bc5dbcec1fe45ef6f9b3) includes CSS-00, CMP-001, and TOK-00 source-pin portability/documentation. Design System main@026c6c4f4d9a6d29102a241862afdb50c35de147. Product compare remains non-linear; do not merge the full tree. Product has three refs (main, development, codex/v09-loc006-register-correction-20261126) and no Product PRs were open at this readback. Netlify Production deploy 6b07bd0f17cb2fd1e0d65b34 is ready at exact Product main SHA. This readback exposed TOK-00 runtimeStatus conflict: main source deploy includes the candidate while PIN says PREVIEW_PENDING. CSS-00 and TOK-00 remain partial; do not treat branch/deploy state as decision approval. The new source-pin gate is on development only; main remains unchanged."
   }
 }
