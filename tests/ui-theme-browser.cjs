@@ -50,6 +50,9 @@ async function main() {
           reducedMotion: "reduce",
           serviceWorkers: "block"
         });
+        await page.addInitScript(() => {
+          localStorage.setItem("casa-ui-theme-mode-v1", "dark");
+        });
         await page.route("**/*", (route) => {
           const requestOrigin = new URL(route.request().url()).origin;
           return requestOrigin === origin ? route.continue() : route.abort();
@@ -159,22 +162,35 @@ async function main() {
             if (reachedByKeyboard) break;
           }
           assert(reachedByKeyboard, shell.path + " theme control is reachable by keyboard");
-          const focusVisible = await control.evaluate((button) => {
+          const focusStyle = await control.evaluate((button) => {
             const style = getComputedStyle(button);
-            return button.matches(":focus-visible") && style.outlineStyle !== "none"
-              && parseFloat(style.outlineWidth) >= 2;
+            return {
+              visible: button.matches(":focus-visible") && style.outlineStyle !== "none",
+              color: style.outlineColor,
+              width: style.outlineWidth,
+              offset: style.outlineOffset
+            };
           });
-          assert(focusVisible, shell.path + " keyboard focus is visibly indicated");
+          assert(focusStyle.visible, shell.path + " keyboard focus is visibly indicated");
+          assert.equal(focusStyle.color, "rgb(216, 188, 124)", shell.path + " dark focus color preserves the baseline");
+          assert.equal(focusStyle.width, "3px", shell.path + " dark focus width preserves the baseline");
+          assert.equal(focusStyle.offset, "2px", shell.path + " dark focus offset preserves the baseline");
 
           await page.keyboard.press("Enter");
           const activated = await control.evaluate((button) => ({
             mode: button.getAttribute("data-mode"),
             label: button.getAttribute("aria-label"),
-            stored: localStorage.getItem("casa-ui-theme-mode-v1")
+            stored: localStorage.getItem("casa-ui-theme-mode-v1"),
+            focusColor: getComputedStyle(button).outlineColor,
+            focusWidth: getComputedStyle(button).outlineWidth,
+            focusOffset: getComputedStyle(button).outlineOffset
           }));
           assert.equal(activated.mode, "light", shell.path + " keyboard activation selects light mode");
           assert.equal(activated.stored, "light", shell.path + " keyboard activation persists the mode");
           assert(activated.label.includes("Ativar Escuro"), shell.path + " announces the next mode");
+          assert.equal(activated.focusColor, "rgb(110, 81, 46)", shell.path + " light focus color preserves the baseline");
+          assert.equal(activated.focusWidth, "3px", shell.path + " light focus width preserves the baseline");
+          assert.equal(activated.focusOffset, "2px", shell.path + " light focus offset preserves the baseline");
 
           results.push({
             shell: shell.path,
@@ -183,7 +199,9 @@ async function main() {
             measuredTargetMinimumCssPx: minTarget,
             measuredWidthCssPx: measured.width,
             measuredHeightCssPx: measured.height,
-            keyboardFocusVisible: focusVisible,
+            keyboardFocusVisible: focusStyle.visible,
+            darkFocus: { color: focusStyle.color, width: focusStyle.width, offset: focusStyle.offset },
+            lightFocus: { color: activated.focusColor, width: activated.focusWidth, offset: activated.focusOffset },
             keyboardActivation: activated.mode
           });
         } finally {
