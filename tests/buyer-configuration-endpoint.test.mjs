@@ -33,13 +33,14 @@ const v5=administrationV5.upgrade(
 
 test("Buyer endpoint denies before storage and exposes only the projected DTO",async()=>{
  let actor=null,identityUnavailable=false,activeSession=null,sessionStoreUnavailable=false;
+ let publishedEntry={data:JSON.stringify(v5),etag:'"fixture-v5"',metadata:{}};
  const counts={siteOpens:0,previewOpens:0,reads:0,sessionLookups:0};
  const store={
   async getWithMetadata(key,options) {
    counts.reads++;
    assert.equal(key,"published");
    assert.deepEqual(options,{type:"text",consistency:"strong"});
-   return {data:JSON.stringify(v5),etag:'"fixture-v5"',metadata:{}};
+   return publishedEntry;
   }
  };
  const harness={
