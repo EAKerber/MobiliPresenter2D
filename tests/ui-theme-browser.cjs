@@ -51,6 +51,31 @@ async function main() {
             timeout: 20000
           });
           assert.equal(response && response.status(), 200, shell.path + " HTTP");
+          if (shell.path === "/admin.html" || shell.path === "/config/") {
+            const selector = shell.path === "/admin.html"
+              ? ".private-header__brand strong.visually-hidden"
+              : "h1.visually-hidden";
+            const utility = page.locator(selector);
+            const measuredUtility = await utility.evaluate((element) => {
+              const style = getComputedStyle(element);
+              return {
+                text: element.textContent.trim(),
+                position: style.position,
+                width: style.width,
+                height: style.height,
+                overflow: style.overflow,
+                whiteSpace: style.whiteSpace,
+                ariaHidden: element.getAttribute("aria-hidden")
+              };
+            });
+            assert.equal(measuredUtility.text, "Casa em Módulos", shell.path + " retains its accessible text");
+            assert.equal(measuredUtility.position, "absolute", shell.path + " visually-hidden utility is applied");
+            assert.equal(measuredUtility.width, "1px", shell.path + " utility width");
+            assert.equal(measuredUtility.height, "1px", shell.path + " utility height");
+            assert.equal(measuredUtility.overflow, "hidden", shell.path + " utility clipping");
+            assert.equal(measuredUtility.whiteSpace, "nowrap", shell.path + " utility text does not wrap");
+            assert.equal(measuredUtility.ariaHidden, null, shell.path + " text remains in the accessibility tree");
+          }
 
           const control = page.locator("[data-ui-theme-toggle]");
           await control.waitFor({ state: "visible", timeout: 10000 });

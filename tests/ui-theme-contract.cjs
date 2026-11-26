@@ -177,6 +177,21 @@ for (const file of shells) {
   assert(!html.includes('aria-hidden="true">▱</span>'), file + " no fake mark");
 }
 const themeCSS = read("app/ui-theme.css");
+const adminCSS = read("app/admin/admin.css");
+const configCSS = read("app/styles.css");
+const hiddenRuleCount = (themeCSS.match(/\.visually-hidden\s*\{/g) || []).length;
+assert.equal(hiddenRuleCount, 1, "shared theme owns one visually-hidden utility");
+assert(!adminCSS.includes(".visually-hidden {") && !configCSS.includes(".visually-hidden {"),
+  "route stylesheets do not duplicate the shared utility");
+assert(configCSS.includes(".sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }"),
+  "Config-only sr-only utility remains intact");
+assert(read("app/admin.html").includes('<strong class="visually-hidden">Casa em Módulos</strong>'),
+  "Admin keeps its visually-hidden brand text");
+assert(read("app/config/index.html").includes('<h1 class="visually-hidden">Casa em Módulos</h1>'),
+  "Config keeps a real visually-hidden page heading");
+for (const file of ["app/admin.html", "app/config/index.html"]) {
+  assert(read(file).includes('href="/ui-theme.css?v=arc03-fnd01-v1"'), file + " refreshes the shared utility cache for its consumer");
+}
 const navCSS = read("app/landing/landing.css");
 assert(navCSS.includes('.site-header nav a[aria-current="page"]'), "shared active navigation styling");
 for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"]) {
