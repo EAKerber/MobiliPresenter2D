@@ -20,6 +20,7 @@ on:
       - tests/public-image-fallback-browser.mjs
       - design-system/pins/vis-002/context-v0.3.0/**
       - scripts/verify-vis002c-product-pin-v03.mjs
+      - scripts/vis002c-pin-lifecycle.mjs
       - docs/architecture/vis002c-v03-product-integration-2026-10-24.md
       - .github/workflows/vis002c-v03-product-pin.yml
       - package.json
@@ -45,6 +46,7 @@ jobs:
           VIS002C_DS_SOURCE_ROOT: .work/design-system-source
         run: |
           node --check scripts/verify-vis002c-product-pin-v03.mjs
+          node --check scripts/vis002c-pin-lifecycle.mjs
           node scripts/verify-vis002c-product-pin-v03.mjs
           node --test tests/ci/vis002-context-pin.test.mjs
           node --check app/core/image-fallback.js
