@@ -835,15 +835,21 @@
       "title": "Reconstruir a baseline CSS atual",
       "chapter": "III",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "CSS-00 read-only cross-ref audit of Product main@5c6e652 and development@ef943910",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Baseline slice covers the Config and Admin shells: both load ui-theme.css last, but main/development CSS blobs differ for app/admin/admin.css and app/ui-theme.css; app/styles.css matches. The 8 public/private shells load the pinned theme stylesheet. Config includes an inline mobile style block; app/core/stone.js injects dynamic mask/z-index CSS, while other runtime style assignments are instance/material/geometry values. Full 98-class/stylesheet inventory is not complete. Main/dev app/styles.css sha eb346a41ad91f6dc53875cb954e9018fdc1dd713; main/admin.css 81b115d4a15409d5c46ba5590a19ef587d785a0f vs dev 9ca5a964d6e64a49f58ee36c798f2d3641e64de4; main/ui-theme.css c1ca2a4c36e9195f15cd9045c64ef1857f9af07e vs dev 921a679466b4f401df4f8f3c953c2785e96aec0d."
+        }
+      ],
+      "nextAction": "Completar a matriz de todas as folhas, blocos inline e estilos dinâmicos nos dois destinos; registrar ownership, import/load order e pin/hash, e classificar as 98 incertezas antes de declarar baseline fechada."
     },
     {
       "order": 43,
@@ -931,15 +937,21 @@
       "title": "Extrair a primeira primitiva neutra",
       "chapter": "III",
       "priority": "P1",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "not_present",
+      "main": "not_present",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "FND-01 candidate and consumers audit at Product main@5c6e652 and development@ef943910",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Candidate: .visually-hidden, identically defined in app/styles.css and app/admin/admin.css. Exact runtime consumers are Config h1 and Admin brand text; neither is focusable. .sr-only is a separate Config-only rule used by the dynamic section heading and live region; keep it unchanged. ui-theme.css is already last-loaded in 8 shells and has no current definition. Existing gates cover theme imports and broad browser/build paths but no direct uniqueness/rendered-semantic contract for .visually-hidden. No implementation has been extracted."
+        }
+      ],
+      "nextAction": "Concluir MD-001/MD-008 e CSS-00 ownership/classification preconditions (AR2-01/02 são análises exigidas pelo plano, não IDs do backlog canônico de 125); então consolidar somente .visually-hidden em um owner global e adicionar assertion direta nos testes existentes. Preservar .sr-only e todos os nomes/marcação."
     },
     {
       "order": 49,
