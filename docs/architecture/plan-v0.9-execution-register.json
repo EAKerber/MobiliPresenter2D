@@ -386,6 +386,11 @@
           "source": "Product PR #438 merge and post-merge development readback",
           "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
           "detail": "PR #438 integrated the exact TST-001 workflow snapshot into development. The post-merge compare from 71bc086 to 6b31bea shows only the inventory document and execution register changed; workflow definitions remain byte-identical. The source snapshot still distinguishes declared commands from observed assertions/results."
+        },
+        {
+          "source": "Product PR #516 exact-head gates and post-merge inventory run #45885782458; snapshot docs/architecture/ci/tst-001-workflow-inventory-2026-11-26.json",
+          "sha": "f864fed27026b5bddbd3b79318e68b3cf470036c",
+          "detail": "PR #516 corrected the TST-001 runner to read stable development from the exact pull_request.base.sha and record pull_request.head.sha in a separate candidate layer; push runs use the exact GITHUB_SHA. A synthetic three-ref Git fixture covers main/development/candidate workflow additions, modifications, removals, tree mismatch, and push-without-candidate. Exact-head plan and inventory jobs passed on PR head aad9f179; PR #516 was squash-integrated into development at this SHA. Post-merge push run #45885782458 passed and generated the current snapshot from main@9f422ffe2112c06efd296425adb84dcb607bb563 and development@f864fed27026b5bddbd3b79318e68b3cf470036c: 28 main workflows, 67 development workflows, 26 shared, 2 main-only, 41 development-only, 87 unique workflow definitions, 0 parser warnings, and 6 workflow files flagged for write-signal review. No open PRs were present in that exact readback. This is definition inventory and exact-run evidence; it does not complete the full assertion-to-contract/result crosswalk or exhaustive draft-PR head workflow analysis."
         }
       ],
       "nextAction": "Complete the command→assertion→contract result crosswalk for the remaining families and refresh this snapshot whenever workflow definitions change; preserve the distinction between declared command and observed run result."
