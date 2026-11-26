@@ -30,7 +30,7 @@ O componente instala um listener `keydown` no `document` em `bindKeyboard()`. O 
 
 - `/config/`: `app/config/index.html` carrega `styles.css?v=runtime-v40` relativo e `/ui-theme.css?v=arc03-fnd01-v1`, além de um bloco inline. O caminho relativo resolve para `config/styles.css`, ausente nos trees main/development; o CSS estático registra essa falha. O audit não altera o link.
 - `/viewer/`: carrega `/public-theme.css`, `viewer/viewer.css` e `/ui-theme.css`; os selectors do componente coexistem com as regras específicas da cena Viewer.
-- A classificação acima não equivale a uma crosswalk completa seletor→folha→rota→estado→consumidor.
+- Blobs CSS em development: o destino de `/config/` `config/styles.css` está ausente; o `/ui-theme.css` carregado é `aa0d160110fc1a3bde187bfab4ea97f26290e143`. No Viewer, `/public-theme.css` é `b8122a6a02cd1be67e2bedf9a0ce3b55dbc47b40`, `viewer/viewer.css` é `5dd315b4a5a277ebca3c2493c8febe7a4e44c9b5`, e `/ui-theme.css` também é `aa0d160110fc1a3bde187bfab4ea97f26290e143`. CSS-00 mantém o inventário completo dos nove arquivos CSS de runtime e suas diferenças main/development.\n- A classificação acima não equivale a uma crosswalk completa seletor→folha→rota→estado→consumidor.
 
 ## Domínios e projeção
 
