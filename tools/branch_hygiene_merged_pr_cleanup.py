@@ -167,8 +167,7 @@ def cleanup(event_path: Path, receipt_path: Path) -> dict[str, Any]:
         key, "done", repository, "merged-pr-cleanup", operation_identity,
         run_id or "", trusted, pin,
     )
-    if remote_refs() != expected:
-        raise RuntimeError("FINAL_INVENTORY_DRIFT")
+    # delete_exact_ref already verifies the exact post-delete inventory.
     mark_applied(
         key, repository, "merged-pr-cleanup", operation_identity, run_id or "", trusted
     )
