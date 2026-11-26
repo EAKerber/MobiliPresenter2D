@@ -1086,7 +1086,7 @@
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
-      "main": "not_present",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -1099,9 +1099,14 @@
           "source": "Product PR #481 exact-head CI e merge readback",
           "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
           "detail": "A extração da regra `.visually-hidden` para app/ui-theme.css foi integrada ao Product development em PR #481 (head 54ffe3da815076d83a9b71c437ec294b7729eb1e; squash daede4b89525ffe4e2caafd89da9a1cda7684665); 16/16 workflow runs do head exato concluíram em success. O contrato e browser gate verificam os consumidores Admin/Config, texto acessível, position/dimensão/overflow/nowrap e import de tema; `.sr-only` permaneceu local. FND-01 continua parcial: a matriz de ownership/CSS-00 e a prova focal de foco/clip do DoD não estão fechadas, e main não contém a extração."
+        },
+        {
+          "source": "Product PR #504 exact-head merge and current main readback",
+          "sha": "be7b279bbac904a987bf9638af2c4dfb3ea72bdd",
+          "detail": "PR #504 head 74a0ec7175b76bb5eddf57900464107f6284eb71 was squash-integrated. All 10 PR-triggered workflow runs for the exact head passed. The shared .visually-hidden rule is in app/ui-theme.css with duplicate Admin/Config rules removed; browser proof covers single ownership, computed clipping geometry, accessible names/headings and focus/Tab on both consumers. The current Product main includes the squash. FND-01 remains partial because the broader CSS-00/ownership matrix is not closed; .sr-only remains a distinct Config-local utility."
         }
       ],
-      "nextAction": "Concluir CSS-00/ownership e a prova focal prevista no DoD (clip, geometria computada e foco/Tab nos consumidores), depois decidir e registrar se o export/pin precisa ser Design-System-owned. Manter main sem promoção até fechar a família."
+      "nextAction": "Concluir a matriz CSS-00/ownership e registrar o escopo do utilitário compartilhado. A prova de clip, geometria computada, semântica acessível e foco/Tab está validada em main; preservar .sr-only sem alteração."
     },
     {
       "order": 49,
@@ -1651,15 +1656,21 @@
       "title": "Consolidar a autorização de preços base no Viewer",
       "chapter": "V",
       "priority": "P0",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
+      "planState": "in_progress",
+      "reconciliation": "partial",
       "local": "unknown",
-      "development": "unknown",
-      "main": "unknown",
-      "technicalValidation": "unknown",
+      "development": "partial",
+      "main": "partial",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #505 exact-head gates, Deploy Preview, merge and production readback",
+          "sha": "463327ce25687f29859a152a41f0915af51e9264",
+          "detail": "PR #505 head 2e43409c8a9a81b006216cb91d38cf2db577b021 was squash-integrated into Product main as 463327ce25687f29859a152a41f0915af51e9264. All 9 exact-head workflows passed; the Deploy Preview was READY on the PR head and the production deploy is READY on the merged main SHA. Primary Preview fallback now accepts only public DTO 0.1, with strict allowlist validation and negative coverage for administrative fields/priced 0.2; the normal primary public path may still consume authorized 0.2. Local simulated contracts do not prove a real persisted V5 authorization, Identity session, Blob write or readback; publication remains unknown."
+        }
+      ],
+      "nextAction": "Validar em ambiente não produtivo uma publicação real autorizada por campo V5 persistido e seu readback ponta a ponta (Admin, Identity/Blob e projeção do Viewer). Manter a evidência simulada separada da operação real; não marcar o ID como concluído até fechar esse caminho."
     },
     {
       "order": 81,
@@ -2565,11 +2576,12 @@
   },
   "baselineReadback": {
     "capturedAt": "2026-11-26",
-    "productMainSha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-    "productDevelopmentSha": "a7f34f593e7d7f82d17c0165e9de7c80455ee240",
-    "designSystemMainSha": "026c6c4f4d9a6d29102a241862afdb50c35de147",
-    "productMainTree": "c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8",
-    "productDevelopmentTree": "6e0e9ab858d398dfe257bc5dbcec1fe45ef6f9b3",
-    "meaning": "Live readback 2026-11-26T13:21Z: Product main@5c6e652693bd30218e6915bf8cb160bde03ac719 (tree c9c9cf8a7a8ca7faa3f169144fdee84f0bc34ec8) remains stable; development@a7f34f593e7d7f82d17c0165e9de7c80455ee240 (tree 6e0e9ab858d398dfe257bc5dbcec1fe45ef6f9b3) includes CSS-00, CMP-001, and TOK-00 source-pin portability/documentation. Design System main@026c6c4f4d9a6d29102a241862afdb50c35de147. Product compare remains non-linear; do not merge the full tree. Product has three refs (main, development, codex/v09-loc006-register-correction-20261126) and no Product PRs were open at this readback. Netlify Production deploy 6b07bd0f17cb2fd1e0d65b34 is ready at exact Product main SHA. This readback exposed TOK-00 runtimeStatus conflict: main source deploy includes the candidate while PIN says PREVIEW_PENDING. CSS-00 and TOK-00 remain partial; do not treat branch/deploy state as decision approval. The new source-pin gate is on development only; main remains unchanged."
+    "productMainSha": "463327ce25687f29859a152a41f0915af51e9264",
+    "productDevelopmentSha": "ba6e851ef0fa7ac029bf59774f26f654ced564f9",
+    "designSystemMainSha": "8686df1cf13f84f18f755cb7de2067fda4f7c66d",
+    "productMainTree": "8114fd0beef69a98bac65e0f4115fb272c725f08",
+    "productDevelopmentTree": "71e0cc671170f3ea2c1a6614ff91a6ab3455bf19",
+    "designSystemMainTree": "a0b6807cc9cf6414e78562064e200583776a6445",
+    "meaning": "Live readback 2026-11-26T16:18Z: Product main@463327ce25687f29859a152a41f0915af51e9264 (tree 8114fd0beef69a98bac65e0f4115fb272c725f08) contains the selective FND-01 and DOM-010 promotions; development remains at ba6e851ef0fa7ac029bf59774f26f654ced564f9 (tree 71e0cc671170f3ea2c1a6614ff91a6ab3455bf19). Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). DOM-010 PR #505 was merged after exact-head 9/9 workflow success; Deploy Preview and production are READY at the expected revisions. No whole-tree Product merge occurred. Product has 3 refs; Design System has 5 refs, which is a review signal only; no refs were deleted."
   }
 }
