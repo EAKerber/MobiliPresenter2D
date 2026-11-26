@@ -29,9 +29,10 @@ let lastPut = null;
 
 const identityStub = [
   'const admin = { email: "admin@example.test", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
-  'export async function getUser() { return admin; }',
-  'export async function handleAuthCallback() { return null; }',
-  'export async function login() { return admin; }',
+  'const deniedUser = { email: "staff@example.test", roles: [], app_metadata: { roles: [] } };',
+  'export async function getUser() { const query = new URLSearchParams(location.search); return query.has("logged-out") ? null : query.has("denied") ? deniedUser : admin; }',
+  'export async function handleAuthCallback() { return new URLSearchParams(location.search).get("auth-callback") === "invite" ? { type: "invite", token: "test-invite-token" } : null; }',
+  'export async function login() { if (new URLSearchParams(location.search).has("provider-error")) throw new Error("Provider-owned identity error"); return admin; }',
   'export async function logout() { return null; }',
   'export function onAuthChange() { return () => {}; }',
   'export async function requestPasswordRecovery() { return null; }',
@@ -150,6 +151,41 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const browserOptions = { headless: true };
   if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH) browserOptions.executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
   browser = await chromium.launch(browserOptions);
+  const authPage = await browser.newPage();
+  await authPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html?logged-out=1", { waitUntil: "networkidle" });
+  const authCopy = await authPage.evaluate(() => window.CASA_UI_COPY.admin.authentication);
+  assert.equal(await authPage.locator("#loginPanel .eyebrow").textContent(), authCopy.restrictedEyebrow, "login eyebrow is bound to the auth catalog");
+  assert.equal(await authPage.locator("#loginPanel h1").textContent(), authCopy.loginHeading, "login heading is bound to the auth catalog");
+  assert.equal((await authPage.locator('label:has(#emailInput)').textContent()).trim(), authCopy.emailLabel, "email label remains associated and catalog-backed");
+  assert.equal(await authPage.locator('label[for="passwordInput"]').textContent(), authCopy.passwordLabel, "password label remains explicitly associated");
+  assert.equal(await authPage.locator("#loginMessage").getAttribute("aria-live"), "polite", "auth status remains politely announced");
+  const revealButton = authPage.locator('[data-password-reveal="passwordInput"]');
+  assert.equal(await revealButton.getAttribute("aria-label"), authCopy.showPassword, "password reveal starts with catalog-backed accessible name");
+  await revealButton.click();
+  assert.equal(await authPage.locator("#passwordInput").getAttribute("type"), "text", "password reveal keeps its existing visibility action");
+  assert.equal(await revealButton.getAttribute("aria-label"), authCopy.hidePassword, "revealed password exposes the matching catalog-backed name");
+  await authPage.locator("#recoveryButton").click();
+  assert.equal(await authPage.locator("#loginMessage").textContent(), authCopy.missingEmail, "blank recovery request keeps its existing validation copy");
+  await authPage.locator("#emailInput").fill("private@example.test");
+  await authPage.locator("#recoveryButton").click();
+  assert.equal(await authPage.locator("#loginMessage").textContent(), authCopy.recoverySuccess, "recovery success remains generic to avoid account enumeration");
+  assert.equal((await authPage.locator("#loginMessage").textContent()).includes("private@example.test"), false, "recovery confirmation never reveals the supplied email");
+  await authPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html?logged-out=1&provider-error=1", { waitUntil: "networkidle" });
+  await authPage.locator("#emailInput").fill("admin@example.test");
+  await authPage.locator("#passwordInput").fill("not-a-real-password");
+  await authPage.locator('#loginForm button[type="submit"]').click();
+  await authPage.waitForFunction(() => document.getElementById("loginMessage").textContent === "Provider-owned identity error");
+  assert.equal(await authPage.locator("#loginMessage").textContent(), "Provider-owned identity error", "Identity errors remain pass-through instead of being reclassified");
+  await authPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html#recovery_token=test-recovery-token", { waitUntil: "networkidle" });
+  assert.equal(await authPage.locator("#passwordActionTitle").textContent(), authCopy.recoveryTitle, "recovery token selects the existing password recovery presentation");
+  assert.equal(await authPage.locator("#passwordActionButton").textContent(), authCopy.updatePassword, "recovery uses the catalog-backed update action");
+  await authPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html?auth-callback=invite", { waitUntil: "networkidle" });
+  assert.equal(await authPage.locator("#passwordActionTitle").textContent(), authCopy.inviteTitle, "invite callback selects the existing invite presentation");
+  assert.equal(await authPage.locator("#passwordActionButton").textContent(), authCopy.acceptInvite, "invite uses the catalog-backed acceptance action");
+  await authPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html?denied=1", { waitUntil: "networkidle" });
+  assert.equal(await authPage.locator("#deniedPanel h1").textContent(), authCopy.deniedHeading, "non-admin role displays the catalog-backed denied heading");
+  assert.equal(await authPage.locator("#deniedPanel .intro").textContent(), authCopy.deniedIntroBefore + "admin" + authCopy.deniedIntroAfter, "denied guidance preserves the named Identity role");
+  await authPage.close();
   const defaultCurrent = structuredClone(current);
   const finishPolicyFixture = structuredClone(current);
   const globalFinish = finishPolicyFixture.finishes[0];
