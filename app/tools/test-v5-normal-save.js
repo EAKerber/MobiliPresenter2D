@@ -23,12 +23,15 @@ function mockStore(initial = v5, mode = "") {
   let document = initial === null ? null : structuredClone(initial);
   let etag = '"original-v5"';
   let writes = 0;
+  let readCount = 0;
   return {
     get writes() { return writes; },
     get document() { return document; },
     async getWithMetadata(key, options) {
       assert.equal(key, "published");
       assert.deepEqual(options, { type: "text", consistency: "strong" });
+      readCount++;
+      if (mode === "missing-readback" && readCount > 1) return null;
       if (document === null) return null;
       return { etag, data: typeof document === "string" ? document : JSON.stringify(document), metadata: {} };
     },
@@ -60,6 +63,78 @@ async function fails(label, store, payload, code, writes = 0) {
   assert.equal(store.writes, writes, label + ": write count");
 }
 
+
+async function concurrentEditRace() {
+  let document = structuredClone(v5);
+  let etag = '"original-v5"';
+  let initialReadCount = 0;
+  let writes = 0;
+  let successfulWrites = 0;
+  let releaseInitialReads;
+  const bothInitialReadsReady = new Promise((resolve) => { releaseInitialReads = resolve; });
+
+  const store = {
+    get writes() { return writes; },
+    get successfulWrites() { return successfulWrites; },
+    get document() { return document; },
+    async getWithMetadata(key, options) {
+      assert.equal(key, "published");
+      assert.deepEqual(options, { type: "text", consistency: "strong" });
+      const snapshot = { etag, data: JSON.stringify(document), metadata: {} };
+      if (initialReadCount < 2) {
+        initialReadCount += 1;
+        if (initialReadCount === 2) releaseInitialReads();
+        await bothInitialReadsReady;
+        return snapshot;
+      }
+      return { etag, data: JSON.stringify(document), metadata: {} };
+    },
+    async setJSON(key, value, options) {
+      assert.equal(key, "published");
+      assert.deepEqual(options, { onlyIfMatch: '"original-v5"' });
+      writes += 1;
+      if (options.onlyIfMatch !== etag) return { modified: false };
+      successfulWrites += 1;
+      document = structuredClone(value);
+      etag = '"race-v5-' + successfulWrites + '"';
+      return { modified: true, etag };
+    }
+  };
+
+  const payloadA = structuredClone(v5);
+  payloadA.objects["module-01"].title = "Edição concorrente A";
+  const payloadB = structuredClone(v5);
+  payloadB.objects["module-01"].title = "Edição concorrente B";
+  assert.deepEqual(v5Core.validate(payloadA, configuration, catalog, priceBook, scene), []);
+  assert.deepEqual(v5Core.validate(payloadB, configuration, catalog, priceBook, scene), []);
+
+  const [resultA, resultB] = await Promise.all([
+    savePublishedV5({ store, payload: payloadA, runtime }),
+    savePublishedV5({ store, payload: payloadB, runtime })
+  ]);
+  const outcomes = [
+    { payload: payloadA, result: resultA },
+    { payload: payloadB, result: resultB }
+  ];
+  const winners = outcomes.filter(({ result }) => result.ok);
+  const losers = outcomes.filter(({ result }) => !result.ok);
+
+  assert.equal(initialReadCount, 2, "both editors read the same original revision before writing");
+  assert.equal(winners.length, 1, "exactly one concurrent save wins");
+  assert.equal(losers.length, 1, "exactly one concurrent save loses");
+  assert.equal(losers[0].result.code, "source_etag_conflict");
+  assert.equal(losers[0].result.status, 409);
+  assert.equal(store.writes, 2, "one compare-and-set attempt per editor; no retry");
+  assert.equal(store.successfulWrites, 1, "only the matching ETag can update storage");
+  assert.equal(store.document.revision, v5.revision + 1);
+  assert.equal(
+    store.document.objects["module-01"].title,
+    winners[0].payload.objects["module-01"].title,
+    "the losing editor never replaces the winner's document"
+  );
+  assert.equal(digestJson(winners[0].result.value), digestJson(store.document));
+}
+
 async function main() {
   const payload = structuredClone(v5);
   payload.objects["module-01"].title = "Título publicado v5";
@@ -79,6 +154,7 @@ async function main() {
   assert.equal(digestJson(saved.value), digestJson(store.document), "verified readback returned");
 
   await fails("stale revision after first save", store, payload, "revision_conflict", 1);
+  await concurrentEditRace();
   await fails("v5 is never created through normal PUT on v3", mockStore(v3), payload, "hierarchy_publication_required");
   await fails("missing source", mockStore(null), payload, "published_blob_missing");
   await fails("malformed source", mockStore("{not-json"), payload, "invalid_stored_json");
@@ -90,6 +166,7 @@ async function main() {
     ...payload, pricing: { ...payload.pricing, schemaVersion: "CommercialPricingRules 0.0" }
   }, "invalid_v5_configuration");
   await fails("missing required policy", mockStore(), { ...payload, presentationPolicy: null }, "invalid_v5_configuration");
+  await fails("missing readback", mockStore(v5, "missing-readback"), payload, "readback_missing_or_invalid", 1);
   await fails("lost etag", mockStore(v5, "conflict"), payload, "source_etag_conflict", 1);
   await fails("missing etag from write", mockStore(v5, "missing-write-etag"), payload, "write_etag_missing", 1);
   await fails("phantom successful write", mockStore(v5, "phantom"), payload, "readback_etag_mismatch", 1);
