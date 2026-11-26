@@ -790,7 +790,7 @@
       "priority": "P0",
       "planState": "in_progress",
       "reconciliation": "partial",
-      "local": "partial",
+      "local": "unknown",
       "development": "partial",
       "main": "partial",
       "technicalValidation": "partial",
@@ -805,9 +805,14 @@
           "source": "Product PR #444 exact-head test and Actions evidence; source-pinned against development",
           "sha": "8dadf220a282bdb111947f27a207351629e786e0",
           "detail": "Added adversarial nested DTO assertions for unknown Admin metadata in objects, asset records and presentation policy, preserved published fields, and verified that Buyer flow clears the internal source revision. The exact-head local projection test passed 1/1 and all nine triggered workflows passed. This closes only a bounded Buyer-projection regression gap; DOM-001 remains partial because schema/default/price compatibility inventory and its CMP-001 dependency are still open."
+        },
+        {
+          "source": "Product DOM-001 Admin V5 source-to-persistence subinventory",
+          "sha": "b56f8a36ab57897c4cfb851f184a53dc20048105",
+          "detail": "Added docs/architecture/dom-001-admin-v5-persistence-subinventory-2026-11-26.md on development. Source review maps V5 schema/validators, authored defaults, Admin edit and save, Identity authorization, Netlify store selection, conditional V5 write/readback, and separate Buyer and public Viewer projections with their tests. Current code refs reviewed: main@463327ce25687f29859a152a41f0915af51e9264 and development code@6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c; later development changes were documentation-only. Tests were inspected, not run in this source review. Hosted Identity claim, actual Blob concurrency behavior, real hosted save/readback/projection, complete form-field map, human owner, and exhaustive route closure remain unknown. This is one bounded subinventory; it does not close DOM-001."
         }
       ],
-      "nextAction": "Continue the schema-to-projection-to-consumer inventory for Admin, Buyer and public Viewer, including defaults, prices and compatibility paths; reconcile CMP-001 before claiming DOM-001 complete."
+      "nextAction": "Complete the Admin form-to-schema/default/compatibility crosswalk, then record exact current Buyer and Viewer projection/auth/test evidence; obtain hosted persistence proof only in an authorized non-production environment. Keep DOM-001 partial until all prioritized routes/components and consumers are closed."
     },
     {
       "order": 36,
@@ -2583,11 +2588,11 @@
   "baselineReadback": {
     "capturedAt": "2026-11-26",
     "productMainSha": "463327ce25687f29859a152a41f0915af51e9264",
-    "productDevelopmentSha": "6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c",
+    "productDevelopmentSha": "b56f8a36ab57897c4cfb851f184a53dc20048105",
     "designSystemMainSha": "8686df1cf13f84f18f755cb7de2067fda4f7c66d",
     "productMainTree": "8114fd0beef69a98bac65e0f4115fb272c725f08",
-    "productDevelopmentTree": "4c81b117cf798f6f99d9d08084ba66adc0fd157c",
+    "productDevelopmentTree": "624865188f6cc77388752a020bbce5e8eb555d8a",
     "designSystemMainTree": "a0b6807cc9cf6414e78562064e200583776a6445",
-    "meaning": "Live branch readback captured at 2026-11-26T16:35Z after PR #506 integration: Product main@463327ce25687f29859a152a41f0915af51e9264 (tree 8114fd0beef69a98bac65e0f4115fb272c725f08), Product development@6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c (tree 4c81b117cf798f6f99d9d08084ba66adc0fd157c), and Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). PR #506 was squash-integrated into development after all 2 applicable workflows passed on exact head 7bde6e4535bac17f4bd0e0b78de4b075a7cfaa50; Supabase Preview was skipped because no associated Supabase branch exists. PR #505 remains at Product main and Production READY on the exact expected main. No whole-tree merge was performed. These branch heads are moving refs and must be re-read before any dependent Git operation. This register-only commit advances Product development to 3833679b0a55814fb9d3915b4c142ab5fe0377d; it changes evidence/status documentation only, not implementation."
+    "meaning": "Live branch readback captured at 2026-11-26T16:40Z: Product main@463327ce25687f29859a152a41f0915af51e9264 (tree 8114fd0beef69a98bac65e0f4115fb272c725f08), Product development@b56f8a36ab57897c4cfb851f184a53dc20048105 (tree 624865188f6cc77388752a020bbce5e8eb555d8a), and Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). Development has PR #506 squash plus documentation-only register and DOM-001 subinventory updates; runtime implementation is unchanged from the reviewed code tree 4c81b117cf798f6f99d9d08084ba66adc0fd157c. PR #506 passed both applicable exact-head workflows and was integrated in development; Supabase Preview was skipped because no associated Supabase branch exists. PR #505 remains at Product main and Production READY on the expected main. No whole-tree merge was performed. These branch heads are moving refs and must be re-read before dependent Git operations."
   }
 }
