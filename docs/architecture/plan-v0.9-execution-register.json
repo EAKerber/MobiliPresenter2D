@@ -78,9 +78,14 @@
           "source": "Leitura ao vivo do Design System e reconciliação pós-PR #131",
           "sha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
           "detail": "PR #131 foi integrado ao DS main; a leitura ao vivo confirma main em 9261c57 e nenhuma PR aberta. A hierarquia do Product aponta para o plano v0.9, o registro de execução e decisões DS. GIT-002 permanece parcial: ainda é preciso varrer os demais documentos apontados para afirmações de autoridade atuais e reconciliar a branch de handover retida."
+        },
+        {
+          "source": "Leitura ao vivo pós-PR #137 no Design System",
+          "sha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
+          "detail": "PR #137 foi integrada ao Design System main em 9261c57 e não há PR aberta. O HANDOVER_CURRENT.md ainda diz que o conteúdo está na PR aberta #137 e reporta Product development@c04efa2; portanto, o documento integrado ficou temporalmente obsoleto e precisa de novo refresh com o retrato atual. Product development não deve ser usado como fonte antiga sem revalidação."
         }
       ],
-      "nextAction": "Continuar a busca por ponteiros atuais obsoletos em Product e Design System, preservando handovers como históricos; revalidar os heads antes de alterar qualquer fonte documental."
+      "nextAction": "Atualizar o HANDOVER_CURRENT do Design System após a integração de #137, varrer os demais ponteiros de autoridade ainda atuais e revalidar refs antes de qualquer alteração; preservar registros históricos."
     },
     {
       "order": 4,
@@ -212,9 +217,14 @@
           "source": "Compare atual de Product main e development",
           "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
           "detail": "Baseline de reconciliação verificada: main@5c6e652693bd30218e6915bf8cb160bde03ac719; development@4f352c56268335ead6655653828ccc5620bfdfe6; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; 35 commits exclusivos de main, 601 de development e 92 paths no lado main. Política aplicada: conservar main estável, usar development como buffer e integrar mudanças da main em pacotes coerentes por família, sem merge de árvore inteira. DS tem apenas main@9261c57 como ramo de release e não possui development."
+        },
+        {
+          "source": "Compare ao vivo Product main ↔ development em 2026-11-26",
+          "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
+          "detail": "Política confirmada no estado atual: Product main@5c6e652693bd30218e6915bf8cb160bde03ac719 permanece estável, development@daede4b89525ffe4e2caafd89da9a1cda7684665 continua como buffer; merge base 221b54b2, 35 commits só em main, 604 só em development e 92 caminhos no sentido development→main. Design System não tem branch development; seu main está em 9261c5782c5987bc91d70f87dde3f8a4779c004d. Promoção permanece seletiva por família."
         }
       ],
-      "nextAction": "Completar a disposição por família dos 92 caminhos de main, documentar checkpoints e gates de promoção por classe e revalidar refs antes de cada pacote."
+      "nextAction": "Registrar o retrato atual e checkpoints por família nos dois repositórios, incluindo que o Design System não tem development; revalidar refs imediatamente antes de cada integração."
     },
     {
       "order": 12,
@@ -493,9 +503,14 @@
           "source": "Leitura ao vivo das PRs abertas e integrações recentes",
           "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
           "detail": "Em 2026-11-26, Product não possui PR aberta. PR #477 foi integrada a development em e7df178 após 10 gates exatos com sucesso; PR #478 foi integrada em 4f352c5 e o workflow pós-merge #45764735114 terminou com authorization-contract e access-session-browser ambos em sucesso. Design System também não possui PR aberta; #131 está integrada em main@9261c57. O critério de todas as PRs atualmente abertas com disposição está satisfeito; a reconciliação documental completa de intenção/dependências/rollback permanece parcial."
+        },
+        {
+          "source": "Leitura ao vivo de PRs e refs em 2026-11-26",
+          "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
+          "detail": "Product e Design System não têm PR aberta. Product tem refs main, development e codex/v09-loc006-register-correction-20261126; Design System tem main e codex/handover-live-reconciliation-20261124. PR #481 foi integrada em development@daede4; PR #137 foi integrada em Design System main@9261c57. A lista atual de PRs está vazia; branches auxiliares permanecem preservadas, sem inferir elegibilidade de higiene."
         }
       ],
-      "nextAction": "Revalidar a lista de PRs abertas após cada novo pacote e registrar intenção, contrato, gates, dependências, rollback e disposição do pacote antes da integração; não há PR aberta pendente neste snapshot."
+      "nextAction": "Atualizar intenção, contrato, gates, dependências, rollback e disposição para cada novo pacote; no retrato atual não há PRs abertas. Revalidar antes de cada integração."
     },
     {
       "order": 24,
@@ -589,9 +604,14 @@
           "source": "Product live compare main...development e classificação dos 92 caminhos",
           "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
           "detail": "Compare atual: base main@5c6e652, head development@4f352c5, merge base 221b54b2; 35 commits só em main, 601 só em development e 92 caminhos do lado main. Os caminhos pertencem a famílias separáveis: páginas públicas/mídia/tema/compiler/manifests e gates; inventário ARC-13; Admin/V5/buyer endpoints com diferenças de política; gate de preço-base do viewer; higiene de branches; tema/rasters. Blobs compartilhados idênticos confirmam o núcleo normalizado flow-model.js e flow-layout.js já presente nos dois destinos. Nenhuma integração integral é indicada."
+        },
+        {
+          "source": "Compare ao vivo Product main ↔ development em 2026-11-26",
+          "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
+          "detail": "Refs verificadas: main@5c6e652693bd30218e6915bf8cb160bde03ac719 e development@daede4b89525ffe4e2caafd89da9a1cda7684665; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95. Há 35 commits exclusivos de main e 604 exclusivos de development; a comparação development→main lista 92 caminhos de main. A divergência segue ampla e multiclasse, então não autoriza merge de árvore inteira."
         }
       ],
-      "nextAction": "Decompor os caminhos de main em pacotes verticais com contratos e gates próprios; começar por famílias sem diferenças de política em runtime e fazer promoção seletiva após integração em development."
+      "nextAction": "Concluir a disposição por família dos 92 caminhos de main em relação à development, com contrato, gate, rollback e checkpoint de promoção; não usar merge integral."
     },
     {
       "order": 27,
@@ -977,7 +997,7 @@
       "planState": "in_progress",
       "reconciliation": "partial",
       "local": "partial",
-      "development": "not_present",
+      "development": "partial",
       "main": "not_present",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
@@ -986,9 +1006,14 @@
           "source": "FND-01 candidate and consumers audit at Product main@5c6e652 and development@ef943910",
           "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
           "detail": "Candidate: .visually-hidden, identically defined in app/styles.css and app/admin/admin.css. Exact runtime consumers are Config h1 and Admin brand text; neither is focusable. .sr-only is a separate Config-only rule used by the dynamic section heading and live region; keep it unchanged. ui-theme.css is already last-loaded in 8 shells and has no current definition. Existing gates cover theme imports and broad browser/build paths but no direct uniqueness/rendered-semantic contract for .visually-hidden. No implementation has been extracted."
+        },
+        {
+          "source": "Product PR #481 exact-head CI e merge readback",
+          "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
+          "detail": "A extração da regra `.visually-hidden` para app/ui-theme.css foi integrada ao Product development em PR #481 (head 54ffe3da815076d83a9b71c437ec294b7729eb1e; squash daede4b89525ffe4e2caafd89da9a1cda7684665); 16/16 workflow runs do head exato concluíram em success. O contrato e browser gate verificam os consumidores Admin/Config, texto acessível, position/dimensão/overflow/nowrap e import de tema; `.sr-only` permaneceu local. FND-01 continua parcial: a matriz de ownership/CSS-00 e a prova focal de foco/clip do DoD não estão fechadas, e main não contém a extração."
         }
       ],
-      "nextAction": "Concluir MD-001/MD-008 e a matriz CSS-00/ownership; confirmar se o destino global é artefato derivado e como atualizar seu pin. Em seguida adicionar contrato direto de unicidade e teste renderizado, preservando .sr-only e seus consumidores."
+      "nextAction": "Concluir CSS-00/ownership e a prova focal prevista no DoD (clip, geometria computada e foco/Tab nos consumidores), depois decidir e registrar se o export/pin precisa ser Design-System-owned. Manter main sem promoção até fechar a família."
     },
     {
       "order": 49,
@@ -2076,9 +2101,14 @@
           "source": "Product LOC-006 Admin scene asset copy — local candidate",
           "sha": "DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0",
           "detail": "Moves only fixed heading, field labels, default option, image alt, preview error, and empty-preview copy for existing Admin scene-asset selectors into uiCopy.admin.objectAssets. Scene and asset paths, mask behavior, values, save/publication path, and commercial content remain unchanged. Local build, page compiler, theme contract, scene core, ARC-03C and auth recovery tests pass. ARC-13 inventory ran twice with identical SHA DB7BB66473704FF3078FB85F688C3D0F821F93A36CB988D7C2C6D23BB77BA1A0: 1,021 unreviewed occurrences, 0 parse errors, 420 primary-page authoring occurrences mapped, 0 unresolved. Local Admin browser is unavailable because Playwright is not installed in this checkout; exact PR browser gates remain pending. LOC-006 remains partial."
+        },
+        {
+          "source": "Candidato local LOC-006 após Product development@c26b5b4",
+          "sha": "c04826106119e799493c431d079491630d327809",
+          "detail": "Candidato local `codex/loc006-admin-assets-copy-20261126` contém extração de cópia fixa dos seletores de arquivos de cena do Admin e correção da proveniência ARC-13. O HEAD está dois commits à frente da base local c26b5b4; live development já avançou a daede4 e não há branch remota/PR aberta para este candidato. Não está integrado nem promovido; gates exatos de PR ainda precisam rodar."
         }
       ],
-      "nextAction": "Concluir os gates da família de cópia de arquivos de cena do Admin e integrá-la em development; depois mapear a próxima família com seus estados, consumidores e contratos, mantendo main estável e sem migrar conteúdo comercial."
+      "nextAction": "Portar o candidato local para a development atual sem perder as mudanças posteriores a c26b5b4; reconciliar os arquivos ARC-13/manifesto e executar os gates de Admin no head exato. Integrar em development após todos os gates, mantendo main estável."
     },
     {
       "order": 107,
@@ -2416,8 +2446,8 @@
   "baselineReadback": {
     "capturedAt": "2026-11-26",
     "productMainSha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
-    "productDevelopmentSha": "4f352c56268335ead6655653828ccc5620bfdfe6",
+    "productDevelopmentSha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
     "designSystemMainSha": "9261c5782c5987bc91d70f87dde3f8a4779c004d",
-    "meaning": "Refs verificadas ao vivo em 2026-11-26. Product main permanece em 5c6e652; development está em 4f352c562. Design System main está em 9261c57; a branch development do DS não existe. Product compare base=main, head=development: merge base 221b54b2, 35 commits exclusivos de main, 601 exclusivos de development e 92 caminhos do lado main; sem merge de árvore inteira. Product sem PRs abertas e com duas branches (main/development); DS sem PRs abertas e com duas branches (main e codex/handover-live-reconciliation-20261124). Produção Product continua vinculada ao main; esta atualização documental não muda main."
+    "meaning": "Refs verificadas ao vivo em 2026-11-26. Product main permanece em 5c6e652693bd30218e6915bf8cb160bde03ac719; development em daede4b89525ffe4e2caafd89da9a1cda7684665. Design System main está em 9261c5782c5987bc91d70f87dde3f8a4779c004d e não possui branch development. Compare Product com merge base 221b54b2: 35 commits exclusivos de main, 604 exclusivos de development e 92 caminhos no sentido development→main; não fazer merge de árvore inteira. PR #481 foi integrada a Product development com 16/16 gates passando; PR #137 foi integrada ao Design System main. Não há PRs abertas. Refs observadas: Product main/development/codex-v09-loc006-register-correction; DS main/codex-handover-live-reconciliation. A branch local LOC-006 é um candidato não publicado e permanece fora deste snapshot remoto. Production/deploy não foi revalidado nesta captura. Cada estado de publicação, proteção e higiene requer nova leitura."
   }
 }
