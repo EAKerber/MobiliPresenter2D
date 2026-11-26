@@ -1,6 +1,6 @@
 {
   "schema": "M2DProductContextualTextPin/0.3",
-  "status": "SCOPED_INTEGRATION_CANDIDATE_NOT_RELEASED",
+  "status": "SCOPED_RUNTIME_AUTHORIZED_AND_RELEASED",
   "designSystem": {
     "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
     "sourceCommit": "2f11ecf8948c779706a0ce0795e088d29633fb7e",
@@ -32,7 +32,92 @@
   "allowedSelectorsCount": 10,
   "theme": "light",
   "productConsumer": "app/landing/landing.css imports the scoped artifact; all ten exact page selectors consume its token",
-  "runtimeStatus": "PREVIEW_PENDING",
+  "runtimeStatus": "PRODUCTION_VERIFIED",
   "changesCanonicalDecision": false,
-  "darkThemeUnchanged": true
+  "darkThemeUnchanged": true,
+  "runtimeAuthorization": {
+    "status": "authorized",
+    "sourceDecision": "VIS-002",
+    "decisionGitBlob": "63b60f8d87327c6fd1e80c8cdf4ff832c4089bfa",
+    "visualChangeAuthorized": true,
+    "approvalSource": "Design System manifest constraints.visualChangeAuthorized and the merged Product integration PR",
+    "designSystemIntegration": {
+      "repository": "EAKerber/MobiliPresenter2D_DesignSystem",
+      "pullRequest": 52,
+      "state": "merged",
+      "mergeCommit": "9324bbcff78839a5c2b8e715c40654ea7c3f4c54",
+      "sourceCommit": "2f11ecf8948c779706a0ce0795e088d29633fb7e"
+    },
+    "productIntegration": {
+      "repository": "EAKerber/MobiliPresenter2D",
+      "pullRequest": 241,
+      "state": "merged",
+      "mergeCommit": "818f165bf0b11b53f5fbaba1417560066bf03637"
+    }
+  },
+  "runtimeVerification": {
+    "environment": "production",
+    "siteUrl": "https://casaemmodulos.casa",
+    "deployId": "6b07bd0f17cb2fd1e0d65b34",
+    "deployState": "ready",
+    "deployedProductCommit": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+    "observedAt": "2026-11-26",
+    "method": "anonymous public-page DOM/CSSOM readback in the ChatGPT in-app browser",
+    "stylesheetImport": "https://casaemmodulos.casa/design-system/vis002c-long-copy-light-v0.3.0.css?v=vis002c-0.3.0",
+    "tokenValue": "#292723",
+    "computedColor": "rgb(41, 39, 35)",
+    "theme": "light",
+    "contexts": [
+      {
+        "route": "/",
+        "selector": ".hero-description",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".how-hero-note",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/about/",
+        "selector": ".about-scale p:not(.eyebrow)",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/",
+        "selector": ".story-section > p:not(.eyebrow)",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/",
+        "selector": ".feature-copy > p:not(.eyebrow):not(.feature-availability)",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/about/",
+        "selector": ".about-closing > p:not(.eyebrow):not(.about-closing__signature)",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/about/",
+        "selector": ".about-scale__stat > span",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".finish-copy > p:not(.eyebrow):not(.finish-signature)",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".commercial-clarity > p:not(.eyebrow)",
+        "computedColor": "rgb(41, 39, 35)"
+      },
+      {
+        "route": "/how-it-works/",
+        "selector": ".launch-card .launch-copy > p",
+        "computedColor": "rgb(41, 39, 35)"
+      }
+    ]
+  }
 }
