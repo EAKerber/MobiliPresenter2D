@@ -16,6 +16,9 @@ def split_waves(manifest, repository):
             or manifest.get("approvedRetirement") is not True
             or manifest.get("auditOnly") is True):
         raise ValueError("INVALID_SERIES_IDENTITY")
+    series_id = manifest.get("seriesId")
+    if not isinstance(series_id, str) or not re.fullmatch(r"[A-Za-z0-9._-]{1,80}", series_id):
+        raise ValueError("INVALID_SERIES_ID")
     waves = manifest.get("waves")
     if not isinstance(waves, list) or not 1 <= len(waves) <= 3:
         raise ValueError("INVALID_SERIES_SIZE")
@@ -40,7 +43,8 @@ def split_waves(manifest, repository):
                 raise ValueError("UNSAFE_SERIES_REF")
             branches_seen.add(ref["branch"])
         batches.append({"schemaVersion":"BranchHygieneBatch 0.1",
-                        "repository":repository,"approvedRetirement":True,"branches":refs})
+                        "repository":repository,"approvedRetirement":True,
+                        "wave":f"{series_id}/{ident}","branches":refs})
     return batches
 
 def run(manifest, receipts, audit_only):
