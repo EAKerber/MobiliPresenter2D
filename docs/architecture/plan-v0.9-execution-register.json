@@ -834,7 +834,7 @@
       "development": "partial",
       "main": "partial",
       "technicalValidation": "partial",
-      "approvalPublication": "unknown",
+      "approvalPublication": "done",
       "evidence": [
         {
           "source": "Product main@5c6e652 / development@ef943910 and local exact-blob token checks at Design System main@c6ff6545",
@@ -850,9 +850,14 @@
           "source": "Product PR #495 merged into development; exact-head VIS-002C gate",
           "sha": "a7f34f593e7d7f82d17c0165e9de7c80455ee240",
           "detail": "PR #495 head dee6a492384049fbb6a864c72fc41ca6cf0f9ef5 foi integrado por squash em Product development no SHA registrado; o gate exato 45827718711 passou nos jobs verify-pinned-consumers e scoped-raster. O gate verificou o checkout DS exato 2f11ecf8948c779706a0ce0795e088d29633fb7e, o blob da decisão e a igualdade dos blobs do CSS, mapping e manifesto entre repos; passou o teste de hash com fixture CRLF. O run também recompilou as páginas e passou a contenção raster e browser image fallback. Main permaneceu em 5c6e652; não houve mudança de CSS/runtime. TOK-00 segue partial porque PIN mantém PREVIEW_PENDING em conflito com a presença do artefato no deploy Production e ainda falta o mecanismo completo de distinção entre referência, candidato e integração runtime autorizada."
+        },
+        {
+          "source": "Live Production DOM/CSSOM readback 2026-11-26",
+          "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
+          "detail": "Netlify deploy 6b07bd0f17cb2fd1e0d65b34 is READY on main@5c6e652. Anonymous browser CSSOM confirmed the exact imported stylesheet, the scoped custom property #292723, and computed rgb(41,39,35) on all 10 mapped selectors across /, /about/, and /how-it-works/ in light theme. Existing approval is anchored by manifest constraints.visualChangeAuthorized plus merged DS #52 and Product #241 receipts; the deploy alone is not treated as approval. Dark-theme runtime was not remeasured in this readback."
         }
       ],
-      "nextAction": "Reconciliar o estado PREVIEW_PENDING contra evidência runtime exata do Production e registrar a autoridade que permite transição de estado. Completar o gate para rejeitar mecanicamente imports de artefatos reference-only e validar a estrutura exigida por uma integração runtime autorizada; só então reavaliar o DoD de TOK-00. Manter main inalterada enquanto houver conflito."
+      "nextAction": "Validate the explicit reference/candidate/runtime-authorized state machine and source gate on the exact Product development head; if all focused gates pass, port this non-runtime contract package to main. Keep Product CSS and page behavior unchanged."
     },
     {
       "order": 39,
