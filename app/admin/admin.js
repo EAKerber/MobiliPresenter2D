@@ -32,6 +32,7 @@ const objectContentFieldCopy = uiCopy.admin.objectContentFields;
 const materialAvailabilityCopy = uiCopy.admin.materials;
 const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
 const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nominalDimensions;
+const authenticationCopy = uiCopy.admin.authentication;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
@@ -69,6 +70,11 @@ let finishAvailabilityPage = 0;
 let materialAvailabilityPage = 0;
 let selectedMaterialTarget = "fronts-all";
 const MATERIALS_PER_PAGE = 4;
+
+document.querySelectorAll("[data-admin-auth-copy]").forEach((element) => {
+  const key = element.dataset.adminAuthCopy;
+  if (typeof authenticationCopy[key] === "string") element.textContent = authenticationCopy[key];
+});
 
 function configuredHierarchyItemLabel(itemId) {
   for (const stage of Object.values(hierarchyDefaults?.stages || {})) {
@@ -109,11 +115,11 @@ function syncPasswordReveal(button) {
   const input = byId(button.dataset.passwordReveal);
   if (!input) return;
   const revealed = input.type === "text";
-  const label = revealed ? "Ocultar senha" : "Mostrar senha";
+  const label = revealed ? authenticationCopy.hidePassword : authenticationCopy.showPassword;
   button.setAttribute("aria-pressed", String(revealed));
   button.setAttribute("aria-label", label);
   button.title = label;
-  button.textContent = revealed ? "Ocultar" : "Mostrar";
+  button.textContent = revealed ? authenticationCopy.hidePasswordAction : authenticationCopy.showPasswordAction;
 }
 
 document.querySelectorAll("[data-password-reveal]").forEach((button) => {
@@ -1678,21 +1684,21 @@ function showPasswordAction(type, token) {
   loginForm.hidden = true;
   passwordActionForm.hidden = false;
   byId("passwordActionTitle").textContent = type === "invite"
-    ? "Defina uma senha para concluir o convite de administrador."
-    : "Defina uma nova senha para acessar a administração.";
-  byId("passwordActionButton").textContent = type === "invite" ? "Aceitar convite" : "Atualizar senha";
+    ? authenticationCopy.inviteTitle
+    : authenticationCopy.recoveryTitle;
+  byId("passwordActionButton").textContent = type === "invite" ? authenticationCopy.acceptInvite : authenticationCopy.updatePassword;
 }
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const submit = loginForm.querySelector("button[type=submit]");
   submit.disabled = true;
-  setMessage(loginMessage, "Entrando…");
+  setMessage(loginMessage, authenticationCopy.loginProgress);
   try {
     await login(byId("emailInput").value.trim(), byId("passwordInput").value);
     setMessage(loginMessage, "");
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível entrar. Confira os dados e tente novamente.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.loginFallback, "error");
   } finally {
     submit.disabled = false;
   }
@@ -1700,12 +1706,12 @@ loginForm.addEventListener("submit", async (event) => {
 
 byId("recoveryButton").addEventListener("click", async () => {
   const email = byId("emailInput").value.trim();
-  if (!email) return setMessage(loginMessage, "Informe seu e-mail para receber o link de recuperação.", "error");
+  if (!email) return setMessage(loginMessage, authenticationCopy.missingEmail, "error");
   try {
     await requestPasswordRecovery(email);
-    setMessage(loginMessage, "Se a conta existir, você receberá um link para redefinir a senha.", "success");
+    setMessage(loginMessage, authenticationCopy.recoverySuccess, "success");
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível solicitar a recuperação.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.recoveryFallback, "error");
   }
 });
 
@@ -1719,7 +1725,7 @@ passwordActionForm.addEventListener("submit", async (event) => {
     window.location.hash = "";
     window.location.reload();
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível atualizar a senha.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.updatePasswordFallback, "error");
   }
 });
 
@@ -2174,7 +2180,7 @@ async function initializeAdminAccess() {
       else await showUser(await getUser());
     }
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.accessInitializationFallback, "error");
     await showUser(await getUser());
   }
 }

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-<script src="/core/ui-copy.js?v=arc13-loc006-admin-nominal-dimensions-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
+<script src="/core/ui-copy.js?v=arc13-loc006-admin-auth-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
 <link rel="icon" type="image/x-icon" href="/branding/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/branding/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/branding/android-chrome-192.png">
@@ -31,37 +31,37 @@
     </header>
     <main class="admin-main">
       <section id="loginPanel" class="admin-card auth-card">
-        <p class="eyebrow">Acesso restrito</p>
-        <h1>Painel administrativo</h1>
-        <p class="intro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
+        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow"></p>
+        <h1 data-admin-auth-copy="loginHeading"></h1>
+        <p class="intro" data-admin-auth-copy="loginIntro"></p>
         <form id="loginForm" class="admin-form" method="post">
-          <label>E-mail<input id="emailInput" type="email" autocomplete="username" required /></label>
+          <label><span data-admin-auth-copy="emailLabel"></span><input id="emailInput" type="email" autocomplete="username" required /></label>
           <div class="admin-field">
-            <label for="passwordInput">Senha</label>
+            <label for="passwordInput" data-admin-auth-copy="passwordLabel"></label>
             <div class="password-field">
               <input id="passwordInput" type="password" autocomplete="current-password" required />
-              <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
+              <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false"></button>
             </div>
           </div>
-          <div class="auth-actions"><button class="button button--primary" type="submit">Entrar</button><button id="recoveryButton" class="text-button" type="button">Esqueci minha senha</button></div>
+          <div class="auth-actions"><button class="button button--primary" type="submit" data-admin-auth-copy="submitLogin"></button><button id="recoveryButton" class="text-button" type="button" data-admin-auth-copy="requestRecovery"></button></div>
         </form>
         <form id="passwordActionForm" class="admin-form" hidden>
           <p id="passwordActionTitle" class="intro"></p>
           <div class="admin-field">
-            <label for="newPasswordInput">Nova senha</label>
+            <label for="newPasswordInput" data-admin-auth-copy="newPasswordLabel"></label>
             <div class="password-field">
               <input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required />
-              <button class="password-reveal" type="button" data-password-reveal="newPasswordInput" aria-controls="newPasswordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
+              <button class="password-reveal" type="button" data-password-reveal="newPasswordInput" aria-controls="newPasswordInput" aria-pressed="false"></button>
             </div>
           </div>
-          <button id="passwordActionButton" class="button button--primary" type="submit">Salvar senha</button>
+          <button id="passwordActionButton" class="button button--primary" type="submit" data-admin-auth-copy="savePassword"></button>
         </form>
         <p id="loginMessage" class="message" aria-live="polite"></p>
       </section>
 
       <section id="deniedPanel" class="admin-card" hidden>
-        <p class="eyebrow">Acesso restrito</p><h1>Esta conta não é administradora</h1>
-        <p class="intro">Peça a um responsável para adicionar o papel <code>admin</code> à sua conta no Netlify Identity.</p>
+        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow"></p><h1 data-admin-auth-copy="deniedHeading"></h1>
+        <p class="intro"><span data-admin-auth-copy="deniedIntroBefore"></span><code>admin</code><span data-admin-auth-copy="deniedIntroAfter"></span></p>
       </section>
       <p id="adminServiceError" class="message" role="alert" hidden></p>
 

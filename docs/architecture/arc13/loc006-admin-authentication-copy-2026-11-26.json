@@ -1,0 +1,61 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-002", "LOC-006"],
+  "family": "admin-authentication-invitation-and-password-recovery-copy",
+  "status": "candidate-implemented",
+  "evidence": {
+    "baseRevision": "23485dc9d6dd7ea5a3a871360c6f423da7dbc2de",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventorySha256": "664AC8947DB583CDD2B0A2240089F9C2F2D3A7CCC45536D4791C7F8BA01159AA",
+    "source": "app/admin/admin.js",
+    "sourceGitBlob": "3ff17f84c567d167c226342be1697138e36a196e",
+    "sourceSha256": "36D884BCC6D66BC3E43CD33C1F9F0DF5B6763EBC8D187385477A1AED77E126D1",
+    "sharedCatalog": "app/core/ui-copy.js",
+    "sharedCatalogGitBlob": "117c368abfcb56a093a171624f123667ec8bc34a",
+    "sharedCatalogSha256": "A343B3557717316CF596C6BD20A73A58F6DC22BB5FEABE7A1E6636ED19AA1755",
+    "generatedPrimaryPageManifest": "architecture/generated/primary-pages.manifest.json",
+    "generatedPrimaryPageManifestSha256": "F61E4D5370CE2F0BC8F05A79992DDF6EC8BDAF543746D8A8F6390DC9DD948B22",
+    "adminShellSha256": "1DA2A208F8860CE0F7C00FE806C4EAE54DF8F4D657064702F3652E9915C249FD",
+    "implementationBranch": "codex/loc006-admin-auth-copy-20261126",
+    "route": "/admin"
+  },
+  "state": {
+    "consumer": "Admin login, access-denied, invitation, and password-recovery forms",
+    "meaning": "Moves fixed Portuguese interface copy into the shared Admin catalog while retaining provider-owned errors and the existing authentication contract.",
+    "catalogPrefix": "admin.authentication",
+    "preservedContracts": [
+      "Netlify Identity methods, callback handling, tokens, and reload timing",
+      "Email and session data remain runtime values and are not catalog text",
+      "Provider error.message remains pass-through; no undocumented error-code mapping is introduced",
+      "Password input autocomplete, required/minlength constraints, explicit label associations, and reveal control state",
+      "Polite aria-live status region and generic recovery confirmation that does not reveal account existence"
+    ]
+  },
+  "validation": {
+    "passed": [
+      "npm run build",
+      "npm run pages:check",
+      "node tests/ui-theme-contract.cjs",
+      "node --test tests/arc03c-source-authority.test.mjs: 6 passed",
+      "node --test tests/auth-first-login-recovery.test.mjs: 11 passed",
+      "Admin hierarchy browser with local Chrome: PASS; catalog, denied-role panel, provider-error pass-through, recovery, invite, generic success, and existing editor contracts"
+    ],
+    "arc13Inventory": {
+      "runs": 2,
+      "sameSha256": true,
+      "unreviewedOccurrences": 1021,
+      "javascriptParseErrors": 0,
+      "primaryPageAuthoringMappedOccurrences": 420,
+      "primaryPageAuthoringUnresolvedOccurrences": 0,
+      "unassignedOwnerSites": 0,
+      "unassignedRouteSites": 0
+    },
+    "developmentPullRequestGates": "Pending for the exact PR head"
+  },
+  "limits": [
+    "No Identity API, authorization, persistence, session, token, provider-error, or deployment behavior is changed.",
+    "No commercial content or configured data is moved into the copy catalog.",
+    "LOC-006 and the global ARC-13 candidate inventory remain partial/unreviewed; this receipt covers only the named Admin authentication-copy family."
+  ]
+}

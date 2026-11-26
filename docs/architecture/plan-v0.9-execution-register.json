@@ -1,6 +1,6 @@
 {
   "schema": "PlanV09OperationalRegister/1",
-  "updatedAt": "2026-11-25",
+  "updatedAt": "2026-11-26",
   "statusSemantics": {
     "planState": "Copiado do Anexo A; é o estado editorial inicial, não uma afirmação de implementação atual.",
     "unreviewed": "Reconciliação operacional ainda não feita; não significa ausência de código.",
@@ -1988,12 +1988,17 @@
           "detail": "Fixed Admin copy for the Dependencies and Events panel now uses uiCopy.admin.rules, including shell guidance, labels, action/state/dimension options, conditional headings, and accessible control text. IDs, action codes, enum values, target/entity/service names, and numeric bounds remain data-backed or unchanged. Event trigger options are deduplicated by ID while preserving the first scene-backed label; stone-skirting now appears once from catalog.services. The Admin hierarchy browser covers all three event variants, code/label contracts, dynamic entity names, unique trigger IDs, and no implicit writes. The exact PR head passed all 12 applicable GitHub workflows. Squash-integrated into development as a16adde74cc6af1fb9dfe1884a217f2f716f6472; live readback confirmed development at that SHA and main unchanged at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f. LOC-006 remains partial."
         },
         {
-          "source": "Product commit bbae4bc9029e2b44eb863ad470635391af4cd5ca; ARC-13 receipt docs/architecture/arc13/loc002-admin-nominal-dimensions-copy-2026-11-25.json",
-          "sha": "bbae4bc9029e2b44eb863ad470635391af4cd5ca",
-          "detail": "Fixed Admin copy for nominal-dimension inputs now uses uiCopy.admin.nominalDimensions; the existing wording, data-backed module name, axis keys, numeric constraints, validation, model state and Buyer projection remain unchanged. Build, pages compiler, theme contract, Admin hierarchy browser in Chrome, core model test, Buyer projection and deterministic ARC-13 inventory passed locally. Exact-head GitHub workflows and development integration are pending; main is unchanged. LOC-006 remains partial."
+          "source": "Product PR #473; exact-head gates and development integration",
+          "sha": "23485dc9d6dd7ea5a3a871360c6f423da7dbc2de",
+          "detail": "Nominal-dimension labels, guidance, accessible-name template, and validation copy use uiCopy.admin.nominalDimensions; dimensions, bounds, validation, draft model path, and explicit-save behavior remain unchanged. Exact PR head c58bf795bb2bffa3a92b1e72d1490865cccc8c68 passed all 12 applicable GitHub workflows and local build, page/theme/browser/model/projection/ARC-13 gates. Squash-integrated into development as 23485dc9d6dd7ea5a3a871360c6f423da7dbc2de after confirming the exact base; live main stayed at 2f1b7e1ee8fbc81b8bc8d22014cfe29d599da37f. LOC-006 remains partial."
+        },
+        {
+          "source": "Product LOC-006 Admin authentication copy — local candidate",
+          "sha": "664AC8947DB583CDD2B0A2240089F9C2F2D3A7CCC45536D4791C7F8BA01159AA",
+          "detail": "Fixed login, denied-access, invitation, password-recovery, status, and reveal-control text now uses uiCopy.admin.authentication. Provider errors and user/session/token data stay outside the catalog; Identity calls and timing are unchanged. Local Admin browser covers denied-role copy, provider-error pass-through, generic recovery confirmation, login fields and aria-live, invite/recovery branches, and existing editor contracts. Build, page/theme, ARC-03C and auth logic tests pass; ARC-13 generated twice with identical hash, 1021 candidates, 0 parse errors, 420 mapped and 0 unresolved primary-page occurrences. Exact PR gates and development integration remain pending. LOC-006 stays partial."
         }
       ],
-      "nextAction": "Integrar este pacote validado na development após os gates exatos; em seguida continuar extraindo famílias Admin/Configurador com seus estados, consumidores e testes, mantendo conteúdo comercial sob sua autoridade."
+      "nextAction": "Integrar em development a família de cópia de autenticação do Admin após os gates do head exato; manter main estável e mapear a próxima família LOC-006 com estados, consumidores e testes próprios."
     },
     {
       "order": 107,
