@@ -1,0 +1,186 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "admin-editor-footer-save-action-labels",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "ui-static",
+    "subsystemOwner": "admin/editor-footer",
+    "contentOwner": "Product/UX; published Portuguese wording preserved byte-for-byte",
+    "authority": "Two distinct fixed labels in the editor footer. They share a point of use, not an effect: one is a conditional isolated v3 Puxadores repair; the other publishes the current configuration through its existing v3/v5 paths.",
+    "consumer": "Admin > editor > controles de gravação no rodapé",
+    "routeConsumers": [
+      "/admin"
+    ],
+    "catalogPrefix": "admin.publication.actions",
+    "catalogKeys": [
+      "persistHandles",
+      "publishConfiguration"
+    ]
+  },
+  "evidence": {
+    "baseRevision": "442bcea460126d07b7622bab955f2c33c0a066f0",
+    "implementationRevision": "2318b7501d653231f2596591dc44e78231ace475",
+    "integrationRevision": "1d110b0929b18dc4f66f5101b85b59a5e58c89e1",
+    "implementationBranch": "codex/loc006-admin-footer-actions-copy-20261127",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "482c82c618475f2b503b890cda7c1c90ee4044d5",
+    "inventoryBaseCandidateIds": [
+      "cdb0886045a63bf2",
+      "2e88918e73d811fc"
+    ],
+    "regeneratedCandidateIds": [
+      "29749c7f0e088003",
+      "d0fb41b279381af0"
+    ],
+    "candidateMap": [
+      {
+        "before": "cdb0886045a63bf2",
+        "after": "29749c7f0e088003",
+        "sink": "text:button",
+        "value": "Persistir Puxadores no v3"
+      },
+      {
+        "before": "2e88918e73d811fc",
+        "after": "d0fb41b279381af0",
+        "sink": "text:button",
+        "value": "Publicar configuração"
+      }
+    ],
+    "adminMarkup": {
+      "path": "app/admin.html",
+      "gitBlob": "071d734f7ef02af3492832ec6fef265e97a01af1"
+    },
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "0ccd95480d4970c4ff27634ae1c639dded14e2a8"
+    },
+    "sharedCatalog": {
+      "path": "app/core/ui-copy.js",
+      "prefix": "admin.publication.actions",
+      "gitBlob": "e8e35886c963860d0dcc23e8556d424d2769bcc5"
+    },
+    "contracts": [
+      {
+        "path": "tests/admin-hierarchy-browser.cjs",
+        "gitBlob": "42a1e47bba12cad5c9b6f79f3a574b33f05660eb",
+        "scope": "asserts both fixed labels; the existing browser flow still verifies their separate effects and conditional repair visibility"
+      },
+      {
+        "path": "tests/ui-theme-contract.cjs",
+        "gitBlob": "a8b7627708d0f36100ac6b7e3b38428f61f695af",
+        "scope": "static fallback/catalog parity"
+      },
+      {
+        "path": "app/tools/test-core.js",
+        "gitBlob": "b81c9c3242801d2e89927ad323899ab117951c31"
+      }
+    ],
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "9782bab978e3aa078dc5b59b996e01d3eedb83ae",
+      "sha256": "8781d0e6a23089816595ac228bef2e49479ef95ce6bd6adc6d07011d62c36c2e"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "f820bc765508ec297a532ea70f2dff0b7bae33a4",
+      "sha256": "8330017a90c7eb63818a51fecc9121870c6029a42bf14f432591ea0569ba97e9",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "entries": 1007,
+        "unreviewedOccurrences": 1007,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "pullRequest": {
+      "number": 543,
+      "head": "2318b7501d653231f2596591dc44e78231ace475",
+      "mergeMethod": "squash",
+      "mergeSha": "1d110b0929b18dc4f66f5101b85b59a5e58c89e1"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        {
+          "name": "Admin hierarchy browser",
+          "id": 46003735440
+        },
+        {
+          "name": "App build purity",
+          "id": 46003735622
+        },
+        {
+          "name": "Viewer base-price publication contract (no Netlify deploy)",
+          "id": 46003735752
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 46003735565
+        },
+        {
+          "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)",
+          "id": 46003735761
+        },
+        {
+          "name": "Mobile browser (local V5; protected preview separately gated)",
+          "id": 46003735619
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 46003735845
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 46003735813
+        },
+        {
+          "name": "Current asset gates",
+          "id": 46003735785
+        },
+        {
+          "name": "Stone browser (local V5; protected preview separately gated)",
+          "id": 46003735583
+        },
+        {
+          "name": "Summary pricing browser (local V5; protected preview separately gated)",
+          "id": 46003735704
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 46003735683
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 46003735712
+        }
+      ]
+    }
+  },
+  "implementation": {
+    "staticHtmlFallbackPreserved": true,
+    "visibleWordingChanged": false,
+    "buttonHandlersChanged": false,
+    "conditionalRepairVisibilityChanged": false,
+    "casReadbackBehaviorChanged": false,
+    "v3v5PublicationBehaviorChanged": false,
+    "authenticationOrPermissionsChanged": false,
+    "priceCopyChanged": false,
+    "inventoryClassificationChanged": false,
+    "mainPromoted": false
+  },
+  "independentReview": {
+    "result": "bounded-family-with-distinct-effects",
+    "reviewer": "ARC-03C gate/common-sense review agent",
+    "notes": "The keys share a footer location, not semantics. Preserve separate action keys and separate existing behavioral gates. Keep the v3 repair hidden without pending changes; messages, confirmations, errors, auth-dependent logout, and price explanations are excluded."
+  }
+}
