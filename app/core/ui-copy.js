@@ -94,6 +94,15 @@
       tagline: "Móveis modulares pensados para a vida real.",
       homeLink: "Voltar ao início ↑"
     }),
+    configurator: Object.freeze({
+      miniScene: Object.freeze({
+        viewerLabel: "Visualização da cozinha",
+        controlsLabel: "Controles da mini-cena",
+        pin: Object.freeze({ pin: "Fixar cena", release: "Liberar cena" }),
+        transparency: "Alternar transparência",
+        resize: Object.freeze({ ariaLabel: "Alterar tamanho da mini-cena", title: "Alterar tamanho" })
+      })
+    }),
     admin: Object.freeze({
       authentication: Object.freeze({
         restrictedEyebrow: "Acesso restrito",
