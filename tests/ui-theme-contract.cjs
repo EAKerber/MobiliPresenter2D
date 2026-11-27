@@ -164,6 +164,11 @@ for (const [key, value] of Object.entries(copy.admin.materials.librarySection)) 
 }
 assert(adminMaterialsCopyCode.includes('querySelectorAll("[data-admin-materials-copy]")') &&
   adminMaterialsCopyCode.includes("materialAvailabilityCopy.librarySection"), "Admin binds static materials-library copy from the canonical catalog");
+for (const [key, value] of Object.entries(copy.admin.publication.actions)) {
+  assert(adminMaterialsFallback.includes(`data-admin-publication-copy="actions.${key}">${value}</button>`), `Admin keeps the static ${key} action fallback aligned with its catalog entry`);
+}
+assert(adminMaterialsCopyCode.includes('querySelectorAll("[data-admin-publication-copy]")') &&
+  adminMaterialsCopyCode.includes("reduce((current, key) => current?.[key], publicationCopy)"), "Admin binds publication action labels from the canonical catalog");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/access/index.html", "app/access/manage.html",
@@ -176,7 +181,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-materials-panel-copy-1"
+      ? "arc13-loc006-admin-footer-actions-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

@@ -111,6 +111,11 @@ document.querySelectorAll("[data-admin-materials-copy]").forEach((element) => {
   if (typeof value === "string") element.textContent = value;
 });
 
+document.querySelectorAll("[data-admin-publication-copy]").forEach((element) => {
+  const value = element.dataset.adminPublicationCopy.split(".").reduce((current, key) => current?.[key], publicationCopy);
+  if (typeof value === "string") element.textContent = value;
+});
+
 
 function configuredHierarchyItemLabel(itemId) {
   for (const stage of Object.values(hierarchyDefaults?.stages || {})) {
