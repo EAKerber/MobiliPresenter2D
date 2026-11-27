@@ -1,0 +1,72 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-006"],
+  "family": "private-navigation-authentication-state-copy",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "shared-navigation-fixed-copy",
+    "subsystemOwner": "shared private-navigation module",
+    "contentOwner": "Product; existing pt-BR text retained in canonical UI copy catalog",
+    "authority": "Move only loading, anonymous admin entry, and denied-access messages to navigation.privateAccessState. Preserve their existing session and role branches, the /admin.html destination, and all authorization policy.",
+    "routeConsumers": ["/access/", "/access/manage", "/admin", "/config/"],
+    "catalogKeys": [
+      "navigation.privateAccessState.loading",
+      "navigation.privateAccessState.anonymousAdminEntry",
+      "navigation.privateAccessState.denied"
+    ],
+    "excludedAdjacentCopy": ["private menu headings and role-gated route labels", "logout labels and retry status", "dynamic public-menu labels"],
+    "occurrences": [
+      {"id": "487aa49b71e50c74", "line": 126, "text": "Verificando acesso…"},
+      {"id": "68a77bd5ffdd91b2", "line": 129, "text": "Entrar na administração"},
+      {"id": "d10c8e4db7f96888", "line": 133, "text": "Esta conta não tem acesso às páginas de gestão."}
+    ]
+  },
+  "evidence": {
+    "baseRevision": "fed2b64b0712c6fc53a99d05efd16d80c37f1cc3",
+    "implementationRevision": "4e0de6580e41bdb5f4d951be8febd00c3a797193",
+    "integrationRevision": "3ee0d75d48b23a94f407d05f5dc9450401388ca8",
+    "pullRequest": {"number": 555, "base": "development", "head": "4e0de6580e41bdb5f4d951be8febd00c3a797193", "mergeMethod": "squash", "mergeSha": "3ee0d75d48b23a94f407d05f5dc9450401388ca8"},
+    "sourceBlobs": {
+      "app/access/index.html": "48474acfc47c67ecaee9bf96460ca8d46324ed02",
+      "app/access/manage.html": "cda8bb0230771e61e811cc8776451c0452a71db2",
+      "app/admin.html": "17b0ea98c1342fc3acabe6c4f5b0cf8a7adfae28",
+      "app/config/index.html": "510441a36cb3142540e7e22bf8658206bfb07138",
+      "app/core/private-navigation.js": "b50f2e1176ca48d1a23d9dbc63d3f9ac9adbd8f3",
+      "app/core/ui-copy.js": "1fbd8f4e0cf42b5f071f0473407a1d3dcfb0575e",
+      "architecture/arc13/ui-text-candidates.json": "bf693a51f09becb8732155494384be27c9a6c244",
+      "architecture/generated/primary-pages.manifest.json": "8639bc109a367b76d11755980d93a1362bcd97fe",
+      "tests/ci/access-surface-boundaries.test.mjs": "3e9bdccc0c02cc5dc32c196e7c71590c17e8ee65",
+      "tests/ui-theme-contract.cjs": "64c9f85ac08d59526e209633ea7b4b52e9e01313"
+    },
+    "candidateSourceSha256": "b82584b186538a6dcfaa54d35f0bea8d971295d3074bd4e979d556830fe14c59",
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "bf693a51f09becb8732155494384be27c9a6c244",
+      "sha256": "1c676fe66bf5a201f20d5d5402673f960cbcf2fcc8e92117c6c13176b7c6b98c",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {"unreviewedOccurrences": 1008, "javascriptSinkSites": 447, "javascriptParseErrors": 0, "unassignedOwnerSites": 0, "unassignedRouteSites": 0, "primaryPageAuthoringMappedOccurrences": 420, "primaryPageAuthoringUnresolvedOccurrences": 0}
+    },
+    "exactHeadGates": {
+      "head": "4e0de6580e41bdb5f4d951be8febd00c3a797193",
+      "status": "15 Actions workflow runs; 17 successful check jobs; 2 checks skipped",
+      "skippedChecks": [
+        {"name": "Supabase Preview", "reason": "Preview branches are disabled in project integrations."},
+        {"name": "Public routing browser job", "reason": "No protected preview was associated with the PR; the static-and-contract job passed."}
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "loadingAnonymousAndDeniedCopyUseCanonicalCatalog": true,
+    "sessionBranchesAndRoutePolicyChanged": false,
+    "rolesPermissionsOrDestinationsChanged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "focusedBoundary": "The existing private navigation role contract verifies all three catalog lookups while preserving loading, anonymous, and denied states; existing Admin and authorization browser/contract gates passed on the exact PR head.",
+    "localChecks": "Primary-page compiler --sync and --check passed. ARC-13 ran twice with identical SHA-256. Local unit/browser tests were not run; exact-head CI supplied the verification."
+  }
+}
