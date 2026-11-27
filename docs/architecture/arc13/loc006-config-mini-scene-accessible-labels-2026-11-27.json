@@ -1,0 +1,95 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-006"],
+  "family": "configurator-mini-scene-accessible-labels",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "shared-ui-fixed-copy",
+    "subsystemOwner": "Configurator app runtime and shared UI copy catalog",
+    "contentOwner": "Product; exact existing pt-BR wording retained",
+    "authority": "Catalog only the mini-scene viewer/group labels and pin, transparency, and resize names/titles. Preserve pin and transparency states, pressed state, sizing behavior, and static no-JavaScript fallbacks. The related controls group receives role=group so its accessible name is exposed.",
+    "routeConsumers": ["/config/"],
+    "catalogKeys": [
+      "configurator.miniScene.viewerLabel",
+      "configurator.miniScene.controlsLabel",
+      "configurator.miniScene.pin.pin",
+      "configurator.miniScene.pin.release",
+      "configurator.miniScene.transparency",
+      "configurator.miniScene.resize.ariaLabel",
+      "configurator.miniScene.resize.title"
+    ],
+    "excludedAdjacentCopy": ["icon glyphs ⌖, ◐ and ⤢", "separate Fixar cena launcher", "commercial content", "PiP geometry and control behavior"],
+    "occurrences": [
+      {"id": "265895c448ce3518", "source": "app/config/index.html", "line": 73, "text": "Visualização da cozinha"},
+      {"id": "041276e8772f31c7", "source": "app/config/index.html", "line": 74, "text": "Controles da mini-cena"},
+      {"id": "edc2f758517548ce", "source": "app/config/index.html", "line": 75, "text": "Liberar cena"},
+      {"id": "86eb8af1756834cf", "source": "app/config/index.html", "line": 75, "text": "Liberar cena"},
+      {"id": "f640a2cb9569b00d", "source": "app/config/index.html", "line": 76, "text": "Alternar transparência"},
+      {"id": "de9a09856b365386", "source": "app/config/index.html", "line": 76, "text": "Alternar transparência"},
+      {"id": "9c1b0a94ff31d3f7", "source": "app/config/index.html", "line": 77, "text": "Alterar tamanho da mini-cena"},
+      {"id": "ca78422044b0d618", "source": "app/config/index.html", "line": 77, "text": "Alterar tamanho"},
+      {"id": "62072d33716499ba", "source": "app/app.js", "line": 116, "text": "Visualização da cozinha"},
+      {"id": "b5201725180ff2ca", "source": "app/app.js", "line": 117, "text": "Controles da mini-cena"},
+      {"id": "0653045416d3eb88", "source": "app/app.js", "line": 119, "text": "Alternar transparência"},
+      {"id": "1e384df19d36436c", "source": "app/app.js", "line": 120, "text": "Alternar transparência"},
+      {"id": "94846579c5feeee8", "source": "app/app.js", "line": 123, "text": "Alterar tamanho da mini-cena"},
+      {"id": "3d35b3c4c0b4fb70", "source": "app/app.js", "line": 124, "text": "Alterar tamanho"},
+      {"id": "a49e2818566e977c", "source": "app/app.js", "line": 2073, "text": "Rótulo dinâmico da ação de fixar/liberar"},
+      {"id": "4b7a17a8ecc20b59", "source": "app/app.js", "line": 2074, "text": "Título dinâmico da ação de fixar/liberar"}
+    ]
+  },
+  "evidence": {
+    "baseRevision": "c8e9ee251b4f311f5e858a2578120eec4e3326c1",
+    "implementationRevision": "fd6fedca4e7b7aff2d535bef888478cc460c3159",
+    "integrationRevision": "5479fae39e8484f34a125932d20119871bce330d",
+    "pullRequest": {"number": 558, "base": "development", "head": "fd6fedca4e7b7aff2d535bef888478cc460c3159", "mergeMethod": "squash", "mergeSha": "5479fae39e8484f34a125932d20119871bce330d"},
+    "sourceBlobs": {
+      "app/access/index.html": "e61965e053da228be6512f0f01d70ee681657faf",
+      "app/access/manage.html": "c9f96ea067711c34cedef94571e085e81dc78cee",
+      "app/admin.html": "f6aae6c01963378df87392316ed47c538db9094d",
+      "app/app.js": "d2e0511908572d0ec53ec79dca8a0143444d433c",
+      "app/config/index.html": "11ae42bec7c1b26764a9fd131a4ec99bbda9fe34",
+      "app/core/ui-copy.js": "0452c4763dbe8e42c6be3d1c76b7b6d216ad8d98",
+      "app/tools/test-core.js": "de6210ea0a4cdbb4da4f55b78cb9c7abd43ba545",
+      "architecture/arc13/ui-text-candidates.json": "3b1e3f7f7ef10ff99d9167c57fe2393a44f521b2",
+      "architecture/generated/primary-pages.manifest.json": "74fb7fee1ccfc2e219a964a3b565e8db81427ae9",
+      "tests/mobile-pip-main-browser.cjs": "71c7ad53b428689bd04378ee3e25516579ec6360",
+      "tests/ui-theme-contract.cjs": "7ce30be2f371a5f63507808147777ff84b81ad4a"
+    },
+    "candidateSourceSha256": {
+      "app/app.js": "6f9139ac05f0a8c940af37e13f0727d0d5009ec40ffc0675e9cae9e423aebff9",
+      "app/config/index.html": "75c4509da185e72563a62a2a7b41e0a974e5c64598d4cb3323f1337b26660ecb"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "3b1e3f7f7ef10ff99d9167c57fe2393a44f521b2",
+      "sha256": "8769c1eac92c68ff3ccc1960f7eae4896e9e3eccf22305af2a939907f4d6ef11",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {"unreviewedOccurrences": 1015, "javascriptSinkSites": 454, "javascriptParseErrors": 0, "unassignedOwnerSites": 0, "unassignedRouteSites": 0, "primaryPageAuthoringMappedOccurrences": 420, "primaryPageAuthoringUnresolvedOccurrences": 0}
+    },
+    "exactHeadGates": {
+      "head": "fd6fedca4e7b7aff2d535bef888478cc460c3159",
+      "status": "17 Actions workflow runs; 18 successful check jobs; 2 protected-preview browser jobs skipped",
+      "skippedChecks": [
+        {"name": "Public routing browser job", "run": 46021458257, "reason": "No protected preview was associated with the PR; the static-and-contract job passed."},
+        {"name": "Public routing browser job", "run": 46021408305, "reason": "No protected preview was associated with the PR; the static-and-contract job passed."}
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "miniSceneFixedLabelsUseCanonicalCatalog": true,
+    "pinAndTransparencyStateSemanticsChanged": false,
+    "resizeAndGeometryBehaviorChanged": false,
+    "separateLauncherAndGlyphsCataloged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "focusedBoundary": "The existing mobile PiP browser contract verifies catalog values against rendered accessible names and titles, checks both pin action labels, and confirms role=group. Exact-head mobile PiP, keyboard, flow layout, Admin, build, ARC-13, assets, authorization, pricing, CSS and variant gates passed.",
+    "firstGateAttempt": "The first run exposed that app.js had a per-file cache token while the configurator requires a shared runtime revision. The config scripts and shared-revision contract were bumped together to runtime-v41; all final applicable gates passed.",
+    "localChecks": "Primary-page compiler --sync and --check passed. ARC-13 was generated twice with identical SHA-256. Local unit/browser tests were not run; exact-head CI supplied the verification."
+  }
+}
