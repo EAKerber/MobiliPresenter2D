@@ -100,7 +100,16 @@
         controlsLabel: "Controles da mini-cena",
         pin: Object.freeze({ pin: "Fixar cena", release: "Liberar cena" }),
         transparency: "Alternar transparência",
-        resize: Object.freeze({ ariaLabel: "Alterar tamanho da mini-cena", title: "Alterar tamanho" })
+        resize: Object.freeze({ ariaLabel: "Alterar tamanho da mini-cena", title: "Alterar tamanho" }),
+        status: Object.freeze({
+          pinned: "Cena fixada para contexto durante a configuração.",
+          released: "Cena liberada para o fluxo normal.",
+          launcherPinned: "Mini-cena fixada para contexto durante a configuração.",
+          available: "Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.",
+          transparencyEnabled: "Mini-cena com transparência ativada.",
+          opaque: "Mini-cena opaca.",
+          size: Object.freeze({ small: "Mini-cena pequena.", medium: "Mini-cena média.", large: "Mini-cena grande." })
+        })
       })
     }),
     admin: Object.freeze({

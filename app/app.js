@@ -2094,7 +2094,10 @@
     mobileScenePinEnabled = Boolean(enabled);
     if (!mobileScenePinEnabled) mobileSceneIsMini = false;
     syncPinnedSceneUi();
-    announce(mobileScenePinEnabled ? "Cena fixada para contexto durante a configuração." : "Cena liberada para o fluxo normal.");
+    announce(uiCopy(
+      mobileScenePinEnabled ? "configurator.miniScene.status.pinned" : "configurator.miniScene.status.released",
+      mobileScenePinEnabled ? "Cena fixada para contexto durante a configuração." : "Cena liberada para o fluxo normal."
+    ));
   }
 
   function refreshMobileSceneDock(profile = currentLayoutProfile()) {
@@ -2105,7 +2108,7 @@
     if (nextMini === mobileSceneIsMini) return;
     mobileSceneIsMini = nextMini;
     syncPinnedSceneUi();
-    if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
+    if (nextMini) announce(uiCopy("configurator.miniScene.status.available", "Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena."));
   }
 
   function activateScenePipFromLauncher() {
@@ -2116,7 +2119,7 @@
       mobileSceneIsMini = true;
       syncPinnedSceneUi();
       requestAnimationFrame(() => mobileScenePin?.focus());
-      announce("Mini-cena fixada para contexto durante a configuração.");
+      announce(uiCopy("configurator.miniScene.status.launcherPinned", "Mini-cena fixada para contexto durante a configuração."));
       return;
     }
     refreshMobileSceneDock(mode.profile);
@@ -2133,7 +2136,7 @@
       if (nextMini === mobileSceneIsMini) return;
       mobileSceneIsMini = nextMini;
       syncPinnedSceneUi();
-      if (nextMini) announce("Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.");
+      if (nextMini) announce(uiCopy("configurator.miniScene.status.available", "Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena."));
     }, { threshold: 0 });
     pinObserver.observe(viewerPinSentinel);
   }
@@ -2423,14 +2426,19 @@
   mobileSceneTransparency?.addEventListener("click", () => {
     mobileSceneTransparent = !mobileSceneTransparent;
     syncPinnedSceneUi();
-    announce(mobileSceneTransparent ? "Mini-cena com transparência ativada." : "Mini-cena opaca.");
+    announce(uiCopy(
+      mobileSceneTransparent ? "configurator.miniScene.status.transparencyEnabled" : "configurator.miniScene.status.opaque",
+      mobileSceneTransparent ? "Mini-cena com transparência ativada." : "Mini-cena opaca."
+    ));
   });
   mobileSceneResize?.addEventListener("click", () => {
     mobilePipSizeIndex = (mobilePipSizeIndex + 1) % 3;
     mobilePipPosition = null;
     mobilePipWidth = null;
     syncPinnedSceneUi();
-    announce(["Mini-cena pequena.", "Mini-cena média.", "Mini-cena grande."][mobilePipSizeIndex]);
+    const sizeStatusKeys = ["small", "medium", "large"];
+    const sizeStatusFallbacks = ["Mini-cena pequena.", "Mini-cena média.", "Mini-cena grande."];
+    announce(uiCopy(`configurator.miniScene.status.size.${sizeStatusKeys[mobilePipSizeIndex]}`, sizeStatusFallbacks[mobilePipSizeIndex]));
   });
 
   mobileSceneResizeHandle?.addEventListener("pointerdown", (event) => {
