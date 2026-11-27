@@ -133,6 +133,16 @@
           assets: "Imagens e máscaras"
         })
       }),
+      loadState: Object.freeze({
+        revisionPending: "Versão —",
+        revisionLabel: "Versão {revision} · editor hierárquico",
+        configurationNotPublished: "A API de configuração ainda não foi publicada.",
+        configurationLoadFailure: "Não foi possível carregar a configuração.",
+        adminDataLoadFallback: "Falha ao carregar os dados administrativos.",
+        handlesRepairNeeded: "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.",
+        version5Loaded: "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação.",
+        hierarchyDraftLoaded: "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+      }),
       initialState: Object.freeze({
         entityVisibility: "Iniciar visível no configurador",
         entityVisibilityAriaLabel: "{item}: visível inicialmente no configurador",
