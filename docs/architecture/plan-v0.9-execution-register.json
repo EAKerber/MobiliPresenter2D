@@ -2424,9 +2424,14 @@
           "source": "Product PR #551 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-temporary-logout-retry-2026-11-27.json",
           "sha": "24c99bba8d08b0b4e35a96094b58bafb9b9b6a48",
           "detail": "For temporary-session logout only, a transport or unsuccessful non-503 revoke response now leaves the session active, shows a generic accessible retry message, and avoids false success. A successful retry revokes and redirects; HTTP 503 continues logout because the function expires the cookie. Identity logout behavior and page-owned /admin and /access/manage controls are unchanged. Exact head 0e15c2290334a84520b5c3fc41594d05196a82f5 passed 14 Actions runs with 17 successful check jobs; Supabase Preview and one protected-preview browser job were skipped for unavailable external preview setup. ARC-13 generation repeated deterministically at 1,008 candidates, 0 parse errors, 0 unassigned owner/route sites, 420 mapped primary-page occurrences and 0 unresolved. Squash-integrated into development at 24c99bba8d08b0b4e35a96094b58bafb9b9b6a48; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial and global ARC-13 review remains open."
+        },
+        {
+          "source": "Product PR #553 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-private-navigation-labels-2026-11-27.json",
+          "sha": "c00bc7688c1a167c763ac0bfd60c1d1cc88458c3",
+          "detail": "Eight bounded private-navigation occurrences now use five canonical navigation.privateMenu keys: both group headings plus the Configurador, Administração and Gerenciar acessos route labels for admin, staff and temporary sessions. Role gates, route destinations and adjacent authentication-state messages are unchanged. Exact head b17d03256b704c9d3a96efcdeee627507209fa61 passed 15 Actions runs with 17 successful check jobs; Supabase Preview and one protected-preview browser job were skipped. ARC-13 generation repeated deterministically at 1,008 globally unreviewed occurrences, 447 sinks, 0 parse errors, 0 unassigned owners/routes, 420 mapped primary-page occurrences and 0 unresolved. Squash-integrated into development at c00bc7688c1a167c763ac0bfd60c1d1cc88458c3; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 and global ARC-13 remain partial/unreviewed."
         }
       ],
-      "nextAction": "Continue LOC-006 with the next bounded private-navigation copy family: review private menu headings and role-gated route labels separately from authentication-state and error messages. Keep the global ARC-13 inventory unreviewed until occurrence-level dispositions are complete."
+      "nextAction": "Review the three private-navigation authentication-state messages separately: loading status, anonymous entry link, and denied-access note. Preserve their conditions and route/access policy; keep dynamic public-menu and global inventory occurrences out of scope."
     },
     {
       "order": 107,
