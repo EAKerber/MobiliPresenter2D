@@ -1680,7 +1680,7 @@ async function showUser(user) {
     deniedPanel.hidden = false;
     return;
   }
-  byId("userLabel").textContent = user.email || "Administrador";
+  byId("userLabel").textContent = user.email || adminShellCopy.header.userFallback;
   try {
     await ensureAdminData();
     if (runId !== adminViewRun) return;

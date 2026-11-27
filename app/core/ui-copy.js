@@ -113,7 +113,8 @@
         documentTitle: "Administração — Casa em Módulos",
         header: Object.freeze({
           pageName: "Administração",
-          menuLabel: "Menu do site"
+          menuLabel: "Menu do site",
+          userFallback: "Administrador"
         }),
         eyebrow: "Configurador público",
         heading: "Administração do catálogo",
