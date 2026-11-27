@@ -1683,7 +1683,7 @@ async function showUser(user) {
     const retry = document.createElement("button");
     retry.type = "button";
     retry.className = "button button--secondary";
-    retry.textContent = "Tentar novamente";
+    retry.textContent = adminLoadCopy.retryLoad;
     retry.addEventListener("click", async () => {
       retry.disabled = true;
       let currentUser = null;

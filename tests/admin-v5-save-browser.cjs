@@ -281,6 +281,15 @@ async function main() {
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
       loadStateCopy.configurationLoadFailure);
+    const retryButton = page.locator("#adminServiceError button");
+    assert.equal(await retryButton.textContent(), loadStateCopy.retryLoad,
+      "retry control label comes from the shared Admin load-state catalog");
+    configurationGetStatus = null;
+    await retryButton.click();
+    await page.waitForFunction((copy) => document.getElementById("adminServiceError")?.hidden
+      && !document.getElementById("editorPanel")?.hidden
+      && document.getElementById("saveMessage")?.textContent === copy,
+    loadStateCopy.version5Loaded);
     assert.deepEqual(errors, [], "v5 admin Save fixture has no uncaught browser errors");
     await page.close();
     console.log("admin native v5 browser save: PASS");
