@@ -421,9 +421,14 @@
           "source": "Product exact TST-001 workflow inventory run #45904223459",
           "sha": "4523c3da2b4d4d1805d1328208cefbd23aaf2a12",
           "detail": "The plan and inventory jobs passed on PR #526 head 4523c3da2b4d4d1805d1328208cefbd23aaf2a12. Exact inventory JSON preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45904223459.json; workflow artifact 15156629898 has zip digest sha256:e5824ea6acd3850ac0571763a2aa4a6ef4fbffc80e70f2d7d82c120896f641ac. Source pins: main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 (tree 45dafef8c70e8421a360a044b71ee96b03737f8a), development@4bcfa26911498a9bf5c3c94c517e9931746b437b (tree 65dced666488a0fa28181f45d3b584c6a22ec141), and candidate PR #526 (tree d34ef65fef2068a64d16a5f594fa3a8783814917). Summary: 28 main workflows, 65 development workflows, 26 shared, 86 unique definitions, 0 parser warnings, 1 candidate workflow change, 0 candidate write-signal workflows. The exact open-PR readback included #526 and #528 against the current development SHA, plus draft #517 still pinned to development@f864fed; this is inventory evidence, not branch count. TST-001 remains partial because its 21-command/21-workflow assertion and contract audit is unfinished."
+        },
+        {
+          "source": "Product PR #530 exact-ref workflow inventory run #45909076162",
+          "sha": "62d3b0058cb860c9c12ff48185988b4eeefd2134",
+          "detail": "The plan and inventory jobs passed on this exact candidate head. Artifact 15159680969 (sha256:a3524558e81e40d485ade29601d5551a07c4b243c5a463a4ed560156b3d4f930) records main@ecaa38cf0be54e8d586458a86d1062b90c0b9691/tree 45dafef8c70e8421a360a044b71ee96b03737f8a, development@ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860/tree 7eaeddb1c78b3bf4af025957d385a2d309bc4131, and candidate PR #530/tree 1bc6a246c9347967134b2f83e92a53803c42cd1c. The readback included draft #517 based on stale development@f864fed. Inventory summary: 28 main workflows, 65 development workflows, 26 shared, 85 unique definitions, 0 parser warnings and 0 candidate workflow changes. The generated inventory is current for these exact refs; the separate 21-command/21-workflow assertion and contract audit remains open."
         }
       ],
-      "nextAction": "The inventory reference in this register is pinned to development@4bcfa26, while the live ref is development@6750d9b. Regenerate and preserve the exact current-ref 21-workflow inventory before continuing the 21-command/21-workflow command→assertion→contract/result audit; generation alone does not close TST-001."
+      "nextAction": "The exact-ref workflow inventory was generated and preserved for PR #530 against main@ecaa38c and development@ca9be99. Continue the separate 21-command/21-workflow command→assertion→contract/result audit, identifying reachable gate coverage; generation alone does not close TST-001."
     },
     {
       "order": 20,
@@ -600,9 +605,14 @@
           "source": "Branch Hygiene vNext read-only run #356, artifact #15158385866",
           "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
           "detail": "Run #45906365744 observed 16 Product refs at main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development@6750d9b67a9b5d8b52c022093fdac50f288c0339. Plan hash a61dfe057cf9bd1b14df766a4b638a57cdd94b28ca66160eefea6ced06b4e765 reported authorization NONE and zero delete-candidates. Discovery counts (main 2 candidate/3 preserve/11 review; development 5 candidate/3 preserve/8 review) are advisory only and do not authorize deletion."
+        },
+        {
+          "source": "Branch Hygiene vNext post-merge cleanup retries and live ref readback, 2026-11-26",
+          "sha": "ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860",
+          "detail": "The read-only run #356 observed 16 refs and authorized zero deletions. Seven previously failed exact post-merge cleanup jobs were then retried individually; each revalidated its target and completed with receipt status PASS, result DELETED, deleted=true, readback PASS, proof SQUASH_TREE_IDENTICAL: #512 run 45872428781 branch codex/git021-consumption-guard-main-20261126 @ 444b6304; #513 run 45872793188 branch codex/git021-main-readback-20261126 @ 6579516d; #514 run 45881145982 branch codex/vis002c-solid-background-gate-20261126 @ 092263c0; #515 run 45882362132 branch codex/tok01-production-receipt-refresh-20261126 @ ac47f22a; #518 run 45886297565 branch codex/tst001-inventory-refresh-20261126 @ 3be24f0a; #519 run 45887541965 branch codex/tst001-pr517-readback-20261126 @ 128ade99; #520 run 45891893301 branch codex/tok02-focus-alias-main-port-20261126 @ 1a1798b5. Final live readback confirms all seven refs absent, Product main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 unchanged, development@ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860, and 9 Product refs. The exact retained-ref list was captured in the current readback; no further cleanup is implied."
         }
       ],
-      "nextAction": "Before each retirement batch, obtain the current vNext observation and exact reviewed batch receipt. The latest run #356 authorized no deletion; do not infer an eligible batch from discovery counts."
+      "nextAction": "Keep GIT-019 done for the tested mechanism. The seven exact retries passed and reduced Product refs to 9; before any later retirement, obtain a fresh vNext observation and a reviewed receipt for those exact targets. Discovery counts alone are not authority."
     },
     {
       "order": 25,
