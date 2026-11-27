@@ -692,6 +692,9 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
 
   assert.equal(await cocoaType.locator("option[value=amount]").textContent(), pricingEditorCopy.typeLabels.amount, "fixed-price option comes from shared Admin copy");
   assert.equal(await cocoaType.locator("option[value=percentage]").textContent(), pricingEditorCopy.typeLabels.percentage, "percentage option comes from shared Admin copy");
+  const cocoaPublicLabel = await cocoaRow.locator(".pricing-field__label").textContent();
+  assert.equal(await cocoaType.getAttribute("aria-label"), pricingEditorCopy.typeAriaLabel.replace("{label}", cocoaPublicLabel), "pricing type accessible name comes from the shared catalog");
+  assert.equal(await cocoaPrice.getAttribute("aria-label"), pricingEditorCopy.valueAriaLabel.replace("{label}", cocoaPublicLabel), "pricing value accessible name comes from the shared catalog");
   assert.equal(await cocoaType.inputValue(), "percentage", "migrated front-finish pricing starts as percentage");
   assert.equal(await cocoaPrice.inputValue(), "15.00", "migrated cocoa BPS displays as 15 percent");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage rule renders a percent unit");
@@ -702,7 +705,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await cocoaPrice.inputValue(), "0.00", "percentage-to-amount switch resets the numeric value");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "R$", "fixed finish amount renders as BRL");
   assert.equal(await cocoaRow.locator(".pricing-basis").count(), 0, "fixed amount has no percentage basis");
-  assert.ok((await page.locator("#saveMessage").textContent()).includes("zerado"), "admin explains that type switching resets the value");
+  assert.equal(await page.locator("#saveMessage").textContent(), pricingEditorCopy.typeChangedResetNotice, "type-switch reset notice comes from the shared catalog");
 
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("futura publicação consolidada"));
