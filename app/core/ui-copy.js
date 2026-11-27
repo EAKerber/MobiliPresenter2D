@@ -301,6 +301,15 @@
         noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
       }),
       pricing: Object.freeze({
+        editor: Object.freeze({
+          typeLabels: Object.freeze({
+            amount: "Valor fixo",
+            percentage: "Percentual"
+          }),
+          basisLabels: Object.freeze({
+            "eligible-module-base": "Base: valor base de cada módulo elegível"
+          })
+        }),
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",
           label: "Mostrar preços base no Viewer",

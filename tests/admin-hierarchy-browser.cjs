@@ -670,6 +670,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const publicationReason = page.locator("#viewer-base-price-publication-note");
   const publicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.viewerBasePricePublication);
   const adminPublicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.publication);
+  const pricingEditorCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.editor);
   assert.equal(await page.locator(".pricing-publication-card h2").textContent(), publicationCopy.title, "publication title comes from the shared copy catalog");
   assert.equal((await publicationToggle.locator("xpath=..").textContent()).trim(), publicationCopy.label, "publication checkbox name comes from the shared copy catalog");
   assert.equal(await publicationToggle.isDisabled(), true, "legacy configuration cannot enable V5 base-price publication");
@@ -689,10 +690,12 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await finishTypeSelectors.count(), await finishPriceInputs.count(), "every front-finish row derives a type selector from the dual-type role capability");
   assert.equal(await page.locator('[data-price-rule-type]:not([data-price-role="frontFinishAdjustment"])').count(), 0, "no other pricing role exposes a type selector");
 
+  assert.equal(await cocoaType.locator("option[value=amount]").textContent(), pricingEditorCopy.typeLabels.amount, "fixed-price option comes from shared Admin copy");
+  assert.equal(await cocoaType.locator("option[value=percentage]").textContent(), pricingEditorCopy.typeLabels.percentage, "percentage option comes from shared Admin copy");
   assert.equal(await cocoaType.inputValue(), "percentage", "migrated front-finish pricing starts as percentage");
   assert.equal(await cocoaPrice.inputValue(), "15.00", "migrated cocoa BPS displays as 15 percent");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage rule renders a percent unit");
-  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), "Base: valor base de cada módulo elegível", "percentage authoring exposes the explicit calculation basis");
+  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), pricingEditorCopy.basisLabels["eligible-module-base"], "percentage authoring exposes the catalog-backed calculation basis");
 
   await cocoaType.selectOption("amount");
   assert.equal(await cocoaType.inputValue(), "amount", "front-finish type can switch to fixed amount");
@@ -710,7 +713,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await cocoaType.inputValue(), "percentage", "finish can return to percentage authoring");
   assert.equal(await cocoaPrice.inputValue(), "0.00", "amount-to-percentage switch resets BPS instead of converting currency");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage unit returns after switching back");
-  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), "Base: valor base de cada módulo elegível", "percentage basis returns after switching back");
+  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), pricingEditorCopy.basisLabels["eligible-module-base"], "percentage basis returns from its shared catalog entry");
 
   await cocoaPrice.fill("15.00");
   await cocoaPrice.press("Tab");
