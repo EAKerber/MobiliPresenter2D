@@ -19,6 +19,7 @@
         close: "Fechar menu"
       }),
       primaryLabel: "Navegação principal",
+      logout: "Sair",
       environments: "Ambientes",
       howItWorks: "Como funciona",
       about: "Quem somos",

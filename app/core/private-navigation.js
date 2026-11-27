@@ -49,9 +49,9 @@ if (header) {
       logoutButton = document.createElement("button");
       logoutButton.type = "button";
       logoutButton.className = "button button--secondary private-menu__logout";
-      logoutButton.textContent = "Sair";
       logoutButton.setAttribute("data-private-logout", "");
     }
+    logoutButton.textContent = copy("navigation.logout", "Sair");
     if (!account.contains(logoutButton)) account.append(logoutButton);
     if (!logoutButton.hasAttribute("data-private-logout")) {
       logoutButton.classList.add("private-menu__logout");
