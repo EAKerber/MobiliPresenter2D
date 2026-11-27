@@ -149,7 +149,9 @@ for (const file of ["app/access/index.html", "app/access/manage.html", "app/admi
   assert(read(file).includes("ui-copy.js?v=arc13-loc006-private-logout-copy-1"), file + " busts the old shared copy catalog cache");
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html"]) {
-  assert(read(file).includes(`id="logoutButton" class="private-menu__logout" type="button" hidden>${copy.navigation.logout}</button>`), file + " keeps the catalog-matched no-JavaScript logout fallback");
+  const logoutMarkup = read(file);
+  assert(logoutMarkup.includes(`id="logoutButton" class="private-menu__logout" type="button" hidden${file === "app/access/index.html" ? ' data-private-logout=""' : ""}>${copy.navigation.logout}</button>`), file + " keeps the catalog-matched no-JavaScript logout fallback");
+  assert.equal(logoutMarkup.includes('id="logoutButton"') && logoutMarkup.includes('data-private-logout=""'), file === "app/access/index.html", file + " assigns the shared logout handler only to the /access/ static control");
 }
 for (const file of [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html", "app/viewer/index.html",

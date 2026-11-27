@@ -479,6 +479,60 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   assert.equal(listeners.length, 2, "document-level close handlers are installed once");
 });
 
+test("static /access/ logout control receives the shared temporary-session logout handler", async () => {
+  const header = new FakeElement("header");
+  const toggle = new FakeElement("button");
+  const menu = new FakeElement("nav");
+  const privateLinks = new FakeElement();
+  privateLinks.selector = "[data-private-links]";
+  const account = new FakeElement();
+  account.selector = "[data-private-account]";
+  const email = new FakeElement("span");
+  email.selector = "[data-private-email]";
+  const logoutButton = new FakeElement("button");
+  logoutButton.textContent = "Sair";
+  logoutButton.setAttribute("data-private-logout", "");
+  account.append(email, logoutButton);
+  menu.append(privateLinks, account);
+  header.append(toggle, menu);
+  const document = {
+    querySelector(selector) { return selector === "[data-private-header]" ? header : null; },
+    getElementById(id) { return id === "logoutButton" ? logoutButton : null; },
+    createElement(tagName) { return new FakeElement(tagName); },
+    addEventListener() {},
+  };
+  header.querySelector = (selector) => ({
+    "[data-private-menu-toggle]": toggle,
+    "[data-private-menu]": menu,
+  }[selector] || null);
+  menu.querySelector = (selector) => selector === "[data-private-links]" ? privateLinks : FakeElement.prototype.querySelector.call(menu, selector);
+  const location = { pathname: "/access/", origin: "https://site.test", assign(value) { this.assigned = value; } };
+  const window = { location, CASA_UI_THEME: { getCopy(_key, fallback) { return fallback; } } };
+  let logoutCalls = 0;
+  const fetchCalls = [];
+  const fetchImpl = async (url, options) => {
+    fetchCalls.push({ url, options });
+    if (url === "/api/access/session/logout") return { ok: true, status: 200, json: async () => ({ ok: true }) };
+    return { ok: true, status: 200, json: async () => ({ authenticated: true, email: "temporary@example.test", accessType: "temporary" }) };
+  };
+  const source = await readFile(resolve(ROOT, "app/core/private-navigation.js"), "utf8");
+  const stripped = source.replace(/^import\s+[\s\S]*?\s+from\s+["'][^"']+['"];\s*$/gm, "");
+  new Function("getUser", "logout", "onAuthChange", "document", "window", "fetch", stripped)(
+    async () => null,
+    async () => { logoutCalls += 1; },
+    () => {},
+    document,
+    window,
+    fetchImpl,
+  );
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(logoutButton.hidden, false, "a verified temporary session reveals the existing static control");
+  await logoutButton.dispatch("click");
+  assert.ok(fetchCalls.some((call) => call.url === "/api/access/session/logout" && call.options.method === "POST"), "static control revokes the temporary session");
+  assert.equal(logoutCalls, 1, "static control also closes Identity when present");
+  assert.equal(location.assigned, "/", "the static access route returns to the public entry point");
+});
+
 test("invitation token leaves the URL before UI interaction and never appears in rendered text", async () => {
   const token = "one-time-grant-token-fixture";
   const button = new FakeElement("button");
