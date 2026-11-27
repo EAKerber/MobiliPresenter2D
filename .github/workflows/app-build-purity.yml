@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - 'app/**'
+      - 'tests/ui-theme-contract.cjs'
       - '!app/tools/test-v5-normal-save.js'
       - '.github/workflows/app-build-purity.yml'
   pull_request:
     paths:
       - 'app/**'
+      - 'tests/ui-theme-contract.cjs'
       - '!app/tools/test-v5-normal-save.js'
       - '.github/workflows/app-build-purity.yml'
   workflow_dispatch:
