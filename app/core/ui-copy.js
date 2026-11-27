@@ -336,6 +336,10 @@
         })
       }),
       publication: Object.freeze({
+        actions: Object.freeze({
+          persistHandles: "Persistir Puxadores no v3",
+          publishConfiguration: "Publicar configuração"
+        }),
         handlesConfirmation: "Há alterações locais no painel. Esta operação publicará somente Puxadores no schema v3 e recarregará o painel; outras alterações locais não serão publicadas. Continuar?",
         handlesCancelled: "Persistência de Puxadores cancelada; nenhuma alteração foi publicada.",
         handlesRechecking: "Relendo a configuração publicada antes de persistir Puxadores…",
