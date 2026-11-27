@@ -274,11 +274,11 @@ async function main() {
       "readback mismatch may not be reported as success");
 
     configurationGetStatus = 404;
-    await page.reload({ waitUntil: "networkidle" });
+    await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
       loadStateCopy.configurationNotPublished);
     configurationGetStatus = 503;
-    await page.reload({ waitUntil: "networkidle" });
+    await page.reload({ waitUntil: "domcontentloaded" });
     await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
       loadStateCopy.configurationLoadFailure);
     assert.deepEqual(errors, [], "v5 admin Save fixture has no uncaught browser errors");
