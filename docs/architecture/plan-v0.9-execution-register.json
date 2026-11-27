@@ -1,6 +1,6 @@
 {
   "schema": "PlanV09OperationalRegister/1",
-  "updatedAt": "2026-11-26",
+  "updatedAt": "2026-11-27",
   "statusSemantics": {
     "planState": "Copiado do Anexo A; é o estado editorial inicial, não uma afirmação de implementação atual.",
     "unreviewed": "Reconciliação operacional ainda não feita; não significa ausência de código.",
@@ -2364,9 +2364,24 @@
           "source": "Product PR #491 exact-head gates and current development blob readback",
           "sha": "a6ec80a1d1b36204fb313e11393f61451d145d95",
           "detail": "PR #491 merged to development at 0ca4a203be03a3085253129c7b9422b40fef01e2. All 12 applicable workflows passed on this exact PR head. Seven source, test, ARC-13 inventory, and generated-manifest blobs were re-read and are byte-identical between the PR head and current development@6750d9b67a9b5d8b52c022093fdac50f288c0339. This proves only the Admin editor-shell copy slice (masthead, primary/object tabs and object pager); LOC-006 remains partial, and main is intentionally unchanged."
+        },
+        {
+          "source": "Product PR #531 exact-head gates and development integration; family receipt docs/architecture/arc13/loc006-admin-load-state-copy-2026-11-27.json",
+          "sha": "ba975a280daca76a931323be23530adb3ba7549f",
+          "detail": "Fixed Admin load/revision states moved to uiCopy.admin.loadState with status-aware distinctions (not published vs generic load failure; v3 repair, v5 loaded, hierarchy draft). Admin browser, ARC-13, build, asset, variant, mobile, stone, summary pricing, viewer base-price, authorization and impact workflows passed on exact head. Squash integrated into development at b2143ec81d2be90613cbff9bf25eec23dbe0f318; main remained unchanged. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #532 family evidence receipt integration",
+          "sha": "032e3b2bec4b2b58d91523fc0aa8d0b26ed39e7b",
+          "detail": "The append-only family receipt for #531 was integrated into development. It pins the named pre-change candidate IDs and exact source/test/catalog/manifest/inventory provenance, and explicitly keeps the global ARC-13 inventory candidate-unreviewed. Documentation evidence only; no main change."
+        },
+        {
+          "source": "Product PR #533 exact-head gates and development readback; merged-head cleanup run 45989395850",
+          "sha": "0d96426242fdbcd8a53bcbb74d26d7d054e582e4",
+          "detail": "The remaining fixed Admin retry action label now uses uiCopy.admin.loadState.retryLoad; the browser contract retries a simulated load failure and verifies the editor returns. All 12 applicable workflows passed on the exact PR head. Squash integrated into development at 9112cad477bd0d665f19bd4880b9aa3bc809d1a5; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. The merged-PR cleanup receipt verifies exact head/tree equivalence, deleted the merged branch, and passed readback; run artifact digest bf4d9b7732860bbc7ae930721ebdb22934cf010af5d1e49b1c045c3bf60d832e. LOC-006 remains partial."
         }
       ],
-      "nextAction": "Use the current ARC-13 inventory to select the next remaining fixed Admin/Config copy family; keep dynamic and commercial content separate, close its consumers/assertions, and do not promote this Admin shell slice to main as an isolated patch."
+      "nextAction": "Proceed with the bounded Admin pricing-type and calculation-basis fixed-label family. Preserve pricing rules, numeric values, commercial policy copy, and behavior; cover catalog-to-DOM consumers and regenerate provenance. Keep LOC-006 and ARC-13 partial until broader Admin/Configurator and candidate-inventory review are complete."
     },
     {
       "order": 107,
@@ -2718,13 +2733,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-26T22:46:56Z",
+    "capturedAt": "2026-11-27T11:25:00Z",
     "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
-    "productDevelopmentSha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
+    "productDevelopmentSha": "9112cad477bd0d665f19bd4880b9aa3bc809d1a5",
     "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
     "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
-    "productDevelopmentTree": "42bd2231cd6236dbc76c4848d0c6abd27e453f22",
+    "productDevelopmentTree": "6f167b61b0187a08a8669e8d707f6a64d82bfba8",
     "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
-    "meaning": "Live refs read immediately before this register update. Product main remains the stable release line and development the integration buffer; Design System has only main. Product compare: merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95, development 647 commits ahead and main 46 commits ahead; GitHub returned at most 300 changed paths, so the full family map remains open. One Product PR is open: draft #517, head 3079610c6688e50604a26a4fb10580b8e3d7304d based on stale development f864fed27026b5bddbd3b79318e68b3cf470036c. Current Branch Hygiene vNext read-only run #356 observed 16 refs and authorized zero deletions. Register update branch is created from development@6750d9b and will itself advance the ref after merge."
+    "meaning": "Live GitHub readback after Product PR #533. Product main remains the stable release line at ecaa38c; development is the integration buffer at 9112cad; Design System has only main at a405dff. Product comparison main→development is diverged from merge base 221b54b2: development 652 commits ahead and main 46 ahead; the API caps path output at 300, so this does not authorize whole-tree integration. Product has 9 live branches after the verified automatic cleanup of merged #533; 1 open draft PR (#517). Design System has 6 branches including main and zero open PRs. Product #533 merged branch cleanup run 45989395850 passed exact-head/tree preservation and live readback, leaving 9 branches. Branch Hygiene vNext #464 and its exact audit/apply receipts were verified before this cleanup. This baseline records live refs only; it does not claim the 125-ID register or global ARC-13 inventory is complete."
   }
 }

@@ -172,5 +172,131 @@
     "developmentReadback": "b2143ec81d2be90613cbff9bf25eec23dbe0f318",
     "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
     "mainChanged": false
+  },
+  "followUp": {
+    "family": "admin-configuration-load-and-revision-state-copy",
+    "pullRequest": 533,
+    "implementationHead": "0d96426242fdbcd8a53bcbb74d26d7d054e582e4",
+    "implementationBranch": "codex/loc006-admin-error-retry-copy-20261127",
+    "branchLifecycle": {
+      "workflowRun": 45989395850,
+      "jobId": 140473096861,
+      "artifactId": 15193081922,
+      "artifactName": "m2d-merged-pr-head-cleanup-45989395850",
+      "artifactSha256": "bf4d9b7732860bbc7ae930721ebdb22934cf010af5d1e49b1c045c3bf60d832e",
+      "status": "PASS",
+      "deleted": true,
+      "readback": "PASS",
+      "remainingProductBranchCount": 9,
+      "mergeSha": "9112cad477bd0d665f19bd4880b9aa3bc809d1a5"
+    },
+    "developmentIntegration": {
+      "pullRequest": 533,
+      "head": "0d96426242fdbcd8a53bcbb74d26d7d054e582e4",
+      "mergeCommit": "9112cad477bd0d665f19bd4880b9aa3bc809d1a5",
+      "developmentReadback": "9112cad477bd0d665f19bd4880b9aa3bc809d1a5",
+      "developmentTree": "6f167b61b0187a08a8669e8d707f6a64d82bfba8",
+      "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+      "mainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
+      "mainChanged": false
+    },
+    "sourceReadback": {
+      "app/admin/admin.js": "fe10867613502f5fc2ec2b6e55d564d533eee283",
+      "app/core/ui-copy.js": "209fa52d1ba609c539b9eaf60571d6de91e0dd84",
+      "app/admin.html": "b89357b110431801e3a8dadf388ba0550f6b0e8c",
+      "tests/admin-hierarchy-browser.cjs": "8e7a3ae053ff9f0cc38564e4fbb80473cf5b9eaa",
+      "tests/auth-first-login-recovery.test.mjs": "bf0cbdb9084ff63fdd1f307ec711085ea832eef0",
+      "architecture/generated/primary-pages.manifest.json": "2635c980f325d47ea12b9507a090c79d9b0fae61",
+      "architecture/arc13/ui-text-candidates.json": "c5e933c29ad332f1df24e911c7057b80361bb670"
+    },
+    "generatedInventoryStatus": {
+      "entries": 1004,
+      "unreviewedOccurrences": 1004,
+      "javascriptParseErrors": 0,
+      "unassignedOwnerSites": 0,
+      "unassignedRouteSites": 0,
+      "primaryPageAuthoringMappedOccurrences": 420,
+      "primaryPageAuthoringUnresolvedOccurrences": 0,
+      "status": "candidate-unreviewed"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        {
+          "name": "App build purity",
+          "id": 45989135722
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 45989135768
+        },
+        {
+          "name": "Admin hierarchy browser",
+          "id": 45989135597
+        },
+        {
+          "name": "Viewer base-price publication contract",
+          "id": 45989135546
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 45989135550
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 45989135755
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 45989135638
+        },
+        {
+          "name": "Mobile browser",
+          "id": 45989135693
+        },
+        {
+          "name": "Summary pricing browser",
+          "id": 45989135801
+        },
+        {
+          "name": "Stone browser",
+          "id": 45989136136
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 45989135652
+        },
+        {
+          "name": "Current asset gates",
+          "id": 45989136078
+        }
+      ]
+    },
+    "decision": {
+      "rationale": "Complete the retry control label in the same Admin load/error component after the load-state family, keeping copy catalog-backed and preserving exact behavior and error/status distinctions.",
+      "catalogKeys": [
+        "admin.loadState.retryLoad"
+      ],
+      "resolvedCandidateIdsAreFrom": "No candidate IDs are attributed to this follow-up because the pre-change candidate inventory was not pinned to an exact retry-label occurrence."
+    },
+    "state": {
+      "consumers": [
+        "Admin retry button in the configuration load-error state"
+      ],
+      "meaning": "Fixed retry label is catalog-backed; retry still re-runs the same configuration load and restores the editor on success.",
+      "preservedContracts": [
+        "HTTP/auth/error behavior, status distinctions, endpoint requests, persistence, model selection and publication behavior are unchanged."
+      ]
+    },
+    "validation": {
+      "passed": [
+        "Exact PR head passed all 12 applicable workflows; Admin browser retry recovery and CP-PUBLIC-03a both passed."
+      ]
+    },
+    "limits": [
+      "This receipt covers only the named Admin load/revision/retry copy family; LOC-006 and the overall v0.9 plan remain partial.",
+      "The ARC-13 candidate inventory remains 1004/1004 unreviewed occurrences.",
+      "No authenticated hosted Admin, Netlify or Production behavior is inferred."
+    ]
   }
 }
