@@ -157,6 +157,8 @@ assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps
 assert(adminHeaderFallback.includes(`>${copy.brand.logoAlt}</strong>`), "Admin keeps the catalog-matched hidden brand fallback");
 assert(adminHeaderFallback.includes(`>${copy.admin.shell.header.pageName}</small>`), "Admin keeps the catalog-matched page-name fallback");
 assert(adminHeaderFallback.includes(`aria-label="${copy.admin.shell.header.menuLabel}"`), "Admin keeps the catalog-matched menu-landmark fallback");
+const adminSource = read("app/admin/admin.js");
+assert(adminSource.includes("user.email || adminShellCopy.header.userFallback") && !adminSource.includes('user.email || "Administrador"'), "Admin only substitutes the catalog fallback when the authenticated email is empty");
 const adminMaterialsFallback = read("app/admin.html");
 const adminMaterialsCopyCode = read("app/admin/admin.js");
 for (const [key, value] of Object.entries(copy.admin.materials.librarySection)) {
@@ -181,7 +183,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-footer-actions-copy-1"
+      ? "arc13-loc006-admin-user-label-fallback-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

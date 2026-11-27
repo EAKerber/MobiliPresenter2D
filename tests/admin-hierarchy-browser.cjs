@@ -29,8 +29,9 @@ let lastPut = null;
 
 const identityStub = [
   'const admin = { email: "admin@example.test", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
+  'const noEmailAdmin = { email: "", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
   'const deniedUser = { email: "staff@example.test", roles: [], app_metadata: { roles: [] } };',
-  'export async function getUser() { const query = new URLSearchParams(location.search); return query.has("logged-out") ? null : query.has("denied") ? deniedUser : admin; }',
+  'export async function getUser() { const query = new URLSearchParams(location.search); return query.has("logged-out") ? null : query.has("denied") ? deniedUser : query.has("no-email") ? noEmailAdmin : admin; }',
   'export async function handleAuthCallback() { return new URLSearchParams(location.search).get("auth-callback") === "invite" ? { type: "invite", token: "test-invite-token" } : null; }',
   'export async function login() { if (new URLSearchParams(location.search).has("provider-error")) throw new Error("Provider-owned identity error"); return admin; }',
   'export async function logout() { return null; }',
@@ -251,9 +252,15 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     "legacy v3 settings are identified as a hierarchy draft");
 
   const shellCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.shell);
+  assert.equal(await page.locator("#userLabel").textContent(), "admin@example.test", "nonempty authenticated email remains the displayed user label");
+  const noEmailPage = await browser.newPage();
+  await noEmailPage.goto(baseUrl + "/admin-test.html?no-email=1", { waitUntil: "networkidle" });
+  await noEmailPage.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+  assert.equal(await noEmailPage.locator("#userLabel").textContent(), shellCopy.header.userFallback, "missing email uses the catalog-backed Admin user-label fallback");
+  await noEmailPage.close();
   assert.deepEqual(shellCopy, {
     documentTitle: "Administração — Casa em Módulos",
-    header: { pageName: "Administração", menuLabel: "Menu do site" },
+    header: { pageName: "Administração", menuLabel: "Menu do site", userFallback: "Administrador" },
     eyebrow: "Configurador público",
     heading: "Administração do catálogo",
     intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
