@@ -53,30 +53,62 @@ if (header) {
     }
     logoutButton.textContent = copy("navigation.logout", "Sair");
     if (!account.contains(logoutButton)) account.append(logoutButton);
+    const logoutStatus = document.createElement("p");
+    logoutStatus.className = "private-menu__note";
+    logoutStatus.setAttribute("role", "status");
+    logoutStatus.setAttribute("aria-live", "polite");
+    logoutStatus.hidden = true;
+    account.append(logoutStatus);
+    let activeUser = null;
+    const showLogoutFailure = () => {
+      logoutStatus.textContent = copy("navigation.logoutFailure", "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+      logoutStatus.hidden = false;
+      logoutButton.disabled = false;
+    };
     if (!logoutButton.hasAttribute("data-private-logout")) {
       logoutButton.classList.add("private-menu__logout");
     } else {
       logoutButton.addEventListener("click", async () => {
+        const temporarySession = activeUser?.temporarySession === true;
+        if (temporarySession) logoutButton.disabled = true;
+        logoutStatus.hidden = true;
+        logoutStatus.textContent = "";
+        let response = null;
         try {
-          await fetch("/api/access/session/logout", {
+          response = await fetch("/api/access/session/logout", {
             method: "POST",
             credentials: "same-origin",
             cache: "no-store",
             headers: { "Content-Type": "application/json" },
             body: "{}",
           });
-        } catch { /* Identity logout remains authoritative. */ }
+        } catch {
+          if (temporarySession) {
+            showLogoutFailure();
+            return;
+          }
+        }
+        // This function also expires the cookie when its store returns 503.
+        if (temporarySession && response && !response.ok && response.status !== 503) {
+          showLogoutFailure();
+          return;
+        }
         await logout();
         window.location.assign("/");
       });
     }
 
     function render(user, { loading = false } = {}) {
+      if (activeUser !== user) {
+        logoutStatus.hidden = true;
+        logoutStatus.textContent = "";
+      }
+      activeUser = user;
       privateLinks.replaceChildren();
       account.hidden = !user;
       email.hidden = !user;
       email.textContent = user?.email || "";
-      logoutButton.hidden = !user;
+      if (logoutButton.hasAttribute("data-private-logout")) logoutButton.hidden = !user;
       const privateGroup = addGroup("Páginas privadas", privateLinks, "private-menu__links");
       const roles = rolesFor(user);
       if (roles.has("admin")) {

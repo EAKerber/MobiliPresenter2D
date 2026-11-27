@@ -20,6 +20,7 @@
       }),
       primaryLabel: "Navegação principal",
       logout: "Sair",
+      logoutFailure: "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.",
       environments: "Ambientes",
       howItWorks: "Como funciona",
       about: "Quem somos",
