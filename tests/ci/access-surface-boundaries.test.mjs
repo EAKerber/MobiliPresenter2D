@@ -392,6 +392,7 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   const header = new FakeElement("header");
   const toggle = new FakeElement("button");
   const menu = new FakeElement("nav");
+  menu.hidden = true;
   const privateLinks = new FakeElement();
   privateLinks.selector = "[data-private-links]";
   const account = new FakeElement();
@@ -414,17 +415,24 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   }[selector] || null);
   menu.querySelector = (selector) => selector === "[data-private-links]" ? privateLinks : FakeElement.prototype.querySelector.call(menu, selector);
   const location = { pathname: "/admin.html", origin: "https://site.test", assign(value) { this.assigned = value; } };
-  const window = { location };
+  const copyLookups = [];
+  const window = { location, CASA_UI_THEME: { getCopy(key, fallback) { copyLookups.push([key, fallback]); return fallback; } } };
   let authCallback;
+  let failNextSessionLookup = true;
   let sessionResponse = { authenticated: false };
-  let deferredSessionResolve = null;
+  let deferredSessionResolve = () => {};
   let logoutCalls = 0;
   const fetchCalls = [];
   const fetchImpl = async (url, options) => {
     fetchCalls.push({ url, options });
     if (url === "/api/access/session/logout") return { ok: true, status: 200, json: async () => ({ ok: true }) };
-    if (deferredSessionResolve) return new Promise((resolve) => { deferredSessionResolve = () => resolve({ ok: true, status: 200, json: async () => sessionResponse }); });
-    return { ok: true, status: 200, json: async () => sessionResponse };
+    const sessionResponseForRequest = () => ({
+      ok: !failNextSessionLookup,
+      status: failNextSessionLookup ? 503 : 200,
+      json: async () => sessionResponse,
+    });
+    if (deferredSessionResolve) return new Promise((resolve) => { deferredSessionResolve = () => resolve(sessionResponseForRequest()); });
+    return sessionResponseForRequest();
   };
   const source = await readFile(resolve(ROOT, "app/core/private-navigation.js"), "utf8");
   const stripped = source.replace(/^import\s+[\s\S]*?\s+from\s+["'][^"']+["'];\s*$/gm, "");
@@ -439,24 +447,73 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   );
   await new Promise((resolve) => setImmediate(resolve));
   const privateHrefs = () => privateLinks.links.map((link) => link.href);
+  const privateLabels = () => privateLinks.links.map((link) => link.textContent);
+  const groupHeadings = () => privateLinks.children.map((group) => group.children[0]?.textContent);
+  const accessNote = () => privateLinks.children[0]?.find((node) => node.tagName === "p");
+  const assertAccessStateLookup = (key, fallback) => assert.ok(copyLookups.some(([lookedUpKey, lookedUpFallback]) =>
+    lookedUpKey === `navigation.privateAccessState.${key}` && lookedUpFallback === fallback), `private access state resolves catalog key ${key}`);
+  assert.equal(accessNote()?.textContent, "Verificando acesso…");
+  assertAccessStateLookup("loading", "Verificando acesso…");
+  deferredSessionResolve();
+  await new Promise((resolve) => setImmediate(resolve));
+  deferredSessionResolve = null;
+  assert.equal(menu.hidden, true, "a closed menu stays closed after its background lookup fails");
+  assert.equal(accessNote()?.textContent, "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
+  assertAccessStateLookup("lookupFailure", "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
+  assert.equal(privateHrefs().includes("/config/"), false, "a failed lookup never exposes Configurator access");
+  assert.equal(privateHrefs().includes("/access/manage.html"), false, "a failed lookup never exposes access management");
+  assert.equal(privateHrefs().includes("/admin.html"), false, "a failed lookup does not assume an anonymous session");
+  await toggle.dispatch("click");
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(menu.hidden, false, "opening the menu exposes the lookup failure and retry guidance");
+  assert.equal(accessNote()?.textContent, "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
+  assert.equal(privateHrefs().includes("/config/"), false, "a failed retry never exposes Configurator access");
+  assert.equal(privateHrefs().includes("/access/manage.html"), false, "a failed retry never exposes access management");
+  assert.equal(privateHrefs().includes("/admin.html"), false, "a failed retry does not assume an anonymous session");
+  await toggle.dispatch("click");
+  assert.equal(menu.hidden, true);
+  failNextSessionLookup = false;
+  await toggle.dispatch("click");
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(menu.hidden, false);
+  assert.deepEqual(groupHeadings(), ["Páginas privadas", "Páginas públicas"]);
   assert.ok(privateHrefs().includes("/admin.html"), "anonymous menu offers entry to administration");
+  assert.equal(privateLabels().find((label) => label === "Entrar na administração"), "Entrar na administração");
+  assertAccessStateLookup("anonymousAdminEntry", "Entrar na administração");
 
   authCallback("login", { id: "admin-1", app_metadata: { roles: ["admin"] }, email: "admin@example.test" });
   assert.ok(privateHrefs().includes("/config/"));
   assert.ok(privateHrefs().includes("/access/manage.html"));
+  assert.ok(privateLabels().includes("Configurador"));
+  assert.ok(privateLabels().includes("Administração"));
+  assert.ok(privateLabels().includes("Gerenciar acessos"));
+  for (const [key, fallback] of [
+    ["privatePages", "Páginas privadas"],
+    ["publicPages", "Páginas públicas"],
+    ["configurator", "Configurador"],
+    ["administration", "Administração"],
+    ["manageAccesses", "Gerenciar acessos"]
+  ]) {
+    assert.ok(copyLookups.some(([lookedUpKey, lookedUpFallback]) =>
+      lookedUpKey === `navigation.privateMenu.${key}` && lookedUpFallback === fallback), `private navigation resolves catalog key ${key}`);
+  }
   assert.equal(email.textContent, "admin@example.test");
   authCallback("login", { id: "staff-1", roles: ["staff"], email: "staff@example.test" });
   assert.ok(privateHrefs().includes("/config/"));
   assert.ok(privateHrefs().includes("/access/manage.html"));
+  assert.ok(privateLabels().includes("Configurador"));
+  assert.ok(privateLabels().includes("Gerenciar acessos"));
   assert.equal(privateHrefs().includes("/admin.html"), false, "staff menu does not expose the administrator-only page");
   authCallback("login", { id: "buyer-1", roles: ["buyer"], email: "buyer@example.test" });
   assert.equal(privateHrefs().includes("/config/"), false);
-  assert.ok(privateLinks.children.some((node) => node.textContent.includes("não tem acesso")));
+  assert.equal(accessNote()?.textContent, "Esta conta não tem acesso às páginas de gestão.");
+  assertAccessStateLookup("denied", "Esta conta não tem acesso às páginas de gestão.");
 
   sessionResponse = { authenticated: true, email: "temporary@example.test", accessType: "temporary" };
   authCallback("logout", null);
   await new Promise((resolve) => setImmediate(resolve));
   assert.ok(privateHrefs().includes("/config/"), "verified temporary session is represented as Configurator access");
+  assert.ok(privateLabels().includes("Configurador"));
   assert.equal(privateHrefs().includes("/admin.html"), false);
   assert.equal(privateHrefs().includes("/access/manage.html"), false);
 
@@ -470,11 +527,82 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   assert.ok(privateHrefs().includes("/access/manage.html"), "late anonymous lookup cannot overwrite a newer admin state");
 
   const logoutButton = menu.buttons.find((button) => button.textContent === "Sair");
+  assert.ok(copyLookups.some(([key, fallback]) => key === "navigation.logout" && fallback === "Sair"), "private logout uses the canonical copy key and safe fallback");
   await logoutButton.dispatch("click");
   assert.equal(fetchCalls.some((call) => call.url === "/api/access/session/logout"), true);
   assert.equal(logoutCalls, 1);
   assert.equal(location.assigned, "/");
   assert.equal(listeners.length, 2, "document-level close handlers are installed once");
+});
+
+test("static /access/ logout control receives the shared temporary-session logout handler", async () => {
+  const header = new FakeElement("header");
+  const toggle = new FakeElement("button");
+  const menu = new FakeElement("nav");
+  const privateLinks = new FakeElement();
+  privateLinks.selector = "[data-private-links]";
+  const account = new FakeElement();
+  account.selector = "[data-private-account]";
+  const email = new FakeElement("span");
+  email.selector = "[data-private-email]";
+  const logoutButton = new FakeElement("button");
+  logoutButton.textContent = "Sair";
+  logoutButton.setAttribute("data-private-logout", "");
+  account.append(email, logoutButton);
+  menu.append(privateLinks, account);
+  header.append(toggle, menu);
+  const document = {
+    querySelector(selector) { return selector === "[data-private-header]" ? header : null; },
+    getElementById(id) { return id === "logoutButton" ? logoutButton : null; },
+    createElement(tagName) { return new FakeElement(tagName); },
+    addEventListener() {},
+  };
+  header.querySelector = (selector) => ({
+    "[data-private-menu-toggle]": toggle,
+    "[data-private-menu]": menu,
+  }[selector] || null);
+  menu.querySelector = (selector) => selector === "[data-private-links]" ? privateLinks : FakeElement.prototype.querySelector.call(menu, selector);
+  const location = { pathname: "/access/", origin: "https://site.test", assign(value) { this.assigned = value; } };
+  const window = { location, CASA_UI_THEME: { getCopy(_key, fallback) { return fallback; } } };
+  let logoutCalls = 0;
+  let failLogoutRequest = true;
+  const fetchCalls = [];
+  const fetchImpl = async (url, options) => {
+    fetchCalls.push({ url, options });
+    if (url === "/api/access/session/logout") {
+      if (failLogoutRequest) {
+        failLogoutRequest = false;
+        throw new Error("network details must not reach the UI");
+      }
+      return { ok: true, status: 200, json: async () => ({ ok: true }) };
+    }
+    return { ok: true, status: 200, json: async () => ({ authenticated: true, email: "temporary@example.test", accessType: "temporary" }) };
+  };
+  const source = await readFile(resolve(ROOT, "app/core/private-navigation.js"), "utf8");
+  const stripped = source.replace(/^import\s+[\s\S]*?\s+from\s+["'][^"']+['"];\s*$/gm, "");
+  new Function("getUser", "logout", "onAuthChange", "document", "window", "fetch", stripped)(
+    async () => null,
+    async () => { logoutCalls += 1; },
+    () => {},
+    document,
+    window,
+    fetchImpl,
+  );
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(logoutButton.hidden, false, "a verified temporary session reveals the existing static control");
+  await logoutButton.dispatch("click");
+  const logoutStatus = account.children.find((node) => node.getAttribute("role") === "status");
+  assert.equal(logoutStatus.hidden, false, "a transport failure leaves a generic live message visible");
+  assert.equal(logoutStatus.textContent, "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+  assert.equal(logoutStatus.textContent.includes("network details"), false, "transport details never appear in the UI");
+  assert.equal(logoutButton.disabled, false, "the temporary-session logout can be retried");
+  assert.equal(logoutCalls, 0, "Identity logout is not treated as revoking a temporary session");
+  assert.equal(location.assigned, undefined, "a transport failure does not claim logout succeeded");
+  await logoutButton.dispatch("click");
+  assert.equal(logoutStatus.hidden, true, "retry clears the previous failure message");
+  assert.ok(fetchCalls.some((call) => call.url === "/api/access/session/logout" && call.options.method === "POST"), "static control revokes the temporary session");
+  assert.equal(logoutCalls, 1, "static control also closes Identity when present");
+  assert.equal(location.assigned, "/", "the static access route returns to the public entry point");
 });
 
 test("invitation token leaves the URL before UI interaction and never appears in rendered text", async () => {

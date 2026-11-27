@@ -1,0 +1,223 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006"
+  ],
+  "family": "private-navigation-headings-and-route-labels",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "shared-navigation-fixed-copy",
+    "subsystemOwner": "shared private-navigation module",
+    "contentOwner": "Product; existing pt-BR text retained in canonical UI copy catalog",
+    "authority": "Move only the two menu group headings and role-gated management route labels to navigation.privateMenu. Preserve roles, visibility, route destinations, and authentication-state messages.",
+    "routeConsumers": [
+      "/access/",
+      "/access/manage",
+      "/admin",
+      "/config/"
+    ],
+    "catalogKeys": [
+      "navigation.privateMenu.privatePages",
+      "navigation.privateMenu.publicPages",
+      "navigation.privateMenu.configurator",
+      "navigation.privateMenu.administration",
+      "navigation.privateMenu.manageAccesses"
+    ],
+    "excludedAdjacentCopy": [
+      "Verificando acesso…",
+      "Entrar na administração",
+      "Esta conta não tem acesso às páginas de gestão."
+    ],
+    "occurrences": [
+      {
+        "id": "f431fd90c75c398f",
+        "line": 112,
+        "text": "Páginas privadas"
+      },
+      {
+        "id": "1952e416013f806f",
+        "line": 115,
+        "text": "Configurador (admin)"
+      },
+      {
+        "id": "4b8f75b5274c4963",
+        "line": 116,
+        "text": "Administração"
+      },
+      {
+        "id": "fbb10db349799c37",
+        "line": 117,
+        "text": "Gerenciar acessos (admin)"
+      },
+      {
+        "id": "c7e84e8b8e185f0e",
+        "line": 119,
+        "text": "Configurador (staff)"
+      },
+      {
+        "id": "d97b5e2a41aa32a9",
+        "line": 120,
+        "text": "Gerenciar acessos (staff)"
+      },
+      {
+        "id": "c91c2735f986e33e",
+        "line": 122,
+        "text": "Configurador (temporary session)"
+      },
+      {
+        "id": "eb8851e25e184b57",
+        "line": 136,
+        "text": "Páginas públicas"
+      }
+    ]
+  },
+  "evidence": {
+    "baseRevision": "fe0d453f4f84bfc8d4e95dcd8933ee53bef1d8f1",
+    "implementationRevision": "b17d03256b704c9d3a96efcdeee627507209fa61",
+    "integrationRevision": "c00bc7688c1a167c763ac0bfd60c1d1cc88458c3",
+    "pullRequest": {
+      "number": 553,
+      "base": "development",
+      "head": "b17d03256b704c9d3a96efcdeee627507209fa61",
+      "mergeMethod": "squash",
+      "mergeSha": "c00bc7688c1a167c763ac0bfd60c1d1cc88458c3"
+    },
+    "sourceBlobs": {
+      "app/core/private-navigation.js": "2e58ce2bf545c69ff30131617b1f5ebe17b15bf3",
+      "app/core/ui-copy.js": "89313ba9c9d88fb3667f380f1a858ec5f9d1956f",
+      "app/access/index.html": "4c6b15c831da8a1fe661df98c651a8ddf711ec37",
+      "app/access/manage.html": "2f76e02e3c3a34aa5dcef7407b7e8bb99c385c88",
+      "app/admin.html": "7796864f38feffe12070960a53069161fa4d3d0a",
+      "app/config/index.html": "d49dd3e4102d7716af32af34d96df768fa107da8",
+      "tests/ci/access-surface-boundaries.test.mjs": "6b7d4c6aedd105f490ed5e70df09a797c23d99db",
+      "tests/ui-theme-contract.cjs": "3ffa1c265a905815b2ff1ceb72457b8a19817782",
+      "architecture/arc13/ui-text-candidates.json": "973b6ecb9f14c9a246cea82db4cd453e39a679d9",
+      "architecture/generated/primary-pages.manifest.json": "2e62f67018fcc9b90e7d4a4cb8f2efb009cbd740"
+    },
+    "candidateSourceSha256": "15491a33534d4b4cda2dce93162eba1d959cf03b7987519d89f72c1e3f6b3ffe",
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "973b6ecb9f14c9a246cea82db4cd453e39a679d9",
+      "sha256": "43bf2ba3df36c05d3939ddcd3ff06b93ac4ec5cc83eebd818866b8b7b9c7aae9",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "unreviewedOccurrences": 1008,
+        "javascriptSinkSites": 447,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "exactHeadGates": {
+      "head": "b17d03256b704c9d3a96efcdeee627507209fa61",
+      "status": "15 Actions workflow runs; 17 successful check jobs; 2 checks skipped",
+      "successfulRuns": [
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 46014569621
+        },
+        {
+          "name": "Public routing before Clerk",
+          "id": 46014569600
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 46014569667
+        },
+        {
+          "name": "Configuration endpoint authorization boundaries",
+          "id": 46014569611
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 46014569734
+        },
+        {
+          "name": "Summary pricing browser (local V5; protected preview separately gated)",
+          "id": 46014569687
+        },
+        {
+          "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)",
+          "id": 46014569521
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 46014569620
+        },
+        {
+          "name": "Stone browser (local V5; protected preview separately gated)",
+          "id": 46014569311
+        },
+        {
+          "name": "App build purity",
+          "id": 46014569685
+        },
+        {
+          "name": "Admin hierarchy browser",
+          "id": 46014569576
+        },
+        {
+          "name": "Mobile browser (local V5; protected preview separately gated)",
+          "id": 46014569356
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 46014569301
+        },
+        {
+          "name": "Viewer base-price publication contract (no Netlify deploy)",
+          "id": 46014569321
+        },
+        {
+          "name": "Current asset gates",
+          "id": 46014569341
+        }
+      ],
+      "successfulJobs": [
+        "plan",
+        "inventory x2",
+        "configuration-boundaries",
+        "variants",
+        "browser jobs x4",
+        "source-and-browsers",
+        "css-00-readback",
+        "static-and-contract",
+        "current-build",
+        "access-session-browser",
+        "price-contract",
+        "current-asset-gates",
+        "authorization-contract"
+      ],
+      "skippedChecks": [
+        {
+          "name": "Supabase Preview",
+          "reason": "Preview branches are disabled in project integrations."
+        },
+        {
+          "name": "Public routing browser job",
+          "reason": "No protected preview was associated with the PR; its static-and-contract job passed."
+        }
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "fixedCopyCatalogued": true,
+    "rolesAndVisibilityChanged": false,
+    "routeDestinationsChanged": false,
+    "authenticationStateMessagesChanged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "roleCoverage": "The existing private-navigation boundary checks the same destinations for administrator, staff, and temporary-session states; assertions now also verify visible labels and both group headings.",
+    "catalogContract": "The shared UI theme contract checks all five catalog values, route-menu catalog lookups, static fallbacks, and cache-version updates for the four private consumers.",
+    "independentReview": "The eight occurrence cohort is one shared component family. Adjacent loading, anonymous-entry, and denied-access messages were left for a separate auth-state review; dynamic public-menu labels were excluded.",
+    "localChecks": "Primary-page compiler --sync and --check passed. ARC-13 was generated twice with identical SHA-256. Local tests were not run; exact-head CI supplied validation."
+  },
+  "nextAction": "Review the three private-navigation authentication-state messages separately: loading status, anonymous entry link, and denied-access note. Preserve their conditions and route/access policy; keep dynamic public-menu and global inventory occurrences out of scope."
+}

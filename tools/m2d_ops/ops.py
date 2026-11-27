@@ -330,6 +330,11 @@ def markdown(report):
 def load(path): return json.loads(Path(path).read_text(encoding='utf-8'))
 
 def cli(argv=None):
+    # Snapshot reports include Unicode plan text. Windows may otherwise select
+    # a legacy console encoding that cannot emit the JSON or Markdown output.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(encoding='utf-8', errors='backslashreplace')
     p=argparse.ArgumentParser(description=__doc__); sub=p.add_subparsers(dest='cmd',required=True)
     cap=sub.add_parser('snapshot'); cap.add_argument('--repo',required=True); cap.add_argument('--main',required=True); cap.add_argument('--development',required=True); cap.add_argument('--ds-repo'); cap.add_argument('--ds-ref')
     for name in ('status','context','candidates','reconcile','handover','validate'):

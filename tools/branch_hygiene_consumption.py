@@ -13,6 +13,28 @@ from typing import Any
 
 SCHEMA = "BranchHygieneConsumption 0.1"
 
+TAGGER_NAME = "MobiliPresenter2D Branch Hygiene"
+TAGGER_EMAIL = "branch-hygiene@m2d.invalid"
+
+
+def create_annotated_tag(
+    tag_name: str, message: str, commit_sha: str, *,
+    cwd: str | None = None, env: dict[str, str] | None = None,
+) -> None:
+    """Create a marker tag with a stable service identity, independent of runner config."""
+    proc = subprocess.run(
+        [
+            "git", "-c", "user.name=" + TAGGER_NAME,
+            "-c", "user.email=" + TAGGER_EMAIL,
+            "tag", "-a", tag_name, "-m", message, commit_sha,
+        ],
+        cwd=cwd, env=env, text=True, capture_output=True, check=False,
+    )
+    if proc.returncode:
+        detail = proc.stderr.strip().replace("\r", " ").replace("\n", " ")[:300]
+        suffix = (": " + detail) if detail else ""
+        raise RuntimeError("CONSUMPTION_GIT_FAILED:tag -a (exit=" + str(proc.returncode) + ")" + suffix)
+
 
 def _git(*args: str, input_text: str | None = None, check: bool = True) -> str:
     proc = subprocess.run(
@@ -100,7 +122,7 @@ def write_marker(
 
     local_tag = "codex-consumption-" + key[:16] + "-" + stage + "-" + uuid.uuid4().hex[:12]
     message = json.dumps(expected, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    _git("tag", "-a", local_tag, "-m", message, commit_sha)
+    create_annotated_tag(local_tag, message, commit_sha)
     try:
         proc = subprocess.run(
             ["git", "push", "--force-with-lease=" + remote_ref + ":", "origin",

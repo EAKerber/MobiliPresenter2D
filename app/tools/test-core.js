@@ -710,12 +710,12 @@ const adminCss = fs.readFileSync(path.join(projectRoot, "admin/admin.css"), "utf
 const pricingSource = fs.readFileSync(path.join(projectRoot, "core/pricing.js"), "utf8");
 const configurationSource = fs.readFileSync(path.join(projectRoot, "core/configuration.js"), "utf8");
 const priceBookSource = fs.readFileSync(path.join(projectRoot, "data/mock-price-book.js"), "utf8");
-assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v40"), true, "buyer cache revision declares PriceBook 2.0");
-assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v40"), true, "buyer loads the typed pricing contract");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v40") < indexHtml.indexOf("core/configuration.js?v=admin-config-v9"), true, "pricing contract loads before the v3 compatibility core");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v40") < indexHtml.indexOf("core/pricing.js?v=runtime-v40"), true, "pricing contract loads before calculator");
-assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v40"), true, "typed pricing calculator cache revision is explicit");
-assert.equal(indexHtml.includes("app.js?v=runtime-v40"), true, "buyer cache revision is explicit");
+assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v41"), true, "buyer cache revision declares PriceBook 2.0");
+assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v41"), true, "buyer loads the typed pricing contract");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v41") < indexHtml.indexOf("core/configuration.js?v=admin-config-v9"), true, "pricing contract loads before the v3 compatibility core");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v41") < indexHtml.indexOf("core/pricing.js?v=runtime-v41"), true, "pricing contract loads before calculator");
+assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v41"), true, "typed pricing calculator cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=runtime-v41"), true, "buyer cache revision is explicit");
 ["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
@@ -746,7 +746,7 @@ assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login conti
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
 assert.equal(adminHtml.includes("admin/admin.css?v=viewer-price-main-v1"), true, "admin editor CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=viewer-price-main-ux230-v2"), true, "admin editor bundle cache revision is explicit");
+assert.equal(adminHtml.includes("admin/admin.bundle.js?v=arc13-loc006-admin-user-label-fallback-1"), true, "admin editor bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
 assert.equal(adminHtml.includes("data/mock-price-book.js"), false, "admin loads protected pricing through the authenticated bootstrap endpoint");
 assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v9"), true, "admin loads the v3 compatibility core revision");
@@ -774,7 +774,7 @@ assert.equal(adminJs.includes("pricingContract.ROLE_CAPABILITIES[role]"), true, 
 assert.equal(adminJs.includes("select.dataset.priceRuleType"), true, "dual-type pricing rows expose an explicit type selector");
 assert.equal(adminJs.includes('{ type: "amount", cents: 0 }'), true, "percentage to amount switching resets the numeric value instead of converting units");
 assert.equal(adminJs.includes('{ type: "percentage", bps: 0, basis }'), true, "amount to percentage switching resets BPS and restores the contract basis");
-assert.equal(adminJs.includes("O valor foi zerado para evitar conversão implícita"), true, "admin explains zero-on-type-switch behavior");
+assert.equal(adminJs.includes("pricingEditorCopy.typeChangedResetNotice"), true, "admin explains zero-on-type-switch behavior from the shared copy catalog");
 assert.equal(adminJs.includes('projection.code === "pricing_requires_publication"'), true, "non-representable typed pricing is blocked before legacy publication");
 assert.equal(adminCss.includes(".pricing-field--typed"), true, "dual-type pricing rows have a dedicated compact layout");
 assert.equal(adminCss.includes(".pricing-basis"), true, "percentage basis copy has an explicit admin style hook");
@@ -829,7 +829,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v40"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v41"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );

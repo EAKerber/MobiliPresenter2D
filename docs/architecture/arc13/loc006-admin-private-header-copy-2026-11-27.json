@@ -1,0 +1,160 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "admin-private-header-static-copy-and-catalog-parity",
+  "status": "integrated-development",
+  "evidence": {
+    "baseRevision": "dbe528eeb7de4cf38dfa34a94c772bbe1db0c468",
+    "implementationRevision": "f2e4d86d233e6bb72e94a6bac454d924436dfeb6",
+    "integrationRevision": "5b183d007029a3cdbd9aaebf256da9e4a99e534b",
+    "implementationBranch": "codex/loc006-admin-header-static-copy-20261127",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "fc5f6fc702133d4018f478b45b6a2d04c463ee2f",
+    "implementationCandidateIds": [
+      "7b0753494b736d68",
+      "a793a1218bc0b813",
+      "19f2c8a0c0f6d96d",
+      "0820680b264010a8",
+      "34b357f4b8b82539",
+      "42744b3303a51cf3"
+    ],
+    "regeneratedCandidateIds": [
+      "7b0753494b736d68",
+      "bbf5c710a80c36d6",
+      "9edcbc09de57dabf",
+      "a3b6222b2b967ccd",
+      "34b357f4b8b82539",
+      "42744b3303a51cf3"
+    ],
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "a7e5b266a820db0b92fc786dddf4a7a6cc240b93"
+    },
+    "adminMarkup": {
+      "path": "app/admin.html",
+      "gitBlob": "e0f7158b991bfb19c5859182cc2c22d1f80f84ca"
+    },
+    "sharedCatalogs": [
+      {
+        "path": "app/core/ui-copy.js",
+        "prefix": "brand",
+        "gitBlob": "5e115bd0041b6dfc9cfa588e77bd06032955e986"
+      },
+      {
+        "path": "app/core/ui-copy.js",
+        "prefix": "navigation.menu",
+        "gitBlob": "5e115bd0041b6dfc9cfa588e77bd06032955e986"
+      },
+      {
+        "path": "app/core/ui-copy.js",
+        "prefix": "admin.shell.header",
+        "gitBlob": "5e115bd0041b6dfc9cfa588e77bd06032955e986"
+      }
+    ],
+    "contracts": [
+      {
+        "path": "tests/admin-hierarchy-browser.cjs",
+        "gitBlob": "f82d9166293d02d940d91ac7dcab2f6efb7775ba"
+      },
+      {
+        "path": "tests/ui-theme-contract.cjs",
+        "gitBlob": "b0ed43fc8fd3c328565a80c8240679a73a86507a"
+      },
+      {
+        "path": "app/tools/test-core.js",
+        "gitBlob": "79d5c3304454f2d283ecdae16cde780f8a9a538f"
+      }
+    ],
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "687ae1aa9e0d85ac15862bbe63dcd32e53dabc71"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "ee15e552822bdb5e58bd5f9a8400084242174f61",
+      "status": "candidate-unreviewed",
+      "summary": {
+        "entries": 1005,
+        "unreviewedOccurrences": 1005,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "pullRequest": {
+      "number": 539,
+      "head": "f2e4d86d233e6bb72e94a6bac454d924436dfeb6",
+      "mergeMethod": "squash",
+      "mergeSha": "5b183d007029a3cdbd9aaebf256da9e4a99e534b"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        { "name": "Summary pricing browser (local V5; protected preview separately gated)", "id": 45999371453 },
+        { "name": "Development test impact plan (advisory)", "id": 45999371491 },
+        { "name": "Current variant fidelity", "id": 45999371066 },
+        { "name": "ARC-13 inventory provenance and determinism", "id": 45999371118 },
+        { "name": "App build purity", "id": 45999371062 },
+        { "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)", "id": 45999371131 },
+        { "name": "Viewer base-price publication contract (no Netlify deploy)", "id": 45999371191 },
+        { "name": "Development CP-PUBLIC-03a authorization boundary (offline)", "id": 45999371335 },
+        { "name": "Development CSS-00 read-only baseline", "id": 45999371198 },
+        { "name": "Admin hierarchy browser", "id": 45999371245 },
+        { "name": "Current asset gates", "id": 45999371121 },
+        { "name": "Stone browser (local V5; protected preview separately gated)", "id": 45999371345 },
+        { "name": "Mobile browser (local V5; protected preview separately gated)", "id": 45999371053 }
+      ]
+    },
+    "readback": {
+      "development": "5b183d007029a3cdbd9aaebf256da9e4a99e534b",
+      "main": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+    }
+  },
+  "decision": {
+    "rationale": "Bind the six fixed Admin private-header text/accessibility sites to existing brand and navigation catalog keys plus two narrowly named Admin header keys. Keep the original markup values as deliberate no-JavaScript fallbacks and assert their exact parity with the catalog.",
+    "catalogKeys": [
+      "brand.homeLinkAriaLabel",
+      "brand.logoAlt",
+      "navigation.menu.open",
+      "admin.shell.header.pageName",
+      "admin.shell.header.menuLabel"
+    ],
+    "resolvedCandidateIdsAreFrom": "The exact pre-change ARC-13 inventory blob above. The regenerated IDs are separately pinned; the inventory remains candidate-unreviewed globally."
+  },
+  "state": {
+    "consumers": [
+      "Admin private-header brand link accessible name",
+      "Admin logo alternative and hidden brand text",
+      "Admin private-header page name",
+      "Admin private-menu initial accessible name",
+      "Admin private-menu landmark accessible name"
+    ],
+    "meaning": "Runtime copy is catalog-backed while the HTML keeps accessible static fallback text. Brand, fallback, menu state, and landmark contracts are checked against the same catalog values.",
+    "preservedContracts": [
+      "No-JavaScript header text and accessible names remain available and match the shared catalog exactly.",
+      "The private menu controller retains its existing initial, open and close behavior and continues to own dynamic label changes.",
+      "Private links, account identity, logout, authentication, role policy, and menu content are unchanged.",
+      "Only development was updated; main remains unchanged."
+    ]
+  },
+  "validation": {
+    "passed": [
+      "Primary-page compiler --sync and --check passed.",
+      "ARC-13 inventory was regenerated deterministically on the exact source; 1,005 occurrences remain unreviewed, with 0 JavaScript parse errors, 0 unassigned owner/route sites and 0 unresolved primary-page mappings.",
+      "All 13 applicable GitHub workflows passed on exact final PR head f2e4d86d233e6bb72e94a6bac454d924436dfeb6.",
+      "The squash merge succeeded with expected head pinned; live readback confirms development at the merge SHA and main unchanged at the recorded SHA."
+    ]
+  },
+  "limits": [
+    "This receipt covers only the named private-header copy sites; LOC-006, ARC-13 review and the 125-ID plan remain partial.",
+    "All 1,005 ARC-13 occurrences remain candidate-unreviewed globally; this receipt does not approve or reconcile them globally.",
+    "No hosted authenticated Admin, Netlify deployment, or Production behavior is inferred."
+  ]
+}

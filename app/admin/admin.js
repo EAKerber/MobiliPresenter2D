@@ -36,11 +36,18 @@ const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nomin
 const authenticationCopy = uiCopy.admin.authentication;
 const publicationCopy = uiCopy.admin.publication;
 const adminShellCopy = uiCopy.admin.shell;
+const adminLoadCopy = uiCopy.admin.loadState;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
+const pricingEditorCopy = uiCopy.admin.pricing.editor;
 let catalogPricing = null;
 let adminDataPromise = null;
 let adminViewRun = 0;
 const byId = (id) => document.getElementById(id);
+byId("revisionLabel").textContent = adminLoadCopy.revisionPending;
+
+function setAdminRevisionLabel(revision) {
+  byId("revisionLabel").textContent = adminLoadCopy.revisionLabel.replace("{revision}", String(revision || 1));
+}
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
 const adminServiceError = byId("adminServiceError");
@@ -80,7 +87,8 @@ document.querySelectorAll("[data-admin-auth-copy]").forEach((element) => {
 });
 
 function adminShellCopyValue(path) {
-  return path.split(".").reduce((value, key) => value?.[key], adminShellCopy);
+  const root = path.startsWith("brand.") || path.startsWith("navigation.") ? uiCopy : adminShellCopy;
+  return path.split(".").reduce((value, key) => value?.[key], root);
 }
 
 document.querySelectorAll("[data-admin-shell-copy]").forEach((element) => {
@@ -91,6 +99,21 @@ document.querySelectorAll("[data-admin-shell-copy]").forEach((element) => {
 document.querySelectorAll("[data-admin-shell-aria-label]").forEach((element) => {
   const value = adminShellCopyValue(element.dataset.adminShellAriaLabel);
   if (typeof value === "string") element.setAttribute("aria-label", value);
+});
+
+document.querySelectorAll("[data-admin-shell-alt]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellAlt);
+  if (typeof value === "string") element.setAttribute("alt", value);
+});
+
+document.querySelectorAll("[data-admin-materials-copy]").forEach((element) => {
+  const value = element.dataset.adminMaterialsCopy.split(".").reduce((current, key) => current?.[key], materialAvailabilityCopy.librarySection);
+  if (typeof value === "string") element.textContent = value;
+});
+
+document.querySelectorAll("[data-admin-publication-copy]").forEach((element) => {
+  const value = element.dataset.adminPublicationCopy.split(".").reduce((current, key) => current?.[key], publicationCopy);
+  if (typeof value === "string") element.textContent = value;
 });
 
 
@@ -116,13 +139,8 @@ const pricingRoles = [
   ["globalAdjustment", "Adicionais globais"]
 ];
 
-const pricingTypeLabels = Object.freeze({
-  amount: "Valor fixo",
-  percentage: "Percentual"
-});
-const pricingBasisLabels = Object.freeze({
-  "eligible-module-base": "Base: valor base de cada módulo elegível"
-});
+const pricingTypeLabels = pricingEditorCopy.typeLabels;
+const pricingBasisLabels = pricingEditorCopy.basisLabels;
 
 function setMessage(element, message, kind = "") {
   element.textContent = message;
@@ -1292,7 +1310,7 @@ function renderPricing() {
         select.dataset.priceRuleType = "true";
         select.dataset.priceRole = role;
         select.dataset.priceId = id;
-        select.setAttribute("aria-label", `Tipo de preço: ${publicLabel}`);
+        select.setAttribute("aria-label", pricingEditorCopy.typeAriaLabel.replace("{label}", publicLabel));
         capabilities.types.forEach((type) => {
           const option = document.createElement("option");
           option.value = type;
@@ -1313,7 +1331,7 @@ function renderPricing() {
       input.dataset.priceRole = role;
       input.dataset.priceId = id;
       input.dataset.priceType = rule.type;
-      input.setAttribute("aria-label", `Valor de ${publicLabel}`);
+      input.setAttribute("aria-label", pricingEditorCopy.valueAriaLabel.replace("{label}", publicLabel));
 
       const unit = document.createElement("small");
       unit.className = "pricing-unit";
@@ -1391,20 +1409,25 @@ function refreshHandlesRepairState() {
 }
 
 async function loadSettings() {
-  const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-  if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
+  let response;
+  try {
+    response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
+  } catch {
+    throw new Error(adminLoadCopy.configurationLoadFailure);
+  }
+  if (!response.ok) throw new Error(response.status === 404 ? adminLoadCopy.configurationNotPublished : adminLoadCopy.configurationLoadFailure);
   const published = await response.json();
   publishedSource = structuredClone(published);
   model = baselineHierarchyFor(published);
-  byId("revisionLabel").textContent = "Versão " + (model.revision || 1) + " · editor hierárquico";
+  setAdminRevisionLabel(model.revision);
   const repair = refreshHandlesRepairState();
   setMessage(
     saveMessage,
     repair?.ok && repair.needed
-      ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
+      ? adminLoadCopy.handlesRepairNeeded
       : published.schemaVersion === hierarchyCore.SCHEMA
-        ? "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação."
-        : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+        ? adminLoadCopy.version5Loaded
+        : adminLoadCopy.hierarchyDraftLoaded
   );
   renderAdminTabs();
 }
@@ -1624,7 +1647,7 @@ pricingList.addEventListener("change", (event) => {
     } else {
       rules[id] = { type: "amount", cents: 0 };
     }
-    setMessage(saveMessage, "Tipo de preço alterado. O valor foi zerado para evitar conversão implícita entre R$ e %.", "success");
+    setMessage(saveMessage, pricingEditorCopy.typeChangedResetNotice, "success");
     renderPricing();
     return;
   }
@@ -1657,7 +1680,7 @@ async function showUser(user) {
     deniedPanel.hidden = false;
     return;
   }
-  byId("userLabel").textContent = user.email || "Administrador";
+  byId("userLabel").textContent = user.email || adminShellCopy.header.userFallback;
   try {
     await ensureAdminData();
     if (runId !== adminViewRun) return;
@@ -1667,12 +1690,12 @@ async function showUser(user) {
   } catch (error) {
     if (runId !== adminViewRun) return;
     adminServiceError.hidden = false;
-    setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
+    setMessage(adminServiceError, error.message || adminLoadCopy.adminDataLoadFallback, "error");
     if (error.code === "forbidden") return;
     const retry = document.createElement("button");
     retry.type = "button";
     retry.className = "button button--secondary";
-    retry.textContent = "Tentar novamente";
+    retry.textContent = adminLoadCopy.retryLoad;
     retry.addEventListener("click", async () => {
       retry.disabled = true;
       let currentUser = null;
@@ -2039,7 +2062,7 @@ persistHandlesButton.addEventListener("click", async () => {
 
     publishedSource = structuredClone(readback);
     model = baselineHierarchyFor(readback);
-    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setAdminRevisionLabel(model.revision);
     refreshHandlesRepairState();
     renderAdminTabs();
     setMessage(
@@ -2101,7 +2124,7 @@ saveButton.addEventListener("click", async () => {
       }
       publishedSource = structuredClone(readback);
       model = baselineHierarchyFor(readback);
-      byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+      setAdminRevisionLabel(model.revision);
       refreshHandlesRepairState();
       renderAdminTabs();
       setMessage(saveMessage, publicationCopy.hierarchyPublished, "success");
@@ -2157,7 +2180,7 @@ saveButton.addEventListener("click", async () => {
     }
     model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     publishedSource = structuredClone(payload);
-    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setAdminRevisionLabel(model.revision);
     refreshHandlesRepairState();
     setMessage(saveMessage, publicationCopy.compatiblePublished, "success");
     renderAdminTabs();

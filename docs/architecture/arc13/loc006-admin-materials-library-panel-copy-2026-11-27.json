@@ -1,0 +1,227 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "admin-materials-library-static-panel-copy",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "ui-static",
+    "subsystemOwner": "admin/materials-library",
+    "contentOwner": "Product/UX; published Portuguese wording preserved byte-for-byte",
+    "authority": "Three heading/guidance pairs and the Add Material action within the Admin finishes panel. Dynamic material/group names and existing catalog-backed availability labels are outside this family.",
+    "consumer": "Admin > Acabamentos > biblioteca e disponibilidade de materiais",
+    "routeConsumers": [
+      "/admin"
+    ],
+    "catalogPrefix": "admin.materials.librarySection",
+    "catalogKeys": [
+      "heading",
+      "guidance",
+      "addMaterial",
+      "availabilityHeading",
+      "availabilityGuidance",
+      "finishAvailabilityHeading",
+      "finishAvailabilityGuidance"
+    ]
+  },
+  "evidence": {
+    "baseRevision": "48084c9bbe01d300e16b71ad854165c0d1cc275d",
+    "implementationRevision": "baad3a88cd5f9541c8b9ce5c8dc60c83ad3b09c5",
+    "integrationRevision": "402648d4cb8d6df69e9fa300a1c799f99e23d5ea",
+    "implementationBranch": "codex/loc006-admin-materials-panel-copy-20261127",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "ee15e552822bdb5e58bd5f9a8400084242174f61",
+    "inventoryBaseCandidateIds": [
+      "59b6735ae56af96a",
+      "05a47637ab216c21",
+      "e4a3d51639b43cc8",
+      "5c4f1b289ac0f812",
+      "8bb7c88315965637",
+      "d07306f05d26cfd6",
+      "947f13d8ef6b9a66"
+    ],
+    "regeneratedCandidateIds": [
+      "80de0da5a8521d07",
+      "2e2482d5b0686127",
+      "24535a736a4cab10",
+      "4cf6c2327e81548e",
+      "ea3897ccde9d69d2",
+      "19d6a232ead1df24",
+      "35f0c4b0a3e0819a"
+    ],
+    "candidateMap": [
+      {
+        "before": "59b6735ae56af96a",
+        "after": "80de0da5a8521d07",
+        "sink": "text:h2",
+        "value": "Biblioteca de cores e texturas"
+      },
+      {
+        "before": "05a47637ab216c21",
+        "after": "2e2482d5b0686127",
+        "sink": "text:p",
+        "value": "A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador."
+      },
+      {
+        "before": "e4a3d51639b43cc8",
+        "after": "24535a736a4cab10",
+        "sink": "text:button",
+        "value": "Adicionar material"
+      },
+      {
+        "before": "5c4f1b289ac0f812",
+        "after": "4cf6c2327e81548e",
+        "sink": "text:h2",
+        "value": "Opções e disponibilidade por acabamento"
+      },
+      {
+        "before": "8bb7c88315965637",
+        "after": "ea3897ccde9d69d2",
+        "sink": "text:p",
+        "value": "Configure separadamente pedras e materiais de cada puxador. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente."
+      },
+      {
+        "before": "d07306f05d26cfd6",
+        "after": "19d6a232ead1df24",
+        "sink": "text:h2",
+        "value": "Disponibilidade das cores de MDF"
+      },
+      {
+        "before": "947f13d8ef6b9a66",
+        "after": "35f0c4b0a3e0819a",
+        "sink": "text:p",
+        "value": "Ative as cores para clientes e escolha se cada uma vale para o conjunto todo ou para módulos específicos."
+      }
+    ],
+    "adminMarkup": {
+      "path": "app/admin.html",
+      "gitBlob": "f37f8c7e54de2236f81f22f9200795b9fc4117b7"
+    },
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "6bd34be138d9fc1b6879b05feb61c8646d07125e"
+    },
+    "sharedCatalog": {
+      "path": "app/core/ui-copy.js",
+      "prefix": "admin.materials.librarySection",
+      "gitBlob": "3e0748f37d940589d8c9cfca1e7c349e71ab9cd6"
+    },
+    "browserContracts": [
+      {
+        "path": "tests/admin-hierarchy-browser.cjs",
+        "gitBlob": "b4fc9dfd16c7aa91beb7d4350cafdbec7189c5f7"
+      },
+      {
+        "path": "tests/ui-theme-contract.cjs",
+        "gitBlob": "9a32141bdd8a9c2678910e5802c281d5b9e86081"
+      },
+      {
+        "path": "app/tools/test-core.js",
+        "gitBlob": "227fc8ec9a83485fd691c36db864ec8547cc0593"
+      }
+    ],
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "0e6d1c93c6ab8b98b19866e159b7424cb67e8155",
+      "sha256": "49ba50ddedb92b6ff671262b5ded5ad77221d5be6e6130778539ce0a0a3f1670"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "482c82c618475f2b503b890cda7c1c90ee4044d5",
+      "sha256": "b49eef701ad9e0e265f95db539ac2447c74d5908dabd012558d140b8033655ea",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "entries": 1006,
+        "unreviewedOccurrences": 1006,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "pullRequest": {
+      "number": 541,
+      "head": "baad3a88cd5f9541c8b9ce5c8dc60c83ad3b09c5",
+      "mergeMethod": "squash",
+      "mergeSha": "402648d4cb8d6df69e9fa300a1c799f99e23d5ea"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        {
+          "name": "Summary pricing browser",
+          "id": 46001578693
+        },
+        {
+          "name": "Stone browser",
+          "id": 46001578756
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 46001578695
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 46001578796
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 46001578829
+        },
+        {
+          "name": "App build purity",
+          "id": 46001578698
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 46001578903
+        },
+        {
+          "name": "Viewer base-price publication contract (no Netlify deploy)",
+          "id": 46001578902
+        },
+        {
+          "name": "Mobile browser",
+          "id": 46001578748
+        },
+        {
+          "name": "Current asset gates",
+          "id": 46001578766
+        },
+        {
+          "name": "Development NAV005 semantic reconciliation (offline)",
+          "id": 46001578675
+        },
+        {
+          "name": "Admin hierarchy browser",
+          "id": 46001578715
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 46001578676
+        }
+      ]
+    }
+  },
+  "implementation": {
+    "staticHtmlFallbackPreserved": true,
+    "visibleWordingChanged": false,
+    "materialDataChanged": false,
+    "availabilityBehaviorChanged": false,
+    "commercialRulesChanged": false,
+    "authenticationOrPublicationChanged": false,
+    "inventoryClassificationChanged": false,
+    "mainPromoted": false
+  },
+  "independentReview": {
+    "result": "coherent-bounded-family",
+    "reviewer": "ARC-03C gate/common-sense review agent",
+    "notes": "Preserve the two material/availability guidance paragraphs literally because they describe concrete product rules. Dynamic material names, existing availability labels and the JavaScript add-material prompt remain outside the family."
+  }
+}

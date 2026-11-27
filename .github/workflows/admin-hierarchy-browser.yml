@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'app/admin.html'
+      - 'app/core/ui-copy.js'
       - 'app/admin/**'
       - 'app/core/private-navigation.js'
       - 'app/data/catalog-data.js'
@@ -29,6 +30,7 @@ on:
   pull_request:
     paths:
       - 'app/admin.html'
+      - 'app/core/ui-copy.js'
       - 'app/admin/**'
       - 'app/core/private-navigation.js'
       - 'app/data/catalog-data.js'

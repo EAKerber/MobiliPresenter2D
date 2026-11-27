@@ -24,6 +24,7 @@ let lastPut = null;
 let forceConflict = false;
 let wrongReadback = false;
 let tamperNextReadback = false;
+let configurationGetStatus = null;
 const stub = [
   'const admin = { email: "admin@example.test", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
   'export async function getUser() { return admin; }',
@@ -67,6 +68,10 @@ const server = http.createServer(async (req, res) => {
   }
   if (target.pathname === "/api/configuration") {
     if (req.method === "GET") {
+      if (configurationGetStatus) {
+        json({ error: "configuration_fixture" }, configurationGetStatus);
+        return;
+      }
       if (wrongReadback && tamperNextReadback) {
         tamperNextReadback = false;
         json({ ...current, revision: current.revision + 7 });
@@ -122,6 +127,9 @@ async function main() {
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto(base + "/admin-test.html", { waitUntil: "networkidle" });
     await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+    const loadStateCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.loadState);
+    assert.equal(await page.locator("#saveMessage").textContent(), loadStateCopy.version5Loaded,
+      "native v5 settings announce the validated published state");
 
     assert.equal(await page.locator("#persistHandlesButton").isHidden(), true, "v3-only repair action must stay hidden for v5");
     await page.locator('[data-admin-tab="pricing"]').click();
@@ -264,6 +272,24 @@ async function main() {
     assert.equal(putCount, 7);
     assert.notEqual((await page.locator("#saveMessage").getAttribute("data-kind")), "success",
       "readback mismatch may not be reported as success");
+
+    configurationGetStatus = 404;
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
+      loadStateCopy.configurationNotPublished);
+    configurationGetStatus = 503;
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
+      loadStateCopy.configurationLoadFailure);
+    const retryButton = page.locator("#adminServiceError button");
+    assert.equal(await retryButton.textContent(), loadStateCopy.retryLoad,
+      "retry control label comes from the shared Admin load-state catalog");
+    configurationGetStatus = null;
+    await retryButton.click();
+    await page.waitForFunction((copy) => document.getElementById("adminServiceError")?.hidden
+      && !document.getElementById("editorPanel")?.hidden
+      && document.getElementById("saveMessage")?.textContent === copy,
+    loadStateCopy.version5Loaded);
     assert.deepEqual(errors, [], "v5 admin Save fixture has no uncaught browser errors");
     await page.close();
     console.log("admin native v5 browser save: PASS");

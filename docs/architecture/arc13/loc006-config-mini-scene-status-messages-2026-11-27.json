@@ -1,0 +1,147 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006"
+  ],
+  "family": "configurator-mini-scene-status-messages",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "shared-ui-fixed-copy",
+    "subsystemOwner": "Configurator app runtime and shared UI copy catalog",
+    "contentOwner": "Product; exact existing pt-BR wording retained",
+    "authority": "Catalog only the fixed /config/ mini-scene status and polite live-region announcements for pin/release, automatic availability, transparency and size. Preserve exact wording, triggers, aria-pressed behavior, observer behavior, control geometry and static fallbacks.",
+    "routeConsumers": [
+      "/config/"
+    ],
+    "catalogKeys": [
+      "configurator.miniScene.status.pinned",
+      "configurator.miniScene.status.released",
+      "configurator.miniScene.status.launcherPinned",
+      "configurator.miniScene.status.available",
+      "configurator.miniScene.status.transparencyEnabled",
+      "configurator.miniScene.status.opaque",
+      "configurator.miniScene.status.size.small",
+      "configurator.miniScene.status.size.medium",
+      "configurator.miniScene.status.size.large"
+    ],
+    "excludedAdjacentCopy": [
+      "module, service and commercial announcements",
+      "separate launcher accessible label",
+      "glyphs and icon text",
+      "PiP state transitions, geometry and control behavior"
+    ],
+    "occurrences": [
+      {
+        "id": "b5d8e4f07434b2ad",
+        "source": "app/app.js",
+        "line": 2097,
+        "expression": "mobileScenePinEnabled ? \"Cena fixada para contexto durante a configuração.\" : \"Cena liberada para o fluxo normal.\""
+      },
+      {
+        "id": "e588df32d825e2b2",
+        "source": "app/app.js",
+        "line": 2108,
+        "expression": "\"Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.\""
+      },
+      {
+        "id": "e17af336b5d73328",
+        "source": "app/app.js",
+        "line": 2119,
+        "expression": "\"Mini-cena fixada para contexto durante a configuração.\""
+      },
+      {
+        "id": "eb27b3f890cffb15",
+        "source": "app/app.js",
+        "line": 2136,
+        "expression": "\"Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.\""
+      },
+      {
+        "id": "a1ce6eb25f845c94",
+        "source": "app/app.js",
+        "line": 2426,
+        "expression": "mobileSceneTransparent ? \"Mini-cena com transparência ativada.\" : \"Mini-cena opaca.\""
+      },
+      {
+        "id": "675ae36619f59203",
+        "source": "app/app.js",
+        "line": 2433,
+        "expression": "[\"Mini-cena pequena.\", \"Mini-cena média.\", \"Mini-cena grande.\"][mobilePipSizeIndex]"
+      }
+    ]
+  },
+  "evidence": {
+    "baseRevision": "321f8565568c0501c269b51543f1986187620536",
+    "implementationRevision": "3c815de8d335fef4f281b057d70745b7d60481b0",
+    "integrationRevision": "d1197d90e0c7524c8f2416b43d2014bba42beaf6",
+    "pullRequest": {
+      "number": 560,
+      "base": "development",
+      "head": "3c815de8d335fef4f281b057d70745b7d60481b0",
+      "mergeMethod": "squash",
+      "mergeSha": "d1197d90e0c7524c8f2416b43d2014bba42beaf6"
+    },
+    "sourceBlobs": {
+      "app/app.js": "90e1de9708865fb17ab2e4c171d6da1196eaed24",
+      "app/core/ui-copy.js": "bf2737be07ceed2f4d444c2e8c1327e4a5359749",
+      "architecture/generated/primary-pages.manifest.json": "d4e86e64bb7c67cc65aef7ac71682f1186c1f107",
+      "architecture/arc13/ui-text-candidates.json": "33c2865c24c16038eeb9e485c08df8eba46edb1a",
+      "tests/mobile-pip-main-browser.cjs": "589cd6acb078ec97bc2d61258b9b0a3ff64043fa",
+      "tests/ui-theme-contract.cjs": "a0f6ae1fa1030dc7ed9062e356d6f54b8e6ddc01"
+    },
+    "candidateSourceSha256": {
+      "app/app.js": "fec2e96051f5245598a31a3a10c572fc3f9da5a36893fbe45da26f344a00ddaf"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "33c2865c24c16038eeb9e485c08df8eba46edb1a",
+      "sha256": "551b2f86febb08bb256a3fe6475041d0db257102d2cf8b312c84197aea01407d",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "unreviewedOccurrences": 1015,
+        "javascriptSinkSites": 454,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "exactHeadGates": {
+      "head": "3c815de8d335fef4f281b057d70745b7d60481b0",
+      "status": "13 Actions workflow runs; 14 successful check jobs; no final failures or skips",
+      "runIds": [
+        46025509842,
+        46025509996,
+        46025509951,
+        46025509924,
+        46025509932,
+        46025509943,
+        46025510107,
+        46025510209,
+        46025510079,
+        46025510123,
+        46025510153,
+        46025510145,
+        46025509909
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "fixedMiniSceneStatusCopyUsesCanonicalCatalog": true,
+    "wordingTriggersAriaPressedObserverAndGeometryChanged": false,
+    "staticFallbacksPreserved": true,
+    "adjacentCommercialCopyCataloged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "focusedBoundary": "The existing mobile PiP browser test compares the polite #configurationAnnouncement output with catalog values across pin/release, automatic availability, transparency and each size. The static theme contract checks the new catalog structure.",
+    "exactHeadWorkflowEvidence": "The GitHub Actions API returned 13 completed pull-request workflow runs on the exact head; all concluded success. The PR record reports 14 successful check jobs.",
+    "localChecks": "Primary-page compiler --sync and --check passed. ARC-13 generation was repeated twice with identical SHA-256. The local mobile browser test was not relied on; exact-head CI supplied the browser verification.",
+    "firstGateAttempt": "An earlier exact-head browser run failed because the fixture started at size index 1, so the first resize produced large rather than medium. The assertion was corrected and the final exact head passed.",
+    "limitations": "The 1,015 global ARC-13 candidates remain candidate-unreviewed; zero parse/unassigned/unresolved counts do not constitute semantic review. Protected preview was not required for this static copy package."
+  }
+}

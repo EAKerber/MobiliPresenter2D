@@ -1,6 +1,6 @@
 {
   "schema": "PlanV09OperationalRegister/1",
-  "updatedAt": "2026-11-26",
+  "updatedAt": "2026-11-27",
   "statusSemantics": {
     "planState": "Copiado do Anexo A; é o estado editorial inicial, não uma afirmação de implementação atual.",
     "unreviewed": "Reconciliação operacional ainda não feita; não significa ausência de código.",
@@ -368,7 +368,7 @@
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
-      "main": "unknown",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -386,9 +386,49 @@
           "source": "Product PR #438 merge and post-merge development readback",
           "sha": "6b31beadcb460b3c13f125e528ca80f925da7f43",
           "detail": "PR #438 integrated the exact TST-001 workflow snapshot into development. The post-merge compare from 71bc086 to 6b31bea shows only the inventory document and execution register changed; workflow definitions remain byte-identical. The source snapshot still distinguishes declared commands from observed assertions/results."
+        },
+        {
+          "source": "Product PR #516 exact-head gates and post-merge inventory run #45885782458; snapshot docs/architecture/ci/tst-001-workflow-inventory-2026-11-26.json",
+          "sha": "f864fed27026b5bddbd3b79318e68b3cf470036c",
+          "detail": "PR #516 corrected the TST-001 runner to read stable development from the exact pull_request.base.sha and record pull_request.head.sha in a separate candidate layer; push runs use the exact GITHUB_SHA. A synthetic three-ref Git fixture covers main/development/candidate workflow additions, modifications, removals, tree mismatch, and push-without-candidate. Exact-head plan and inventory jobs passed on PR head aad9f179; PR #516 was squash-integrated into development at this SHA. Post-merge push run #45885782458 passed and generated the current snapshot from main@9f422ffe2112c06efd296425adb84dcb607bb563 and development@f864fed27026b5bddbd3b79318e68b3cf470036c: 28 main workflows, 67 development workflows, 26 shared, 2 main-only, 41 development-only, 87 unique workflow definitions, 0 parser warnings, and 6 workflow files flagged for write-signal review. No open PRs were present in that exact readback. This is definition inventory and exact-run evidence; it does not complete the full assertion-to-contract/result crosswalk or exhaustive draft-PR head workflow analysis."
+        },
+        {
+          "source": "Product PR #517 exact Draft workflow readback; artifact 15149661184, run #45885998363; docs/architecture/ci/tst-001-draft-pr-readback-2026-11-26.json",
+          "sha": "3079610c6688e50604a26a4fb10580b8e3d7304d",
+          "detail": "At exact event refs main@9f422ffe and development base@f864fed, the open PR readback contained Draft #517 at head 3079610/tree b92a914. Both plan and inventory jobs passed; candidate workflow delta is zero across its eight tool-only files. Current development@5a07f018 differs from the event base only by the two TST-001 documentation paths, so workflow definitions are unchanged. This closes the exact Draft-PR workflow-layer readback for this candidate only; its tool commands/assertions/contracts are not mapped by this receipt."
+        },
+        {
+          "source": "Product merged-PR cleanup run #45885782903 for PR #516",
+          "sha": "aad9f179a719a68d3b35575732bdfdeb0119e918",
+          "detail": "The pull_request_target cleanup job failed during operation-marker reservation with CONSUMPTION_GIT_FAILED at the local `git tag -a` command. The command sequence failed before delete_exact_ref; no cleanup receipt artifact was produced. The subprocess error text was omitted, so the underlying cause remains unknown. Record this as an observed operational failure, not a completed branch deletion or proof that the cleanup policy is safe."
+        },
+        {
+          "source": "Live Product ref and TST-001 artifact audit on 2026-11-26",
+          "sha": "4bcfa26911498a9bf5c3c94c517e9931746b437b",
+          "detail": "Live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77 and development@4bcfa26911498a9bf5c3c94c517e9931746b437b. The active frozen-inventory auxiliary and PR-archive executors were retired in development; dated October inventory/closure records remain historical. The older TST-001 inventory and open draft PR #521 are pinned to earlier refs and still list the retired workflow. In that inventory, push:60 counts workflow push-trigger declarations, not Git branches. Do not present either as current; refresh the exact inventory at these live refs."
+        },
+        {
+          "source": "Product TST-001 live inventory gate run #45902210791 and artifact readback",
+          "sha": "a13cd23af0483b3a8426bb494df757538d21542f",
+          "detail": "Plan and inventory jobs passed on PR #526 predecessor head a13cd23af0483b3a8426bb494df757538d21542f. Artifact 15155409887 (sha256:97afb78d6f105a9a62224936ae86c55af50da58d5414fd2eca1bc8a7f57572d9) is preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45902210791.json. Exact source refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77, development@4bcfa26911498a9bf5c3c94c517e9931746b437b, candidate PR #526 tree 99f96a282444443b22c2f38330fbf1ac503a0330. Inventory: main 28, development 65, shared 26, unique definitions 86, parse warnings 0; one candidate workflow change and no candidate write signals. This supersedes the old 11/25 snapshot for these refs only. The report's push:59 is workflow-trigger declarations, not branches. Candidate open-PR readback also included draft #517 against development@f864fed; preserve as stale pinned evidence, not current code authority. TST-001 remains partial because generation does not validate each command's assertions/contracts or prove all 21 baseline commands/workflows satisfy the full DoD."
+        },
+        {
+          "source": "Product main PR #527 current readback for TST-001",
+          "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+          "detail": "main advanced from 7ebacc8 to ecaa38cf0be54e8d586458a86d1062b90c0b9691 with a test-only change; its tree is 45dafef8c70e8421a360a044b71ee96b03737f8a and equals PR #527's exact head tree. Run #45903783463 passed on the merged tree. The previous exact TST-001 inventory artifact 15157010588 still pins main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77; it remains historical for its exact inputs. This documentation update triggers a new candidate inventory run that can refresh main/development refs; TST-001 stays partial until the assertion audit is complete."
+        },
+        {
+          "source": "Product exact TST-001 workflow inventory run #45904223459",
+          "sha": "4523c3da2b4d4d1805d1328208cefbd23aaf2a12",
+          "detail": "The plan and inventory jobs passed on PR #526 head 4523c3da2b4d4d1805d1328208cefbd23aaf2a12. Exact inventory JSON preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-26-run-45904223459.json; workflow artifact 15156629898 has zip digest sha256:e5824ea6acd3850ac0571763a2aa4a6ef4fbffc80e70f2d7d82c120896f641ac. Source pins: main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 (tree 45dafef8c70e8421a360a044b71ee96b03737f8a), development@4bcfa26911498a9bf5c3c94c517e9931746b437b (tree 65dced666488a0fa28181f45d3b584c6a22ec141), and candidate PR #526 (tree d34ef65fef2068a64d16a5f594fa3a8783814917). Summary: 28 main workflows, 65 development workflows, 26 shared, 86 unique definitions, 0 parser warnings, 1 candidate workflow change, 0 candidate write-signal workflows. The exact open-PR readback included #526 and #528 against the current development SHA, plus draft #517 still pinned to development@f864fed; this is inventory evidence, not branch count. TST-001 remains partial because its 21-command/21-workflow assertion and contract audit is unfinished."
+        },
+        {
+          "source": "Product PR #530 exact-ref workflow inventory run #45909076162",
+          "sha": "62d3b0058cb860c9c12ff48185988b4eeefd2134",
+          "detail": "The plan and inventory jobs passed on this exact candidate head. Artifact 15159680969 (sha256:a3524558e81e40d485ade29601d5551a07c4b243c5a463a4ed560156b3d4f930) records main@ecaa38cf0be54e8d586458a86d1062b90c0b9691/tree 45dafef8c70e8421a360a044b71ee96b03737f8a, development@ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860/tree 7eaeddb1c78b3bf4af025957d385a2d309bc4131, and candidate PR #530/tree 1bc6a246c9347967134b2f83e92a53803c42cd1c. The readback included draft #517 based on stale development@f864fed. Inventory summary: 28 main workflows, 65 development workflows, 26 shared, 85 unique definitions, 0 parser warnings and 0 candidate workflow changes. The generated inventory is current for these exact refs; the separate 21-command/21-workflow assertion and contract audit remains open."
         }
       ],
-      "nextAction": "Complete the command→assertion→contract result crosswalk for the remaining families and refresh this snapshot whenever workflow definitions change; preserve the distinction between declared command and observed run result."
+      "nextAction": "The exact-ref workflow inventory was generated and preserved for PR #530 against main@ecaa38c and development@ca9be99. Continue the separate 21-command/21-workflow command→assertion→contract/result audit, identifying reachable gate coverage; generation alone does not close TST-001."
     },
     {
       "order": 20,
@@ -528,9 +568,14 @@
           "source": "Leitura ao vivo de PRs e refs em 2026-11-26",
           "sha": "daede4b89525ffe4e2caafd89da9a1cda7684665",
           "detail": "Product e Design System não têm PR aberta. Product tem refs main, development e codex/v09-loc006-register-correction-20261126; Design System tem main e codex/handover-live-reconciliation-20261124. PR #481 foi integrada em development@daede4; PR #137 foi integrada em Design System main@9261c57. A lista atual de PRs está vazia; branches auxiliares permanecem preservadas, sem inferir elegibilidade de higiene."
+        },
+        {
+          "source": "Live open Product PR readback",
+          "sha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
+          "detail": "Only open Product PR is draft #517, head 3079610c6688e50604a26a4fb10580b8e3d7304d, based on development@f864fed27026b5bddbd3b79318e68b3cf470036c. The current development ref has advanced to 6750d9b67a9b5d8b52c022093fdac50f288c0339; #517 remains a proposal and its source-readback/real-clone shadow evidence is not current."
         }
       ],
-      "nextAction": "Atualizar intenção, contrato, gates, dependências, rollback e disposição para cada novo pacote; no retrato atual não há PRs abertas. Revalidar antes de cada integração."
+      "nextAction": "Keep #517 as a draft proposal until its tests and real-clone shadow comparison are run against current Product and Design System refs; refresh the open-PR register before each new package."
     },
     {
       "order": 24,
@@ -555,9 +600,19 @@
           "source": "Current main branch-hygiene merged-PR workflow and executor/tests",
           "sha": "789263e657d6d4c86eaed5d6d87c31330fa914a3",
           "detail": "O workflow em main (blob 789263e657d6d4c86eaed5d6d87c31330fa914a3) só dispara em PR merged para main/development, não executa código do head e delega ao executor protegido. Testes do executor (blob a2721fa0d7d896a218744c585d609b7675146522) cobrem identidade, proteção/ruleset, PR aberta, dependências, ancestralidade, árvore do squash, drift concorrente, lease e readback. O recibo direto mais recente disponível é #462, PASS com SQUASH_TREE_IDENTICAL. Inventário vivo subsequente mostra apenas main e development; API detalhada de ruleset retorna 403."
+        },
+        {
+          "source": "Branch Hygiene vNext read-only run #356, artifact #15158385866",
+          "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+          "detail": "Run #45906365744 observed 16 Product refs at main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development@6750d9b67a9b5d8b52c022093fdac50f288c0339. Plan hash a61dfe057cf9bd1b14df766a4b638a57cdd94b28ca66160eefea6ced06b4e765 reported authorization NONE and zero delete-candidates. Discovery counts (main 2 candidate/3 preserve/11 review; development 5 candidate/3 preserve/8 review) are advisory only and do not authorize deletion."
+        },
+        {
+          "source": "Branch Hygiene vNext post-merge cleanup retries and live ref readback, 2026-11-26",
+          "sha": "ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860",
+          "detail": "The read-only run #356 observed 16 refs and authorized zero deletions. Seven previously failed exact post-merge cleanup jobs were then retried individually; each revalidated its target and completed with receipt status PASS, result DELETED, deleted=true, readback PASS, proof SQUASH_TREE_IDENTICAL: #512 run 45872428781 branch codex/git021-consumption-guard-main-20261126 @ 444b6304; #513 run 45872793188 branch codex/git021-main-readback-20261126 @ 6579516d; #514 run 45881145982 branch codex/vis002c-solid-background-gate-20261126 @ 092263c0; #515 run 45882362132 branch codex/tok01-production-receipt-refresh-20261126 @ ac47f22a; #518 run 45886297565 branch codex/tst001-inventory-refresh-20261126 @ 3be24f0a; #519 run 45887541965 branch codex/tst001-pr517-readback-20261126 @ 128ade99; #520 run 45891893301 branch codex/tok02-focus-alias-main-port-20261126 @ 1a1798b5. Final live readback confirms all seven refs absent, Product main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 unchanged, development@ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860, and 9 Product refs. The exact retained-ref list was captured in the current readback; no further cleanup is implied."
         }
       ],
-      "nextAction": "A auditoria do mecanismo vNext foi concluída; em cada integração futura, conferir o recibo daquele merge e a leitura integral das refs."
+      "nextAction": "Keep GIT-019 done for the tested mechanism. The seven exact retries passed and reduced Product refs to 9; before any later retirement, obtain a fresh vNext observation and a reviewed receipt for those exact targets. Discovery counts alone are not authority."
     },
     {
       "order": 25,
@@ -644,9 +699,19 @@
           "source": "Exact recursive Git blob comparison and corrected GIT-003 map",
           "sha": "45b690e93209a654b81b9ed73c4c794c4f2b014f",
           "detail": "At Product main@94560aa and development@45b690e, both recursive trees were complete. Exact blob comparison: main 816 files, development 1225; 7 paths exist only in main, 416 only in development, and 86 shared paths have different blobs. Thus 93 paths are absent/different from development's perspective and 502 from development's perspective. The earlier 98/300 compare rows are merge-base-relative history, not net tree deltas; the previous map mislabeled these and is superseded by schema /2. Product v0.9 register remains partial pending semantic disposition and safe family packages."
+        },
+        {
+          "source": "Live Product main/development compare on 2026-11-26",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "Exact live refs: main@7ebacc86018c60e54df4d0e15c95ecd3eed46a77; development@4bcfa26911498a9bf5c3c94c517e9931746b437b; merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; compare reports 45 commits only on main and 645 only on development. The tree remains widely divergent; this is not authorization for a whole-tree merge. Rebuild the exact path/semantic family map at these refs."
+        },
+        {
+          "source": "Live Product main/development compare",
+          "sha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
+          "detail": "Exact refs main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development@6750d9b67a9b5d8b52c022093fdac50f288c0339, merge base 221b54b2a41ecc8c338d1bf2cf67280cf165ce95; development is 647 commits ahead and main 46 commits ahead. The compare API returned a maximum of 300 paths, so this is not a complete tree-difference or family classification."
         }
       ],
-      "nextAction": "Inspect the 93 main-perspective blob differences in the corrected map against current consumers, workflows, and semantic contracts. For each, decide whether development is missing the behavior, already has an equivalent/newer version, or intentionally differs. Build only coherent packages after exact-head gates and rollback are defined; do not infer promotion from merge-base history."
+      "nextAction": "Build the complete exact tree-difference map beyond the compare API's 300-path response, classify paths by family, consumer, contract and gate, then port only complete cohesive families."
     },
     {
       "order": 27,
@@ -1527,9 +1592,19 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Reader/inspector, endpoint Admin e consumidores distinguem missing/stored/valid/invalid; testes de V3/V5, schema inválido, metadados, defaults, ETag privado e Preview/prod passaram localmente com blobs iguais à development. Mocks e estado hosted permanecem limitados; main tem endpoint/workflow/testes diferentes."
+        },
+        {
+          "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
+        },
+        {
+          "source": "Live Buyer contract comparison at Product main@7ebacc8 and development@4bcfa26",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "Buyer endpoint and projection source blobs are identical across current refs. However, main tests/buyer-configuration-endpoint.test.mjs at 3c342cfb lacks assertions for missing published configuration and invalid V5; the development test at f61eb8d6 covers both and asserts 503 without defaults. The source behavior exists but is not yet established by main's test evidence. Keep DOM-003/TST-009 main partial until these two assertions are ported and the main boundary gate passes."
         }
       ],
-      "nextAction": "Development DoD is covered for the current slice. Reconcile the differing Admin endpoint, tests, and workflow on main during selective promotion; keep provider-level and hosted state unclaimed."
+      "nextAction": "Keep DOM-003 partial for its broader configuration-read/consumer scope. The Buyer fail-closed cases are now tested on main; do not treat closure of this TST-009 slice as completion of the broader DOM-003 family."
     },
     {
       "order": 73,
@@ -1541,7 +1616,7 @@
       "reconciliation": "partial",
       "local": "done",
       "development": "done",
-      "main": "partial",
+      "main": "done",
       "technicalValidation": "done",
       "approvalPublication": "unknown",
       "evidence": [
@@ -1549,9 +1624,14 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Save V5 e testes cobrem validação, revisão, normalização/incremento, onlyIfMatch, um vencedor em concorrência, conflito sem retry, confirmação de escrita, readback por ETag/digest/assinatura, recusa de downgrade/migração e não escrita em estado inválido. Cinco testes de leitura/save/endpoint/Buyer passaram com hashes iguais à development. Atomicidade do provider real não comprovada."
+        },
+        {
+          "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
         }
       ],
-      "nextAction": "Development DoD is covered for the current slice. Reconcile the differing Admin endpoint, tests, and workflow on main during selective promotion; retain provider-level atomicity as UNKNOWN."
+      "nextAction": "Code-level V5 CAS/revision/readback contract and mocked race coverage are verified in main and share the same core blobs as development. Keep Netlify Blob atomicity and live hosted publication UNKNOWN."
     },
     {
       "order": 74,
@@ -1563,7 +1643,7 @@
       "reconciliation": "partial",
       "local": "done",
       "development": "done",
-      "main": "partial",
+      "main": "done",
       "technicalValidation": "done",
       "approvalPublication": "unknown",
       "evidence": [
@@ -1571,9 +1651,24 @@
           "source": "docs/architecture/ci/tst-009-v5-publication-crosswalk-2026-11-25.md",
           "sha": "d0f63d0c62ed25a78067bb8b2e98d88fded5a1a7",
           "detail": "Crosswalk conecta asserts de sucesso/falha, CAS, concorrência, readback, downgrade, migração, DTO, caminho sem escrita e trigger PR/push às ameaças correspondentes. Os cinco comandos de teste passaram localmente em fontes com blobs idênticos à development; sessão Identity e atomicidade Blob hospedadas permanecem fora da prova. Gate de proteção requerida não acessível (403)."
+        },
+        {
+          "source": "Product main PR #522 and PR #523 exact-head gates; live source/blob comparison",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "At current main@7ebacc8, the shared reader, V5 inspection, and conditional-save core blobs match development exactly (published-configuration.js 7b5d13d; v5-publication-inspection.js 0da45108; v5-normal-save.js e9da3059). Endpoint/Admin/test/workflow blobs differ. Main endpoint tests and authorization-boundary gate passed all 9 PR #522 checks at head 46e8a21; PR #523 added configuration.mjs to app-build-purity trigger paths and run #45898340031 passed. Main app-build-purity blob is 39a2511; development is 3debb0f. This validates the bounded source/test/gate slice, not hosted Identity behavior or real Netlify Blob atomicity."
+        },
+        {
+          "source": "Live Buyer contract comparison at Product main@7ebacc8 and development@4bcfa26",
+          "sha": "7ebacc86018c60e54df4d0e15c95ecd3eed46a77",
+          "detail": "Buyer endpoint and projection source blobs are identical across current refs. However, main tests/buyer-configuration-endpoint.test.mjs at 3c342cfb lacks assertions for missing published configuration and invalid V5; the development test at f61eb8d6 covers both and asserts 503 without defaults. The source behavior exists but is not yet established by main's test evidence. Keep DOM-003/TST-009 main partial until these two assertions are ported and the main boundary gate passes."
+        },
+        {
+          "source": "Product PR #527 test-only promotion and exact main gate",
+          "sha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+          "detail": "PR #527 squash-merged to main@ecaa38cf0be54e8d586458a86d1062b90c0b9691; recursive tree 45dafef8c70e8421a360a044b71ee96b03737f8a exactly matches the PR head tree. The Buyer endpoint and projection remain byte-identical across main/development; main test blob is e9051dfbb87bbf144edc13833ed7a4971a97e7c1 and now asserts 503 for both missing published configuration and invalid V5. Configuration endpoint authorization boundaries run #45903783463 passed all three validation steps at exact PR head d030e21d065e22176ec74518885e7211af1fd910. This closes the code/test/gate gap for the bounded TST-009 V5 publication slice; hosted Identity and provider-level Blob atomicity are not proven."
         }
       ],
-      "nextAction": "The development crosswalk is complete for this bounded publication slice. During selective main promotion, reconcile main's test and workflow paths before claiming cross-branch completion."
+      "nextAction": "The bounded V5 publication coverage is implemented and gated on main and development. Keep hosted Identity behavior and provider-level Netlify Blob atomicity UNKNOWN; do not widen this status to the broader DOM-003 or DOM-001 scope."
     },
     {
       "order": 75,
@@ -2264,9 +2359,99 @@
           "source": "Product PR #489; exact-head gates and post-merge development readback",
           "sha": "65fab1a5e04e50cedb4d2e177d56736d74a7a343",
           "detail": "PR #489 head 29835e84c6902d64a36d984d3616347943342ff9 moved fixed Admin publication and isolated Puxadores persistence feedback into uiCopy.admin.publication, preserving wording and behavior. The Admin browser assertions cover compatible and blocked publication plus isolated v3 Puxadores persistence. The exact head passed all 13 applicable workflow checks; Supabase Preview was skipped because project preview branches are disabled. Local build, page check, theme contract, ARC-03C source-authority tests, syntax checks, and the deterministic ARC-13 inventory generation passed. Squash readback confirms development at 65fab1a5e04e50cedb4d2e177d56736d74a7a343; main remains 5c6e652693bd30218e6915bf8cb160bde03ac719 and unchanged. LOC-006 remains partial for remaining Admin/Configurator families."
+        },
+        {
+          "source": "Product PR #491 exact-head gates and current development blob readback",
+          "sha": "a6ec80a1d1b36204fb313e11393f61451d145d95",
+          "detail": "PR #491 merged to development at 0ca4a203be03a3085253129c7b9422b40fef01e2. All 12 applicable workflows passed on this exact PR head. Seven source, test, ARC-13 inventory, and generated-manifest blobs were re-read and are byte-identical between the PR head and current development@6750d9b67a9b5d8b52c022093fdac50f288c0339. This proves only the Admin editor-shell copy slice (masthead, primary/object tabs and object pager); LOC-006 remains partial, and main is intentionally unchanged."
+        },
+        {
+          "source": "Product PR #531 exact-head gates and development integration; family receipt docs/architecture/arc13/loc006-admin-load-state-copy-2026-11-27.json",
+          "sha": "ba975a280daca76a931323be23530adb3ba7549f",
+          "detail": "Fixed Admin load/revision states moved to uiCopy.admin.loadState with status-aware distinctions (not published vs generic load failure; v3 repair, v5 loaded, hierarchy draft). Admin browser, ARC-13, build, asset, variant, mobile, stone, summary pricing, viewer base-price, authorization and impact workflows passed on exact head. Squash integrated into development at b2143ec81d2be90613cbff9bf25eec23dbe0f318; main remained unchanged. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #532 family evidence receipt integration",
+          "sha": "032e3b2bec4b2b58d91523fc0aa8d0b26ed39e7b",
+          "detail": "The append-only family receipt for #531 was integrated into development. It pins the named pre-change candidate IDs and exact source/test/catalog/manifest/inventory provenance, and explicitly keeps the global ARC-13 inventory candidate-unreviewed. Documentation evidence only; no main change."
+        },
+        {
+          "source": "Product PR #533 exact-head gates and development readback; merged-head cleanup run 45989395850",
+          "sha": "0d96426242fdbcd8a53bcbb74d26d7d054e582e4",
+          "detail": "The remaining fixed Admin retry action label now uses uiCopy.admin.loadState.retryLoad; the browser contract retries a simulated load failure and verifies the editor returns. All 12 applicable workflows passed on the exact PR head. Squash integrated into development at 9112cad477bd0d665f19bd4880b9aa3bc809d1a5; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. The merged-PR cleanup receipt verifies exact head/tree equivalence, deleted the merged branch, and passed readback; run artifact digest bf4d9b7732860bbc7ae930721ebdb22934cf010af5d1e49b1c045c3bf60d832e. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #535 exact-head gates and development readback; merged-head cleanup run 45993290977",
+          "sha": "a31c908977267d83932a670abe91c5d1f875d9ff",
+          "detail": "Fixed Admin pricing-type and percentage-basis labels now read from uiCopy.admin.pricing.editor. The Admin browser contract verifies the two rendered option labels and the basis against the catalog. Pricing values, units, role headings, switch/reset behavior, publication guard, commercial disclaimer, persistence and save flow remain unchanged. The primary-page manifest and ARC-13 inventory were regenerated; exact inventory generation was deterministic with 1,004 unreviewed occurrences, 0 parse errors, 0 unassigned owner/route sites and 0 unresolved primary-page mappings. All 12 applicable exact-head workflows passed. Squash-integrated into development at 92ae3a44f5659fb1639642b0aee60b44e43bae9d; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. The automatic merged-PR cleanup proved tree equivalence and live deletion/readback; LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #537 exact-head gates, squash integration, and development readback; family receipt docs/architecture/arc13/loc006-admin-pricing-control-accessibility-copy-2026-11-27.json",
+          "sha": "3a6f132eb5179a7a3dc8d1d276cdd4b83d9cb4bc",
+          "detail": "Pricing editor accessible-name templates and the type-switch reset notice now use uiCopy.admin.pricing.editor. The browser contract checks both rendered aria-labels and the exact catalog notice; a stale static assertion was corrected to test catalog ownership. All 12 applicable workflows passed on exact final PR head c16393ef1d729e4775807cf9066ddf5cf4d53b3d. Squash-integrated into development at 3a6f132eb5179a7a3dc8d1d276cdd4b83d9cb4bc; live readback confirms development at that SHA and main unchanged at ecaa38cf0be54e8d586458a86d1062b90c0b9691. Pricing values, conversions, persistence, publication, and commercial data remain unchanged. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #539 exact-head gates, squash integration, and development readback; family receipt docs/architecture/arc13/loc006-admin-private-header-copy-2026-11-27.json",
+          "sha": "5b183d007029a3cdbd9aaebf256da9e4a99e534b",
+          "detail": "The Admin private header now binds brand accessible name, logo alternative, hidden brand label, page name, initial menu-toggle label, and menu landmark label to the shared brand/navigation/Admin catalog keys. Original static text and attributes remain as no-JavaScript fallbacks; tests assert fallback/catalog parity and runtime bindings. Existing dynamic menu open/close, identity, links and auth behavior are unchanged. All 13 applicable workflows passed on exact final PR head f2e4d86d233e6bb72e94a6bac454d924436dfeb6. Squash-integrated into development at 5b183d007029a3cdbd9aaebf256da9e4a99e534b; live readback confirms development at that SHA and main unchanged at ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #541 exact-head gates, squash integration, and development readback; family receipt docs/architecture/arc13/loc006-admin-materials-library-panel-copy-2026-11-27.json",
+          "sha": "402648d4cb8d6df69e9fa300a1c799f99e23d5ea",
+          "detail": "Seven static Admin materials-library texts now use uiCopy.admin.materials.librarySection: three headings, three guidance paragraphs, and the Add Material action. Original wording remains in static HTML as the no-JavaScript fallback; the browser and static theme contracts assert all seven catalog/DOM pairs. Material names, availability/data, persistence, publication, and commercial rules did not change. All 13 applicable workflows passed on exact PR head baad3a88cd5f9541c8b9ce5c8dc60c83ad3b09c5. The regenerated ARC-13 inventory is deterministic and has 1,006 candidate occurrences; every occurrence remains globally unreviewed, with 0 JS parse errors, 0 unassigned owners/routes, and 0 unresolved primary-page mappings. Squash-integrated into development at 402648d4cb8d6df69e9fa300a1c799f99e23d5ea; remote readback confirms main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #543 exact-head gates, squash integration, and development readback; family receipt docs/architecture/arc13/loc006-admin-footer-action-copy-2026-11-27.json",
+          "sha": "1d110b0929b18dc4f66f5101b85b59a5e58c89e1",
+          "detail": "The two static editor-footer button labels now use separate uiCopy.admin.publication.actions keys. Their effects remain distinct: the conditional Puxadores v3 repair and configuration publication retain their existing visibility, handlers, CAS/readback, v3/v5 guards and permissions. Static HTML fallbacks and catalog parity remain covered; the Admin hierarchy browser passed on exact PR head 2318b7501d653231f2596591dc44e78231ace475 along with all 12 other applicable workflows. ARC-13 generation was deterministic at 1,007 unreviewed candidate occurrences, with no parse errors, unassigned owner/route sites or unresolved primary-page mappings. Squash-integrated into development at 1d110b0929b18dc4f66f5101b85b59a5e58c89e1; remote readback confirms main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #545 exact-head gates, squash integration, and development readback; family receipt docs/architecture/arc13/loc006-admin-user-label-fallback-2026-11-27.json",
+          "sha": "9c8ac86a0c3c7f014f13c088d68d654b3b5cd7f6",
+          "detail": "The Admin user-label fallback now reads uiCopy.admin.shell.header.userFallback only when the authenticated account has no email. The browser gate proves a populated email remains verbatim and an empty email displays the catalog value. No auth provider, role check, session, permissions or publication behavior changed. All 13 applicable workflows passed on exact PR head 6a4e540818515d204ffb7e9611b04da14db8f074. ARC-13 is deterministic at 1,007 unreviewed candidate occurrences, with no parse errors, unassigned owner/route sites or unresolved primary-page mappings. Squash-integrated into development at 9c8ac86a0c3c7f014f13c088d68d654b3b5cd7f6; remote readback confirms main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #547 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-private-logout-copy-2026-11-27.json",
+          "sha": "383e0cb46c50915bf6c677830f366a9fc4500183",
+          "detail": "The shared private logout label `Sair` now uses `uiCopy.navigation.logout` across `/access/`, `/access/manage`, `/admin`, and `/config/`; static fallbacks remain in the three existing HTML shells. The label is the only runtime property changed. All 15 applicable exact-head workflows passed on final PR head `d5bb8a8104d78aefdc65f36594a70bb452eb9f32`; the Supabase Preview check was skipped because preview branches are disabled. ARC-13 generation was deterministic at 1,007 unreviewed occurrences, with 0 parser errors, unassigned owners/routes, or unresolved primary-page mappings. Squash-integrated into development at this SHA; live main remains `ecaa38cf0be54e8d586458a86d1062b90c0b9691`. Independent review recorded that the static `/access/` logout button may lack a handler; this behavior remains a separate unresolved issue, unchanged by the copy slice. LOC-006 remains partial and the global ARC-13 inventory remains unreviewed."
+        },
+        {
+          "source": "Product PR #549 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-access-static-logout-handler-2026-11-27.json",
+          "sha": "b1aaffbf72f6319a4c3442bbe28e47ba4d87b25e",
+          "detail": "The authenticated/temporary-session /access/ menu previously exposed a static logout button without a listener. The HTML now opts that one button into the shared handler; /access/manage and /admin retain their page-owned handlers, and /config still creates its own shared-handled control. The focused boundary covers a pre-existing static button, temporary-session revocation POST, Identity logout, and / redirect. The final exact PR head passed 11 Actions workflow runs (13 successful check jobs); Supabase Preview was skipped because there is no associated branch. ARC-13 was regenerated twice deterministically at 1,007 globally unreviewed occurrences, 0 parser errors, unassigned owner/route sites, or unresolved primary-page mappings. Squash-integrated into development at this SHA; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #551 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-temporary-logout-retry-2026-11-27.json",
+          "sha": "24c99bba8d08b0b4e35a96094b58bafb9b9b6a48",
+          "detail": "For temporary-session logout only, a transport or unsuccessful non-503 revoke response now leaves the session active, shows a generic accessible retry message, and avoids false success. A successful retry revokes and redirects; HTTP 503 continues logout because the function expires the cookie. Identity logout behavior and page-owned /admin and /access/manage controls are unchanged. Exact head 0e15c2290334a84520b5c3fc41594d05196a82f5 passed 14 Actions runs with 17 successful check jobs; Supabase Preview and one protected-preview browser job were skipped for unavailable external preview setup. ARC-13 generation repeated deterministically at 1,008 candidates, 0 parse errors, 0 unassigned owner/route sites, 420 mapped primary-page occurrences and 0 unresolved. Squash-integrated into development at 24c99bba8d08b0b4e35a96094b58bafb9b9b6a48; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial and global ARC-13 review remains open."
+        },
+        {
+          "source": "Product PR #553 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-private-navigation-labels-2026-11-27.json",
+          "sha": "c00bc7688c1a167c763ac0bfd60c1d1cc88458c3",
+          "detail": "Eight bounded private-navigation occurrences now use five canonical navigation.privateMenu keys: both group headings plus the Configurador, Administração and Gerenciar acessos route labels for admin, staff and temporary sessions. Role gates, route destinations and adjacent authentication-state messages are unchanged. Exact head b17d03256b704c9d3a96efcdeee627507209fa61 passed 15 Actions runs with 17 successful check jobs; Supabase Preview and one protected-preview browser job were skipped. ARC-13 generation repeated deterministically at 1,008 globally unreviewed occurrences, 447 sinks, 0 parse errors, 0 unassigned owners/routes, 420 mapped primary-page occurrences and 0 unresolved. Squash-integrated into development at c00bc7688c1a167c763ac0bfd60c1d1cc88458c3; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 and global ARC-13 remain partial/unreviewed."
+        },
+        {
+          "source": "Product PR #555 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-private-navigation-auth-state-2026-11-27.json",
+          "sha": "3ee0d75d48b23a94f407d05f5dc9450401388ca8",
+          "detail": "Three private-navigation authentication-state messages now use navigation.privateAccessState keys: loading, anonymous administration entry and denied access. Existing conditions, /admin.html destination, roles and authorization policy are unchanged. Exact head 4e0de6580e41bdb5f4d951be8febd00c3a797193 passed 15 Actions workflow runs with 17 successful check jobs; Supabase Preview and the protected-preview browser job were skipped. ARC-13 was reproducible at 1,008 globally unreviewed occurrences, 447 JS sinks, 0 parse errors, unassigned owners/routes or unresolved primary-page mappings, and 420 mapped occurrences. Squash-integrated into development at 3ee0d75d48b23a94f407d05f5dc9450401388ca8; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #556 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-private-session-lookup-failure-2026-11-27.json",
+          "sha": "10d9145aae0043719268b361157959505287ae91",
+          "detail": "A failed private-session lookup now has its own accessible retry message; private routes stay hidden while the lookup fails, and reopening the menu retries. The browser-like boundary covers a closed-menu failure, visible failed retry, private-link absence, and successful recovery. No role, destination, identity, or authorization behavior changed. Exact head 081b3f31d9b49a7e9241ad35f091a53b08cfebb9 passed 15 Actions workflow runs with 17 successful check jobs and one protected-preview browser job skipped. The first ARC-13 run caught four stale cache tokens; correcting all four made the final exact-head ARC-13 run pass. The inventory repeated deterministically at 1,009 globally unreviewed candidates, 448 sinks, 0 parse errors/unassigned owners/routes/unresolved mappings, and 420 mapped occurrences. Squash-integrated into development at 10d9145aae0043719268b361157959505287ae91; remote readback confirms main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #558 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-config-mini-scene-accessible-labels-2026-11-27.json",
+          "sha": "5479fae39e8484f34a125932d20119871bce330d",
+          "detail": "Sixteen bounded static and runtime occurrences for the Configurator mini-scene viewer/group names plus pin, transparency and resize names/titles now use configurator.miniScene catalog keys. The related controls container exposes its label as role=group. State semantics, geometry and control behavior, static fallbacks, commercial data and the separate Fixar cena control remain unchanged. Exact head fd6fedca4e7b7aff2d535bef888478cc460c3159 passed 17 Actions workflow runs with 18 successful jobs; two protected-preview browser jobs were skipped. A first run exposed an outdated shared runtime revision contract; the config script set and contract were updated together to runtime-v41, after which all applicable gates passed. ARC-13 generation was deterministic at 1,015 globally unreviewed occurrences, 454 JS sinks, 0 parse errors, unassigned owner/routes or unresolved primary-page mappings, and 420 mapped occurrences. Squash-integrated into development at 5479fae39e8484f34a125932d20119871bce330d; remote main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #560 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-config-mini-scene-status-messages-2026-11-27.json",
+          "sha": "d1197d90e0c7524c8f2416b43d2014bba42beaf6",
+          "detail": "The fixed /config/ mini-scene status announcements for pin/release, automatic availability, transparency and size now use configurator.miniScene.status catalog keys. Exact wording, triggers, aria-pressed semantics, observer behavior, static fallbacks and geometry are unchanged. The mobile PiP browser contract compares rendered polite announcements with the catalog; the static theme contract checks catalog shape. Exact PR head 3c815de8d335fef4f281b057d70745b7d60481b0 passed 13 Actions workflow runs and 14 successful check jobs. Primary-page compiler --sync/--check passed; ARC-13 repeated deterministically with 1,015 global candidates still unreviewed, 454 JS sinks, zero parse errors, unassigned owners/routes or unresolved primary-page mappings, and 420 mapped primary-page occurrences. Squash-integrated into development at d1197d90e0c7524c8f2416b43d2014bba42beaf6; Product main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691."
         }
       ],
-      "nextAction": "Usar o ARC-13 atual para localizar a próxima família restante de texto fixo em Admin/Config, classificar separadamente conteúdo dinâmico e comercial, e fechar esse lote com consumidores e assertions. Não repetir famílias já integradas; manter main estável até fechar a DoD completa."
+      "nextAction": "Refresh the exact current ARC-13 candidate inventory and continue with the next bounded fixed-copy family in Admin/Configurator. Keep data-backed module, material, service and price labels outside the shared copy catalog; preserve behavior and keep LOC-006 partial until the remaining fixed-copy inventory and consumers are reconciled."
     },
     {
       "order": 107,
@@ -2618,13 +2803,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-26",
-    "productMainSha": "ef9f073542c54ec44bf3c8808ab13d880222d329",
-    "productDevelopmentSha": "6c5830279595768571a7ad09133084e523fc2fda",
-    "designSystemMainSha": "8686df1cf13f84f18f755cb7de2067fda4f7c66d",
-    "productMainTree": "90662fc073fe22846e66e214a8b8a88e4544bfea",
-    "productDevelopmentTree": "5c71e5e69c9ae5c03147aaeae89d088a63f23f10",
-    "designSystemMainTree": "a0b6807cc9cf6414e78562064e200583776a6445",
-    "meaning": "Live branch readback captured at 2026-11-26T16:52Z immediately before this register-only evidence update: Product main@ef9f073542c54ec44bf3c8808ab13d880222d329 (tree 90662fc073fe22846e66e214a8b8a88e4544bfea), Product development@6c5830279595768571a7ad09133084e523fc2fda (tree 5c71e5e69c9ae5c03147aaeae89d088a63f23f10), and Design System main@8686df1cf13f84f18f755cb7de2067fda4f7c66d (tree a0b6807cc9cf6414e78562064e200583776a6445). The next development commit updates this register only and does not change runtime code. Product PR #507 selectively hardens the authenticated Buyer projection and is Production READY at deploy 6b0863681f476b4faf17d7cb on exact main commit ef9f073542c54ec44bf3c8808ab13d880222d329; its exact PR head passed all 8 applicable workflows and its Deploy Preview was READY. No whole-tree merge was performed. Design System has only main. Re-read moving refs before dependent operations."
+    "capturedAt": "2026-11-27T15:45:00Z",
+    "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+    "productDevelopmentSha": "d1197d90e0c7524c8f2416b43d2014bba42beaf6",
+    "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
+    "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
+    "productDevelopmentTree": "82c04c30d24b0c82da15a3717d7b87726f474a92",
+    "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
+    "meaning": "Live ref and tree readback after Product PR #560. Product main remains stable at ecaa38c (tree 45dafef); Product development is the integration buffer at d1197d9 (tree 82c04c3); Design System main remains a405dff (tree d0daa64), and the Design System development ref lookup returns 404. Product main→development is divergent from merge base 221b54b2: development is 679 commits ahead and main is 46 ahead. This broad divergence is not a candidate for whole-tree integration; promote complete, validated architectural families selectively. Product code and registers have not been promoted to main."
   }
 }

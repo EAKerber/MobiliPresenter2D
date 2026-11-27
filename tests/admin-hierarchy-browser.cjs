@@ -29,8 +29,9 @@ let lastPut = null;
 
 const identityStub = [
   'const admin = { email: "admin@example.test", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
+  'const noEmailAdmin = { email: "", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
   'const deniedUser = { email: "staff@example.test", roles: [], app_metadata: { roles: [] } };',
-  'export async function getUser() { const query = new URLSearchParams(location.search); return query.has("logged-out") ? null : query.has("denied") ? deniedUser : admin; }',
+  'export async function getUser() { const query = new URLSearchParams(location.search); return query.has("logged-out") ? null : query.has("denied") ? deniedUser : query.has("no-email") ? noEmailAdmin : admin; }',
   'export async function handleAuthCallback() { return new URLSearchParams(location.search).get("auth-callback") === "invite" ? { type: "invite", token: "test-invite-token" } : null; }',
   'export async function login() { if (new URLSearchParams(location.search).has("provider-error")) throw new Error("Provider-owned identity error"); return admin; }',
   'export async function logout() { return null; }',
@@ -244,9 +245,22 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  const loadStateCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.loadState);
+  assert.equal(await page.locator("#revisionLabel").textContent(), loadStateCopy.revisionLabel.replace("{revision}", String(current.revision || 1)),
+    "revision label uses the shared Admin load-state catalog");
+  assert.equal(await page.locator("#saveMessage").textContent(), loadStateCopy.hierarchyDraftLoaded,
+    "legacy v3 settings are identified as a hierarchy draft");
+
   const shellCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.shell);
+  assert.equal(await page.locator("#userLabel").textContent(), "admin@example.test", "nonempty authenticated email remains the displayed user label");
+  const noEmailPage = await browser.newPage();
+  await noEmailPage.goto(baseUrl + "/admin-test.html?no-email=1", { waitUntil: "networkidle" });
+  await noEmailPage.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+  assert.equal(await noEmailPage.locator("#userLabel").textContent(), shellCopy.header.userFallback, "missing email uses the catalog-backed Admin user-label fallback");
+  await noEmailPage.close();
   assert.deepEqual(shellCopy, {
     documentTitle: "Administração — Casa em Módulos",
+    header: { pageName: "Administração", menuLabel: "Menu do site", userFallback: "Administrador" },
     eyebrow: "Configurador público",
     heading: "Administração do catálogo",
     intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
@@ -262,6 +276,32 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     objectTablistLabel: "Dados do objeto",
     objectTabs: { content: "Conteúdo", assets: "Imagens e máscaras" }
   }, "Admin editor shell copy retains its existing wording");
+  const brandCopy = await page.evaluate(() => window.CASA_UI_COPY.brand);
+  const navigationCopy = await page.evaluate(() => window.CASA_UI_COPY.navigation);
+  assert.equal(await page.locator(".private-header__brand").getAttribute("aria-label"), brandCopy.homeLinkAriaLabel,
+    "Admin brand link accessible name uses the shared brand catalog");
+  assert.equal(await page.locator(".private-header__brand").getAttribute("data-admin-shell-aria-label"), "brand.homeLinkAriaLabel",
+    "Admin brand link declares the shared brand-copy path");
+  assert.equal(await page.locator(".private-header__brand img").getAttribute("alt"), brandCopy.logoAlt,
+    "Admin brand image alternative uses the shared brand catalog");
+  assert.equal(await page.locator(".private-header__brand img").getAttribute("data-admin-shell-alt"), "brand.logoAlt",
+    "Admin brand image declares the shared alternative-text path");
+  assert.equal(await page.locator(".private-header__brand .visually-hidden").textContent(), brandCopy.logoAlt,
+    "Admin hidden brand text uses the shared brand catalog");
+  assert.equal(await page.locator(".private-header__brand .visually-hidden").getAttribute("data-admin-shell-copy"), "brand.logoAlt",
+    "Admin hidden brand text declares the shared brand-copy path");
+  assert.equal(await page.locator(".private-header__page-name").textContent(), shellCopy.header.pageName,
+    "Admin header page name uses the Admin shell catalog");
+  assert.equal(await page.locator(".private-header__page-name").getAttribute("data-admin-shell-copy"), "header.pageName",
+    "Admin header page name declares the Admin shell-copy path");
+  assert.equal(await page.locator("[data-private-menu-toggle]").getAttribute("aria-label"), navigationCopy.menu.open,
+    "Admin private menu starts with its catalog open label");
+  assert.equal(await page.locator("[data-private-menu-toggle]").getAttribute("data-admin-shell-aria-label"), "navigation.menu.open",
+    "Admin private menu toggle declares its shared navigation-copy path");
+  assert.equal(await page.locator("[data-private-menu]").getAttribute("aria-label"), shellCopy.header.menuLabel,
+    "Admin private menu landmark uses the Admin shell catalog");
+  assert.equal(await page.locator("[data-private-menu]").getAttribute("data-admin-shell-aria-label"), "header.menuLabel",
+    "Admin private menu landmark declares the Admin shell-copy path");
   assert.equal(await page.title(), shellCopy.documentTitle, "document title is bound to the Admin shell catalog");
   assert.equal(await page.locator(".admin-heading .eyebrow").textContent(), shellCopy.eyebrow, "editor eyebrow is catalog-backed");
   assert.equal(await page.locator(".admin-heading h1").textContent(), shellCopy.heading, "editor heading is catalog-backed");
@@ -664,6 +704,9 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const publicationReason = page.locator("#viewer-base-price-publication-note");
   const publicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.viewerBasePricePublication);
   const adminPublicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.publication);
+  assert.equal(await page.locator("#persistHandlesButton").textContent(), adminPublicationCopy.actions.persistHandles, "isolated handle persistence action uses the canonical catalog label");
+  assert.equal(await page.locator("#saveButton").textContent(), adminPublicationCopy.actions.publishConfiguration, "configuration publication action uses the canonical catalog label");
+  const pricingEditorCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.editor);
   assert.equal(await page.locator(".pricing-publication-card h2").textContent(), publicationCopy.title, "publication title comes from the shared copy catalog");
   assert.equal((await publicationToggle.locator("xpath=..").textContent()).trim(), publicationCopy.label, "publication checkbox name comes from the shared copy catalog");
   assert.equal(await publicationToggle.isDisabled(), true, "legacy configuration cannot enable V5 base-price publication");
@@ -683,17 +726,22 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await finishTypeSelectors.count(), await finishPriceInputs.count(), "every front-finish row derives a type selector from the dual-type role capability");
   assert.equal(await page.locator('[data-price-rule-type]:not([data-price-role="frontFinishAdjustment"])').count(), 0, "no other pricing role exposes a type selector");
 
+  assert.equal(await cocoaType.locator("option[value=amount]").textContent(), pricingEditorCopy.typeLabels.amount, "fixed-price option comes from shared Admin copy");
+  assert.equal(await cocoaType.locator("option[value=percentage]").textContent(), pricingEditorCopy.typeLabels.percentage, "percentage option comes from shared Admin copy");
+  const cocoaPublicLabel = await cocoaRow.locator(".pricing-field__label").textContent();
+  assert.equal(await cocoaType.getAttribute("aria-label"), pricingEditorCopy.typeAriaLabel.replace("{label}", cocoaPublicLabel), "pricing type accessible name comes from the shared catalog");
+  assert.equal(await cocoaPrice.getAttribute("aria-label"), pricingEditorCopy.valueAriaLabel.replace("{label}", cocoaPublicLabel), "pricing value accessible name comes from the shared catalog");
   assert.equal(await cocoaType.inputValue(), "percentage", "migrated front-finish pricing starts as percentage");
   assert.equal(await cocoaPrice.inputValue(), "15.00", "migrated cocoa BPS displays as 15 percent");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage rule renders a percent unit");
-  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), "Base: valor base de cada módulo elegível", "percentage authoring exposes the explicit calculation basis");
+  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), pricingEditorCopy.basisLabels["eligible-module-base"], "percentage authoring exposes the catalog-backed calculation basis");
 
   await cocoaType.selectOption("amount");
   assert.equal(await cocoaType.inputValue(), "amount", "front-finish type can switch to fixed amount");
   assert.equal(await cocoaPrice.inputValue(), "0.00", "percentage-to-amount switch resets the numeric value");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "R$", "fixed finish amount renders as BRL");
   assert.equal(await cocoaRow.locator(".pricing-basis").count(), 0, "fixed amount has no percentage basis");
-  assert.ok((await page.locator("#saveMessage").textContent()).includes("zerado"), "admin explains that type switching resets the value");
+  assert.equal(await page.locator("#saveMessage").textContent(), pricingEditorCopy.typeChangedResetNotice, "type-switch reset notice comes from the shared catalog");
 
   await page.locator("#saveButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("futura publicação consolidada"));
@@ -704,7 +752,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await cocoaType.inputValue(), "percentage", "finish can return to percentage authoring");
   assert.equal(await cocoaPrice.inputValue(), "0.00", "amount-to-percentage switch resets BPS instead of converting currency");
   assert.equal(await cocoaRow.locator(".pricing-unit").textContent(), "%", "percentage unit returns after switching back");
-  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), "Base: valor base de cada módulo elegível", "percentage basis returns after switching back");
+  assert.equal(await cocoaRow.locator(".pricing-basis").textContent(), pricingEditorCopy.basisLabels["eligible-module-base"], "percentage basis returns from its shared catalog entry");
 
   await cocoaPrice.fill("15.00");
   await cocoaPrice.press("Tab");
@@ -755,8 +803,21 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     baseColor: "Cor base",
     noColor: "Sem cor/tinta base",
     colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
-    noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
+    noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura.",
+    librarySection: {
+      heading: "Biblioteca de cores e texturas",
+      guidance: "A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador.",
+      addMaterial: "Adicionar material",
+      availabilityHeading: "Opções e disponibilidade por acabamento",
+      availabilityGuidance: "Configure separadamente pedras e materiais de cada puxador. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente.",
+      finishAvailabilityHeading: "Disponibilidade das cores de MDF",
+      finishAvailabilityGuidance: "Ative as cores para clientes e escolha se cada uma vale para o conjunto todo ou para módulos específicos."
+    }
   }, "fixed material editor copy stays in the canonical pt-BR catalog");
+  assert.deepEqual(await page.locator('[data-admin-panel="finishes"] [data-admin-materials-copy]').evaluateAll(elements => elements.map(element => ({
+    key: element.dataset.adminMaterialsCopy,
+    text: element.textContent
+  }))), Object.entries(materialStateCopy.librarySection).map(([key, text]) => ({ key, text })), "all seven static materials-library labels bind to their catalog entries");
   const solidMaterialCard = page.locator('[data-material-id="base-light"]');
   const authoredBaseLabel = await page.evaluate(() => window.CASA_EM_MODULOS_CATALOG.options.finishes.find((item) => item.id === "base-light").publicLabel);
   assert.equal((await solidMaterialCard.locator("h2").textContent()).trim(), authoredBaseLabel, "material names continue to come from authored data");
@@ -1002,6 +1063,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   lastPut = null;
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForFunction(() => !document.getElementById("persistHandlesButton").hidden);
+  assert.equal(await page.locator("#saveMessage").textContent(), loadStateCopy.handlesRepairNeeded,
+    "v3 handle repair shows its catalog-backed published-state guidance");
   await page.locator("#persistHandlesButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("v3 publicado"));
   assert.equal(await page.locator("#saveMessage").textContent(), adminPublicationCopy.handlesPersisted, "isolated handle persistence consumes the shared publication copy");

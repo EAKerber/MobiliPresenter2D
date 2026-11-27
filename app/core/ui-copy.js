@@ -19,6 +19,21 @@
         close: "Fechar menu"
       }),
       primaryLabel: "Navegação principal",
+      logout: "Sair",
+      logoutFailure: "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.",
+      privateMenu: Object.freeze({
+        privatePages: "Páginas privadas",
+        publicPages: "Páginas públicas",
+        configurator: "Configurador",
+        administration: "Administração",
+        manageAccesses: "Gerenciar acessos"
+      }),
+      privateAccessState: Object.freeze({
+        loading: "Verificando acesso…",
+        lookupFailure: "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.",
+        anonymousAdminEntry: "Entrar na administração",
+        denied: "Esta conta não tem acesso às páginas de gestão."
+      }),
       environments: "Ambientes",
       howItWorks: "Como funciona",
       about: "Quem somos",
@@ -79,6 +94,24 @@
       tagline: "Móveis modulares pensados para a vida real.",
       homeLink: "Voltar ao início ↑"
     }),
+    configurator: Object.freeze({
+      miniScene: Object.freeze({
+        viewerLabel: "Visualização da cozinha",
+        controlsLabel: "Controles da mini-cena",
+        pin: Object.freeze({ pin: "Fixar cena", release: "Liberar cena" }),
+        transparency: "Alternar transparência",
+        resize: Object.freeze({ ariaLabel: "Alterar tamanho da mini-cena", title: "Alterar tamanho" }),
+        status: Object.freeze({
+          pinned: "Cena fixada para contexto durante a configuração.",
+          released: "Cena liberada para o fluxo normal.",
+          launcherPinned: "Mini-cena fixada para contexto durante a configuração.",
+          available: "Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.",
+          transparencyEnabled: "Mini-cena com transparência ativada.",
+          opaque: "Mini-cena opaca.",
+          size: Object.freeze({ small: "Mini-cena pequena.", medium: "Mini-cena média.", large: "Mini-cena grande." })
+        })
+      })
+    }),
     admin: Object.freeze({
       authentication: Object.freeze({
         restrictedEyebrow: "Acesso restrito",
@@ -111,6 +144,11 @@
       }),
       shell: Object.freeze({
         documentTitle: "Administração — Casa em Módulos",
+        header: Object.freeze({
+          pageName: "Administração",
+          menuLabel: "Menu do site",
+          userFallback: "Administrador"
+        }),
         eyebrow: "Configurador público",
         heading: "Administração do catálogo",
         intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
@@ -132,6 +170,17 @@
           content: "Conteúdo",
           assets: "Imagens e máscaras"
         })
+      }),
+      loadState: Object.freeze({
+        revisionPending: "Versão —",
+        revisionLabel: "Versão {revision} · editor hierárquico",
+        configurationNotPublished: "A API de configuração ainda não foi publicada.",
+        configurationLoadFailure: "Não foi possível carregar a configuração.",
+        adminDataLoadFallback: "Falha ao carregar os dados administrativos.",
+        retryLoad: "Tentar novamente",
+        handlesRepairNeeded: "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.",
+        version5Loaded: "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação.",
+        hierarchyDraftLoaded: "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
       }),
       initialState: Object.freeze({
         entityVisibility: "Iniciar visível no configurador",
@@ -287,9 +336,30 @@
         baseColor: "Cor base",
         noColor: "Sem cor/tinta base",
         colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
-        noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
+        noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura.",
+        librarySection: Object.freeze({
+          heading: "Biblioteca de cores e texturas",
+          guidance: "A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador.",
+          addMaterial: "Adicionar material",
+          availabilityHeading: "Opções e disponibilidade por acabamento",
+          availabilityGuidance: "Configure separadamente pedras e materiais de cada puxador. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente.",
+          finishAvailabilityHeading: "Disponibilidade das cores de MDF",
+          finishAvailabilityGuidance: "Ative as cores para clientes e escolha se cada uma vale para o conjunto todo ou para módulos específicos."
+        })
       }),
       pricing: Object.freeze({
+        editor: Object.freeze({
+          typeLabels: Object.freeze({
+            amount: "Valor fixo",
+            percentage: "Percentual"
+          }),
+          basisLabels: Object.freeze({
+            "eligible-module-base": "Base: valor base de cada módulo elegível"
+          }),
+          typeAriaLabel: "Tipo de preço: {label}",
+          valueAriaLabel: "Valor de {label}",
+          typeChangedResetNotice: "Tipo de preço alterado. O valor foi zerado para evitar conversão implícita entre R$ e %."
+        }),
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",
           label: "Mostrar preços base no Viewer",
@@ -300,6 +370,10 @@
         })
       }),
       publication: Object.freeze({
+        actions: Object.freeze({
+          persistHandles: "Persistir Puxadores no v3",
+          publishConfiguration: "Publicar configuração"
+        }),
         handlesConfirmation: "Há alterações locais no painel. Esta operação publicará somente Puxadores no schema v3 e recarregará o painel; outras alterações locais não serão publicadas. Continuar?",
         handlesCancelled: "Persistência de Puxadores cancelada; nenhuma alteração foi publicada.",
         handlesRechecking: "Relendo a configuração publicada antes de persistir Puxadores…",

@@ -24,8 +24,39 @@ assert.equal(copy.theme.toggle.title, "Tema: {current} (próximo: {next})");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
   open: "Abrir menu", close: "Fechar menu"
 });
+assert.equal(copy.navigation.logout, "Sair");
+assert.equal(copy.navigation.logoutFailure, "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.privateMenu)), {
+  privatePages: "Páginas privadas",
+  publicPages: "Páginas públicas",
+  configurator: "Configurador",
+  administration: "Administração",
+  manageAccesses: "Gerenciar acessos"
+});
+assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.privateAccessState)), {
+  loading: "Verificando acesso…",
+  lookupFailure: "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.",
+  anonymousAdminEntry: "Entrar na administração",
+  denied: "Esta conta não tem acesso às páginas de gestão."
+});
 assert.equal(copy.navigation.contact, "Fale conosco");
 assert.equal(copy.navigation.contactAriaLabel, "Fale conosco pelo WhatsApp");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.configurator.miniScene)), {
+  viewerLabel: "Visualização da cozinha",
+  controlsLabel: "Controles da mini-cena",
+  pin: { pin: "Fixar cena", release: "Liberar cena" },
+  transparency: "Alternar transparência",
+  resize: { ariaLabel: "Alterar tamanho da mini-cena", title: "Alterar tamanho" },
+  status: {
+    pinned: "Cena fixada para contexto durante a configuração.",
+    released: "Cena liberada para o fluxo normal.",
+    launcherPinned: "Mini-cena fixada para contexto durante a configuração.",
+    available: "Mini-cena disponível abaixo das etapas. Selecione um módulo diretamente na cena.",
+    transparencyEnabled: "Mini-cena com transparência ativada.",
+    opaque: "Mini-cena opaca.",
+    size: { small: "Mini-cena pequena.", medium: "Mini-cena média.", large: "Mini-cena grande." }
+  }
+});
 assert.deepEqual(JSON.parse(JSON.stringify(copy.video.fullscreen)), {
   open: "Abrir vídeo em tela cheia", close: "Sair da tela cheia"
 });
@@ -136,6 +167,26 @@ assert(publicMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)'
   publicMenuCode.includes('open ? "Fechar menu" : "Abrir menu"'), "public menu uses shared semantic keys with predictable fallback");
 assert(privateMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)') &&
   privateMenuCode.includes('open ? "Fechar menu" : "Abrir menu"'), "private menu shares menu keys and fallback behavior");
+assert(privateMenuCode.includes('copy("navigation.logout", "Sair")'), "private logout label uses the canonical catalog with a local fallback");
+assert(privateMenuCode.includes('copy("navigation.logoutFailure", "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.")'), "temporary logout failure uses a generic catalog message with a local fallback");
+for (const [key, fallback] of [
+  ["privatePages", "Páginas privadas"],
+  ["publicPages", "Páginas públicas"],
+  ["configurator", "Configurador"],
+  ["administration", "Administração"],
+  ["manageAccesses", "Gerenciar acessos"]
+]) {
+  assert(privateMenuCode.includes(`copy("navigation.privateMenu.${key}", "${fallback}")`), `private menu ${key} uses its catalog key and static fallback`);
+}
+for (const [key, fallback] of [
+  ["loading", "Verificando acesso…"],
+  ["lookupFailure", "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente."],
+  ["anonymousAdminEntry", "Entrar na administração"],
+  ["denied", "Esta conta não tem acesso às páginas de gestão."]
+]) {
+  assert(privateMenuCode.includes(`copy("navigation.privateAccessState.${key}", "${fallback}")`), `private access state ${key} uses its catalog key and static fallback`);
+}
+assert(privateMenuCode.includes('if (logoutButton.hasAttribute("data-private-logout")) logoutButton.hidden = !user;'), "shared visibility does not override route-owned static logout controls");
 assert(code.includes("function getCopy(path, fallback)") &&
   code.includes('COPY.schema !== COPY_SCHEMA') &&
   code.includes('typeof value === "string"'), "catalog resolver detects invalid schema and missing/non-string keys");
@@ -143,7 +194,13 @@ for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/
   assert(read(file).includes("header-menu.js?v=arc13-loc003-copy-1"), file + " busts the old public menu controller cache");
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
-  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc003-copy-1"), file + " busts the old private menu bundle cache");
+  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc006-private-session-lookup-retry-1"), file + " busts the old private menu bundle cache");
+  assert(read(file).includes("ui-copy.js?v=arc13-loc006-config-mini-scene-labels-1"), file + " busts the old shared copy catalog cache");
+}
+for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html"]) {
+  const logoutMarkup = read(file);
+  assert(logoutMarkup.includes(`id="logoutButton" class="private-menu__logout" type="button" hidden${file === "app/access/index.html" ? ' data-private-logout=""' : ""}>${copy.navigation.logout}</button>`), file + " keeps the catalog-matched no-JavaScript logout fallback");
+  assert.equal(logoutMarkup.includes('id="logoutButton"') && logoutMarkup.includes('data-private-logout=""'), file === "app/access/index.html", file + " assigns the shared logout handler only to the /access/ static control");
 }
 for (const file of [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html", "app/viewer/index.html",
@@ -151,6 +208,26 @@ for (const file of [
 ]) {
   assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
 }
+const adminHeaderFallback = read("app/admin.html");
+assert(adminHeaderFallback.includes(`aria-label="${copy.brand.homeLinkAriaLabel}"`), "Admin keeps the catalog-matched brand-link fallback");
+assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps the catalog-matched logo alternative fallback");
+assert(adminHeaderFallback.includes(`>${copy.brand.logoAlt}</strong>`), "Admin keeps the catalog-matched hidden brand fallback");
+assert(adminHeaderFallback.includes(`>${copy.admin.shell.header.pageName}</small>`), "Admin keeps the catalog-matched page-name fallback");
+assert(adminHeaderFallback.includes(`aria-label="${copy.admin.shell.header.menuLabel}"`), "Admin keeps the catalog-matched menu-landmark fallback");
+const adminSource = read("app/admin/admin.js");
+assert(adminSource.includes("user.email || adminShellCopy.header.userFallback") && !adminSource.includes('user.email || "Administrador"'), "Admin only substitutes the catalog fallback when the authenticated email is empty");
+const adminMaterialsFallback = read("app/admin.html");
+const adminMaterialsCopyCode = read("app/admin/admin.js");
+for (const [key, value] of Object.entries(copy.admin.materials.librarySection)) {
+  assert(adminMaterialsFallback.includes(`data-admin-materials-copy="${key}">${value}</`), `Admin keeps the static ${key} fallback aligned with its catalog entry`);
+}
+assert(adminMaterialsCopyCode.includes('querySelectorAll("[data-admin-materials-copy]")') &&
+  adminMaterialsCopyCode.includes("materialAvailabilityCopy.librarySection"), "Admin binds static materials-library copy from the canonical catalog");
+for (const [key, value] of Object.entries(copy.admin.publication.actions)) {
+  assert(adminMaterialsFallback.includes(`data-admin-publication-copy="actions.${key}">${value}</button>`), `Admin keeps the static ${key} action fallback aligned with its catalog entry`);
+}
+assert(adminMaterialsCopyCode.includes('querySelectorAll("[data-admin-publication-copy]")') &&
+  adminMaterialsCopyCode.includes("reduce((current, key) => current?.[key], publicationCopy)"), "Admin binds publication action labels from the canonical catalog");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/access/index.html", "app/access/manage.html",
@@ -162,8 +239,8 @@ for (const file of shells) {
     ? "arc13-loc004-comparison-copy-1"
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
-    : file === "app/admin.html"
-      ? "arc13-loc006-admin-shell-copy-1"
+    : ["app/access/index.html", "app/access/manage.html", "app/config/index.html", "app/admin.html"].includes(file)
+      ? "arc13-loc006-config-mini-scene-labels-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
@@ -185,7 +262,7 @@ assert(!adminCSS.includes(".visually-hidden {") && !configCSS.includes(".visuall
   "route stylesheets do not duplicate the shared utility");
 assert(configCSS.includes(".sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }"),
   "Config-only sr-only utility remains intact");
-assert(read("app/admin.html").includes('<strong class="visually-hidden">Casa em Módulos</strong>'),
+assert(read("app/admin.html").includes('<strong class="visually-hidden" data-admin-shell-copy="brand.logoAlt">Casa em Módulos</strong>'),
   "Admin keeps its visually-hidden brand text");
 assert(read("app/config/index.html").includes('<h1 class="visually-hidden">Casa em Módulos</h1>'),
   "Config keeps a real visually-hidden page heading");

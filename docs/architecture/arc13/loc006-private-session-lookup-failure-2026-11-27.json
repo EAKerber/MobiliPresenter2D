@@ -1,0 +1,85 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-006"],
+  "family": "private-session-lookup-failure-copy-and-retry-state",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "shared-navigation-fixed-copy",
+    "subsystemOwner": "shared private-navigation module",
+    "contentOwner": "Product; existing pt-BR text retained in canonical UI copy catalog",
+    "authority": "On failed private-session lookup, show a distinct generic retry message; keep all private routes hidden until a later lookup confirms the session state. Opening the closed menu retries. Do not change session, role, route, or access policy.",
+    "routeConsumers": ["/access/", "/access/manage", "/admin", "/config/"],
+    "catalogKeys": ["navigation.privateAccessState.lookupFailure"],
+    "excludedAdjacentCopy": ["session provider errors and identities", "role-gated route policy", "logout retry behavior", "public navigation"],
+    "occurrences": [
+      {"id": "5c783aa0523e3203", "line": 131, "text": "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente."}
+    ]
+  },
+  "evidence": {
+    "baseRevision": "3ee0d75d48b23a94f407d05f5dc9450401388ca8",
+    "implementationRevision": "081b3f31d9b49a7e9241ad35f091a53b08cfebb9",
+    "integrationRevision": "10d9145aae0043719268b361157959505287ae91",
+    "pullRequest": {"number": 556, "base": "development", "head": "081b3f31d9b49a7e9241ad35f091a53b08cfebb9", "mergeMethod": "squash", "mergeSha": "10d9145aae0043719268b361157959505287ae91"},
+    "sourceBlobs": {
+      "app/access/index.html": "049a0cf41b589318110f2060847a45c6eeea9c81",
+      "app/access/manage.html": "87a42b45af630dd3cee6214efecf995eb36b4360",
+      "app/admin.html": "0265eb63550858d62473cc43421485d3b22ecef1",
+      "app/config/index.html": "b5c69c9a457246d9a2014e08b1de5cd02abfd3f8",
+      "app/core/private-navigation.js": "b6f071f15eeb4d6bab5aceeb28dd0b9b3f27aed9",
+      "app/core/ui-copy.js": "30d3f6c34ada0964dff541ca89fdbfd83041c7dc",
+      "architecture/arc13/ui-text-candidates.json": "74b538376b484c2e8e4736dc0624916691347ff5",
+      "architecture/generated/primary-pages.manifest.json": "a033edc8496cbbd133baa89d713f6d2402e1ae89",
+      "tests/ci/access-surface-boundaries.test.mjs": "bf7deac4e807763504d0705fc50d5fddddc3f532",
+      "tests/ui-theme-contract.cjs": "a24723e63e37ff57964dd861e0a1b49b99fd82d6"
+    },
+    "candidateSourceSha256": "c240cc482c6c00dd996542a3e0948b7bf1714ab3fdcfc347cf3536f82eb591b6",
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "74b538376b484c2e8e4736dc0624916691347ff5",
+      "sha256": "5674cdadd21c70dd2308996785755b2350021efd7c2b8df13464806003a9c1f7",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {"unreviewedOccurrences": 1009, "javascriptSinkSites": 448, "javascriptParseErrors": 0, "unassignedOwnerSites": 0, "unassignedRouteSites": 0, "primaryPageAuthoringMappedOccurrences": 420, "primaryPageAuthoringUnresolvedOccurrences": 0}
+    },
+    "exactHeadGates": {
+      "head": "081b3f31d9b49a7e9241ad35f091a53b08cfebb9",
+      "status": "15 Actions workflow runs; 17 successful check jobs; 1 check job skipped",
+      "successfulRuns": [
+        {"name": "Configuration endpoint authorization boundaries", "id": 46018394155},
+        {"name": "ARC-13 inventory provenance and determinism", "id": 46018394341},
+        {"name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)", "id": 46018394053},
+        {"name": "Current asset gates", "id": 46018394476},
+        {"name": "Development CSS-00 read-only baseline", "id": 46018394373},
+        {"name": "Public routing before Clerk", "id": 46018394554},
+        {"name": "Admin hierarchy browser", "id": 46018394120},
+        {"name": "Mobile browser (local V5; protected preview separately gated)", "id": 46018394483},
+        {"name": "Viewer base-price publication contract (no Netlify deploy)", "id": 46018394241},
+        {"name": "Development test impact plan (advisory)", "id": 46018394243},
+        {"name": "App build purity", "id": 46018394173},
+        {"name": "Current variant fidelity", "id": 46018394390},
+        {"name": "Development CP-PUBLIC-03a authorization boundary (offline)", "id": 46018394160},
+        {"name": "Stone browser (local V5; protected preview separately gated)", "id": 46018394435},
+        {"name": "Summary pricing browser (local V5; protected preview separately gated)", "id": 46018394331}
+      ],
+      "skippedChecks": [
+        {"name": "Public routing browser job", "reason": "No protected preview was associated with the PR; the static-and-contract job passed."}
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "distinctAccessibleLookupFailureMessage": true,
+    "closedMenuRemainsClosedAfterBackgroundLookupFailure": true,
+    "openMenuShowsFailureAndRetriesOnReopen": true,
+    "privateRoutesHiddenUntilSessionConfirmed": true,
+    "rolesPermissionsOrRouteDestinationsChanged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "focusedBoundary": "The existing access-surface contract covers a failed background lookup, a visible failed lookup when opening the menu, absence of private routes in both failure states, and a later successful retry. The exact-head CI also passed the Admin hierarchy browser, authorization boundary, and mobile browser gates.",
+    "firstGateAttempt": "ARC-13 initially failed because four private HTML shells still referenced the previous cache token. The tokens were corrected; exact-head run 279 passed after the correction.",
+    "localChecks": "Primary-page compiler --sync and --check passed. ARC-13 was generated twice with identical SHA-256. Local unit/browser tests were not run; exact-head CI supplied the verification."
+  }
+}

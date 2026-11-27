@@ -1,0 +1,176 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "admin-authenticated-user-label-fallback",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "ui-dynamic-fallback",
+    "subsystemOwner": "admin/shell/header",
+    "contentOwner": "Product/UX; exact existing fallback wording preserved",
+    "authority": "Only the display fallback used when the authenticated account has no email. A nonempty user email remains data-driven and unchanged.",
+    "consumer": "Admin > shell header > authenticated user label",
+    "routeConsumers": [
+      "/admin"
+    ],
+    "catalogPrefix": "admin.shell.header.userFallback",
+    "catalogKeys": [
+      "userFallback"
+    ]
+  },
+  "evidence": {
+    "baseRevision": "9526469d61074b82272a2222459321b0bb65ae12",
+    "implementationRevision": "6a4e540818515d204ffb7e9611b04da14db8f074",
+    "integrationRevision": "9c8ac86a0c3c7f014f13c088d68d654b3b5cd7f6",
+    "implementationBranch": "codex/loc006-admin-user-label-fallback-20261127",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "f820bc765508ec297a532ea70f2dff0b7bae33a4",
+    "inventoryBaseCandidateId": "a3c0559d48e7dbdb",
+    "regeneratedCandidateId": "b549b06e3f927109",
+    "candidateMap": {
+      "before": {
+        "sink": "property:textContent",
+        "expression": "user.email || \"Administrador\"",
+        "line": 1683,
+        "id": "a3c0559d48e7dbdb"
+      },
+      "after": {
+        "sink": "property:textContent",
+        "expression": "user.email || adminShellCopy.header.userFallback",
+        "line": 1683,
+        "id": "b549b06e3f927109"
+      }
+    },
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "53721ab87e4fc48e9a2f48e196a2d7531177a64a"
+    },
+    "adminMarkup": {
+      "path": "app/admin.html",
+      "gitBlob": "5b5a8989ea5aa57753c7ba70d8fee8058798e581"
+    },
+    "sharedCatalog": {
+      "path": "app/core/ui-copy.js",
+      "prefix": "admin.shell.header",
+      "gitBlob": "d19b3b86e261637a181fbbb4ce04eb81d09b9c24"
+    },
+    "browserContracts": [
+      {
+        "path": "tests/admin-hierarchy-browser.cjs",
+        "gitBlob": "a7a7e723b77fdcdfe79dab22226677702b047952",
+        "scope": "verifies a nonempty email remains verbatim and an empty email uses the fallback"
+      },
+      {
+        "path": "tests/ui-theme-contract.cjs",
+        "gitBlob": "e02fd180ba0c196d96f4e2390df308b853f73c42",
+        "scope": "asserts the Admin uses the catalog fallback instead of a duplicated literal"
+      },
+      {
+        "path": "app/tools/test-core.js",
+        "gitBlob": "66af5e2ba8d474a28de163eb961774dec6eeb74a"
+      }
+    ],
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "0e413a49287af7319bedf6e75c979a61150b729b",
+      "sha256": "d8d627bc9ea60d0afe1b3c0917b42ef7b5e11ad410a232a8dad423167b78af69"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "831fe70d2b6cb6cf9dfcdbda40115cf488fdab46",
+      "sha256": "058f216ae3d7021ecbc4bf7e56f7c7c2029b4b28630667f00f30f00d8a19ae24",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "entries": 1007,
+        "unreviewedOccurrences": 1007,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "pullRequest": {
+      "number": 545,
+      "head": "6a4e540818515d204ffb7e9611b04da14db8f074",
+      "mergeMethod": "squash",
+      "mergeSha": "9c8ac86a0c3c7f014f13c088d68d654b3b5cd7f6"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        {
+          "name": "Admin hierarchy browser",
+          "id": 46005387232
+        },
+        {
+          "name": "Mobile browser (local V5; protected preview separately gated)",
+          "id": 46005387278
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 46005387810
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 46005386902
+        },
+        {
+          "name": "Stone browser (local V5; protected preview separately gated)",
+          "id": 46005387143
+        },
+        {
+          "name": "App build purity",
+          "id": 46005386863
+        },
+        {
+          "name": "Viewer base-price publication contract (no Netlify deploy)",
+          "id": 46005386819
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 46005386942
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 46005386921
+        },
+        {
+          "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)",
+          "id": 46005386969
+        },
+        {
+          "name": "Current asset gates",
+          "id": 46005386957
+        },
+        {
+          "name": "Summary pricing browser (local V5; protected preview separately gated)",
+          "id": 46005387122
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 46005386816
+        }
+      ]
+    }
+  },
+  "implementation": {
+    "fallbackOnlyAppliesToEmptyEmail": true,
+    "nonemptyEmailPreserved": true,
+    "authenticationChanged": false,
+    "roleOrSessionBehaviorChanged": false,
+    "permissionOrPublicationChanged": false,
+    "inventoryClassificationChanged": false,
+    "mainPromoted": false
+  },
+  "independentReview": {
+    "result": "coherent-low-risk-family",
+    "reviewer": "ARC-03C gate/common-sense review agent",
+    "notes": "The fallback is inside the existing Admin authorization check. The catalog owner matches the existing Admin shell header. The browser test covers both empty and populated account emails; nonempty identity data remains outside the catalog."
+  }
+}

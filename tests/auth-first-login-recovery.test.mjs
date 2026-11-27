@@ -73,7 +73,9 @@ test("menu revalidates session on open, without introducing reload or polling",(
 test("admin offers explicit recovery after non-permission errors",()=>{
   const code=readFileSync(new URL("../app/admin/admin.js",import.meta.url),"utf8");
   assert.match(code,/error\.code === "forbidden"/);
-  assert.match(code,/retry\.textContent = "Tentar novamente"/);
+  assert.match(code,/retry\.textContent = adminLoadCopy\.retryLoad/);
+  const copy = readFileSync(new URL("../app/core/ui-copy.js", import.meta.url), "utf8");
+  assert.match(copy,/retryLoad: "Tentar novamente"/);
   assert.match(code,/fetchAdminBootstrap\(\{ fetchImpl: fetch, getUserImpl: getUser \}\)/);
 });
 

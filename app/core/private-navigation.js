@@ -49,59 +49,96 @@ if (header) {
       logoutButton = document.createElement("button");
       logoutButton.type = "button";
       logoutButton.className = "button button--secondary private-menu__logout";
-      logoutButton.textContent = "Sair";
       logoutButton.setAttribute("data-private-logout", "");
     }
+    logoutButton.textContent = copy("navigation.logout", "Sair");
     if (!account.contains(logoutButton)) account.append(logoutButton);
+    const logoutStatus = document.createElement("p");
+    logoutStatus.className = "private-menu__note";
+    logoutStatus.setAttribute("role", "status");
+    logoutStatus.setAttribute("aria-live", "polite");
+    logoutStatus.hidden = true;
+    account.append(logoutStatus);
+    let activeUser = null;
+    const showLogoutFailure = () => {
+      logoutStatus.textContent = copy("navigation.logoutFailure", "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+      logoutStatus.hidden = false;
+      logoutButton.disabled = false;
+    };
     if (!logoutButton.hasAttribute("data-private-logout")) {
       logoutButton.classList.add("private-menu__logout");
     } else {
       logoutButton.addEventListener("click", async () => {
+        const temporarySession = activeUser?.temporarySession === true;
+        if (temporarySession) logoutButton.disabled = true;
+        logoutStatus.hidden = true;
+        logoutStatus.textContent = "";
+        let response = null;
         try {
-          await fetch("/api/access/session/logout", {
+          response = await fetch("/api/access/session/logout", {
             method: "POST",
             credentials: "same-origin",
             cache: "no-store",
             headers: { "Content-Type": "application/json" },
             body: "{}",
           });
-        } catch { /* Identity logout remains authoritative. */ }
+        } catch {
+          if (temporarySession) {
+            showLogoutFailure();
+            return;
+          }
+        }
+        // This function also expires the cookie when its store returns 503.
+        if (temporarySession && response && !response.ok && response.status !== 503) {
+          showLogoutFailure();
+          return;
+        }
         await logout();
         window.location.assign("/");
       });
     }
 
-    function render(user, { loading = false } = {}) {
+    function render(user, { loading = false, lookupFailed = false } = {}) {
+      if (activeUser !== user) {
+        logoutStatus.hidden = true;
+        logoutStatus.textContent = "";
+      }
+      activeUser = user;
       privateLinks.replaceChildren();
       account.hidden = !user;
       email.hidden = !user;
       email.textContent = user?.email || "";
-      logoutButton.hidden = !user;
-      const privateGroup = addGroup("Páginas privadas", privateLinks, "private-menu__links");
+      if (logoutButton.hasAttribute("data-private-logout")) logoutButton.hidden = !user;
+      const privateGroup = addGroup(copy("navigation.privateMenu.privatePages", "Páginas privadas"), privateLinks, "private-menu__links");
       const roles = rolesFor(user);
       if (roles.has("admin")) {
-        privateGroup.append(makeLink("/config/", "Configurador"));
-        privateGroup.append(makeLink("/admin.html", "Administração"));
-        privateGroup.append(makeLink("/access/manage.html", "Gerenciar acessos"));
+        privateGroup.append(makeLink("/config/", copy("navigation.privateMenu.configurator", "Configurador")));
+        privateGroup.append(makeLink("/admin.html", copy("navigation.privateMenu.administration", "Administração")));
+        privateGroup.append(makeLink("/access/manage.html", copy("navigation.privateMenu.manageAccesses", "Gerenciar acessos")));
       } else if (roles.has("staff")) {
-        privateGroup.append(makeLink("/config/", "Configurador"));
-        privateGroup.append(makeLink("/access/manage.html", "Gerenciar acessos"));
+        privateGroup.append(makeLink("/config/", copy("navigation.privateMenu.configurator", "Configurador")));
+        privateGroup.append(makeLink("/access/manage.html", copy("navigation.privateMenu.manageAccesses", "Gerenciar acessos")));
       } else if (user?.temporarySession) {
-        privateGroup.append(makeLink("/config/", "Configurador"));
+        privateGroup.append(makeLink("/config/", copy("navigation.privateMenu.configurator", "Configurador")));
       } else if (loading) {
         const note = document.createElement("p");
         note.className = "private-menu__note";
-        note.textContent = "Verificando acesso…";
+        note.textContent = copy("navigation.privateAccessState.loading", "Verificando acesso…");
+        privateGroup.append(note);
+      } else if (lookupFailed) {
+        const note = document.createElement("p");
+        note.className = "private-menu__note";
+        note.textContent = copy("navigation.privateAccessState.lookupFailure", "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
         privateGroup.append(note);
       } else if (!user) {
-        privateGroup.append(makeLink("/admin.html", "Entrar na administração"));
+        privateGroup.append(makeLink("/admin.html", copy("navigation.privateAccessState.anonymousAdminEntry", "Entrar na administração")));
       } else {
         const note = document.createElement("p");
         note.className = "private-menu__note";
-        note.textContent = "Esta conta não tem acesso às páginas de gestão.";
+        note.textContent = copy("navigation.privateAccessState.denied", "Esta conta não tem acesso às páginas de gestão.");
         privateGroup.append(note);
       }
-      const publicGroup = addGroup("Páginas públicas", privateLinks, "private-menu__links");
+      const publicGroup = addGroup(copy("navigation.privateMenu.publicPages", "Páginas públicas"), privateLinks, "private-menu__links");
       for (const [href, label] of publicPages) publicGroup.append(makeLink(href, label));
     }
 
@@ -168,7 +205,7 @@ if (header) {
           if (revision === authRevision) render(session);
         })
         .catch(() => {
-          if (revision === authRevision) render(null, { loading: true });
+          if (revision === authRevision) render(null, { lookupFailed: true });
         });
     }
 

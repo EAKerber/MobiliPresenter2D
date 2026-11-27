@@ -1,0 +1,235 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "private-navigation-logout-label",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "fixed-ui-copy",
+    "subsystemOwner": "shared/private-navigation",
+    "contentOwner": "Product/UX; exact existing pt-BR wording preserved",
+    "authority": "The existing fixed logout label only; user identity, session state, roles, visibility, handlers, endpoints and redirects remain outside this change.",
+    "consumer": "Private navigation account control",
+    "routeConsumers": [
+      "/access/",
+      "/access/manage",
+      "/admin",
+      "/config/"
+    ],
+    "catalogPrefix": "navigation",
+    "catalogKeys": [
+      "logout"
+    ]
+  },
+  "evidence": {
+    "baseRevision": "9d776525a023690f5394b7e10ea506776056da51",
+    "implementationRevision": "d5bb8a8104d78aefdc65f36594a70bb452eb9f32",
+    "integrationRevision": "383e0cb46c50915bf6c677830f366a9fc4500183",
+    "implementationBranch": "codex/loc006-private-logout-copy-20261127",
+    "pullRequest": {
+      "number": 547,
+      "base": "development",
+      "head": "d5bb8a8104d78aefdc65f36594a70bb452eb9f32",
+      "mergeMethod": "squash",
+      "mergeSha": "383e0cb46c50915bf6c677830f366a9fc4500183"
+    },
+    "candidateMap": {
+      "sourceOccurrences": [
+        {
+          "path": "app/access/index.html",
+          "line": 33,
+          "role": "static no-JavaScript fallback",
+          "routeConsumers": [
+            "/access/"
+          ],
+          "candidateId": "7e3422e7f3093a94"
+        },
+        {
+          "path": "app/access/manage.html",
+          "line": 53,
+          "role": "static no-JavaScript fallback",
+          "routeConsumers": [
+            "/access/manage"
+          ],
+          "candidateId": "c496eb7a584ddbca"
+        },
+        {
+          "path": "app/admin.html",
+          "line": 26,
+          "role": "static no-JavaScript fallback",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "candidateId": "51446131d3e37d56"
+        },
+        {
+          "path": "app/core/private-navigation.js",
+          "line": 54,
+          "role": "runtime logout-button text sink",
+          "expression": "copy(\"navigation.logout\", \"Sair\")",
+          "routeConsumers": [
+            "/access/",
+            "/access/manage",
+            "/admin",
+            "/config/"
+          ],
+          "candidateId": "03b29113cc22cbdf"
+        }
+      ],
+      "generatedInventoryStatus": "candidate-unreviewed",
+      "candidateClassificationsChanged": false
+    },
+    "sourceBlobs": {
+      "app/core/ui-copy.js": "2f029836331a06cf9a800e3fab10cd1d6a4dab33",
+      "app/core/private-navigation.js": "fb8cdfa6b668ac8b90c882f5a46173c322f4d5b3",
+      "app/access/index.html": "5823e8e13a2554273afa4a870c012e506939a502",
+      "app/access/manage.html": "033cb3a5090fdeac059e694ffebf5c2588f170be",
+      "app/admin.html": "b45c1d1cf9cc06d09ac51ae40fd3c30a293ce2e8",
+      "app/config/index.html": "dafb1d810f7664e82c7af67c23987f4bffc0a1bd",
+      "tests/ui-theme-contract.cjs": "b1c1844c873ad03f039dc1f03abad289b3a0b07f",
+      "tests/ci/access-surface-boundaries.test.mjs": "82c2591e4d863b66d4a7a0707d9ef7e92ebaefb5"
+    },
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "1df503285ec2ff98dd46eb5d1c4f7ec96e4844f1",
+      "sha256": "93029bf4226aee89713cbaec7fb4f87aad4978bfc4b86c6a131235325736e0eb"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "4aac4f1f312b3cb6bdcd1c1fe35e013e8250d5fe",
+      "sha256": "5fa9258e6100634b1c9ea9223eb88d4f31ed84b212acc54ca5092714d2e5398f",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "unreviewedOccurrences": 1007,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "primaryPageCompiler": {
+      "sync": "passed",
+      "check": "passed",
+      "pageCount": 3,
+      "authority": "architecture/pages"
+    },
+    "exactHeadGates": {
+      "head": "d5bb8a8104d78aefdc65f36594a70bb452eb9f32",
+      "status": "15 successful workflows",
+      "initialAttempt": "The earlier candidate failed because a static contract still expected the old private catalog cache token; the assertion was updated, and the corrected final head passed.",
+      "runs": [
+        {
+          "name": "App build purity",
+          "id": 46007740006
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 46007740013
+        },
+        {
+          "name": "Public routing before Clerk",
+          "id": 46007739915
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 46007740021
+        },
+        {
+          "name": "Current asset gates",
+          "id": 46007739967
+        },
+        {
+          "name": "Summary pricing browser (local V5; protected preview separately gated)",
+          "id": 46007739994
+        },
+        {
+          "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)",
+          "id": 46007739934
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 46007739723
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 46007739692
+        },
+        {
+          "name": "Configuration endpoint authorization boundaries",
+          "id": 46007739764
+        },
+        {
+          "name": "Viewer base-price publication contract (no Netlify deploy)",
+          "id": 46007739694
+        },
+        {
+          "name": "Admin hierarchy browser",
+          "id": 46007739818
+        },
+        {
+          "name": "Stone browser (local V5; protected preview separately gated)",
+          "id": 46007739850
+        },
+        {
+          "name": "Mobile browser (local V5; protected preview separately gated)",
+          "id": 46007739771
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 46007739697
+        }
+      ],
+      "externalChecks": [
+        {
+          "name": "Supabase Preview",
+          "status": "skipped",
+          "reason": "Preview branches are disabled in the Supabase project."
+        }
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+    "routeLogoutAudit": {
+      "revision": "383e0cb46c50915bf6c677830f366a9fc4500183",
+      "sources": {
+        "app/access/access.js": "e2b99d775576fe24d6757c8f24cf52fb8b498ac4",
+        "app/access/manage.js": "a1013d476781cafa52cb63b0706ab3a4fd30041e",
+        "app/admin/admin.js": "53721ab87e4fc48e9a2f48e196a2d7531177a64a",
+        "app/core/private-navigation.js": "fb8cdfa6b668ac8b90c882f5a46173c322f4d5b3",
+        "netlify/functions/access-session-logout.mjs": "82f40a1c7fa6d158b315e473b3c05e384e91bd85",
+        "tests/access-session-browser.cjs": "8a21266c608fa2d632309e645910e47a77c12e08",
+        "tests/ci/access-surface-boundaries.test.mjs": "82c2591e4d863b66d4a7a0707d9ef7e92ebaefb5",
+        ".github/workflows/development-access-dto-boundary.yml": "0cbfceda3b1f3cdf6bdec7855f16e4c14e67c52a"
+      },
+      "routes": {
+        "/access/": "Static button is visible for a resolved Identity or temporary session, but access.js has no listener and shared navigation does not bind existing static controls without data-private-logout. No session-revoke request, Identity logout, or redirect fires.",
+        "/access/manage": "manage.js owns the static button handler: POST session revoke, Identity logout, then replace to /admin.html?returnTo=%2Faccess%2Fmanage.html.",
+        "/admin": "admin.js owns the static button handler: POST session revoke, Identity logout, then replace to /.",
+        "/config/": "private-navigation creates the button and owns its handler: POST session revoke, Identity logout, then assign to /."
+      },
+      "gateGap": "The access-surface boundary test covers only a dynamically created button when getElementById returns null; the access-session browser covers invitation redemption, not logout. No current gate exercises the pre-existing static /access/ control.",
+      "secondaryRisk": "Existing handlers continue to Identity logout and redirect after a network error before the temporary-session revoke request reaches the function; in that case the temporary cookie may remain valid until expiry. This is separate from the inert /access/ control and needs a deliberate failure-state decision."
+    }
+  },
+  "implementation": {
+    "existingStaticFallbacksPreserved": true,
+    "catalogCopySourceAdded": true,
+    "authProviderChanged": false,
+    "roleOrSessionBehaviorChanged": false,
+    "visibilityOrHandlersChanged": false,
+    "logoutEndpointOrRedirectChanged": false,
+    "commercialDataOrPublicationChanged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "independentReview": {
+    "result": "copy-slice-coherent; separate P1 logout defect identified",
+    "reviewer": "ARC-03C gate/common-sense review agent",
+    "notes": "The label slice is limited to fixed UI copy and does not change auth, roles, visibility, session, handler, endpoint, or redirect behavior. Route audit confirmed /access/ has a visible but inert static logout control; /access/manage and /admin use page-owned handlers; /config uses the dynamically created shared handler. Current test coverage misses the existing static /access/ button. A separate secondary risk exists when temporary-session revocation fails before reaching the function."
+  },
+  "nextAction": "Fix the /access/ static logout control by connecting it to the single existing shared logout handler, add a focused assertion for the existing-static-button path, and verify the exact-head access boundary gate. Review temporary-session network-failure behavior separately before deciding whether to change it. Keep LOC-006 partial and the ARC-13 inventory globally unreviewed."
+}

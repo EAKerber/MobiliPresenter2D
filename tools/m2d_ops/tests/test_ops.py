@@ -110,7 +110,7 @@ class OpsTests(unittest.TestCase):
         put(self.ds,ops.PLAN,'# modified plan');commit(self.ds,'modified plan');o=self.capture();self.assertFalse(o['planPinMatches']);self.assertFalse(o['plan_check']['complete'])
     def test_cli(self):
         o=Path(self.tmp.name)/'observation.json';o.write_text(json.dumps(self.o));script=Path(ops.__file__)
-        out=subprocess.check_output([sys.executable,str(script),'handover',str(o)],text=True);self.assertIn('Handover derivado',out);self.assertIn('não são ordens',out)
-        result=json.loads(subprocess.check_output([sys.executable,str(script),'status',str(o)],text=True));self.assertEqual(result['total'],3)
+        out=subprocess.check_output([sys.executable,str(script),'handover',str(o)],encoding='utf-8');self.assertIn('Handover derivado',out);self.assertIn('não são ordens',out)
+        result=json.loads(subprocess.check_output([sys.executable,str(script),'status',str(o)],encoding='utf-8'));self.assertEqual(result['total'],3)
 
 if __name__=='__main__':unittest.main()
