@@ -2444,9 +2444,14 @@
           "source": "Product PR #558 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-config-mini-scene-accessible-labels-2026-11-27.json",
           "sha": "5479fae39e8484f34a125932d20119871bce330d",
           "detail": "Sixteen bounded static and runtime occurrences for the Configurator mini-scene viewer/group names plus pin, transparency and resize names/titles now use configurator.miniScene catalog keys. The related controls container exposes its label as role=group. State semantics, geometry and control behavior, static fallbacks, commercial data and the separate Fixar cena control remain unchanged. Exact head fd6fedca4e7b7aff2d535bef888478cc460c3159 passed 17 Actions workflow runs with 18 successful jobs; two protected-preview browser jobs were skipped. A first run exposed an outdated shared runtime revision contract; the config script set and contract were updated together to runtime-v41, after which all applicable gates passed. ARC-13 generation was deterministic at 1,015 globally unreviewed occurrences, 454 JS sinks, 0 parse errors, unassigned owner/routes or unresolved primary-page mappings, and 420 mapped occurrences. Squash-integrated into development at 5479fae39e8484f34a125932d20119871bce330d; remote main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #560 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-config-mini-scene-status-messages-2026-11-27.json",
+          "sha": "d1197d90e0c7524c8f2416b43d2014bba42beaf6",
+          "detail": "The fixed /config/ mini-scene status announcements for pin/release, automatic availability, transparency and size now use configurator.miniScene.status catalog keys. Exact wording, triggers, aria-pressed semantics, observer behavior, static fallbacks and geometry are unchanged. The mobile PiP browser contract compares rendered polite announcements with the catalog; the static theme contract checks catalog shape. Exact PR head 3c815de8d335fef4f281b057d70745b7d60481b0 passed 13 Actions workflow runs and 14 successful check jobs. Primary-page compiler --sync/--check passed; ARC-13 repeated deterministically with 1,015 global candidates still unreviewed, 454 JS sinks, zero parse errors, unassigned owners/routes or unresolved primary-page mappings, and 420 mapped primary-page occurrences. Squash-integrated into development at d1197d90e0c7524c8f2416b43d2014bba42beaf6; Product main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691."
         }
       ],
-      "nextAction": "Continue LOC-006 with the bounded /config/ mini-scene status and live-region messages. Catalog only the fixed pin/release, automatic-availability, transparency, and size announcements; preserve current wording, triggers, aria-pressed semantics, observer behavior and geometry. Reuse tests/mobile-pip-main-browser.cjs and assert the existing polite announcement output against the catalog. Exclude module/service/commercial announcements, glyphs, the separate launcher label and the already-cataloged mini-scene accessible names."
+      "nextAction": "Refresh the exact current ARC-13 candidate inventory and continue with the next bounded fixed-copy family in Admin/Configurator. Keep data-backed module, material, service and price labels outside the shared copy catalog; preserve behavior and keep LOC-006 partial until the remaining fixed-copy inventory and consumers are reconciled."
     },
     {
       "order": 107,
@@ -2798,13 +2803,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-27T11:48:32Z",
+    "capturedAt": "2026-11-27T15:45:00Z",
     "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
-    "productDevelopmentSha": "92ae3a44f5659fb1639642b0aee60b44e43bae9d",
+    "productDevelopmentSha": "d1197d90e0c7524c8f2416b43d2014bba42beaf6",
     "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
     "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
-    "productDevelopmentTree": "45164d6ff0977f937bdd0790aa19fd9902f8fafa",
+    "productDevelopmentTree": "82c04c30d24b0c82da15a3717d7b87726f474a92",
     "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
-    "meaning": "Live refs read after Product PR #535. Product main remains stable at ecaa38c; development is the integration buffer at 92ae3a44; Design System has only main at a405dff. Product compare main→development remains diverged from merge base 221b54b2: development 654 commits ahead and main 46 ahead; GitHub returns at most 300 changed paths, so no whole-tree integration is proposed. Product has 9 live refs after verified automatic cleanup of #535; one open draft PR (#517). Design System has 6 live refs including main and zero open PRs. The #535 merged-head cleanup run 45993290977 passed exact-head/tree-preservation and readback, leaving 9 Product refs (artifact digest de688161a7622295207a97e81cd514f3fc2eb01eecd299e1552c70b87df4078c). Branch Hygiene vNext #464 and its exact audit/apply receipts remain the policy basis; no manual destructive batch is inferred from this readback. The operational register still covers 125 IDs but remains only partially reconciled; ARC-13 has 1,004 candidate occurrences, all unreviewed."
+    "meaning": "Live ref and tree readback after Product PR #560. Product main remains stable at ecaa38c (tree 45dafef); Product development is the integration buffer at d1197d9 (tree 82c04c3); Design System main remains a405dff (tree d0daa64), and the Design System development ref lookup returns 404. Product main→development is divergent from merge base 221b54b2: development is 679 commits ahead and main is 46 ahead. This broad divergence is not a candidate for whole-tree integration; promote complete, validated architectural families selectively. Product code and registers have not been promoted to main."
   }
 }
