@@ -440,15 +440,33 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   );
   await new Promise((resolve) => setImmediate(resolve));
   const privateHrefs = () => privateLinks.links.map((link) => link.href);
+  const privateLabels = () => privateLinks.links.map((link) => link.textContent);
+  const groupHeadings = () => privateLinks.children.map((group) => group.children[0]?.textContent);
+  assert.deepEqual(groupHeadings(), ["Páginas privadas", "Páginas públicas"]);
   assert.ok(privateHrefs().includes("/admin.html"), "anonymous menu offers entry to administration");
 
   authCallback("login", { id: "admin-1", app_metadata: { roles: ["admin"] }, email: "admin@example.test" });
   assert.ok(privateHrefs().includes("/config/"));
   assert.ok(privateHrefs().includes("/access/manage.html"));
+  assert.ok(privateLabels().includes("Configurador"));
+  assert.ok(privateLabels().includes("Administração"));
+  assert.ok(privateLabels().includes("Gerenciar acessos"));
+  for (const [key, fallback] of [
+    ["privatePages", "Páginas privadas"],
+    ["publicPages", "Páginas públicas"],
+    ["configurator", "Configurador"],
+    ["administration", "Administração"],
+    ["manageAccesses", "Gerenciar acessos"]
+  ]) {
+    assert.ok(copyLookups.some(([lookedUpKey, lookedUpFallback]) =>
+      lookedUpKey === `navigation.privateMenu.${key}` && lookedUpFallback === fallback), `private navigation resolves catalog key ${key}`);
+  }
   assert.equal(email.textContent, "admin@example.test");
   authCallback("login", { id: "staff-1", roles: ["staff"], email: "staff@example.test" });
   assert.ok(privateHrefs().includes("/config/"));
   assert.ok(privateHrefs().includes("/access/manage.html"));
+  assert.ok(privateLabels().includes("Configurador"));
+  assert.ok(privateLabels().includes("Gerenciar acessos"));
   assert.equal(privateHrefs().includes("/admin.html"), false, "staff menu does not expose the administrator-only page");
   authCallback("login", { id: "buyer-1", roles: ["buyer"], email: "buyer@example.test" });
   assert.equal(privateHrefs().includes("/config/"), false);
@@ -458,6 +476,7 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   authCallback("logout", null);
   await new Promise((resolve) => setImmediate(resolve));
   assert.ok(privateHrefs().includes("/config/"), "verified temporary session is represented as Configurator access");
+  assert.ok(privateLabels().includes("Configurador"));
   assert.equal(privateHrefs().includes("/admin.html"), false);
   assert.equal(privateHrefs().includes("/access/manage.html"), false);
 
