@@ -1294,7 +1294,7 @@ function renderPricing() {
         select.dataset.priceRuleType = "true";
         select.dataset.priceRole = role;
         select.dataset.priceId = id;
-        select.setAttribute("aria-label", `Tipo de preço: ${publicLabel}`);
+        select.setAttribute("aria-label", pricingEditorCopy.typeAriaLabel.replace("{label}", publicLabel));
         capabilities.types.forEach((type) => {
           const option = document.createElement("option");
           option.value = type;
@@ -1315,7 +1315,7 @@ function renderPricing() {
       input.dataset.priceRole = role;
       input.dataset.priceId = id;
       input.dataset.priceType = rule.type;
-      input.setAttribute("aria-label", `Valor de ${publicLabel}`);
+      input.setAttribute("aria-label", pricingEditorCopy.valueAriaLabel.replace("{label}", publicLabel));
 
       const unit = document.createElement("small");
       unit.className = "pricing-unit";
@@ -1631,7 +1631,7 @@ pricingList.addEventListener("change", (event) => {
     } else {
       rules[id] = { type: "amount", cents: 0 };
     }
-    setMessage(saveMessage, "Tipo de preço alterado. O valor foi zerado para evitar conversão implícita entre R$ e %.", "success");
+    setMessage(saveMessage, pricingEditorCopy.typeChangedResetNotice, "success");
     renderPricing();
     return;
   }

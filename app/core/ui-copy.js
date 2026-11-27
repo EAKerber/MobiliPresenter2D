@@ -308,7 +308,10 @@
           }),
           basisLabels: Object.freeze({
             "eligible-module-base": "Base: valor base de cada módulo elegível"
-          })
+          }),
+          typeAriaLabel: "Tipo de preço: {label}",
+          valueAriaLabel: "Valor de {label}",
+          typeChangedResetNotice: "Tipo de preço alterado. O valor foi zerado para evitar conversão implícita entre R$ e %."
         }),
         viewerBasePricePublication: Object.freeze({
           title: "Exibição pública no Viewer",

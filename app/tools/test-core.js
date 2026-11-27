@@ -774,7 +774,7 @@ assert.equal(adminJs.includes("pricingContract.ROLE_CAPABILITIES[role]"), true, 
 assert.equal(adminJs.includes("select.dataset.priceRuleType"), true, "dual-type pricing rows expose an explicit type selector");
 assert.equal(adminJs.includes('{ type: "amount", cents: 0 }'), true, "percentage to amount switching resets the numeric value instead of converting units");
 assert.equal(adminJs.includes('{ type: "percentage", bps: 0, basis }'), true, "amount to percentage switching resets BPS and restores the contract basis");
-assert.equal(adminJs.includes("O valor foi zerado para evitar conversão implícita"), true, "admin explains zero-on-type-switch behavior");
+assert.equal(adminJs.includes("pricingEditorCopy.typeChangedResetNotice"), true, "admin explains zero-on-type-switch behavior from the shared copy catalog");
 assert.equal(adminJs.includes('projection.code === "pricing_requires_publication"'), true, "non-representable typed pricing is blocked before legacy publication");
 assert.equal(adminCss.includes(".pricing-field--typed"), true, "dual-type pricing rows have a dedicated compact layout");
 assert.equal(adminCss.includes(".pricing-basis"), true, "percentage basis copy has an explicit admin style hook");
