@@ -302,7 +302,16 @@
         baseColor: "Cor base",
         noColor: "Sem cor/tinta base",
         colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
-        noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura."
+        noColorDisabledReason: "Sem cor/tinta base está disponível apenas para materiais do tipo Textura.",
+        librarySection: Object.freeze({
+          heading: "Biblioteca de cores e texturas",
+          guidance: "A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador.",
+          addMaterial: "Adicionar material",
+          availabilityHeading: "Opções e disponibilidade por acabamento",
+          availabilityGuidance: "Configure separadamente pedras e materiais de cada puxador. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente.",
+          finishAvailabilityHeading: "Disponibilidade das cores de MDF",
+          finishAvailabilityGuidance: "Ative as cores para clientes e escolha se cada uma vale para o conjunto todo ou para módulos específicos."
+        })
       }),
       pricing: Object.freeze({
         editor: Object.freeze({
