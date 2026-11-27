@@ -21,6 +21,13 @@
       primaryLabel: "Navegação principal",
       logout: "Sair",
       logoutFailure: "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.",
+      privateMenu: Object.freeze({
+        privatePages: "Páginas privadas",
+        publicPages: "Páginas públicas",
+        configurator: "Configurador",
+        administration: "Administração",
+        manageAccesses: "Gerenciar acessos"
+      }),
       environments: "Ambientes",
       howItWorks: "Como funciona",
       about: "Quem somos",

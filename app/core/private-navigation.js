@@ -109,17 +109,17 @@ if (header) {
       email.hidden = !user;
       email.textContent = user?.email || "";
       if (logoutButton.hasAttribute("data-private-logout")) logoutButton.hidden = !user;
-      const privateGroup = addGroup("Páginas privadas", privateLinks, "private-menu__links");
+      const privateGroup = addGroup(copy("navigation.privateMenu.privatePages", "Páginas privadas"), privateLinks, "private-menu__links");
       const roles = rolesFor(user);
       if (roles.has("admin")) {
-        privateGroup.append(makeLink("/config/", "Configurador"));
-        privateGroup.append(makeLink("/admin.html", "Administração"));
-        privateGroup.append(makeLink("/access/manage.html", "Gerenciar acessos"));
+        privateGroup.append(makeLink("/config/", copy("navigation.privateMenu.configurator", "Configurador")));
+        privateGroup.append(makeLink("/admin.html", copy("navigation.privateMenu.administration", "Administração")));
+        privateGroup.append(makeLink("/access/manage.html", copy("navigation.privateMenu.manageAccesses", "Gerenciar acessos")));
       } else if (roles.has("staff")) {
-        privateGroup.append(makeLink("/config/", "Configurador"));
-        privateGroup.append(makeLink("/access/manage.html", "Gerenciar acessos"));
+        privateGroup.append(makeLink("/config/", copy("navigation.privateMenu.configurator", "Configurador")));
+        privateGroup.append(makeLink("/access/manage.html", copy("navigation.privateMenu.manageAccesses", "Gerenciar acessos")));
       } else if (user?.temporarySession) {
-        privateGroup.append(makeLink("/config/", "Configurador"));
+        privateGroup.append(makeLink("/config/", copy("navigation.privateMenu.configurator", "Configurador")));
       } else if (loading) {
         const note = document.createElement("p");
         note.className = "private-menu__note";
@@ -133,7 +133,7 @@ if (header) {
         note.textContent = "Esta conta não tem acesso às páginas de gestão.";
         privateGroup.append(note);
       }
-      const publicGroup = addGroup("Páginas públicas", privateLinks, "private-menu__links");
+      const publicGroup = addGroup(copy("navigation.privateMenu.publicPages", "Páginas públicas"), privateLinks, "private-menu__links");
       for (const [href, label] of publicPages) publicGroup.append(makeLink(href, label));
     }
 
