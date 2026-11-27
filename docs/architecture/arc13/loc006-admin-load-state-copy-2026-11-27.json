@@ -1,0 +1,176 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "admin-configuration-load-and-revision-state-copy",
+  "status": "integrated-development",
+  "evidence": {
+    "baseRevision": "53869aa1d2272401224bcf914b421a118e8c4862",
+    "implementationRevision": "ba975a280daca76a931323be23530adb3ba7549f",
+    "implementationBranch": "codex/loc006-admin-load-state-copy-20261127",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "eecc370f8a1673cd47cdfa9a05d1800d47752325",
+    "implementationCandidateIds": [
+      "5fd7d8f178fdf544",
+      "fef94a71d5e767f4",
+      "dcf51c4a2a82e364",
+      "07f71fc2663db670",
+      "2760470af1e6be1a",
+      "a1f6a7c73d12f5a0",
+      "f44f6d412834278c"
+    ],
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "7146c27c92100f87f8f3d76377a081a144f58536"
+    },
+    "adminMarkup": {
+      "path": "app/admin.html",
+      "gitBlob": "b89357b110431801e3a8dadf388ba0550f6b0e8c"
+    },
+    "sharedCatalog": {
+      "path": "app/core/ui-copy.js",
+      "prefix": "admin.loadState",
+      "gitBlob": "992b8e12c4a1d6cce425925a261c869d0f568e2f"
+    },
+    "browserContracts": [
+      {
+        "path": "tests/admin-hierarchy-browser.cjs",
+        "gitBlob": "8e7a3ae053ff9f0cc38564e4fbb80473cf5b9eaa"
+      },
+      {
+        "path": "tests/admin-v5-save-browser.cjs",
+        "gitBlob": "932c92e83a85e6ffdfafccc8b81e158f5a5c5b57"
+      }
+    ],
+    "browserGate": {
+      "workflow": ".github/workflows/admin-hierarchy-browser.yml",
+      "gitBlob": "1e580d88c70d3423731a8eac4684b79603a1f166"
+    },
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "8faaf4dfe7503b06cbd072cd31eef4d3fc728945"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "afbc27e312245c29a1cf1bd9c2afa201fc48c2ec",
+      "status": "candidate-unreviewed",
+      "summary": {
+        "entries": 1004,
+        "unreviewedOccurrences": 1004,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "pullRequest": {
+      "number": 531,
+      "head": "ba975a280daca76a931323be23530adb3ba7549f"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        {
+          "name": "Admin hierarchy browser",
+          "id": 45986641481
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 45986641416
+        },
+        {
+          "name": "App build purity",
+          "id": 45986641433
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 45986641744
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 45986641442
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 45986641612
+        },
+        {
+          "name": "Current asset gates",
+          "id": 45986641429
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 45986641417
+        },
+        {
+          "name": "Mobile browser",
+          "id": 45986641490
+        },
+        {
+          "name": "Stone browser",
+          "id": 45986641432
+        },
+        {
+          "name": "Summary pricing browser",
+          "id": 45986641578
+        },
+        {
+          "name": "Viewer base-price publication contract",
+          "id": 45986641451
+        }
+      ]
+    }
+  },
+  "decision": {
+    "rationale": "Keep the existing pt-BR wording while centralizing the fixed Admin load-state copy and preserving distinct published-v3 repair, published-v5, hierarchy-draft, not-yet-published, and generic failure states.",
+    "catalogKeys": [
+      "admin.loadState.revisionPending",
+      "admin.loadState.revisionLabel",
+      "admin.loadState.configurationNotPublished",
+      "admin.loadState.configurationLoadFailure",
+      "admin.loadState.adminDataLoadFallback",
+      "admin.loadState.handlesRepairNeeded",
+      "admin.loadState.version5Loaded",
+      "admin.loadState.hierarchyDraftLoaded"
+    ],
+    "resolvedCandidateIdsAreFrom": "The pre-change candidate inventory blob above. The regenerated inventory rekeys source records after the source hash changed; its 1,004 candidates remain unreviewed."
+  },
+  "state": {
+    "consumers": [
+      "#revisionLabel",
+      "saveMessage",
+      "#adminServiceError"
+    ],
+    "meaning": "Static pending revision copy, revision interpolation, load result status, and error fallback are catalog-backed for the /admin route.",
+    "preservedContracts": [
+      "404 remains distinct as configuration not published; other HTTP statuses and network errors use the generic load failure.",
+      "The v3 Puxadores repair message, v5 loaded message, and legacy hierarchy draft message remain distinct.",
+      "Revision fallback, hierarchy baseline, authorization, endpoint requests, persistence, schema selection, and publication behavior are unchanged."
+    ]
+  },
+  "validation": {
+    "passed": [
+      "Admin hierarchy browser run 45986641481: hierarchy and isolated Puxadores tests passed; native v5 Admin Save, exact readback, and new load-state assertions passed.",
+      "ARC-13 inventory run 45986641416: compiler, provenance coverage, unreviewed status, and reproducibility passed.",
+      "Build, CP-PUBLIC-03a, CSS-00, asset, variant, mobile, stone, summary pricing, viewer-base-price, and test-impact-plan workflows all passed on exact PR head ba975a280daca76a931323be23530adb3ba7549f."
+    ]
+  },
+  "limits": [
+    "This receipt covers only the named Admin load-state copy family; it does not complete LOC-006, ARC-13, or the plan v0.9.",
+    "The regenerated global UI candidate inventory remains unreviewed.",
+    "No authenticated hosted Admin, Netlify, or Production behavior was inferred from the local browser harness."
+  ],
+  "developmentIntegration": {
+    "pullRequest": 531,
+    "head": "ba975a280daca76a931323be23530adb3ba7549f",
+    "mergeCommit": "b2143ec81d2be90613cbff9bf25eec23dbe0f318",
+    "developmentReadback": "b2143ec81d2be90613cbff9bf25eec23dbe0f318",
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+    "mainChanged": false
+  }
+}
