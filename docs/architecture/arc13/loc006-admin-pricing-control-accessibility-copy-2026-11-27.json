@@ -1,0 +1,128 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006",
+    "ARC-13"
+  ],
+  "family": "admin-pricing-control-accessibility-and-reset-notice-copy",
+  "status": "integrated-development",
+  "evidence": {
+    "baseRevision": "3d3265c6eceab7e416217ee90091ce7e26bdd42d",
+    "implementationRevision": "c16393ef1d729e4775807cf9066ddf5cf4d53b3d",
+    "integrationRevision": "3a6f132eb5179a7a3dc8d1d276cdd4b83d9cb4bc",
+    "implementationBranch": "codex/loc006-admin-pricing-control-copy-20261127",
+    "route": "/admin",
+    "inventoryPath": "architecture/arc13/ui-text-candidates.json",
+    "inventoryBaseBlob": "839b3ae7145b2f46ebf682baeea64d84695645ef",
+    "implementationCandidateIds": [
+      "01abfd9e364ee402",
+      "9708b2cd1000274c",
+      "be6322e8c81484ea"
+    ],
+    "source": {
+      "path": "app/admin/admin.js",
+      "gitBlob": "373acf38e8be0e5601e990a11bd4420cab83161d"
+    },
+    "adminMarkup": {
+      "path": "app/admin.html",
+      "gitBlob": "b89357b110431801e3a8dadf388ba0550f6b0e8c"
+    },
+    "sharedCatalog": {
+      "path": "app/core/ui-copy.js",
+      "prefix": "admin.pricing.editor",
+      "gitBlob": "6976383ddfdf580b398125fc29f83ff5e05fca90"
+    },
+    "browserContracts": [
+      {
+        "path": "tests/admin-hierarchy-browser.cjs",
+        "gitBlob": "12e9479ce560ecb04898d595ae5241353f529a45"
+      },
+      {
+        "path": "app/tools/test-core.js",
+        "gitBlob": "1f16798d436ed58107a25d2069fab285eb8cfab4"
+      }
+    ],
+    "generatedPrimaryPageManifest": {
+      "path": "architecture/generated/primary-pages.manifest.json",
+      "gitBlob": "2584a3544b0ba91fe3c8078b00de516a70b65306"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "fc5f6fc702133d4018f478b45b6a2d04c463ee2f",
+      "status": "candidate-unreviewed",
+      "summary": {
+        "entries": 1004,
+        "unreviewedOccurrences": 1004,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "pullRequest": {
+      "number": 537,
+      "head": "c16393ef1d729e4775807cf9066ddf5cf4d53b3d",
+      "mergeMethod": "squash",
+      "mergeSha": "3a6f132eb5179a7a3dc8d1d276cdd4b83d9cb4bc"
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        { "name": "Mobile browser (local V5; protected preview separately gated)", "id": 45995542932 },
+        { "name": "Current asset gates", "id": 45995542805 },
+        { "name": "Admin hierarchy browser", "id": 45995542485 },
+        { "name": "Development CP-PUBLIC-03a authorization boundary (offline)", "id": 45995542473 },
+        { "name": "Development CSS-00 read-only baseline", "id": 45995542698 },
+        { "name": "Summary pricing browser (local V5; protected preview separately gated)", "id": 45995542606 },
+        { "name": "Stone browser (local V5; protected preview separately gated)", "id": 45995542614 },
+        { "name": "Viewer base-price publication contract (no Netlify deploy)", "id": 45995542474 },
+        { "name": "Current variant fidelity", "id": 45995542647 },
+        { "name": "Development test impact plan (advisory)", "id": 45995542529 },
+        { "name": "ARC-13 inventory provenance and determinism", "id": 45995542680 },
+        { "name": "App build purity", "id": 45995542353 }
+      ]
+    },
+    "readback": {
+      "development": "3a6f132eb5179a7a3dc8d1d276cdd4b83d9cb4bc",
+      "main": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+    }
+  },
+  "decision": {
+    "rationale": "Move fixed pricing-control accessible-name templates and the fixed type-switch reset notice into the existing shared Admin pricing editor catalog. Preserve exact wording, dynamic product labels, price data, and all existing unit-switch semantics.",
+    "catalogKeys": [
+      "admin.pricing.editor.typeAriaLabel",
+      "admin.pricing.editor.valueAriaLabel",
+      "admin.pricing.editor.typeChangedResetNotice"
+    ],
+    "resolvedCandidateIdsAreFrom": "The exact pre-change ARC-13 inventory blob above. The regenerated inventory is separately pinned; all its 1,004 occurrences remain candidate-unreviewed."
+  },
+  "state": {
+    "consumers": [
+      "Admin pricing type selector aria-label",
+      "Admin pricing value input aria-label",
+      "Admin pricing type-switch reset notice"
+    ],
+    "meaning": "The selector and value control compose their accessible names from fixed catalog templates plus the existing dynamic item label. The post-switch notice communicates the existing zero-reset behavior.",
+    "preservedContracts": [
+      "Switching amount and percentage types continues to reset values instead of implicitly converting units.",
+      "Percentage basis, displayed units, pricing rules, save and persistence flow, publication guard, and commercial disclaimer are unchanged.",
+      "Dynamic product labels, account data, and commercial data remain outside the UI copy catalog.",
+      "Only development was updated; main remains unchanged."
+    ]
+  },
+  "validation": {
+    "passed": [
+      "Primary-page compiler --check passed before the final test-only correction; the correction did not alter page-authoring inputs.",
+      "ARC-13 inventory generation passed deterministically on the exact final PR head: 1,004 unreviewed occurrences, 0 JavaScript parse errors, 0 unassigned owner/route sites, and 0 unresolved primary-page mappings.",
+      "All 12 applicable GitHub workflows passed on exact final PR head c16393ef1d729e4775807cf9066ddf5cf4d53b3d.",
+      "The squash merge succeeded with expected head pinned; live readback confirms development at the merge SHA and main unchanged at the recorded SHA."
+    ]
+  },
+  "limits": [
+    "This receipt covers only the named pricing-control copy family; LOC-006, ARC-13 review, and the 125-ID plan remain partial.",
+    "All 1,004 ARC-13 occurrences remain candidate-unreviewed; this receipt does not approve or globally reconcile them.",
+    "No hosted authenticated Admin, Netlify deployment, Supabase preview, or Production behavior is inferred."
+  ]
+}
