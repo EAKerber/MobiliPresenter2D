@@ -38,6 +38,7 @@ const publicationCopy = uiCopy.admin.publication;
 const adminShellCopy = uiCopy.admin.shell;
 const adminLoadCopy = uiCopy.admin.loadState;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
+const pricingEditorCopy = uiCopy.admin.pricing.editor;
 let catalogPricing = null;
 let adminDataPromise = null;
 let adminViewRun = 0;
@@ -122,13 +123,8 @@ const pricingRoles = [
   ["globalAdjustment", "Adicionais globais"]
 ];
 
-const pricingTypeLabels = Object.freeze({
-  amount: "Valor fixo",
-  percentage: "Percentual"
-});
-const pricingBasisLabels = Object.freeze({
-  "eligible-module-base": "Base: valor base de cada módulo elegível"
-});
+const pricingTypeLabels = pricingEditorCopy.typeLabels;
+const pricingBasisLabels = pricingEditorCopy.basisLabels;
 
 function setMessage(element, message, kind = "") {
   element.textContent = message;
