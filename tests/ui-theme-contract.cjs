@@ -24,6 +24,7 @@ assert.equal(copy.theme.toggle.title, "Tema: {current} (próximo: {next})");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
   open: "Abrir menu", close: "Fechar menu"
 });
+assert.equal(copy.navigation.logout, "Sair");
 assert.equal(copy.navigation.contact, "Fale conosco");
 assert.equal(copy.navigation.contactAriaLabel, "Fale conosco pelo WhatsApp");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.video.fullscreen)), {
@@ -136,6 +137,7 @@ assert(publicMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)'
   publicMenuCode.includes('open ? "Fechar menu" : "Abrir menu"'), "public menu uses shared semantic keys with predictable fallback");
 assert(privateMenuCode.includes('getCopy("navigation.menu." + copyKey, fallback)') &&
   privateMenuCode.includes('open ? "Fechar menu" : "Abrir menu"'), "private menu shares menu keys and fallback behavior");
+assert(privateMenuCode.includes('copy("navigation.logout", "Sair")'), "private logout label uses the canonical catalog with a local fallback");
 assert(code.includes("function getCopy(path, fallback)") &&
   code.includes('COPY.schema !== COPY_SCHEMA') &&
   code.includes('typeof value === "string"'), "catalog resolver detects invalid schema and missing/non-string keys");
@@ -143,7 +145,11 @@ for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/
   assert(read(file).includes("header-menu.js?v=arc13-loc003-copy-1"), file + " busts the old public menu controller cache");
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
-  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc003-copy-1"), file + " busts the old private menu bundle cache");
+  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc006-private-logout-copy-1"), file + " busts the old private menu bundle cache");
+  assert(read(file).includes("ui-copy.js?v=arc13-loc006-private-logout-copy-1"), file + " busts the old shared copy catalog cache");
+}
+for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html"]) {
+  assert(read(file).includes(`id="logoutButton" class="private-menu__logout" type="button" hidden>${copy.navigation.logout}</button>`), file + " keeps the catalog-matched no-JavaScript logout fallback");
 }
 for (const file of [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html", "app/viewer/index.html",

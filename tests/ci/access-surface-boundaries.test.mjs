@@ -414,7 +414,8 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   }[selector] || null);
   menu.querySelector = (selector) => selector === "[data-private-links]" ? privateLinks : FakeElement.prototype.querySelector.call(menu, selector);
   const location = { pathname: "/admin.html", origin: "https://site.test", assign(value) { this.assigned = value; } };
-  const window = { location };
+  const copyLookups = [];
+  const window = { location, CASA_UI_THEME: { getCopy(key, fallback) { copyLookups.push([key, fallback]); return fallback; } } };
   let authCallback;
   let sessionResponse = { authenticated: false };
   let deferredSessionResolve = null;
@@ -470,6 +471,7 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   assert.ok(privateHrefs().includes("/access/manage.html"), "late anonymous lookup cannot overwrite a newer admin state");
 
   const logoutButton = menu.buttons.find((button) => button.textContent === "Sair");
+  assert.ok(copyLookups.some(([key, fallback]) => key === "navigation.logout" && fallback === "Sair"), "private logout uses the canonical copy key and safe fallback");
   await logoutButton.dispatch("click");
   assert.equal(fetchCalls.some((call) => call.url === "/api/access/session/logout"), true);
   assert.equal(logoutCalls, 1);
