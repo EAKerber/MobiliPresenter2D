@@ -418,7 +418,7 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   const window = { location, CASA_UI_THEME: { getCopy(key, fallback) { copyLookups.push([key, fallback]); return fallback; } } };
   let authCallback;
   let sessionResponse = { authenticated: false };
-  let deferredSessionResolve = null;
+  let deferredSessionResolve = () => {};
   let logoutCalls = 0;
   const fetchCalls = [];
   const fetchImpl = async (url, options) => {
@@ -442,8 +442,18 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   const privateHrefs = () => privateLinks.links.map((link) => link.href);
   const privateLabels = () => privateLinks.links.map((link) => link.textContent);
   const groupHeadings = () => privateLinks.children.map((group) => group.children[0]?.textContent);
+  const accessNote = () => privateLinks.children[0]?.find((node) => node.tagName === "p");
+  const assertAccessStateLookup = (key, fallback) => assert.ok(copyLookups.some(([lookedUpKey, lookedUpFallback]) =>
+    lookedUpKey === `navigation.privateAccessState.${key}` && lookedUpFallback === fallback), `private access state resolves catalog key ${key}`);
+  assert.equal(accessNote()?.textContent, "Verificando acesso…");
+  assertAccessStateLookup("loading", "Verificando acesso…");
+  deferredSessionResolve();
+  await new Promise((resolve) => setImmediate(resolve));
+  deferredSessionResolve = null;
   assert.deepEqual(groupHeadings(), ["Páginas privadas", "Páginas públicas"]);
   assert.ok(privateHrefs().includes("/admin.html"), "anonymous menu offers entry to administration");
+  assert.equal(privateLabels().find((label) => label === "Entrar na administração"), "Entrar na administração");
+  assertAccessStateLookup("anonymousAdminEntry", "Entrar na administração");
 
   authCallback("login", { id: "admin-1", app_metadata: { roles: ["admin"] }, email: "admin@example.test" });
   assert.ok(privateHrefs().includes("/config/"));
@@ -470,7 +480,8 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   assert.equal(privateHrefs().includes("/admin.html"), false, "staff menu does not expose the administrator-only page");
   authCallback("login", { id: "buyer-1", roles: ["buyer"], email: "buyer@example.test" });
   assert.equal(privateHrefs().includes("/config/"), false);
-  assert.ok(privateLinks.children.some((node) => node.textContent.includes("não tem acesso")));
+  assert.equal(accessNote()?.textContent, "Esta conta não tem acesso às páginas de gestão.");
+  assertAccessStateLookup("denied", "Esta conta não tem acesso às páginas de gestão.");
 
   sessionResponse = { authenticated: true, email: "temporary@example.test", accessType: "temporary" };
   authCallback("logout", null);
