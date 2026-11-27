@@ -426,9 +426,14 @@
           "source": "Product PR #530 exact-ref workflow inventory run #45909076162",
           "sha": "62d3b0058cb860c9c12ff48185988b4eeefd2134",
           "detail": "The plan and inventory jobs passed on this exact candidate head. Artifact 15159680969 (sha256:a3524558e81e40d485ade29601d5551a07c4b243c5a463a4ed560156b3d4f930) records main@ecaa38cf0be54e8d586458a86d1062b90c0b9691/tree 45dafef8c70e8421a360a044b71ee96b03737f8a, development@ca9be99f1ea3a3e89a1c9588ae32cdeaf75d8860/tree 7eaeddb1c78b3bf4af025957d385a2d309bc4131, and candidate PR #530/tree 1bc6a246c9347967134b2f83e92a53803c42cd1c. The readback included draft #517 based on stale development@f864fed. Inventory summary: 28 main workflows, 65 development workflows, 26 shared, 85 unique definitions, 0 parser warnings and 0 candidate workflow changes. The generated inventory is current for these exact refs; the separate 21-command/21-workflow assertion and contract audit remains open."
+        },
+        {
+          "source": "Product PR #562 exact-head gates and TST-001 artifact #46084847131",
+          "sha": "3b65a0215e80e3c5c8dfae05f53679755c864bf7",
+          "detail": "At exact main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development base@647f4791c4e980d205942a5da48d3256f5d4f517, run #46084847131 generated and uploaded artifact #15238627077 (sha256:eff3dc646b8c36fd6476160fda61a2af36bf28364ff76a19bd2ea36bdbdb6bc3), preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-27-run-46084847131.json. Inventory: 28 main workflows, 65 development workflows, 26 shared, 2 main-only, 39 development-only, 67 path definitions, 86 unique definitions, zero parser warnings; candidate PR #562 changes one workflow. Inventory and plan jobs passed; app build/test passed with the development UI theme contract added to npm test. This proves workflow-definition inventory and exact changed-path reachability, not the separate command-to-assertion-to-contract/results crosswalk."
         }
       ],
-      "nextAction": "The exact-ref workflow inventory was generated and preserved for PR #530 against main@ecaa38c and development@ca9be99. Continue the separate 21-command/21-workflow command→assertion→contract/result audit, identifying reachable gate coverage; generation alone does not close TST-001."
+      "nextAction": "Complete the current command-to-assertion-to-contract/result crosswalk across the exact workflow inventory; treat the historical 21/21 baseline as historical and reconcile any remaining main/development coverage differences without copying triggers wholesale."
     },
     {
       "order": 20,
