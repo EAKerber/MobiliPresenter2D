@@ -106,6 +106,11 @@ document.querySelectorAll("[data-admin-shell-alt]").forEach((element) => {
   if (typeof value === "string") element.setAttribute("alt", value);
 });
 
+document.querySelectorAll("[data-admin-materials-copy]").forEach((element) => {
+  const value = element.dataset.adminMaterialsCopy.split(".").reduce((current, key) => current?.[key], materialAvailabilityCopy.librarySection);
+  if (typeof value === "string") element.textContent = value;
+});
+
 
 function configuredHierarchyItemLabel(itemId) {
   for (const stage of Object.values(hierarchyDefaults?.stages || {})) {
