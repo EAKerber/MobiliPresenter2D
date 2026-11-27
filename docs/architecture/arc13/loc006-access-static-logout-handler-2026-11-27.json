@@ -1,0 +1,100 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": ["LOC-006"],
+  "family": "access-static-logout-handler",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "existing-shared-behavior-wiring",
+    "subsystemOwner": "shared/private-navigation logout handler",
+    "contentOwner": "Product; existing label and routes preserved",
+    "authority": "Connect only the existing /access/ static logout button to the established shared handler. Preserve the page-owned /access/manage and /admin handlers and the /config dynamic handler.",
+    "routeConsumers": ["/access/"],
+    "behavior": "POST the same-origin temporary-session revocation endpoint, close Identity when present, then assign the public root route.",
+    "candidateIdAfterSourceUpdate": "da01a5065fb39830"
+  },
+  "evidence": {
+    "baseRevision": "934adccfdfe979dd38da2ea0c12aeabdd76c49b4",
+    "implementationRevision": "e4ea4d4188c8e6e7ba83ce0fa54fa98c505243f8",
+    "integrationRevision": "b1aaffbf72f6319a4c3442bbe28e47ba4d87b25e",
+    "pullRequest": {
+      "number": 549,
+      "base": "development",
+      "head": "e4ea4d4188c8e6e7ba83ce0fa54fa98c505243f8",
+      "mergeMethod": "squash",
+      "mergeSha": "b1aaffbf72f6319a4c3442bbe28e47ba4d87b25e"
+    },
+    "sourceBlobs": {
+      "app/access/index.html": "4d304a9db909f58afcec42bfb4523e6fe6c8a6c2",
+      "tests/ci/access-surface-boundaries.test.mjs": "9f2983290cf7c7e525c4b9749e1c1bd2f215f36b",
+      "tests/ui-theme-contract.cjs": "122426ff1ca58b4a97ebf4966570ec072963952c"
+    },
+    "candidate": {
+      "path": "app/access/index.html",
+      "line": 33,
+      "expression": "Sair",
+      "id": "da01a5065fb39830",
+      "sourceSha256": "93f899fd7cf5664ae91496f9b91e7e08d0cafab370dbc15d1c055f51df63fda6",
+      "status": "unreviewed-occurrence; bounded family reviewed in this receipt"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "3c2990a1c599c7d02dbdcae0dac3922b05e31ed9",
+      "sha256": "eb21c78765acc93f29034ae972c0d6bcbf40e8437799ae6c7c924540a1355bb0",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "unreviewedOccurrences": 1007,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "exactHeadGates": {
+      "head": "e4ea4d4188c8e6e7ba83ce0fa54fa98c505243f8",
+      "status": "11 successful Actions workflow runs; 13 successful check jobs",
+      "runs": [
+        {"name": "Summary pricing browser (local V5; protected preview separately gated)", "id": 46009743428},
+        {"name": "Development CP-PUBLIC-03a authorization boundary (offline)", "id": 46009743105},
+        {"name": "ARC-13 inventory provenance and determinism", "id": 46009742887},
+        {"name": "Development test impact plan (advisory)", "id": 46009742751},
+        {"name": "Mobile browser (local V5; protected preview separately gated)", "id": 46009743075},
+        {"name": "Stone browser (local V5; protected preview separately gated)", "id": 46009743094},
+        {"name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)", "id": 46009742822},
+        {"name": "Current asset gates", "id": 46009742823},
+        {"name": "App build purity", "id": 46009742697},
+        {"name": "Development CSS-00 read-only baseline", "id": 46009742753},
+        {"name": "Current variant fidelity", "id": 46009743064}
+      ],
+      "externalChecks": [
+        {"name": "Supabase Preview", "status": "skipped", "reason": "This branch has no associated Supabase Preview branch."}
+      ],
+      "note": "The CP-PUBLIC workflow run contains both the authorization-contract and access-session-browser jobs; the test-impact workflow contains plan and inventory jobs. These produce 13 successful check jobs across 11 Actions runs, excluding the skipped Supabase check."
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "sharedHandlerReused": true,
+    "staticControlNowMarkedForSharedHandler": true,
+    "otherRouteHandlersChanged": false,
+    "identityOrRoleBehaviorChanged": false,
+    "temporarySessionEndpointChanged": false,
+    "routeRedirectsChanged": false,
+    "networkFailureSemanticsChanged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "focusedBoundary": "An existing static button with a verified temporary session becomes visible; clicking it issues the same-origin revoke POST, invokes Identity logout if present, and redirects to `/`.",
+    "singleHandlerOwnership": "The static marker is assigned only on /access/; /access/manage and /admin retain page-owned listeners, while /config continues to create a shared dynamically handled button.",
+    "priorFailure": "The first submitted head omitted the regenerated ARC-13 source hash for the changed HTML. The inventory was regenerated twice deterministically and the final exact head passed its reproducibility gate."
+  },
+  "independentReview": {
+    "result": "P1 inert static control repaired; behavior scope bounded",
+    "reviewer": "ARC-03C gate/common-sense review agent",
+    "notes": "Before the fix, the authenticated or temporary-session menu could reveal the /access/ button without any listener. access.js had no logout listener; the shared module only attached to elements marked data-private-logout. /access/manage and /admin have their own listeners and /config creates a shared handled button. The existing boundary gate previously covered only the created-button path; this PR added the static-button path."
+  },
+  "nextAction": "Review the failure mode where a temporary-session revoke POST cannot reach the function: current page handlers continue Identity logout and redirect, so the temporary cookie may remain usable until expiry. Choose and test a fail-safe user-visible outcome without changing auth, role, or route policy. Keep LOC-006 partial and ARC-13 globally unreviewed."
+}
