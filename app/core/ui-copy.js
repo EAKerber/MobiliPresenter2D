@@ -30,6 +30,7 @@
       }),
       privateAccessState: Object.freeze({
         loading: "Verificando acesso…",
+        lookupFailure: "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.",
         anonymousAdminEntry: "Entrar na administração",
         denied: "Esta conta não tem acesso às páginas de gestão."
       }),
