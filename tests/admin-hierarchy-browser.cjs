@@ -244,6 +244,12 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await page.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
   await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
 
+  const loadStateCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.loadState);
+  assert.equal(await page.locator("#revisionLabel").textContent(), loadStateCopy.revisionLabel.replace("{revision}", String(current.revision || 1)),
+    "revision label uses the shared Admin load-state catalog");
+  assert.equal(await page.locator("#saveMessage").textContent(), loadStateCopy.hierarchyDraftLoaded,
+    "legacy v3 settings are identified as a hierarchy draft");
+
   const shellCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.shell);
   assert.deepEqual(shellCopy, {
     documentTitle: "Administração — Casa em Módulos",
@@ -1002,6 +1008,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   lastPut = null;
   await page.reload({ waitUntil: "networkidle" });
   await page.waitForFunction(() => !document.getElementById("persistHandlesButton").hidden);
+  assert.equal(await page.locator("#saveMessage").textContent(), loadStateCopy.handlesRepairNeeded,
+    "v3 handle repair shows its catalog-backed published-state guidance");
   await page.locator("#persistHandlesButton").click();
   await page.waitForFunction(() => document.getElementById("saveMessage").textContent.includes("v3 publicado"));
   assert.equal(await page.locator("#saveMessage").textContent(), adminPublicationCopy.handlesPersisted, "isolated handle persistence consumes the shared publication copy");
