@@ -98,7 +98,7 @@ const { chromium } = require("playwright");
     "stacked PiP opens above the persistent bottom dock");
   const stackedWidthBefore = (await stackedCard.boundingBox()).width;
   await stackedPage.locator("#mobileSceneResize").click();
-  assert.equal(await stackedPage.locator("#configurationAnnouncement").textContent(), miniSceneStatusCopy.size.medium,
+  assert.equal(await stackedPage.locator("#configurationAnnouncement").textContent(), miniSceneStatusCopy.size.large,
     "resize status matches the catalog");
   await stackedPage.waitForTimeout(50);
   const stackedAfterResize = await stackedCard.boundingBox();
