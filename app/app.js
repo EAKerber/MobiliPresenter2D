@@ -1,6 +1,11 @@
 (function startConfigurator(global) {
   "use strict";
 
+  function uiCopy(path, fallback) {
+    const theme = global.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function" ? theme.getCopy(path, fallback) : fallback;
+  }
+
   let scene = structuredClone(global.CASA_EM_MODULOS_SCENE);
   const inlineMasks = global.CASA_EM_MODULOS_MASK_DATA;
   const core = global.CasaModulesCore;
@@ -100,6 +105,7 @@
   const stonePackageOptions = document.getElementById("stonePackageOptions");
   const stoneSkirtingToggle = document.getElementById("stoneSkirtingToggle");
   const viewerCard = document.getElementById("viewerCard");
+  const viewerPipControls = document.querySelector(".viewer-pip-controls");
   const viewerAnchor = document.getElementById("viewerAnchor");
   const viewerPinSentinel = document.getElementById("viewerPinSentinel");
   const mobileScenePin = document.getElementById("mobileScenePin");
@@ -107,6 +113,16 @@
   const mobileSceneResize = document.getElementById("mobileSceneResize");
   const mobileSceneResizeHandle = document.getElementById("mobileSceneResizeHandle");
   const mobileSceneRepin = document.getElementById("mobileSceneRepin");
+  if (viewerCard) viewerCard.setAttribute("aria-label", uiCopy("configurator.miniScene.viewerLabel", "Visualização da cozinha"));
+  if (viewerPipControls) viewerPipControls.setAttribute("aria-label", uiCopy("configurator.miniScene.controlsLabel", "Controles da mini-cena"));
+  if (mobileSceneTransparency) {
+    mobileSceneTransparency.setAttribute("aria-label", uiCopy("configurator.miniScene.transparency", "Alternar transparência"));
+    mobileSceneTransparency.title = uiCopy("configurator.miniScene.transparency", "Alternar transparência");
+  }
+  if (mobileSceneResize) {
+    mobileSceneResize.setAttribute("aria-label", uiCopy("configurator.miniScene.resize.ariaLabel", "Alterar tamanho da mini-cena"));
+    mobileSceneResize.title = uiCopy("configurator.miniScene.resize.title", "Alterar tamanho");
+  }
   const flowNav = document.querySelector(".flow-nav");
   const flowActions = document.querySelector(".flow-actions");
   const stagePanels = new Map([
@@ -2050,8 +2066,12 @@
     }
     if (mobileScenePin) {
       mobileScenePin.setAttribute("aria-pressed", String(mobileScenePinEnabled));
-      mobileScenePin.setAttribute("aria-label", mobileScenePinEnabled ? "Liberar cena" : "Fixar cena");
-      mobileScenePin.title = mobileScenePinEnabled ? "Liberar cena" : "Fixar cena";
+      const pinLabel = uiCopy(
+        mobileScenePinEnabled ? "configurator.miniScene.pin.release" : "configurator.miniScene.pin.pin",
+        mobileScenePinEnabled ? "Liberar cena" : "Fixar cena"
+      );
+      mobileScenePin.setAttribute("aria-label", pinLabel);
+      mobileScenePin.title = pinLabel;
     }
     if (mobileSceneTransparency) {
       mobileSceneTransparency.setAttribute("aria-pressed", String(mobileSceneTransparent));

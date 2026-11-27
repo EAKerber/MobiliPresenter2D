@@ -27,6 +27,29 @@ const { chromium } = require("playwright");
     await stackedPage.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
   }
   await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
+  const miniSceneCopy = await stackedPage.evaluate(() => window.CASA_UI_COPY.configurator.miniScene);
+  const miniSceneLabels = await stackedPage.evaluate(() => ({
+    viewerLabel: document.getElementById("viewerCard").getAttribute("aria-label"),
+    controlsLabel: document.querySelector(".viewer-pip-controls").getAttribute("aria-label"),
+    controlsRole: document.querySelector(".viewer-pip-controls").getAttribute("role"),
+    pin: document.getElementById("mobileScenePin").getAttribute("aria-label"),
+    pinTitle: document.getElementById("mobileScenePin").title,
+    transparency: document.getElementById("mobileSceneTransparency").getAttribute("aria-label"),
+    transparencyTitle: document.getElementById("mobileSceneTransparency").title,
+    resize: document.getElementById("mobileSceneResize").getAttribute("aria-label"),
+    resizeTitle: document.getElementById("mobileSceneResize").title
+  }));
+  assert.deepEqual(miniSceneLabels, {
+    viewerLabel: miniSceneCopy.viewerLabel,
+    controlsLabel: miniSceneCopy.controlsLabel,
+    controlsRole: "group",
+    pin: miniSceneCopy.pin.release,
+    pinTitle: miniSceneCopy.pin.release,
+    transparency: miniSceneCopy.transparency,
+    transparencyTitle: miniSceneCopy.transparency,
+    resize: miniSceneCopy.resize.ariaLabel,
+    resizeTitle: miniSceneCopy.resize.title
+  }, "mini-scene accessible names and titles match the canonical catalog");
   assert.equal(await stackedPage.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "stacked",
     "1050px resolves through the canonical stacked profile");
   assert.equal(await stackedPage.evaluate(() => document.documentElement.dataset.layoutProfile), "stacked",
@@ -106,6 +129,10 @@ const { chromium } = require("playwright");
   await stackedPage.waitForFunction(() => window.CASA_EM_MODULOS_DEBUG.getState().selectedEntityId === null);
   await stackedPage.locator("#mobileScenePin").focus();
   await stackedPage.locator("#mobileScenePin").click();
+  assert.equal(await stackedPage.locator("#mobileScenePin").getAttribute("aria-label"), miniSceneCopy.pin.pin,
+    "the unpinned action name matches the catalog");
+  assert.equal(await stackedPage.locator("#mobileScenePin").getAttribute("title"), miniSceneCopy.pin.pin,
+    "the unpinned title matches the catalog");
   await stackedPage.waitForFunction(() =>
     !document.body.classList.contains("is-mobile-scene-pinned")
     && !document.getElementById("mobileSceneRepin").hidden
