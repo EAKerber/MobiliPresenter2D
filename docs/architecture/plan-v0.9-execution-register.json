@@ -2419,9 +2419,14 @@
           "source": "Product PR #549 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-access-static-logout-handler-2026-11-27.json",
           "sha": "b1aaffbf72f6319a4c3442bbe28e47ba4d87b25e",
           "detail": "The authenticated/temporary-session /access/ menu previously exposed a static logout button without a listener. The HTML now opts that one button into the shared handler; /access/manage and /admin retain their page-owned handlers, and /config still creates its own shared-handled control. The focused boundary covers a pre-existing static button, temporary-session revocation POST, Identity logout, and / redirect. The final exact PR head passed 11 Actions workflow runs (13 successful check jobs); Supabase Preview was skipped because there is no associated branch. ARC-13 was regenerated twice deterministically at 1,007 globally unreviewed occurrences, 0 parser errors, unassigned owner/route sites, or unresolved primary-page mappings. Squash-integrated into development at this SHA; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #551 exact-head gates and development readback; family receipt docs/architecture/arc13/loc006-temporary-logout-retry-2026-11-27.json",
+          "sha": "24c99bba8d08b0b4e35a96094b58bafb9b9b6a48",
+          "detail": "For temporary-session logout only, a transport or unsuccessful non-503 revoke response now leaves the session active, shows a generic accessible retry message, and avoids false success. A successful retry revokes and redirects; HTTP 503 continues logout because the function expires the cookie. Identity logout behavior and page-owned /admin and /access/manage controls are unchanged. Exact head 0e15c2290334a84520b5c3fc41594d05196a82f5 passed 14 Actions runs with 17 successful check jobs; Supabase Preview and one protected-preview browser job were skipped for unavailable external preview setup. ARC-13 generation repeated deterministically at 1,008 candidates, 0 parse errors, 0 unassigned owner/route sites, 420 mapped primary-page occurrences and 0 unresolved. Squash-integrated into development at 24c99bba8d08b0b4e35a96094b58bafb9b9b6a48; live main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial and global ARC-13 review remains open."
         }
       ],
-      "nextAction": "Review the failure mode where a temporary-session revoke POST cannot reach the function: current page handlers continue Identity logout and redirect, so the temporary cookie may remain usable until expiry. Choose and test a fail-safe user-visible outcome without changing auth, role, or route policy. Keep LOC-006 partial and ARC-13 globally unreviewed."
+      "nextAction": "Continue LOC-006 with the next bounded private-navigation copy family: review private menu headings and role-gated route labels separately from authentication-state and error messages. Keep the global ARC-13 inventory unreviewed until occurrence-level dispositions are complete."
     },
     {
       "order": 107,

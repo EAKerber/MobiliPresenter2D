@@ -1,0 +1,175 @@
+{
+  "schema": "ARC13LOC002FamilyReview/1",
+  "plan": "MobiliPresenter2D Plano Diretor v0.9",
+  "workItems": [
+    "LOC-006"
+  ],
+  "family": "temporary-session-logout-retry",
+  "status": "integrated-development",
+  "decision": {
+    "classification": "temporary-session-failure-boundary",
+    "subsystemOwner": "shared private-navigation logout handler",
+    "contentOwner": "Product; generic retry message added to the canonical pt-BR UI copy catalog",
+    "authority": "For a temporary session, do not claim logout succeeded when the same-origin revoke request cannot be completed. Preserve normal Identity logout behavior and existing page-owned controls. The endpoint's 503 response expires the cookie and is treated as completed revocation.",
+    "routeConsumers": [
+      "/access/",
+      "/config/"
+    ],
+    "behavior": "A transport failure or other non-503 unsuccessful response retains the temporary session, shows an accessible generic retry message, and re-enables the control. A subsequent successful retry revokes the session and returns to the public root. Identity sessions keep the previous logout behavior. /access/manage and /admin page-owned handlers remain unchanged.",
+    "candidateIdAfterSourceUpdate": "900a0276eaa60788"
+  },
+  "evidence": {
+    "baseRevision": "e3c363c19ef55daf93ff409634446826f9991cfa",
+    "implementationRevision": "0e15c2290334a84520b5c3fc41594d05196a82f5",
+    "integrationRevision": "24c99bba8d08b0b4e35a96094b58bafb9b9b6a48",
+    "pullRequest": {
+      "number": 551,
+      "base": "development",
+      "head": "0e15c2290334a84520b5c3fc41594d05196a82f5",
+      "mergeMethod": "squash",
+      "mergeSha": "24c99bba8d08b0b4e35a96094b58bafb9b9b6a48"
+    },
+    "sourceBlobs": {
+      "app/core/private-navigation.js": "28eaf6038842b46d4e6fb80138d6c16477101e88",
+      "app/core/ui-copy.js": "81f300ae52f44cb730d645e8083c217cd6ffa111",
+      "app/access/index.html": "67e4b6fb09ba60dc2f381c2c3ec805add8df6d83",
+      "app/access/manage.html": "91efb51af45117e9eb533ca28742c28b50ad1182",
+      "app/admin.html": "db57821e8e7849bec567923aad6436e9627fb543",
+      "app/config/index.html": "2978cfb726f476577aa320e9577d7a0632fd69f8c",
+      "tests/ci/access-surface-boundaries.test.mjs": "1fa570b5d6ee862c37071b52e5b208a75e0331eb",
+      "tests/ui-theme-contract.cjs": "15479cfb726d1ba6d4831007d49da4002360abea",
+      "architecture/arc13/ui-text-candidates.json": "7737cfb4caff4b3b495a1b84b15cc9c075529381",
+      "architecture/generated/primary-pages.manifest.json": "95c7c861437c44b037f430b8e663891869008444"
+    },
+    "candidate": {
+      "path": "app/core/private-navigation.js",
+      "line": 64,
+      "expression": "copy(\"navigation.logoutFailure\", \"Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.\")",
+      "id": "900a0276eaa60788",
+      "sourceSha256": "ce797be541492f1524940c3abc335fedf5d23b95baf8039755367feaacb1732b",
+      "status": "unreviewed-occurrence; behavior reviewed in this bounded receipt"
+    },
+    "generatedInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "gitBlob": "7737cfb4caff4b3b495a1b84b15cc9c075529381",
+      "sha256": "67f08f7d288c5e5c97c3d0ff978ee1b8b825d10f4713750cdd16a5f7867a3b1f",
+      "status": "candidate-unreviewed",
+      "deterministicRuns": 2,
+      "summary": {
+        "unreviewedOccurrences": 1008,
+        "javascriptParseErrors": 0,
+        "unassignedOwnerSites": 0,
+        "unassignedRouteSites": 0,
+        "primaryPageAuthoringMappedOccurrences": 420,
+        "primaryPageAuthoringUnresolvedOccurrences": 0
+      }
+    },
+    "exactHeadGates": {
+      "head": "0e15c2290334a84520b5c3fc41594d05196a82f5",
+      "status": "14 Actions workflow runs; 17 successful check jobs; 2 checks skipped",
+      "successfulRuns": [
+        {
+          "name": "Development 13 — Viewer NAV005 newer-intent semantic reconciliation (offline)",
+          "id": 46012747296
+        },
+        {
+          "name": "Configuration endpoint authorization boundaries",
+          "id": 46012747404
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 46012747560
+        },
+        {
+          "name": "Current variant fidelity",
+          "id": 46012747315
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 46012747890
+        },
+        {
+          "name": "Mobile browser (local V5; protected preview separately gated)",
+          "id": 46012747274
+        },
+        {
+          "name": "Summary pricing browser (local V5; protected preview separately gated)",
+          "id": 46012747436
+        },
+        {
+          "name": "Stone browser (local V5; protected preview separately gated)",
+          "id": 46012747540
+        },
+        {
+          "name": "Viewer base-price publication contract (no Netlify deploy)",
+          "id": 46012747726
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 46012747558
+        },
+        {
+          "name": "Public routing before Clerk",
+          "id": 46012747492
+        },
+        {
+          "name": "App build purity",
+          "id": 46012747277
+        },
+        {
+          "name": "Current asset gates",
+          "id": 46012748036
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 46012747533
+        }
+      ],
+      "successfulJobs": [
+        "source-and-browsers",
+        "configuration-boundaries",
+        "css-00-readback",
+        "variants",
+        "inventory x2",
+        "browser jobs x4",
+        "price-contract",
+        "authorization-contract",
+        "access-session-browser",
+        "static-and-contract",
+        "current-build",
+        "current-asset-gates",
+        "plan"
+      ],
+      "skippedChecks": [
+        {
+          "name": "Supabase Preview",
+          "reason": "Preview branches are disabled in project integrations."
+        },
+        {
+          "name": "Public routing browser job",
+          "reason": "No protected preview was associated with the PR; the static-and-contract job passed."
+        }
+      ]
+    },
+    "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691"
+  },
+  "implementation": {
+    "temporaryTransportFailureRetainsSessionAndAllowsRetry": true,
+    "genericAccessibleFailureMessage": true,
+    "http503ContinuesLogoutAfterCookieExpiry": true,
+    "identityLogoutBehaviorChanged": false,
+    "pageOwnedAdminAndAccessManageHandlersChanged": false,
+    "temporarySessionEndpointChanged": false,
+    "authRolesPermissionsOrRoutesChanged": false,
+    "globalInventoryReviewed": false,
+    "mainPromoted": false
+  },
+  "verification": {
+    "focusedBoundary": "The /access/ static logout control now handles a rejected revoke request without hiding the failure: it displays generic status, keeps Identity logout and redirect out of that failure path, and succeeds on retry.",
+    "endpoint503": "The existing access session boundary gate passed; it verifies the function's 503 response expires the temporary-session cookie. The shared UI therefore proceeds on that explicit response.",
+    "identityRegressionBoundary": "Only verified temporary sessions get the fail-safe branch; regular Identity users retain prior logout behavior if the temporary-cookie POST is unreachable.",
+    "independentReview": "Common-sense route review found no change to page-owned /admin or /access/manage handlers, shared /access and /config ownership, or Identity semantics.",
+    "localChecks": "Primary page compiler --build and --check passed. ARC-13 was generated twice with identical SHA-256. Local unit/browser tests were not run; exact-head CI supplied the verification. Local esbuild bundling could not be invoked because dependencies are absent from the isolated checkout; exact-head CI build passed."
+  },
+  "nextAction": "Continue LOC-006 with the next bounded private-navigation copy family: review private menu headings and role-gated route labels separately from authentication-state and error messages. Keep the global ARC-13 inventory unreviewed until occurrence-level dispositions are complete."
+}
