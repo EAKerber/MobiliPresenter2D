@@ -28,6 +28,11 @@
         administration: "Administração",
         manageAccesses: "Gerenciar acessos"
       }),
+      privateAccessState: Object.freeze({
+        loading: "Verificando acesso…",
+        anonymousAdminEntry: "Entrar na administração",
+        denied: "Esta conta não tem acesso às páginas de gestão."
+      }),
       environments: "Ambientes",
       howItWorks: "Como funciona",
       about: "Quem somos",

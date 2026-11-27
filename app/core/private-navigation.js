@@ -123,14 +123,14 @@ if (header) {
       } else if (loading) {
         const note = document.createElement("p");
         note.className = "private-menu__note";
-        note.textContent = "Verificando acesso…";
+        note.textContent = copy("navigation.privateAccessState.loading", "Verificando acesso…");
         privateGroup.append(note);
       } else if (!user) {
-        privateGroup.append(makeLink("/admin.html", "Entrar na administração"));
+        privateGroup.append(makeLink("/admin.html", copy("navigation.privateAccessState.anonymousAdminEntry", "Entrar na administração")));
       } else {
         const note = document.createElement("p");
         note.className = "private-menu__note";
-        note.textContent = "Esta conta não tem acesso às páginas de gestão.";
+        note.textContent = copy("navigation.privateAccessState.denied", "Esta conta não tem acesso às páginas de gestão.");
         privateGroup.append(note);
       }
       const publicGroup = addGroup(copy("navigation.privateMenu.publicPages", "Páginas públicas"), privateLinks, "private-menu__links");
