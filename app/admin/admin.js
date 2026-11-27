@@ -87,7 +87,8 @@ document.querySelectorAll("[data-admin-auth-copy]").forEach((element) => {
 });
 
 function adminShellCopyValue(path) {
-  return path.split(".").reduce((value, key) => value?.[key], adminShellCopy);
+  const root = path.startsWith("brand.") || path.startsWith("navigation.") ? uiCopy : adminShellCopy;
+  return path.split(".").reduce((value, key) => value?.[key], root);
 }
 
 document.querySelectorAll("[data-admin-shell-copy]").forEach((element) => {
@@ -98,6 +99,11 @@ document.querySelectorAll("[data-admin-shell-copy]").forEach((element) => {
 document.querySelectorAll("[data-admin-shell-aria-label]").forEach((element) => {
   const value = adminShellCopyValue(element.dataset.adminShellAriaLabel);
   if (typeof value === "string") element.setAttribute("aria-label", value);
+});
+
+document.querySelectorAll("[data-admin-shell-alt]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellAlt);
+  if (typeof value === "string") element.setAttribute("alt", value);
 });
 
 

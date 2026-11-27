@@ -151,6 +151,12 @@ for (const file of [
 ]) {
   assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
 }
+const adminHeaderFallback = read("app/admin.html");
+assert(adminHeaderFallback.includes(`aria-label="${copy.brand.homeLinkAriaLabel}"`), "Admin keeps the catalog-matched brand-link fallback");
+assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps the catalog-matched logo alternative fallback");
+assert(adminHeaderFallback.includes(`>${copy.brand.logoAlt}</strong>`), "Admin keeps the catalog-matched hidden brand fallback");
+assert(adminHeaderFallback.includes(`>${copy.admin.shell.header.pageName}</small>`), "Admin keeps the catalog-matched page-name fallback");
+assert(adminHeaderFallback.includes(`aria-label="${copy.admin.shell.header.menuLabel}"`), "Admin keeps the catalog-matched menu-landmark fallback");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/access/index.html", "app/access/manage.html",
@@ -163,7 +169,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-shell-copy-1"
+      ? "arc13-loc006-admin-header-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
@@ -185,7 +191,7 @@ assert(!adminCSS.includes(".visually-hidden {") && !configCSS.includes(".visuall
   "route stylesheets do not duplicate the shared utility");
 assert(configCSS.includes(".sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }"),
   "Config-only sr-only utility remains intact");
-assert(read("app/admin.html").includes('<strong class="visually-hidden">Casa em Módulos</strong>'),
+assert(read("app/admin.html").includes('<strong class="visually-hidden" data-admin-shell-copy="brand.logoAlt">Casa em Módulos</strong>'),
   "Admin keeps its visually-hidden brand text");
 assert(read("app/config/index.html").includes('<h1 class="visually-hidden">Casa em Módulos</h1>'),
   "Config keeps a real visually-hidden page heading");

@@ -253,6 +253,7 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const shellCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.shell);
   assert.deepEqual(shellCopy, {
     documentTitle: "Administração — Casa em Módulos",
+    header: { pageName: "Administração", menuLabel: "Menu do site" },
     eyebrow: "Configurador público",
     heading: "Administração do catálogo",
     intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
@@ -268,6 +269,32 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     objectTablistLabel: "Dados do objeto",
     objectTabs: { content: "Conteúdo", assets: "Imagens e máscaras" }
   }, "Admin editor shell copy retains its existing wording");
+  const brandCopy = await page.evaluate(() => window.CASA_UI_COPY.brand);
+  const navigationCopy = await page.evaluate(() => window.CASA_UI_COPY.navigation);
+  assert.equal(await page.locator(".private-header__brand").getAttribute("aria-label"), brandCopy.homeLinkAriaLabel,
+    "Admin brand link accessible name uses the shared brand catalog");
+  assert.equal(await page.locator(".private-header__brand").getAttribute("data-admin-shell-aria-label"), "brand.homeLinkAriaLabel",
+    "Admin brand link declares the shared brand-copy path");
+  assert.equal(await page.locator(".private-header__brand img").getAttribute("alt"), brandCopy.logoAlt,
+    "Admin brand image alternative uses the shared brand catalog");
+  assert.equal(await page.locator(".private-header__brand img").getAttribute("data-admin-shell-alt"), "brand.logoAlt",
+    "Admin brand image declares the shared alternative-text path");
+  assert.equal(await page.locator(".private-header__brand .visually-hidden").textContent(), brandCopy.logoAlt,
+    "Admin hidden brand text uses the shared brand catalog");
+  assert.equal(await page.locator(".private-header__brand .visually-hidden").getAttribute("data-admin-shell-copy"), "brand.logoAlt",
+    "Admin hidden brand text declares the shared brand-copy path");
+  assert.equal(await page.locator(".private-header__page-name").textContent(), shellCopy.header.pageName,
+    "Admin header page name uses the Admin shell catalog");
+  assert.equal(await page.locator(".private-header__page-name").getAttribute("data-admin-shell-copy"), "header.pageName",
+    "Admin header page name declares the Admin shell-copy path");
+  assert.equal(await page.locator("[data-private-menu-toggle]").getAttribute("aria-label"), navigationCopy.menu.open,
+    "Admin private menu starts with its catalog open label");
+  assert.equal(await page.locator("[data-private-menu-toggle]").getAttribute("data-admin-shell-aria-label"), "navigation.menu.open",
+    "Admin private menu toggle declares its shared navigation-copy path");
+  assert.equal(await page.locator("[data-private-menu]").getAttribute("aria-label"), shellCopy.header.menuLabel,
+    "Admin private menu landmark uses the Admin shell catalog");
+  assert.equal(await page.locator("[data-private-menu]").getAttribute("data-admin-shell-aria-label"), "header.menuLabel",
+    "Admin private menu landmark declares the Admin shell-copy path");
   assert.equal(await page.title(), shellCopy.documentTitle, "document title is bound to the Admin shell catalog");
   assert.equal(await page.locator(".admin-heading .eyebrow").textContent(), shellCopy.eyebrow, "editor eyebrow is catalog-backed");
   assert.equal(await page.locator(".admin-heading h1").textContent(), shellCopy.heading, "editor heading is catalog-backed");
