@@ -36,11 +36,17 @@ const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nomin
 const authenticationCopy = uiCopy.admin.authentication;
 const publicationCopy = uiCopy.admin.publication;
 const adminShellCopy = uiCopy.admin.shell;
+const adminLoadCopy = uiCopy.admin.loadState;
 const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
 let catalogPricing = null;
 let adminDataPromise = null;
 let adminViewRun = 0;
 const byId = (id) => document.getElementById(id);
+byId("revisionLabel").textContent = adminLoadCopy.revisionPending;
+
+function setAdminRevisionLabel(revision) {
+  byId("revisionLabel").textContent = adminLoadCopy.revisionLabel.replace("{revision}", String(revision || 1));
+}
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
 const adminServiceError = byId("adminServiceError");
@@ -1391,20 +1397,25 @@ function refreshHandlesRepairState() {
 }
 
 async function loadSettings() {
-  const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-  if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
+  let response;
+  try {
+    response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
+  } catch {
+    throw new Error(adminLoadCopy.configurationLoadFailure);
+  }
+  if (!response.ok) throw new Error(response.status === 404 ? adminLoadCopy.configurationNotPublished : adminLoadCopy.configurationLoadFailure);
   const published = await response.json();
   publishedSource = structuredClone(published);
   model = baselineHierarchyFor(published);
-  byId("revisionLabel").textContent = "Versão " + (model.revision || 1) + " · editor hierárquico";
+  setAdminRevisionLabel(model.revision);
   const repair = refreshHandlesRepairState();
   setMessage(
     saveMessage,
     repair?.ok && repair.needed
-      ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
+      ? adminLoadCopy.handlesRepairNeeded
       : published.schemaVersion === hierarchyCore.SCHEMA
-        ? "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação."
-        : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+        ? adminLoadCopy.version5Loaded
+        : adminLoadCopy.hierarchyDraftLoaded
   );
   renderAdminTabs();
 }
@@ -1667,7 +1678,7 @@ async function showUser(user) {
   } catch (error) {
     if (runId !== adminViewRun) return;
     adminServiceError.hidden = false;
-    setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
+    setMessage(adminServiceError, error.message || adminLoadCopy.adminDataLoadFallback, "error");
     if (error.code === "forbidden") return;
     const retry = document.createElement("button");
     retry.type = "button";
@@ -2039,7 +2050,7 @@ persistHandlesButton.addEventListener("click", async () => {
 
     publishedSource = structuredClone(readback);
     model = baselineHierarchyFor(readback);
-    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setAdminRevisionLabel(model.revision);
     refreshHandlesRepairState();
     renderAdminTabs();
     setMessage(
@@ -2101,7 +2112,7 @@ saveButton.addEventListener("click", async () => {
       }
       publishedSource = structuredClone(readback);
       model = baselineHierarchyFor(readback);
-      byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+      setAdminRevisionLabel(model.revision);
       refreshHandlesRepairState();
       renderAdminTabs();
       setMessage(saveMessage, publicationCopy.hierarchyPublished, "success");
@@ -2157,7 +2168,7 @@ saveButton.addEventListener("click", async () => {
     }
     model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     publishedSource = structuredClone(payload);
-    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setAdminRevisionLabel(model.revision);
     refreshHandlesRepairState();
     setMessage(saveMessage, publicationCopy.compatiblePublished, "success");
     renderAdminTabs();
