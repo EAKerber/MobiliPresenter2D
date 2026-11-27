@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-<script src="/core/ui-copy.js?v=arc13-loc006-admin-shell-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
+<script src="/core/ui-copy.js?v=arc13-loc006-admin-header-copy-1"></script><script src="/core/ui-theme.js?v=arc13-loc003-copy-1"></script>
 <link rel="icon" type="image/x-icon" href="/branding/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/branding/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/branding/android-chrome-192.png">
@@ -16,10 +16,10 @@
 </head>
   <body>
     <header class="admin-topbar private-header" data-private-header>
-      <a class="brand private-header__brand" href="/" aria-label="Casa em Módulos, início"><img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos"><span><strong class="visually-hidden">Casa em Módulos</strong><small class="private-header__page-name">Administração</small></span></a>
+      <a class="brand private-header__brand" href="/" aria-label="Casa em Módulos, início" data-admin-shell-aria-label="brand.homeLinkAriaLabel"><img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos" data-admin-shell-alt="brand.logoAlt"><span><strong class="visually-hidden" data-admin-shell-copy="brand.logoAlt">Casa em Módulos</strong><small class="private-header__page-name" data-admin-shell-copy="header.pageName">Administração</small></span></a>
       <div class="admin-topbar__actions private-header__actions">
-        <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
-        <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" hidden>
+        <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu" data-admin-shell-aria-label="navigation.menu.open"><span></span><span></span><span></span></button>
+        <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" data-admin-shell-aria-label="header.menuLabel" hidden>
           <div data-private-links></div>
           <div class="private-menu__account" data-private-account hidden>
             <p class="private-menu__email" data-private-email hidden></p>
@@ -111,6 +111,6 @@
     <script src="core/legacy-stage-repair.js?v=cp-ux-05a0-v1"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
     <script type="module" src="/core/private-navigation.bundle.js?v=arc13-loc003-copy-1"></script>
-    <script type="module" src="admin/admin.bundle.js?v=viewer-price-main-ux230-v2"></script>
+    <script type="module" src="admin/admin.bundle.js?v=arc13-loc006-admin-header-copy-1"></script>
   </body>
 </html>

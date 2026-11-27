@@ -151,6 +151,12 @@ for (const file of [
 ]) {
   assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
 }
+const adminHeaderFallback = read("app/admin.html");
+assert(adminHeaderFallback.includes(`aria-label="${copy.brand.homeLinkAriaLabel}"`), "Admin keeps the catalog-matched brand-link fallback");
+assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps the catalog-matched logo alternative fallback");
+assert(adminHeaderFallback.includes(`<strong class="visually-hidden">${copy.brand.logoAlt}</strong>`), "Admin keeps the catalog-matched hidden brand fallback");
+assert(adminHeaderFallback.includes(`<small class="private-header__page-name">${copy.admin.shell.header.pageName}</small>`), "Admin keeps the catalog-matched page-name fallback");
+assert(adminHeaderFallback.includes(`aria-label="${copy.admin.shell.header.menuLabel}"`), "Admin keeps the catalog-matched menu-landmark fallback");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/access/index.html", "app/access/manage.html",
@@ -163,7 +169,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : file === "app/admin.html"
-      ? "arc13-loc006-admin-shell-copy-1"
+      ? "arc13-loc006-admin-header-copy-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");

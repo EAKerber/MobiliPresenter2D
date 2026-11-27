@@ -111,6 +111,10 @@
       }),
       shell: Object.freeze({
         documentTitle: "Administração — Casa em Módulos",
+        header: Object.freeze({
+          pageName: "Administração",
+          menuLabel: "Menu do site"
+        }),
         eyebrow: "Configurador público",
         heading: "Administração do catálogo",
         intro: "Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.",
