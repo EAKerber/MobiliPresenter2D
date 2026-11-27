@@ -298,5 +298,137 @@
       "The ARC-13 candidate inventory remains 1004/1004 unreviewed occurrences.",
       "No authenticated hosted Admin, Netlify or Production behavior is inferred."
     ]
+  },
+  "pricingLabelFollowUp": {
+    "family": "admin-pricing-type-and-calculation-basis-labels",
+    "workItems": [
+      "LOC-006",
+      "ARC-13"
+    ],
+    "status": "integrated-development",
+    "preChangeInventory": {
+      "path": "architecture/arc13/ui-text-candidates.json",
+      "blob": "c5e933c29ad332f1df24e911c7057b80361bb670",
+      "status": "candidate-unreviewed"
+    },
+    "resolvedCandidateIds": [
+      "5686c761487cb740",
+      "72522d25b23da15d"
+    ],
+    "currentRegeneratedCandidateIds": [
+      "4ecba1b3a9443672",
+      "15c8f19d713d2986"
+    ],
+    "sourceReadback": {
+      "app/admin/admin.js": "c35072204f4d09bff6feb50dfe5cc47575be4453",
+      "app/core/ui-copy.js": "822614f8e8608c57c859f9986784435954936492",
+      "tests/admin-hierarchy-browser.cjs": "7e825216fabe691e24244a4491c37bfaf48e09f9",
+      "architecture/generated/primary-pages.manifest.json": "6631b3c1196b5821b298b2218deb37ed792f80ba",
+      "architecture/arc13/ui-text-candidates.json": "839b3ae7145b2f46ebf682baeea64d84695645ef"
+    },
+    "implementation": {
+      "pullRequest": 535,
+      "head": "a31c908977267d83932a670abe91c5d1f875d9ff",
+      "branch": "codex/loc006-admin-pricing-labels-20261127",
+      "mergeCommit": "92ae3a44f5659fb1639642b0aee60b44e43bae9d",
+      "mainReadback": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
+      "mainChanged": false
+    },
+    "exactHeadGates": {
+      "status": "all successful",
+      "runs": [
+        {
+          "name": "Current variant fidelity",
+          "id": 45993037124
+        },
+        {
+          "name": "ARC-13 inventory provenance and determinism",
+          "id": 45993037184
+        },
+        {
+          "name": "App build purity",
+          "id": 45993037306
+        },
+        {
+          "name": "Development test impact plan (advisory)",
+          "id": 45993037149
+        },
+        {
+          "name": "Summary pricing browser",
+          "id": 45993037164
+        },
+        {
+          "name": "Development CSS-00 read-only baseline",
+          "id": 45993037105
+        },
+        {
+          "name": "Current asset gates",
+          "id": 45993037357
+        },
+        {
+          "name": "Stone browser",
+          "id": 45993037099
+        },
+        {
+          "name": "Admin hierarchy browser",
+          "id": 45993037036
+        },
+        {
+          "name": "Mobile browser",
+          "id": 45993037109
+        },
+        {
+          "name": "Viewer base-price publication contract",
+          "id": 45993037283
+        },
+        {
+          "name": "Development CP-PUBLIC-03a authorization boundary (offline)",
+          "id": 45993037143
+        }
+      ]
+    },
+    "branchLifecycle": {
+      "workflowRun": 45993290977,
+      "jobId": 140486284451,
+      "artifactId": 15195506176,
+      "artifactName": "m2d-merged-pr-head-cleanup-45993290977",
+      "artifactSha256": "de688161a7622295207a97e81cd514f3fc2eb01eecd299e1552c70b87df4078c",
+      "status": "PASS",
+      "deleted": true,
+      "readback": "PASS",
+      "remainingProductBranchCount": 9
+    },
+    "decision": {
+      "catalogKeys": [
+        "admin.pricing.editor.typeLabels",
+        "admin.pricing.editor.basisLabels"
+      ],
+      "rationale": "Move only fixed type and basis labels to the shared catalog; preserve exact pt-BR wording and keep pricing rule data and commercial decisions unchanged.",
+      "resolvedCandidateIdsAreFrom": "Pre-change ARC-13 blob c5e933c; current sink IDs are separately listed because source-hash changes rekey generated records."
+    },
+    "state": {
+      "consumers": [
+        "Admin pricing type <option> nodes",
+        "Admin percentage calculation-basis help text"
+      ],
+      "meaning": "The existing amount/percentage labels and eligible-module-base explanation are catalog-backed.",
+      "preservedContracts": [
+        "Type switching still resets the corresponding value rather than converting between currency and percentage.",
+        "Percentage basis appears only for percentage rules.",
+        "Pricing units, numeric rules, publication compatibility guard, save/persistence flow, role headings and the commercial disclaimer are unchanged."
+      ]
+    },
+    "validation": {
+      "passed": [
+        "Primary-page compiler --sync and --check passed.",
+        "ARC-13 inventory was regenerated deterministically on the exact source; 1,004 entries remain unreviewed, with 0 JavaScript parse errors, 0 unassigned owner/route sites and 0 unresolved primary-page mappings.",
+        "All 12 applicable GitHub workflows passed on exact head a31c908977267d83932a670abe91c5d1f875d9ff."
+      ]
+    },
+    "limits": [
+      "This is one bounded Admin copy slice; LOC-006 and the 125-ID plan remain partial.",
+      "All 1,004 ARC-13 occurrences remain candidate-unreviewed; this receipt does not approve or globally reconcile them.",
+      "No hosted authenticated Admin, Netlify deploy or Production behavior is inferred."
+    ]
   }
 }
