@@ -710,12 +710,12 @@ const adminCss = fs.readFileSync(path.join(projectRoot, "admin/admin.css"), "utf
 const pricingSource = fs.readFileSync(path.join(projectRoot, "core/pricing.js"), "utf8");
 const configurationSource = fs.readFileSync(path.join(projectRoot, "core/configuration.js"), "utf8");
 const priceBookSource = fs.readFileSync(path.join(projectRoot, "data/mock-price-book.js"), "utf8");
-assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v40"), true, "buyer cache revision declares PriceBook 2.0");
-assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v40"), true, "buyer loads the typed pricing contract");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v40") < indexHtml.indexOf("core/configuration.js?v=admin-config-v9"), true, "pricing contract loads before the v3 compatibility core");
-assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v40") < indexHtml.indexOf("core/pricing.js?v=runtime-v40"), true, "pricing contract loads before calculator");
-assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v40"), true, "typed pricing calculator cache revision is explicit");
-assert.equal(indexHtml.includes("app.js?v=runtime-v40"), true, "buyer cache revision is explicit");
+assert.equal(indexHtml.includes("data/mock-price-book.js?v=runtime-v41"), true, "buyer cache revision declares PriceBook 2.0");
+assert.equal(indexHtml.includes("core/pricing-contract.js?v=runtime-v41"), true, "buyer loads the typed pricing contract");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v41") < indexHtml.indexOf("core/configuration.js?v=admin-config-v9"), true, "pricing contract loads before the v3 compatibility core");
+assert.equal(indexHtml.indexOf("core/pricing-contract.js?v=runtime-v41") < indexHtml.indexOf("core/pricing.js?v=runtime-v41"), true, "pricing contract loads before calculator");
+assert.equal(indexHtml.includes("core/pricing.js?v=runtime-v41"), true, "typed pricing calculator cache revision is explicit");
+assert.equal(indexHtml.includes("app.js?v=runtime-v41"), true, "buyer cache revision is explicit");
 ["frontFinishRatesBps", "handleEntries", "localEntries", "globalEntries"].forEach((legacyBucket) => {
   assert.equal(pricingSource.includes(legacyBucket), false, `calculator no longer reads legacy pricing bucket: ${legacyBucket}`);
 });
@@ -829,7 +829,7 @@ assert.equal(appJs.includes("publishNormalizedFlow"), true, "app publishes one n
 assert.equal(appJs.includes("applyBuyerFlowLayout"), true, "buyer composition is mounted from normalized flow layout");
 assert.equal((indexHtml.match(/core\/layout-profiles\.js/g) || []).length, 1, "layout profile resolver loads exactly once");
 assert.equal(
-  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v40"),
+  indexHtml.indexOf("core/layout-profiles.js?v=cp-sd-01c1-v1") < indexHtml.indexOf("styles.css?v=runtime-v41"),
   true,
   "canonical layout profile resolves before public topology CSS to avoid first-paint profile drift"
 );
