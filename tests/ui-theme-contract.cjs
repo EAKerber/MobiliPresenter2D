@@ -191,7 +191,7 @@ assert(!adminCSS.includes(".visually-hidden {") && !configCSS.includes(".visuall
   "route stylesheets do not duplicate the shared utility");
 assert(configCSS.includes(".sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }"),
   "Config-only sr-only utility remains intact");
-assert(read("app/admin.html").includes('<strong class="visually-hidden">Casa em Módulos</strong>'),
+assert(read("app/admin.html").includes('<strong class="visually-hidden" data-admin-shell-copy="brand.logoAlt">Casa em Módulos</strong>'),
   "Admin keeps its visually-hidden brand text");
 assert(read("app/config/index.html").includes('<h1 class="visually-hidden">Casa em Módulos</h1>'),
   "Config keeps a real visually-hidden page heading");
