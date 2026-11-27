@@ -2379,9 +2379,14 @@
           "source": "Product PR #533 exact-head gates and development readback; merged-head cleanup run 45989395850",
           "sha": "0d96426242fdbcd8a53bcbb74d26d7d054e582e4",
           "detail": "The remaining fixed Admin retry action label now uses uiCopy.admin.loadState.retryLoad; the browser contract retries a simulated load failure and verifies the editor returns. All 12 applicable workflows passed on the exact PR head. Squash integrated into development at 9112cad477bd0d665f19bd4880b9aa3bc809d1a5; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. The merged-PR cleanup receipt verifies exact head/tree equivalence, deleted the merged branch, and passed readback; run artifact digest bf4d9b7732860bbc7ae930721ebdb22934cf010af5d1e49b1c045c3bf60d832e. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #535 exact-head gates and development readback; merged-head cleanup run 45993290977",
+          "sha": "a31c908977267d83932a670abe91c5d1f875d9ff",
+          "detail": "Fixed Admin pricing-type and percentage-basis labels now read from uiCopy.admin.pricing.editor. The Admin browser contract verifies the two rendered option labels and the basis against the catalog. Pricing values, units, role headings, switch/reset behavior, publication guard, commercial disclaimer, persistence and save flow remain unchanged. The primary-page manifest and ARC-13 inventory were regenerated; exact inventory generation was deterministic with 1,004 unreviewed occurrences, 0 parse errors, 0 unassigned owner/route sites and 0 unresolved primary-page mappings. All 12 applicable exact-head workflows passed. Squash-integrated into development at 92ae3a44f5659fb1639642b0aee60b44e43bae9d; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. The automatic merged-PR cleanup proved tree equivalence and live deletion/readback; LOC-006 remains partial."
         }
       ],
-      "nextAction": "Proceed with the bounded Admin pricing-type and calculation-basis fixed-label family. Preserve pricing rules, numeric values, commercial policy copy, and behavior; cover catalog-to-DOM consumers and regenerate provenance. Keep LOC-006 and ARC-13 partial until broader Admin/Configurator and candidate-inventory review are complete."
+      "nextAction": "Re-read the regenerated ARC-13/Admin sources and select the next bounded fixed-copy family by exact consumer and contract; keep commercial data, dynamic content and behavior changes out of scope. Do not close LOC-006 or mark the global candidate inventory reviewed from these slices."
     },
     {
       "order": 107,
@@ -2733,13 +2738,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-27T11:25:00Z",
+    "capturedAt": "2026-11-27T11:48:32Z",
     "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
-    "productDevelopmentSha": "9112cad477bd0d665f19bd4880b9aa3bc809d1a5",
+    "productDevelopmentSha": "92ae3a44f5659fb1639642b0aee60b44e43bae9d",
     "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
     "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
-    "productDevelopmentTree": "6f167b61b0187a08a8669e8d707f6a64d82bfba8",
+    "productDevelopmentTree": "45164d6ff0977f937bdd0790aa19fd9902f8fafa",
     "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
-    "meaning": "Live GitHub readback after Product PR #533. Product main remains the stable release line at ecaa38c; development is the integration buffer at 9112cad; Design System has only main at a405dff. Product comparison main→development is diverged from merge base 221b54b2: development 652 commits ahead and main 46 ahead; the API caps path output at 300, so this does not authorize whole-tree integration. Product has 9 live branches after the verified automatic cleanup of merged #533; 1 open draft PR (#517). Design System has 6 branches including main and zero open PRs. Product #533 merged branch cleanup run 45989395850 passed exact-head/tree preservation and live readback, leaving 9 branches. Branch Hygiene vNext #464 and its exact audit/apply receipts were verified before this cleanup. This baseline records live refs only; it does not claim the 125-ID register or global ARC-13 inventory is complete."
+    "meaning": "Live refs read after Product PR #535. Product main remains stable at ecaa38c; development is the integration buffer at 92ae3a44; Design System has only main at a405dff. Product compare main→development remains diverged from merge base 221b54b2: development 654 commits ahead and main 46 ahead; GitHub returns at most 300 changed paths, so no whole-tree integration is proposed. Product has 9 live refs after verified automatic cleanup of #535; one open draft PR (#517). Design System has 6 live refs including main and zero open PRs. The #535 merged-head cleanup run 45993290977 passed exact-head/tree-preservation and readback, leaving 9 Product refs (artifact digest de688161a7622295207a97e81cd514f3fc2eb01eecd299e1552c70b87df4078c). Branch Hygiene vNext #464 and its exact audit/apply receipts remain the policy basis; no manual destructive batch is inferred from this readback. The operational register still covers 125 IDs but remains only partially reconciled; ARC-13 has 1,004 candidate occurrences, all unreviewed."
   }
 }
