@@ -392,6 +392,7 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   const header = new FakeElement("header");
   const toggle = new FakeElement("button");
   const menu = new FakeElement("nav");
+  menu.hidden = true;
   const privateLinks = new FakeElement();
   privateLinks.selector = "[data-private-links]";
   const account = new FakeElement();
@@ -417,6 +418,7 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   const copyLookups = [];
   const window = { location, CASA_UI_THEME: { getCopy(key, fallback) { copyLookups.push([key, fallback]); return fallback; } } };
   let authCallback;
+  let failNextSessionLookup = true;
   let sessionResponse = { authenticated: false };
   let deferredSessionResolve = () => {};
   let logoutCalls = 0;
@@ -424,8 +426,13 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   const fetchImpl = async (url, options) => {
     fetchCalls.push({ url, options });
     if (url === "/api/access/session/logout") return { ok: true, status: 200, json: async () => ({ ok: true }) };
-    if (deferredSessionResolve) return new Promise((resolve) => { deferredSessionResolve = () => resolve({ ok: true, status: 200, json: async () => sessionResponse }); });
-    return { ok: true, status: 200, json: async () => sessionResponse };
+    const sessionResponseForRequest = () => ({
+      ok: !failNextSessionLookup,
+      status: failNextSessionLookup ? 503 : 200,
+      json: async () => sessionResponse,
+    });
+    if (deferredSessionResolve) return new Promise((resolve) => { deferredSessionResolve = () => resolve(sessionResponseForRequest()); });
+    return sessionResponseForRequest();
   };
   const source = await readFile(resolve(ROOT, "app/core/private-navigation.js"), "utf8");
   const stripped = source.replace(/^import\s+[\s\S]*?\s+from\s+["'][^"']+["'];\s*$/gm, "");
@@ -450,6 +457,25 @@ test("private menu renders authoritative roles and ignores stale asynchronous se
   deferredSessionResolve();
   await new Promise((resolve) => setImmediate(resolve));
   deferredSessionResolve = null;
+  assert.equal(menu.hidden, true, "a closed menu stays closed after its background lookup fails");
+  assert.equal(accessNote()?.textContent, "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
+  assertAccessStateLookup("lookupFailure", "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
+  assert.equal(privateHrefs().includes("/config/"), false, "a failed lookup never exposes Configurator access");
+  assert.equal(privateHrefs().includes("/access/manage.html"), false, "a failed lookup never exposes access management");
+  assert.equal(privateHrefs().includes("/admin.html"), false, "a failed lookup does not assume an anonymous session");
+  await toggle.dispatch("click");
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(menu.hidden, false, "opening the menu exposes the lookup failure and retry guidance");
+  assert.equal(accessNote()?.textContent, "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
+  assert.equal(privateHrefs().includes("/config/"), false, "a failed retry never exposes Configurator access");
+  assert.equal(privateHrefs().includes("/access/manage.html"), false, "a failed retry never exposes access management");
+  assert.equal(privateHrefs().includes("/admin.html"), false, "a failed retry does not assume an anonymous session");
+  await toggle.dispatch("click");
+  assert.equal(menu.hidden, true);
+  failNextSessionLookup = false;
+  await toggle.dispatch("click");
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(menu.hidden, false);
   assert.deepEqual(groupHeadings(), ["Páginas privadas", "Páginas públicas"]);
   assert.ok(privateHrefs().includes("/admin.html"), "anonymous menu offers entry to administration");
   assert.equal(privateLabels().find((label) => label === "Entrar na administração"), "Entrar na administração");

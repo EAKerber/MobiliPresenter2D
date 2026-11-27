@@ -98,7 +98,7 @@ if (header) {
       });
     }
 
-    function render(user, { loading = false } = {}) {
+    function render(user, { loading = false, lookupFailed = false } = {}) {
       if (activeUser !== user) {
         logoutStatus.hidden = true;
         logoutStatus.textContent = "";
@@ -124,6 +124,11 @@ if (header) {
         const note = document.createElement("p");
         note.className = "private-menu__note";
         note.textContent = copy("navigation.privateAccessState.loading", "Verificando acesso…");
+        privateGroup.append(note);
+      } else if (lookupFailed) {
+        const note = document.createElement("p");
+        note.className = "private-menu__note";
+        note.textContent = copy("navigation.privateAccessState.lookupFailure", "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.");
         privateGroup.append(note);
       } else if (!user) {
         privateGroup.append(makeLink("/admin.html", copy("navigation.privateAccessState.anonymousAdminEntry", "Entrar na administração")));
@@ -200,7 +205,7 @@ if (header) {
           if (revision === authRevision) render(session);
         })
         .catch(() => {
-          if (revision === authRevision) render(null, { loading: true });
+          if (revision === authRevision) render(null, { lookupFailed: true });
         });
     }
 

@@ -35,6 +35,7 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.privateMenu)), {
 });
 assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.privateAccessState)), {
   loading: "Verificando acesso…",
+  lookupFailure: "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.",
   anonymousAdminEntry: "Entrar na administração",
   denied: "Esta conta não tem acesso às páginas de gestão."
 });
@@ -163,6 +164,7 @@ for (const [key, fallback] of [
 }
 for (const [key, fallback] of [
   ["loading", "Verificando acesso…"],
+  ["lookupFailure", "Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente."],
   ["anonymousAdminEntry", "Entrar na administração"],
   ["denied", "Esta conta não tem acesso às páginas de gestão."]
 ]) {
@@ -176,8 +178,8 @@ for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/
   assert(read(file).includes("header-menu.js?v=arc13-loc003-copy-1"), file + " busts the old public menu controller cache");
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
-  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc006-private-access-state-1"), file + " busts the old private menu bundle cache");
-  assert(read(file).includes("ui-copy.js?v=arc13-loc006-private-access-state-1"), file + " busts the old shared copy catalog cache");
+  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc006-private-session-lookup-retry-1"), file + " busts the old private menu bundle cache");
+  assert(read(file).includes("ui-copy.js?v=arc13-loc006-private-session-lookup-retry-1"), file + " busts the old shared copy catalog cache");
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html"]) {
   const logoutMarkup = read(file);
@@ -222,7 +224,7 @@ for (const file of shells) {
     : file === "app/viewer/index.html"
       ? "arc13-loc005-scene-interaction-1"
     : ["app/access/index.html", "app/access/manage.html", "app/config/index.html", "app/admin.html"].includes(file)
-      ? "arc13-loc006-private-access-state-1"
+      ? "arc13-loc006-private-session-lookup-retry-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");
   assert(html.includes('src="/core/ui-theme.js?v=arc13-loc003-copy-1"'), file + " theme bootstrap");
