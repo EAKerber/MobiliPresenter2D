@@ -102,7 +102,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          status=$(curl -sS -o /tmp/public-projection.json -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules")
+          # The preview HTML may be reachable before its function route has
+          # propagated. Retry only that transient 404; other failures fail closed.
+          for i in $(seq 1 10); do
+            status=$(curl -sS -o /tmp/public-projection.json -w '%{http_code}' "$PUBLIC_PAGES_URL/api/public-modules")
+            [[ "$status" == 404 && "$i" -lt 10 ]] || break
+            sleep 3
+          done
           echo "Deploy-preview public-modules HTTP status: $status"
           test "$status" = 200
           node <<'NODE'

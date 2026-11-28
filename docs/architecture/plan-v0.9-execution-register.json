@@ -2309,11 +2309,11 @@
       "title": "Extrair textos dos fragmentos e páginas estáticas",
       "chapter": "V",
       "priority": "P1",
-      "planState": "not_started",
+      "planState": "in_progress",
       "reconciliation": "partial",
       "local": "unknown",
       "development": "partial",
-      "main": "unknown",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -2321,6 +2321,11 @@
           "source": "Product receipt docs/architecture/arc13/loc-004-comparison-card-copy-2026-11-23.json",
           "sha": "4d03abe829f25e2d7e1d57303d1f947beaf0ba21",
           "detail": "Três títulos e 18 descrições dos cards comparativos vêm do catálogo e permanecem no HTML estático. O recibo registra aprovação do compilador, autoridade da fonte, tema e scanner; ARC-13 segue parcial."
+        },
+        {
+          "source": "Product PRs #577 and #578, exact-head checks and production readback",
+          "sha": "4428db4910e8fc3200de5ba103e2186295cdab49",
+          "detail": "Viewer shell copy is compiled from an independently authored page and the pt-BR catalog, with its own header and no-JavaScript HTML preserved. PR #577 integrated the family into development at 91ae41cc8875d55f0094b970c6a973c8caf63b3a; PR #578 promoted it selectively to main at this SHA after 16 applicable workflows passed on head 2ce83a2b16fa22f84a46a93798780c0792a4777a. Netlify production deploy 6b0ae9c114836baa85a61fbf is ready on this SHA; anonymous Viewer and public-modules requests returned 200. Other static-page families remain partial and the primary page sources differ intentionally between the branches."
         }
       ],
       "nextAction": "Reconciliar as famílias restantes de LOC-004 e definir pacote seletivo após comparar as fontes atuais de main e development."
@@ -2335,7 +2340,7 @@
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
-      "main": "unknown",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
@@ -2348,6 +2353,11 @@
           "source": "Product PR #576 exact-head checks and development readback",
           "sha": "fff5be92995f3c33a0e8a9f89e844a1e2416021a",
           "detail": "Shared technical-drawing SVG descriptions use the catalog in the Viewer and Configurator, preserving fallback, overrides, product values and geometry. Unit tests cover both normal and thin-panel descriptions, internal labels and literal special characters; browser tests exercise both consumers. Exact head 5d77035337f82be2c5b76e8471fbde22fdc57cdc passed all 15 applicable workflows. Integrated into development at this SHA; broader JS localization and promotion remain open."
+        },
+        {
+          "source": "Product PR #578 exact-head checks and production readback",
+          "sha": "4428db4910e8fc3200de5ba103e2186295cdab49",
+          "detail": "Viewer runtime copy and the shared technical-drawing descriptions were selectively promoted with the catalog and theme resolver. The exact head passed 16 workflows, including Chromium and WebKit Viewer checks and local V5 consumer tests. Netlify production deploy 6b0ae9c114836baa85a61fbf is ready on this SHA, and the public Viewer and modules endpoint returned 200. Other controllers and components remain to be reconciled; this is not full LOC-005 completion."
         }
       ],
       "nextAction": "Reconciliar controladores e componentes restantes por consumidor, incluindo as demais famílias do Configurador. Preservar textos de produto e distinguir desenvolvimento de promoção para main."
@@ -2362,10 +2372,15 @@
       "reconciliation": "partial",
       "local": "partial",
       "development": "partial",
-      "main": "not_present",
+      "main": "partial",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
       "evidence": [
+        {
+          "source": "Product PR #578 exact-head checks and production readback",
+          "sha": "4428db4910e8fc3200de5ba103e2186295cdab49",
+          "detail": "The Configurator's shared technical-drawing accessible descriptions now consume the catalog in main, verified with local V5 browser tests and a production deploy ready on this SHA. This is a partial Configurator consumer only: the remaining Admin and Configurator copy families are not implied to be present in main."
+        },
         {
           "source": "Product PR #415",
           "sha": "ed89f243a1f54d80701908c707e5edc61e1ffff4",
