@@ -1,16 +1,15 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
-const { pathToFileURL } = require("node:url");
 const { chromium } = require("playwright");
+const {requireConfiguratorTarget, assertConfiguratorResponse, requirePublishedV5} = require("./ci/config-target-preflight.cjs");
 
 (async () => {
   const output = process.argv[2] || "/tmp/mobile-pip-main-review";
   fs.mkdirSync(output, { recursive: true });
 
+  const targetUrl = requireConfiguratorTarget(process.env.MOBILE_INTERACTIONS_URL, "MOBILE_INTERACTIONS_URL");
   const browser = await chromium.launch({ headless: true });
-  const targetUrl = process.env.MOBILE_INTERACTIONS_URL ||
-    pathToFileURL(path.resolve(__dirname, "../app/index.html")).href;
 
   const stackedContext = await browser.newContext({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, 
     viewport: { width: 1050, height: 900 },
@@ -22,10 +21,9 @@ const { chromium } = require("playwright");
   stackedPage.on("console", message => {
     if (message.type() === "error") stackedErrors.push(message.text());
   });
-  await stackedPage.goto(targetUrl);
-  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
-    await stackedPage.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
-  }
+  const stackedResponse = await stackedPage.goto(targetUrl);
+  assertConfiguratorResponse(stackedPage.url(), stackedResponse?.status());
+  await requirePublishedV5(stackedPage, process.env.CI_EXPECT_PUBLISHED_V5 === "1");
   await stackedPage.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   const miniSceneCopy = await stackedPage.evaluate(() => window.CASA_UI_COPY.configurator.miniScene);
   const miniSceneStatusCopy = miniSceneCopy.status;
@@ -193,10 +191,9 @@ const { chromium } = require("playwright");
     if (message.type() === "error") errors.push(message.text());
   });
 
-  await page.goto(targetUrl);
-  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
-    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
-  }
+  const response = await page.goto(targetUrl);
+  assertConfiguratorResponse(page.url(), response?.status());
+  await requirePublishedV5(page, process.env.CI_EXPECT_PUBLISHED_V5 === "1");
   await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode())));
   assert.equal(await page.evaluate(() => window.CASA_EM_MODULOS_DEBUG.getLayoutProfile()), "compact",
     "mobile viewport resolves through the canonical compact profile");
