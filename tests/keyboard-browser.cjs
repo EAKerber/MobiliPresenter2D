@@ -2,11 +2,12 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {chromium} = require('playwright');
+const {requireConfiguratorTarget, assertConfiguratorResponse, isPreflightError, requirePublishedV5} = require('./ci/config-target-preflight.cjs');
 
 (async () => {
   const output = process.argv[2] || '/tmp/keyboard-browser';
   fs.mkdirSync(output, {recursive: true});
-  const targetUrl = process.env.KEYBOARD_BROWSER_URL || 'https://mobilipresenter2d.netlify.app/';
+  const targetUrl = requireConfiguratorTarget(process.env.KEYBOARD_BROWSER_URL, 'KEYBOARD_BROWSER_URL');
   const browser = await chromium.launch({headless: true});
   const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, viewport: {width: 1366, height: 900}});
   const errors = [];
@@ -16,11 +17,13 @@ const {chromium} = require('playwright');
   let lastError;
   for (let attempt = 0; attempt < 18; attempt += 1) {
     try {
-      await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
+      const response = await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
+      assertConfiguratorResponse(page.url(), response?.status());
       await page.waitForFunction(() => window.CASA_KEYBOARD_SHORTCUTS?.discoverStageSections && window.CASA_KEYBOARD_SHORTCUTS?.navigationInvariantErrors && window.CASA_NORMALIZED_FLOW?.stages?.length && document.querySelectorAll('#moduleList [data-select-entity]').length > 1, null, {timeout: 5000});
       lastError = null;
       break;
     } catch (error) {
+      if (isPreflightError(error)) throw error;
       lastError = error;
       await page.waitForTimeout(3000);
     }
@@ -28,9 +31,7 @@ const {chromium} = require('playwright');
   if (lastError) throw lastError;
   // Authenticated preview: the legacy UI initializes before the async V5
   // published configuration is applied. Start interactions only after commit.
-  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
-    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
-  }
+  await requirePublishedV5(page, process.env.CI_EXPECT_PUBLISHED_V5 === "1");
 
   const selectedNumber = () => page.evaluate(() => {
     const card = document.querySelector('#moduleList .module-card.is-selected');

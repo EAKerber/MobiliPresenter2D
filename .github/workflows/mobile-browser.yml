@@ -6,6 +6,8 @@ on:
     paths:
       - 'app/**'
       - 'tests/mobile-pip-main-browser.cjs'
+      - 'tests/ci/config-target-preflight.cjs'
+      - 'tests/ci/config-target-preflight.test.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
       - 'tests/exposed-sides-glass.cjs'
       - 'tests/ui-theme-browser.cjs'
@@ -16,6 +18,8 @@ on:
     paths:
       - 'app/**'
       - 'tests/mobile-pip-main-browser.cjs'
+      - 'tests/ci/config-target-preflight.cjs'
+      - 'tests/ci/config-target-preflight.test.cjs'
       - 'tests/home-hero-phone-geometry-browser.cjs'
       - 'tests/exposed-sides-glass.cjs'
       - 'tests/ui-theme-browser.cjs'
@@ -43,6 +47,8 @@ jobs:
           node-version: '22'
       - name: Verify focus token alias contract
         run: node tests/ui-theme-focus-token-contract.cjs
+      - name: Verify Configurator browser target diagnostics
+        run: node --test tests/ci/config-target-preflight.test.cjs
       - name: Resolve browser target (validated V5 loopback by default)
         shell: bash
         run: |

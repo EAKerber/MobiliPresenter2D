@@ -2,6 +2,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const { chromium } = require("playwright");
+const {requireConfiguratorTarget, assertConfiguratorResponse, isPreflightError, requirePublishedV5} = require("./ci/config-target-preflight.cjs");
 const configuration = require("../app/core/configuration.js");
 const defaultSettings = require("../app/data/configurator-settings.js");
 const catalog = require("../app/data/catalog-data.js");
@@ -35,7 +36,7 @@ const flatV3 = configuration.createDefaultAdministration(
 (async () => {
   const output = process.argv[2] || "/tmp/flow-layout-browser";
   fs.mkdirSync(output, { recursive: true });
-  const targetUrl = process.env.FLOW_LAYOUT_URL || "https://mobilipresenter2d.netlify.app/";
+  const targetUrl = requireConfiguratorTarget(process.env.FLOW_LAYOUT_URL, "FLOW_LAYOUT_URL");
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   const errors = [];
@@ -45,7 +46,8 @@ const flatV3 = configuration.createDefaultAdministration(
   let lastError;
   for (let attempt = 0; attempt < 18; attempt += 1) {
     try {
-      await page.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+      const response = await page.goto(targetUrl, { waitUntil: "domcontentloaded", timeout: 15000 });
+      assertConfiguratorResponse(page.url(), response?.status());
       await page.waitForFunction(() =>
         window.CASA_NORMALIZED_FLOW?.stages?.length
         && window.CASA_EM_MODULOS_DEBUG?.getFlowLayoutErrors
@@ -56,6 +58,7 @@ const flatV3 = configuration.createDefaultAdministration(
       lastError = null;
       break;
     } catch (error) {
+      if (isPreflightError(error)) throw error;
       lastError = error;
       await page.waitForTimeout(3000);
     }
@@ -63,9 +66,7 @@ const flatV3 = configuration.createDefaultAdministration(
   if (lastError) throw lastError;
   // Authenticated preview: the legacy UI initializes before the async V5
   // published configuration is applied. Start interactions only after commit.
-  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
-    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
-  }
+  await requirePublishedV5(page, process.env.CI_EXPECT_PUBLISHED_V5 === "1");
 
   const stageGroupOrder = (stageId) => page.evaluate((id) => {
     const grid = document.querySelector('[data-flow-group-grid="' + id + '"]');

@@ -5,6 +5,7 @@ on:
     paths:
       - 'app/**'
       - 'tests/stone-browser.cjs'
+      - 'tests/ci/config-target-preflight.cjs'
       - '.github/workflows/stone-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
@@ -12,6 +13,7 @@ on:
     paths:
       - 'app/**'
       - 'tests/stone-browser.cjs'
+      - 'tests/ci/config-target-preflight.cjs'
       - '.github/workflows/stone-browser.yml'
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/local-buyer-config-server.mjs'
