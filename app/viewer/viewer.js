@@ -1,7 +1,7 @@
 (function () {
   "use strict";
   const data = window.CASA_PUBLIC_VIEWER;
-  const detailHeadingsCopy = window.CASA_UI_COPY.viewer.detailHeadings;
+  const detailHeadingsCopy = { components: "Componentes", requirements: "Requisitos", ...window.CASA_UI_COPY?.viewer?.detailHeadings };
   const root = document.getElementById("viewerLayout");
   const renderers = new Map();
   const search = new URLSearchParams(window.location.search);
