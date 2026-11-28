@@ -366,13 +366,14 @@
         "netlify/functions/configuration.mjs",
         "tests/ci/access-dto-boundary.test.mjs",
         "tests/access-session-browser.cjs",
+        "tests/private-menu-logout-browser.cjs",
         "tests/ci/access-surface-boundaries.test.mjs",
         "tests/auth-first-login-recovery.test.mjs"
       ],
       "execution": [
         {
           "workflow": ".github/workflows/development-access-dto-boundary.yml",
-          "scope": "pull_request and push on development (path-filtered)",
+          "scope": "pull_request and push on main and development (path-filtered)",
           "commands": [
             "node app/tools/test-access-policy.mjs",
             "node app/tools/test-v5-endpoint-safety.js",
@@ -385,11 +386,12 @@
         },
         {
           "workflow": ".github/workflows/development-access-dto-boundary.yml",
-          "scope": "pull_request and push on development; dedicated Playwright container",
+          "scope": "pull_request and push on main and development; dedicated Playwright container",
           "commands": [
-            "node tests/access-session-browser.cjs"
+            "node tests/access-session-browser.cjs",
+            "node tests/private-menu-logout-browser.cjs"
           ],
-          "assertion": "Browser-level removal of invitation token from URL before interaction; token is absent from rendered page state and is sent only to same-origin redemption."
+          "assertion": "Browser-level token-free invitation state and same-origin redemption; temporary logout retains a synthetic cookie after a gateway error and clears it on successful retry."
         }
       ]
     }
