@@ -745,8 +745,8 @@ assert.equal(adminJs.includes('input.type = input.type === "password" ? "text" :
 assert.equal(adminJs.includes('byId("passwordInput").value'), true, "login continues reading the same password value");
 assert.equal(adminJs.includes('byId("newPasswordInput").value'), true, "password update continues reading the same new-password value");
 assert.equal(adminCss.includes(".password-field"), true, "admin reveal control has local field layout");
-assert.equal(adminHtml.includes("admin/admin.css?v=viewer-price-main-v1"), true, "admin editor CSS cache revision is explicit");
-assert.equal(adminHtml.includes("admin/admin.bundle.js?v=viewer-price-main-ux230-v2"), true, "admin editor bundle cache revision is explicit");
+assert.match(adminHtml, /admin\/admin\.css\?v=[a-zA-Z0-9_-]+/, "admin editor CSS cache revision is explicit");
+assert.match(adminHtml, /admin\/admin\.bundle\.js\?v=[a-zA-Z0-9_-]+/, "admin editor bundle cache revision is explicit");
 assert.equal(adminHtml.includes("core/pricing-contract.js?v=pricing-contract-v1"), true, "admin explicitly loads the typed pricing contract");
 assert.equal(adminHtml.includes("data/mock-price-book.js"), false, "admin loads protected pricing through the authenticated bootstrap endpoint");
 assert.equal(adminHtml.includes("core/configuration.js?v=admin-config-v9"), true, "admin loads the v3 compatibility core revision");
@@ -774,7 +774,8 @@ assert.equal(adminJs.includes("pricingContract.ROLE_CAPABILITIES[role]"), true, 
 assert.equal(adminJs.includes("select.dataset.priceRuleType"), true, "dual-type pricing rows expose an explicit type selector");
 assert.equal(adminJs.includes('{ type: "amount", cents: 0 }'), true, "percentage to amount switching resets the numeric value instead of converting units");
 assert.equal(adminJs.includes('{ type: "percentage", bps: 0, basis }'), true, "amount to percentage switching resets BPS and restores the contract basis");
-assert.equal(adminJs.includes("O valor foi zerado para evitar conversão implícita"), true, "admin explains zero-on-type-switch behavior");
+assert.equal(adminJs.includes("pricingEditorCopy.typeChangedResetNotice"), true, "admin uses the catalog notice for a type-switch reset");
+assert.equal(fs.readFileSync(path.join(projectRoot, "core/ui-copy.js"), "utf8").includes("O valor foi zerado para evitar conversão implícita"), true, "the catalog explains the reset");
 assert.equal(adminJs.includes('projection.code === "pricing_requires_publication"'), true, "non-representable typed pricing is blocked before legacy publication");
 assert.equal(adminCss.includes(".pricing-field--typed"), true, "dual-type pricing rows have a dedicated compact layout");
 assert.equal(adminCss.includes(".pricing-basis"), true, "percentage basis copy has an explicit admin style hook");

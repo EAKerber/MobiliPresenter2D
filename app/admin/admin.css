@@ -30,6 +30,8 @@ textarea { min-height:76px; resize:vertical; line-height:1.45; }
 .message { min-height:20px; color:var(--muted); font-size:13px; line-height:1.5; }.message[data-kind=error] { color:var(--error); }.message[data-kind=success] { color:var(--success); }
 .admin-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:22px; }.admin-heading__meta { display:grid; gap:6px; color:var(--muted); font-size:12px; text-align:right; }
 .stages-list { display:grid; gap:12px; }.stage-card { padding:17px; }.stage-card__top { display:grid; grid-template-columns:auto minmax(180px,1fr) auto auto auto; align-items:center; gap:12px; }.stage-card__number { color:var(--accent); font-size:12px; font-weight:800; }.stage-name input { margin-top:0; }.stage-order { display:flex; gap:5px; }.stage-order button { width:34px; height:34px; border:1px solid var(--border); border-radius:8px; background:var(--raised); cursor:pointer; }.stage-order button:disabled { opacity:.35; cursor:default; }
+.stage-card__policy-note { margin:8px 0 0; }
+.finish-admin-card__policy-note { grid-column:1 / -1; margin:0; }
 .switch { display:flex; align-items:center; gap:7px; color:var(--muted); font-size:12px; white-space:nowrap; }.switch input,.item-option input { accent-color:var(--accent); }
 .stage-unassigned { padding:15px 17px; border:1px solid var(--border); border-radius:14px; background:var(--subtle-bg); }
 .stage-unassigned h2 { margin-bottom:5px; font-size:15px; }
@@ -105,6 +107,7 @@ textarea { min-height:76px; resize:vertical; line-height:1.45; }
 .stage-card__actions { display:flex; gap:6px; }
 .stage-items--custom { grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
 .initial-state-option { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:10px; white-space:nowrap; }
+.initial-state-option input[type="checkbox"] { accent-color:var(--accent); }
 .module-nominal-dimensions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; margin:0; padding:8px; border:1px solid rgba(255,255,255,.08); border-radius:8px; }
 .module-nominal-dimensions legend { padding:0 4px; color:var(--muted); font-size:10px; }
 .module-nominal-dimensions__note { grid-column:1 / -1; color:var(--muted); font-size:10px; line-height:1.4; }

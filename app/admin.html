@@ -10,16 +10,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title>Administração — Casa em Módulos</title>
-    <link rel="stylesheet" href="admin/admin.css?v=viewer-price-main-v1" />
+    <title data-admin-shell-copy="documentTitle">Administração — Casa em Módulos</title>
+    <link rel="stylesheet" href="admin/admin.css?v=admin-copy-family-v1" />
   <link rel="stylesheet" href="/ui-theme.css?v=private-header-nav005-v2">
 </head>
   <body>
     <header class="admin-topbar private-header" data-private-header>
-      <a class="brand private-header__brand" href="/" aria-label="Casa em Módulos, início"><img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos"><span><strong class="visually-hidden">Casa em Módulos</strong><small class="private-header__page-name">Administração</small></span></a>
+      <a class="brand private-header__brand" href="/" aria-label="Casa em Módulos, início" data-admin-shell-aria-label="brand.homeLinkAriaLabel"><img class="brand__logo" data-brand-variant data-src-light="/branding/logo-light-380.png" data-src-dark="/branding/logo-dark-380.png" src="/branding/logo-dark-380.png" width="380" height="136" alt="Casa em Módulos" data-admin-shell-alt="brand.logoAlt"><span><strong class="visually-hidden" data-admin-shell-copy="brand.logoAlt">Casa em Módulos</strong><small class="private-header__page-name" data-admin-shell-copy="header.pageName">Administração</small></span></a>
       <div class="admin-topbar__actions private-header__actions">
-        <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu"><span></span><span></span><span></span></button>
-        <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" hidden>
+        <button class="private-menu-toggle" style="order:3" type="button" data-private-menu-toggle aria-expanded="false" aria-controls="privateMenu" aria-label="Abrir menu" data-admin-shell-aria-label="navigation.menu.open"><span></span><span></span><span></span></button>
+        <nav id="privateMenu" class="private-menu" data-private-menu aria-label="Menu do site" data-admin-shell-aria-label="header.menuLabel" hidden>
           <div data-private-links></div>
           <div class="private-menu__account" data-private-account hidden>
             <p class="private-menu__email" data-private-email hidden></p>
@@ -31,67 +31,67 @@
     </header>
     <main class="admin-main">
       <section id="loginPanel" class="admin-card auth-card">
-        <p class="eyebrow">Acesso restrito</p>
-        <h1>Painel administrativo</h1>
-        <p class="intro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
+        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow">Acesso restrito</p>
+        <h1 data-admin-auth-copy="loginHeading">Painel administrativo</h1>
+        <p class="intro" data-admin-auth-copy="loginIntro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
         <form id="loginForm" class="admin-form" method="post">
-          <label>E-mail<input id="emailInput" type="email" autocomplete="username" required /></label>
+          <label><span data-admin-auth-copy="emailLabel">E-mail</span><input id="emailInput" type="email" autocomplete="username" required /></label>
           <div class="admin-field">
-            <label for="passwordInput">Senha</label>
+            <label for="passwordInput" data-admin-auth-copy="passwordLabel">Senha</label>
             <div class="password-field">
               <input id="passwordInput" type="password" autocomplete="current-password" required />
               <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
             </div>
           </div>
-          <div class="auth-actions"><button class="button button--primary" type="submit">Entrar</button><button id="recoveryButton" class="text-button" type="button">Esqueci minha senha</button></div>
+          <div class="auth-actions"><button class="button button--primary" type="submit" data-admin-auth-copy="submitLogin">Entrar</button><button id="recoveryButton" class="text-button" type="button" data-admin-auth-copy="requestRecovery">Esqueci minha senha</button></div>
         </form>
         <form id="passwordActionForm" class="admin-form" hidden>
           <p id="passwordActionTitle" class="intro"></p>
           <div class="admin-field">
-            <label for="newPasswordInput">Nova senha</label>
+            <label for="newPasswordInput" data-admin-auth-copy="newPasswordLabel">Nova senha</label>
             <div class="password-field">
               <input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required />
               <button class="password-reveal" type="button" data-password-reveal="newPasswordInput" aria-controls="newPasswordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
             </div>
           </div>
-          <button id="passwordActionButton" class="button button--primary" type="submit">Salvar senha</button>
+          <button id="passwordActionButton" class="button button--primary" type="submit" data-admin-auth-copy="savePassword">Salvar senha</button>
         </form>
         <p id="loginMessage" class="message" aria-live="polite"></p>
       </section>
 
       <section id="deniedPanel" class="admin-card" hidden>
-        <p class="eyebrow">Acesso restrito</p><h1>Esta conta não é administradora</h1>
-        <p class="intro">Peça a um responsável para adicionar o papel <code>admin</code> à sua conta no Netlify Identity.</p>
+        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow">Acesso restrito</p><h1 data-admin-auth-copy="deniedHeading">Esta conta não é administradora</h1>
+        <p class="intro"><span data-admin-auth-copy="deniedIntroBefore">Peça a um responsável para adicionar o papel </span><code>admin</code><span data-admin-auth-copy="deniedIntroAfter"> à sua conta no Netlify Identity.</span></p>
       </section>
       <p id="adminServiceError" class="message" role="alert" hidden></p>
 
       <section id="editorPanel" hidden>
         <div class="admin-heading">
-          <div><p class="eyebrow">Configurador público</p><h1>Administração do catálogo</h1><p class="intro">Configure etapas, conteúdo dos objetos, acabamentos e valores publicados.</p></div>
-          <div class="admin-heading__meta"><span id="revisionLabel">Versão —</span><span id="userLabel"></span></div>
+          <div><p class="eyebrow" data-admin-shell-copy="eyebrow"></p><h1 data-admin-shell-copy="heading"></h1><p class="intro" data-admin-shell-copy="intro"></p></div>
+          <div class="admin-heading__meta"><span id="revisionLabel"></span><span id="userLabel"></span></div>
         </div>
-        <nav class="admin-tabs" role="tablist" aria-label="Áreas de administração">
-          <button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-admin-tab="stages">Etapas</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="objects">Dados dos objetos</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="finishes">Cores e acabamentos</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="rules">Dependências e eventos</button>
-          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing">Preços</button>
+        <nav class="admin-tabs" role="tablist" data-admin-shell-aria-label="tablistLabel">
+          <button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-admin-tab="stages" data-admin-shell-copy="tabs.stages"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="objects" data-admin-shell-copy="tabs.objects"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="finishes" data-admin-shell-copy="tabs.finishes"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="rules" data-admin-shell-copy="tabs.rules"></button>
+          <button class="admin-tab" type="button" role="tab" aria-selected="false" data-admin-tab="pricing" data-admin-shell-copy="tabs.pricing"></button>
         </nav>
-        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div class="panel-toolbar"><p class="admin-note">Arraste os itens entre etapas. Itens sem etapa aparecem na lista de disponíveis. Etapas de módulos e resumo são essenciais.</p><div class="stage-add-tools"><select id="stageKindInput" aria-label="Tipo da nova etapa"><option value="custom">Personalizada</option><option value="finishes">Acabamentos</option><option value="services">Serviços</option></select><button id="addStageButton" class="button button--secondary" type="button">Adicionar etapa</button></div></div><div id="stagesList" class="stages-list"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="stages"><div class="panel-toolbar"><p id="stagePanelNote" class="admin-note"></p><div class="stage-add-tools"><select id="stageKindInput"><option value="custom"></option><option value="finishes"></option><option value="services"></option></select><button id="addStageButton" class="button button--secondary" type="button"></button></div></div><div id="stagesList" class="stages-list"></div></section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="objects" hidden>
-          <div class="object-pager"><button id="objectPrevious" class="button button--secondary" type="button">← Anterior</button><label class="data-field">Objeto<select id="objectSelector"></select></label><button id="objectNext" class="button button--secondary" type="button">Próximo →</button></div>
-          <nav class="admin-tabs admin-tabs--nested" role="tablist" aria-label="Dados do objeto"><button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-object-tab="content">Conteúdo</button><button class="admin-tab" type="button" role="tab" aria-selected="false" data-object-tab="assets">Imagens e máscaras</button></nav>
+          <div class="object-pager"><button id="objectPrevious" class="button button--secondary" type="button" data-admin-shell-copy="objectPager.previous"></button><label class="data-field"><span data-admin-shell-copy="objectPager.label"></span><select id="objectSelector"></select></label><button id="objectNext" class="button button--secondary" type="button" data-admin-shell-copy="objectPager.next"></button></div>
+          <nav class="admin-tabs admin-tabs--nested" role="tablist" data-admin-shell-aria-label="objectTablistLabel"><button class="admin-tab is-active" type="button" role="tab" aria-selected="true" data-object-tab="content" data-admin-shell-copy="objectTabs.content"></button><button class="admin-tab" type="button" role="tab" aria-selected="false" data-object-tab="assets" data-admin-shell-copy="objectTabs.assets"></button></nav>
           <section class="object-tab-panel" data-object-panel="content"><div id="objectsList" class="editor-grid"></div></section>
           <section class="object-tab-panel" data-object-panel="assets" hidden><div id="objectAssetsList" class="editor-grid"></div></section>
         </section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="finishes" hidden>
-          <div class="library-section"><div class="panel-toolbar"><div><h2>Biblioteca de cores e texturas</h2><p class="admin-note">A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador.</p></div><button id="addMaterialButton" class="button button--secondary" type="button">Adicionar material</button></div><div id="materialPager" class="library-pager"></div><div id="materialsList" class="editor-grid"></div></div>
-          <div class="library-section"><div class="panel-toolbar"><div><h2>Opções e disponibilidade por acabamento</h2><p class="admin-note">Configure separadamente pedras e materiais de cada puxador. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente.</p></div></div><div id="materialTargetPager" class="library-pager"></div><div id="materialGroupsList" class="editor-grid"></div></div>
-          <div class="library-section"><div class="panel-toolbar"><div><h2>Disponibilidade das cores de MDF</h2><p class="admin-note">Ative as cores para clientes e escolha se cada uma vale para o conjunto todo ou para módulos específicos.</p></div></div><div id="finishAvailabilityPager" class="library-pager"></div><div id="finishesList" class="editor-grid"></div></div>
+          <div class="library-section"><div class="panel-toolbar"><div><h2 data-admin-materials-copy="heading">Biblioteca de cores e texturas</h2><p class="admin-note" data-admin-materials-copy="guidance">A mesma biblioteca pode abastecer frentes, pedras e modelos de puxador.</p></div><button id="addMaterialButton" class="button button--secondary" type="button" data-admin-materials-copy="addMaterial">Adicionar material</button></div><div id="materialPager" class="library-pager"></div><div id="materialsList" class="editor-grid"></div></div>
+          <div class="library-section"><div class="panel-toolbar"><div><h2 data-admin-materials-copy="availabilityHeading">Opções e disponibilidade por acabamento</h2><p class="admin-note" data-admin-materials-copy="availabilityGuidance">Configure separadamente pedras e materiais de cada puxador. Pedra e rodapé compartilham a escolha; a disponibilidade do serviço de rodapé continua independente.</p></div></div><div id="materialTargetPager" class="library-pager"></div><div id="materialGroupsList" class="editor-grid"></div></div>
+          <div class="library-section"><div class="panel-toolbar"><div><h2 data-admin-materials-copy="finishAvailabilityHeading">Disponibilidade das cores de MDF</h2><p class="admin-note" data-admin-materials-copy="finishAvailabilityGuidance">Ative as cores para clientes e escolha se cada uma vale para o conjunto todo ou para módulos específicos.</p></div></div><div id="finishAvailabilityPager" class="library-pager"></div><div id="finishesList" class="editor-grid"></div></div>
         </section>
-        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="rules" hidden><div class="panel-toolbar"><div><h2>Regras de dependência</h2><p class="admin-note">Um objeto pode exigir outros módulos ou itens visíveis para ser habilitado.</p></div><button id="addDependencyButton" class="button button--secondary" type="button">Adicionar dependência</button></div><div id="dependenciesList" class="editor-grid"></div><div class="panel-toolbar library-section"><div><h2>Eventos de configuração</h2><p class="admin-note">Altere dimensões ou ative/desative um módulo ou serviço quando outro item for ligado ou desligado.</p></div><button id="addEventButton" class="button button--secondary" type="button">Adicionar evento</button></div><div id="eventsList" class="editor-grid"></div></section>
+        <section class="admin-tab-panel" role="tabpanel" data-admin-panel="rules" hidden><div class="panel-toolbar"><div><h2 id="dependenciesHeading"></h2><p id="dependenciesHint" class="admin-note"></p></div><button id="addDependencyButton" class="button button--secondary" type="button"></button></div><div id="dependenciesList" class="editor-grid"></div><div class="panel-toolbar library-section"><div><h2 id="eventsHeading"></h2><p id="eventsHint" class="admin-note"></p></div><button id="addEventButton" class="button button--secondary" type="button"></button></div><div id="eventsList" class="editor-grid"></div></section>
         <section class="admin-tab-panel" role="tabpanel" data-admin-panel="pricing" hidden><div id="pricingList" class="editor-grid"></div></section>
-        <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><div class="editor-actions__buttons"><button id="persistHandlesButton" class="button button--secondary" type="button" hidden>Persistir Puxadores no v3</button><button id="saveButton" class="button button--primary" type="button">Publicar configuração</button></div></div>
+        <div class="editor-actions"><p id="saveMessage" class="message" aria-live="polite"></p><div class="editor-actions__buttons"><button id="persistHandlesButton" class="button button--secondary" type="button" hidden data-admin-publication-copy="actions.persistHandles">Persistir Puxadores no v3</button><button id="saveButton" class="button button--primary" type="button" data-admin-publication-copy="actions.publishConfiguration">Publicar configuração</button></div></div>
       </section>
     </main>
     <script src="core/browser-compat.js?v=browser-compat-v1"></script>
@@ -111,6 +111,6 @@
     <script src="core/legacy-stage-repair.js?v=cp-ux-05a0-v1"></script>
     <script src="core/runtime-contracts.js?v=runtime-contracts-v2"></script>
     <script type="module" src="/core/private-navigation.bundle.js?v=private-header-v1"></script>
-    <script type="module" src="admin/admin.bundle.js?v=viewer-price-main-ux230-v2"></script>
+    <script type="module" src="admin/admin.bundle.js?v=admin-literal-copy-1"></script>
   </body>
 </html>

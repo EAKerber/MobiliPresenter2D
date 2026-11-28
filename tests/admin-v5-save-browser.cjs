@@ -24,6 +24,7 @@ let lastPut = null;
 let forceConflict = false;
 let wrongReadback = false;
 let tamperNextReadback = false;
+let configurationGetStatus = null;
 const stub = [
   'const admin = { email: "admin@example.test", roles: ["admin"], app_metadata: { roles: ["admin"] } };',
   'export async function getUser() { return admin; }',
@@ -67,6 +68,10 @@ const server = http.createServer(async (req, res) => {
   }
   if (target.pathname === "/api/configuration") {
     if (req.method === "GET") {
+      if (configurationGetStatus) {
+        json({ error: "configuration_fixture" }, configurationGetStatus);
+        return;
+      }
       if (wrongReadback && tamperNextReadback) {
         tamperNextReadback = false;
         json({ ...current, revision: current.revision + 7 });
@@ -122,9 +127,24 @@ async function main() {
     page.on("pageerror", (err) => errors.push(err.message));
     await page.goto(base + "/admin-test.html", { waitUntil: "networkidle" });
     await page.waitForSelector('[data-hierarchy-stage="finishes"] [data-hierarchy-group="cabinet-finishes"]');
+    const loadStateCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.loadState);
+    assert.equal(await page.locator("#saveMessage").textContent(), loadStateCopy.version5Loaded,
+      "native v5 settings announce the validated published state");
 
     assert.equal(await page.locator("#persistHandlesButton").isHidden(), true, "v3-only repair action must stay hidden for v5");
     await page.locator('[data-admin-tab="pricing"]').click();
+    const publicationCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.viewerBasePricePublication);
+    const publicationToggle = page.locator('[data-viewer-base-price-publication]');
+    const publicationNote = page.locator("#viewer-base-price-publication-note");
+    assert.equal(await publicationToggle.isDisabled(), false, "a validated V5 source enables editing the publication draft");
+    assert.equal(await publicationToggle.isChecked(), false, "base-price publication remains off by default");
+    assert.equal(await publicationNote.textContent(), publicationCopy.explanation, "enabled-state explanation comes from the shared copy catalog");
+    await publicationToggle.check();
+    assert.equal(await page.locator("#saveMessage").textContent(), publicationCopy.enabledDraft, "enabling the option explains that this changes only the draft");
+    assert.equal(putCount, 0, "changing the switch alone never publishes or saves");
+    await publicationToggle.uncheck();
+    assert.equal(await page.locator("#saveMessage").textContent(), publicationCopy.disabledDraft, "disabling the option explains the draft-only removal");
+    assert.equal(putCount, 0, "turning the switch off also requires explicit Save");
     const cocoa = page.locator('input[data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
     const type = page.locator('[data-price-rule-type][data-price-role="frontFinishAdjustment"][data-price-id="cocoa"]');
     await type.selectOption("amount");
@@ -148,11 +168,133 @@ async function main() {
     assert.equal(putCount, 2);
     assert.equal(current.pricing.roles.frontFinishAdjustment.cocoa.type, "amount");
 
+    await page.locator('[data-move-section-group="finishes|cabinet-finishes|handles"]').selectOption("stone");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="stone"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["stone-packages", "stone-skirting", "handles"],
+      "Admin section transfer preserves the section identity and appends it to the destination group");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="cabinet-finishes"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["fronts"], "section transfer removes the section from its source group");
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    const movedFinishes = current.stages.find((s) => s.id === "finishes");
+    assert.deepEqual(movedFinishes.groups[0].sections[2].itemIds, ["handles-all"],
+      "V5 save retains the transferred section's exact item ownership");
+    assert.equal(putCount, 3);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector('[data-hierarchy-group="stone"] [data-hierarchy-section="handles"]');
+    assert.deepEqual(await page.locator('[data-hierarchy-group="stone"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["stone-packages", "stone-skirting", "handles"],
+      "reloading Admin reads back the persisted section transfer");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="stone"] [data-hierarchy-item]').evaluateAll(
+      (items) => items.map((item) => item.dataset.hierarchyItem)
+    ), ["stone-all", "stone-skirting", "handles-all"],
+      "reloaded section transfer preserves the exact items under the destination group");
+
+    page.once("dialog", (dialog) => dialog.accept("Puxadores em grupo separado"));
+    await page.locator('[data-split-hierarchy-section="finishes|stone|handles"]').click();
+    await page.waitForSelector('[data-hierarchy-group="puxadores-em-grupo-separado"]');
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ),
+      ["stone", "puxadores-em-grupo-separado", "cabinet-finishes"],
+      "splitting a section in Admin creates a peer group in the v5 draft");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="puxadores-em-grupo-separado"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["handles"]);
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups[1].sections[0].itemIds, ["handles-all"],
+      "v5 save preserves the split section's exact item ownership");
+    assert.equal(putCount, 4);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector('[data-hierarchy-group="puxadores-em-grupo-separado"]');
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups.map((group) => group.id),
+      ["stone", "puxadores-em-grupo-separado", "cabinet-finishes"],
+      "reloading Admin reads back the persisted split hierarchy");
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ), ["stone", "puxadores-em-grupo-separado", "cabinet-finishes"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-group="puxadores-em-grupo-separado"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["handles"]);
+
+    await page.locator('[data-merge-hierarchy-group="finishes|puxadores-em-grupo-separado|previous"]').click();
+    await page.waitForSelector('[data-hierarchy-group="puxadores-em-grupo-separado"]', { state: "detached" });
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ), ["stone", "cabinet-finishes"],
+      "merging the group restores the adjacent hierarchy structure in the Admin draft");
+    assert.deepEqual(await page.locator('[data-hierarchy-group="stone"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["stone-packages", "stone-skirting", "handles"]);
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups[0].sections[2].itemIds, ["handles-all"],
+      "v5 save preserves exact item ownership after merging the group");
+    assert.equal(putCount, 5);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.waitForSelector('[data-hierarchy-group="stone"]');
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups.map((group) => group.id),
+      ["stone", "cabinet-finishes"],
+      "reloading Admin reads back the persisted merged hierarchy");
+    assert.deepEqual(current.stages.find((s) => s.id === "finishes").groups[0].sections.map((section) => section.id),
+      ["stone-packages", "stone-skirting", "handles"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-group="stone"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["stone-packages", "stone-skirting", "handles"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-stage="finishes"] [data-hierarchy-group]').evaluateAll(
+      (groups) => groups.map((group) => group.dataset.hierarchyGroup)
+    ), ["stone", "cabinet-finishes"]);
+    assert.deepEqual(await page.locator('[data-hierarchy-group="cabinet-finishes"] [data-hierarchy-section]').evaluateAll(
+      (sections) => sections.map((section) => section.dataset.hierarchySection)
+    ), ["fronts"]);
+
+    await page.locator('[data-admin-tab="finishes"]').click();
+    await page.waitForSelector('[data-finish-scope="cocoa"]');
+    const cocoaFinishBefore = current.finishes.find((finish) => finish.id === "cocoa");
+    assert.ok(cocoaFinishBefore?.enabled && cocoaFinishBefore.scope === "global",
+      "finish availability fixture starts with an enabled global finish");
+    const removedModuleId = catalog.modules[catalog.modules.length - 1]?.entityId;
+    assert.ok(removedModuleId && cocoaFinishBefore.moduleIds.includes(removedModuleId),
+      "the local-availability case starts with the selected module association");
+    const expectedCocoaFinish = {
+      id: "cocoa",
+      enabled: true,
+      scope: "local",
+      moduleIds: cocoaFinishBefore.moduleIds.filter((id) => id !== removedModuleId)
+    };
+    await page.locator('[data-finish-scope="cocoa"]').selectOption("local");
+    await page.locator(`[data-finish-module="cocoa:${removedModuleId}"]`).uncheck();
+    assert.equal(putCount, 5, "changing finish scope and module availability remains an unsaved draft");
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    assert.deepEqual(lastPut.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish,
+      "explicit V5 save sends the selected finish scope and module associations");
+    assert.deepEqual(current.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish,
+      "normalized V5 write/readback retains finish availability");
+    assert.equal(putCount, 6);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator('[data-admin-tab="finishes"]').click();
+    await page.waitForSelector('[data-finish-scope="cocoa"]');
+    assert.equal(await page.locator('[data-finish-scope="cocoa"]').inputValue(), "local",
+      "reloading Admin reads back the persisted local finish scope");
+    assert.equal(await page.locator(`[data-finish-module="cocoa:${removedModuleId}"]`).isChecked(), false,
+      "reloading Admin reads back the removed module association");
+    assert.deepEqual(current.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish);
+
+    await page.locator('[data-admin-tab="stages"]').click();
     await page.locator('[data-stage-label="finishes"]').fill("Acabamentos rejeitados");
     forceConflict = true;
     await page.locator("#saveButton").click();
     await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("Recarregue o painel"));
-    assert.equal(putCount, 3);
+    assert.equal(putCount, 7);
     assert.equal(current.stages.find((s) => s.id === "finishes").label !== "Acabamentos rejeitados", true);
     forceConflict = false;
 
@@ -162,9 +304,27 @@ async function main() {
     await page.locator('[data-stage-label="finishes"]').fill("Publicação sem confirmação");
     await page.locator("#saveButton").click();
     await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("releitura v5 não corresponde"));
-    assert.equal(putCount, 4);
+    assert.equal(putCount, 8);
     assert.notEqual((await page.locator("#saveMessage").getAttribute("data-kind")), "success",
       "readback mismatch may not be reported as success");
+
+    configurationGetStatus = 404;
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
+      loadStateCopy.configurationNotPublished);
+    configurationGetStatus = 503;
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForFunction((copy) => document.querySelector("#adminServiceError")?.textContent.includes(copy),
+      loadStateCopy.configurationLoadFailure);
+    const retryButton = page.locator("#adminServiceError button");
+    assert.equal(await retryButton.textContent(), loadStateCopy.retryLoad,
+      "retry control label comes from the shared Admin load-state catalog");
+    configurationGetStatus = null;
+    await retryButton.click();
+    await page.waitForFunction((copy) => document.getElementById("adminServiceError")?.hidden
+      && !document.getElementById("editorPanel")?.hidden
+      && document.getElementById("saveMessage")?.textContent === copy,
+    loadStateCopy.version5Loaded);
     assert.deepEqual(errors, [], "v5 admin Save fixture has no uncaught browser errors");
     await page.close();
     console.log("admin native v5 browser save: PASS");

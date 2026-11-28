@@ -23,10 +23,37 @@ const hierarchyCore = window.CasaModulesAdministrationV5;
 const hierarchyEditor = window.CasaModulesHierarchyEditor;
 const legacyStageRepair = window.CasaModulesLegacyStageRepair;
 const hierarchyDefaults = window.CASA_EM_MODULOS_HIERARCHY_DEFAULTS;
+const uiCopy = window.CASA_UI_COPY;
+const initialStateCopy = uiCopy.admin.initialState;
+const finishAvailabilityCopy = uiCopy.admin.finishes;
+const stageAvailabilityCopy = uiCopy.admin.stages;
+const objectAssetsCopy = uiCopy.admin.objectAssets;
+const objectContentFieldCopy = uiCopy.admin.objectContentFields;
+const materialAvailabilityCopy = uiCopy.admin.materials;
+const paginationCopy = uiCopy.admin.pagination;
+const hierarchyEditorCopy = uiCopy.admin.hierarchyEditor;
+const rulesCopy = uiCopy.admin.rules, nominalDimensionsCopy = uiCopy.admin.nominalDimensions;
+const authenticationCopy = uiCopy.admin.authentication;
+const publicationCopy = uiCopy.admin.publication;
+const adminShellCopy = uiCopy.admin.shell;
+const adminLoadCopy = uiCopy.admin.loadState;
+const viewerBasePricePublicationCopy = uiCopy.admin.pricing.viewerBasePricePublication;
+const pricingEditorCopy = uiCopy.admin.pricing.editor;
 let catalogPricing = null;
 let adminDataPromise = null;
 let adminViewRun = 0;
 const byId = (id) => document.getElementById(id);
+// Replace placeholders in one pass so authored names remain literal, including
+// dollar sequences and text that resembles another placeholder.
+function formatAdminCopy(template, values) {
+  return template.replace(/\{([A-Za-z]+)\}/g, (match, key) =>
+    Object.hasOwn(values, key) ? String(values[key]) : match);
+}
+byId("revisionLabel").textContent = adminLoadCopy.revisionPending;
+
+function setAdminRevisionLabel(revision) {
+  byId("revisionLabel").textContent = adminLoadCopy.revisionLabel.replace("{revision}", String(revision || 1));
+}
 const loginPanel = byId("loginPanel");
 const deniedPanel = byId("deniedPanel");
 const adminServiceError = byId("adminServiceError");
@@ -60,6 +87,42 @@ let materialAvailabilityPage = 0;
 let selectedMaterialTarget = "fronts-all";
 const MATERIALS_PER_PAGE = 4;
 
+document.querySelectorAll("[data-admin-auth-copy]").forEach((element) => {
+  const key = element.dataset.adminAuthCopy;
+  if (typeof authenticationCopy[key] === "string") element.textContent = authenticationCopy[key];
+});
+
+function adminShellCopyValue(path) {
+  const root = path.startsWith("brand.") || path.startsWith("navigation.") ? uiCopy : adminShellCopy;
+  return path.split(".").reduce((value, key) => value?.[key], root);
+}
+
+document.querySelectorAll("[data-admin-shell-copy]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellCopy);
+  if (typeof value === "string") element.textContent = value;
+});
+
+document.querySelectorAll("[data-admin-shell-aria-label]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellAriaLabel);
+  if (typeof value === "string") element.setAttribute("aria-label", value);
+});
+
+document.querySelectorAll("[data-admin-shell-alt]").forEach((element) => {
+  const value = adminShellCopyValue(element.dataset.adminShellAlt);
+  if (typeof value === "string") element.setAttribute("alt", value);
+});
+
+document.querySelectorAll("[data-admin-materials-copy]").forEach((element) => {
+  const value = element.dataset.adminMaterialsCopy.split(".").reduce((current, key) => current?.[key], materialAvailabilityCopy.librarySection);
+  if (typeof value === "string") element.textContent = value;
+});
+
+document.querySelectorAll("[data-admin-publication-copy]").forEach((element) => {
+  const value = element.dataset.adminPublicationCopy.split(".").reduce((current, key) => current?.[key], publicationCopy);
+  if (typeof value === "string") element.textContent = value;
+});
+
+
 function configuredHierarchyItemLabel(itemId) {
   for (const stage of Object.values(hierarchyDefaults?.stages || {})) {
     for (const group of stage.groups || []) {
@@ -75,20 +138,15 @@ function configuredHierarchyItemLabel(itemId) {
 }
 
 const pricingRoles = [
-  ["itemBase", "Valores de módulos e acessórios"],
-  ["handleChoiceTotal", "Puxadores"],
-  ["frontFinishAdjustment", "Adicional por acabamento"],
-  ["localAdjustment", "Adicionais locais"],
-  ["globalAdjustment", "Adicionais globais"]
+  "itemBase",
+  "handleChoiceTotal",
+  "frontFinishAdjustment",
+  "localAdjustment",
+  "globalAdjustment"
 ];
 
-const pricingTypeLabels = Object.freeze({
-  amount: "Valor fixo",
-  percentage: "Percentual"
-});
-const pricingBasisLabels = Object.freeze({
-  "eligible-module-base": "Base: valor base de cada módulo elegível"
-});
+const pricingTypeLabels = pricingEditorCopy.typeLabels;
+const pricingBasisLabels = pricingEditorCopy.basisLabels;
 
 function setMessage(element, message, kind = "") {
   element.textContent = message;
@@ -99,11 +157,11 @@ function syncPasswordReveal(button) {
   const input = byId(button.dataset.passwordReveal);
   if (!input) return;
   const revealed = input.type === "text";
-  const label = revealed ? "Ocultar senha" : "Mostrar senha";
+  const label = revealed ? authenticationCopy.hidePassword : authenticationCopy.showPassword;
   button.setAttribute("aria-pressed", String(revealed));
   button.setAttribute("aria-label", label);
   button.title = label;
-  button.textContent = revealed ? "Ocultar" : "Mostrar";
+  button.textContent = revealed ? authenticationCopy.hidePasswordAction : authenticationCopy.showPasswordAction;
 }
 
 document.querySelectorAll("[data-password-reveal]").forEach((button) => {
@@ -203,7 +261,7 @@ function compatibleDestinationOptions(itemId) {
     if (!stage.groups.length) {
       options.push({
         value: `${stage.id}||`,
-        label: `${stage.label} · criar grupo/seção inicial`
+        label: `${stage.label} · ${hierarchyEditorCopy.emptyStageDestination}`
       });
       return;
     }
@@ -238,20 +296,20 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = Boolean(model.initialState.entities[itemId]);
     initial.dataset.initialConfiguratorEntity = itemId;
-    initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
+    initial.setAttribute("aria-label", formatAdminCopy(initialStateCopy.entityVisibilityAriaLabel, { item: item.label }));
     const label = document.createElement("label");
     label.className = "initial-state-option";
-    label.append(initial, document.createTextNode(kind === "module" ? "Iniciar visível no configurador" : "Iniciar ativo"));
+    label.append(initial, document.createTextNode(initialStateCopy.entityVisibility));
     option.append(label);
     if (kind === "module") {
       const viewer = document.createElement("input");
       viewer.type = "checkbox";
       viewer.checked = Boolean(model.initialState.viewerEntities[itemId]);
       viewer.dataset.initialViewerEntity = itemId;
-      viewer.setAttribute("aria-label", `${item.label}: visível inicialmente no viewer`);
+      viewer.setAttribute("aria-label", formatAdminCopy(initialStateCopy.viewerVisibilityAriaLabel, { item: item.label }));
       const viewerLabel = document.createElement("label");
       viewerLabel.className = "initial-state-option";
-      viewerLabel.append(viewer, document.createTextNode("Iniciar visível no viewer"));
+      viewerLabel.append(viewer, document.createTextNode(initialStateCopy.viewerVisibility));
       option.append(viewerLabel);
       appendNominalDimensionControls(option, itemId, item.label);
     }
@@ -260,10 +318,10 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = model.initialState.services.includes(itemId);
     initial.dataset.initialService = itemId;
-    initial.setAttribute("aria-label", `${item.label}: ativo inicialmente`);
+    initial.setAttribute("aria-label", formatAdminCopy(initialStateCopy.serviceActiveAriaLabel, { item: item.label }));
     const label = document.createElement("label");
     label.className = "initial-state-option";
-    label.append(initial, document.createTextNode("Iniciar ativo"));
+    label.append(initial, document.createTextNode(initialStateCopy.serviceActive));
     option.append(label);
   }
 }
@@ -274,13 +332,13 @@ function appendNominalDimensionControls(option, itemId, label) {
   const fieldset = document.createElement("fieldset");
   fieldset.className = "module-nominal-dimensions";
   const legend = document.createElement("legend");
-  legend.textContent = "Medidas nominais (mm)";
+  legend.textContent = nominalDimensionsCopy.legend;
   fieldset.append(legend);
   const note = document.createElement("small");
   note.className = "module-nominal-dimensions__note";
-  note.textContent = "Atualiza as cotas e vistas técnicas; não altera a geometria da cena.";
+  note.textContent = nominalDimensionsCopy.note;
   fieldset.append(note);
-  const axes = [["width", "Largura"], ["height", "Altura"], ["depth", "Profundidade"]];
+  const axes = Object.entries(nominalDimensionsCopy.axisLabels);
   axes.forEach(([axis, axisLabel]) => {
     const fieldLabel = document.createElement("label");
     fieldLabel.className = "module-nominal-dimensions__field";
@@ -293,7 +351,7 @@ function appendNominalDimensionControls(option, itemId, label) {
     input.value = String(dimensions[axis]);
     input.dataset.moduleDimension = itemId;
     input.dataset.dimensionAxis = axis;
-    input.setAttribute("aria-label", `${label}: ${axisLabel} nominal em milímetros`);
+    input.setAttribute("aria-label", formatAdminCopy(nominalDimensionsCopy.axisAriaLabel, { module: label, axis: axisLabel }));
     fieldLabel.append(input);
     fieldset.append(fieldLabel);
   });
@@ -306,14 +364,14 @@ function makeOrderButtons(upData, downData, index, length, label) {
   const up = document.createElement("button");
   up.type = "button";
   up.textContent = "↑";
-  up.title = `Mover ${label} para cima`;
+  up.title = hierarchyEditorCopy.moveUpAriaLabel.replace("{item}", () => label);
   up.setAttribute("aria-label", up.title);
   up.disabled = index === 0;
   Object.entries(upData).forEach(([key, value]) => { up.dataset[key] = value; });
   const down = document.createElement("button");
   down.type = "button";
   down.textContent = "↓";
-  down.title = `Mover ${label} para baixo`;
+  down.title = hierarchyEditorCopy.moveDownAriaLabel.replace("{item}", () => label);
   down.setAttribute("aria-label", down.title);
   down.disabled = index === length - 1;
   Object.entries(downData).forEach(([key, value]) => { down.dataset[key] = value; });
@@ -377,11 +435,11 @@ function appendHierarchyChoiceOptions(container, itemId) {
 
   const summary = document.createElement("summary");
   const availableCount = choices.filter((choice) => choice.available).length;
-  summary.textContent = `Opções do item · ${availableCount} disponível(is)`;
+  summary.textContent = hierarchyEditorCopy.choiceOptionsSummary.replace("{count}", String(availableCount));
 
   const note = document.createElement("p");
   note.className = "admin-note hierarchy-choice-options__note";
-  note.textContent = "Estas são opções do item, não itens hierárquicos independentes. Disponibilidade e dados comerciais continuam nas abas próprias.";
+  note.textContent = hierarchyEditorCopy.choiceOptionsNote;
 
   const list = document.createElement("div");
   list.className = "hierarchy-choice-options__list";
@@ -395,7 +453,7 @@ function appendHierarchyChoiceOptions(container, itemId) {
     label.textContent = choice.label;
 
     const status = document.createElement("small");
-    status.textContent = choice.available ? "Disponível" : "Indisponível";
+    status.textContent = choice.available ? hierarchyEditorCopy.choiceAvailable : hierarchyEditorCopy.choiceUnavailable;
     row.append(label, status);
     list.append(row);
   });
@@ -429,7 +487,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
 
   const moveLabel = document.createElement("label");
   moveLabel.className = "hierarchy-move";
-  moveLabel.append(document.createTextNode("Mover para"));
+  moveLabel.append(document.createTextNode(hierarchyEditorCopy.moveItemLabel));
   const move = document.createElement("select");
   move.dataset.moveHierarchyItemTarget = itemId;
   const current = `${stage.id}|${group.id}|${section.id}`;
@@ -449,7 +507,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
     const split = document.createElement("button");
     split.type = "button";
     split.className = "button button--secondary button--compact";
-    split.textContent = "Nova seção";
+    split.textContent = hierarchyEditorCopy.newSection;
     split.dataset.splitHierarchyItem = itemId;
     split.dataset.stageId = stage.id;
     split.dataset.groupId = group.id;
@@ -459,7 +517,7 @@ function renderItem(stage, group, section, itemId, itemIndex) {
   const remove = document.createElement("button");
   remove.type = "button";
   remove.className = "button button--secondary button--compact";
-  remove.textContent = "Retirar";
+  remove.textContent = hierarchyEditorCopy.removeItem;
   remove.dataset.removeHierarchyItem = itemId;
   actions.append(remove);
   option.append(actions);
@@ -475,7 +533,7 @@ function renderSection(stage, group, section, sectionIndex) {
   header.className = "hierarchy-section__header";
   const name = document.createElement("label");
   name.className = "hierarchy-name";
-  name.append(document.createTextNode("Seção"));
+  name.append(document.createTextNode(hierarchyEditorCopy.sectionName));
   const input = document.createElement("input");
   input.type = "text";
   input.value = section.label;
@@ -485,7 +543,7 @@ function renderSection(stage, group, section, sectionIndex) {
 
   const presentation = document.createElement("label");
   presentation.className = "hierarchy-field";
-  presentation.append(document.createTextNode("Componente"));
+  presentation.append(document.createTextNode(hierarchyEditorCopy.componentLabel));
   const select = document.createElement("select");
   select.dataset.sectionComponent = `${stage.id}|${group.id}|${section.id}`;
   hierarchyCore.COMPONENTS.filter((value) => presentationCore.componentSupportsBehavior(value, section.behavior)).forEach((value) => {
@@ -510,7 +568,7 @@ function renderSection(stage, group, section, sectionIndex) {
   if (stage.groups.length > 1) {
     const moveGroupLabel = document.createElement("label");
     moveGroupLabel.className = "hierarchy-move";
-    moveGroupLabel.append(document.createTextNode("Mover seção para grupo"));
+    moveGroupLabel.append(document.createTextNode(hierarchyEditorCopy.moveSectionToGroup));
     const moveGroup = document.createElement("select");
     moveGroup.dataset.moveSectionGroup = `${stage.id}|${group.id}|${section.id}`;
     stage.groups.forEach((candidate) => {
@@ -535,14 +593,14 @@ function renderSection(stage, group, section, sectionIndex) {
     const split = document.createElement("button");
     split.type = "button";
     split.className = "button button--secondary button--compact";
-    split.textContent = "Mover para novo grupo";
+    split.textContent = hierarchyEditorCopy.moveSectionToNewGroup;
     split.dataset.splitHierarchySection = `${stage.id}|${group.id}|${section.id}`;
     actions.append(split);
 
     const merge = document.createElement("button");
     merge.type = "button";
     merge.className = "button button--secondary button--compact";
-    merge.textContent = "Remover seção e unir";
+    merge.textContent = hierarchyEditorCopy.mergeSection;
     merge.dataset.mergeHierarchySection = `${stage.id}|${group.id}|${section.id}|${sectionIndex === 0 ? "next" : "previous"}`;
     actions.append(merge);
   }
@@ -559,7 +617,7 @@ function renderGroup(stage, group, groupIndex) {
   header.className = "hierarchy-group__header";
   const name = document.createElement("label");
   name.className = "hierarchy-name";
-  name.append(document.createTextNode("Grupo"));
+  name.append(document.createTextNode(hierarchyEditorCopy.groupName));
   const input = document.createElement("input");
   input.type = "text";
   input.value = group.label;
@@ -569,13 +627,13 @@ function renderGroup(stage, group, groupIndex) {
 
   const span = document.createElement("label");
   span.className = "hierarchy-field";
-  span.append(document.createTextNode("Largura"));
+  span.append(document.createTextNode(hierarchyEditorCopy.groupWidth));
   const select = document.createElement("select");
   select.dataset.groupSpan = `${stage.id}|${group.id}`;
   hierarchyCore.COLUMN_SPANS.forEach((value) => {
     const option = document.createElement("option");
     option.value = String(value);
-    option.textContent = value === 2 ? "2 colunas" : "1 coluna";
+    option.textContent = value === 2 ? hierarchyEditorCopy.groupColumnOptions.two : hierarchyEditorCopy.groupColumnOptions.one;
     option.selected = value === group.columnSpan;
     select.append(option);
   });
@@ -600,7 +658,7 @@ function renderGroup(stage, group, groupIndex) {
     const merge = document.createElement("button");
     merge.type = "button";
     merge.className = "button button--secondary button--compact hierarchy-group__merge";
-    merge.textContent = "Remover grupo e unir conteúdo";
+    merge.textContent = hierarchyEditorCopy.mergeGroup;
     merge.dataset.mergeHierarchyGroup = `${stage.id}|${group.id}|${groupIndex === 0 ? "next" : "previous"}`;
     card.append(merge);
   }
@@ -608,6 +666,7 @@ function renderGroup(stage, group, groupIndex) {
 }
 
 function renderStages() {
+  byId("stagePanelNote").textContent = hierarchyEditorCopy.stagePanelNote;
   stagesList.replaceChildren();
   const assigned = new Set(model.stages.flatMap(stageItemIds));
   const availableById = new Map();
@@ -621,12 +680,12 @@ function renderStages() {
 
   const availableItems = document.createElement("section");
   availableItems.className = "stage-unassigned";
-  availableItems.setAttribute("aria-label", "Itens do catálogo sem seção");
+  availableItems.setAttribute("aria-label", hierarchyEditorCopy.availableItemsAriaLabel);
   const availableHeading = document.createElement("h2");
-  availableHeading.textContent = "Itens disponíveis";
+  availableHeading.textContent = hierarchyEditorCopy.availableItemsHeading;
   const availableHint = document.createElement("p");
   availableHint.className = "admin-note";
-  availableHint.textContent = "Itens pertencem a seções explícitas. Escolha uma seção compatível ou crie a estrutura inicial de uma etapa vazia.";
+  availableHint.textContent = hierarchyEditorCopy.availableItemsHint;
   const availableGrid = document.createElement("div");
   availableGrid.className = "stage-unassigned__items";
 
@@ -646,7 +705,7 @@ function renderStages() {
     const add = document.createElement("button");
     add.type = "button";
     add.className = "button button--secondary button--compact";
-    add.textContent = "Adicionar";
+    add.textContent = hierarchyEditorCopy.addItem;
     add.dataset.placeHierarchyItem = item.id;
     add.disabled = !select.options.length;
     chip.append(title, select, add);
@@ -655,7 +714,7 @@ function renderStages() {
   if (!availableById.size) {
     const empty = document.createElement("span");
     empty.className = "admin-note";
-    empty.textContent = "Todos os itens compatíveis já pertencem a uma seção.";
+    empty.textContent = hierarchyEditorCopy.allItemsPlaced;
     availableGrid.append(empty);
   }
   availableItems.append(availableHeading, availableHint, availableGrid);
@@ -674,13 +733,13 @@ function renderStages() {
 
     const nameLabel = document.createElement("label");
     nameLabel.className = "stage-name";
-    nameLabel.append(document.createTextNode("Nome da etapa"));
+    nameLabel.append(document.createTextNode(hierarchyEditorCopy.stageNameLabel));
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.maxLength = 40;
     nameInput.value = stage.label;
     nameInput.dataset.stageLabel = stage.id;
-    nameInput.setAttribute("aria-label", `Nome da etapa ${stage.label}`);
+    nameInput.setAttribute("aria-label", hierarchyEditorCopy.stageNameAriaLabel.replace("{stage}", () => stage.label));
     nameLabel.append(nameInput);
 
     const order = makeOrderButtons(
@@ -693,12 +752,21 @@ function renderStages() {
 
     const actions = document.createElement("div");
     actions.className = "stage-card__actions";
+    const isRequiredStage = ["modules", "summary"].includes(stage.kind || stage.id);
+    const hasStageItems = stageItemIds(stage).length > 0;
+    const disabledReason = isRequiredStage
+      ? stageAvailabilityCopy.requiredAvailabilityPolicy
+      : !hasStageItems
+        ? stageAvailabilityCopy.emptyAvailabilityPolicy
+        : "";
+    const disabledReasonId = `stage-policy-${stage.id}`;
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "button button--secondary";
-    remove.textContent = "Remover etapa";
+    remove.textContent = hierarchyEditorCopy.removeStage;
     remove.dataset.removeStage = stage.id;
-    remove.disabled = ["modules", "summary"].includes(stage.kind || stage.id);
+    remove.disabled = isRequiredStage;
+    if (remove.disabled && disabledReason) remove.setAttribute("aria-describedby", disabledReasonId);
     actions.append(remove);
 
     const enabledLabel = document.createElement("label");
@@ -707,11 +775,21 @@ function renderStages() {
     enabledInput.type = "checkbox";
     enabledInput.checked = stage.enabled;
     enabledInput.dataset.stageEnabled = stage.id;
-    enabledInput.disabled = stage.id === "modules" || stage.id === "summary" || stageItemIds(stage).length === 0;
-    enabledInput.setAttribute("aria-label", `Ativar etapa ${stage.label}`);
-    enabledLabel.append(enabledInput, document.createTextNode(stage.enabled ? "Ativa" : "Inativa"));
+    enabledInput.disabled = isRequiredStage || !hasStageItems;
+    enabledInput.setAttribute("aria-label", formatAdminCopy(stageAvailabilityCopy.availabilityAriaLabel, { stage: stage.label }));
+    if (enabledInput.disabled && disabledReason) enabledInput.setAttribute("aria-describedby", disabledReasonId);
+    enabledLabel.append(enabledInput, document.createTextNode(
+      stage.enabled ? stageAvailabilityCopy.availabilityActive : stageAvailabilityCopy.availabilityInactive
+    ));
     top.append(number, nameLabel, order, actions, enabledLabel);
     card.append(top);
+    if (disabledReason) {
+      const policyNote = document.createElement("p");
+      policyNote.className = "admin-note stage-card__policy-note";
+      policyNote.id = disabledReasonId;
+      policyNote.textContent = disabledReason;
+      card.append(policyNote);
+    }
 
     const hierarchy = document.createElement("div");
     hierarchy.className = "stage-hierarchy";
@@ -720,7 +798,7 @@ function renderStages() {
     } else {
       const empty = document.createElement("p");
       empty.className = "stage-drop-hint";
-      empty.textContent = "Etapa vazia. Adicione um item disponível para criar o primeiro grupo e seção.";
+      empty.textContent = hierarchyEditorCopy.emptyStageHint;
       hierarchy.append(empty);
     }
     card.append(hierarchy);
@@ -728,9 +806,12 @@ function renderStages() {
   });
 
   const stageKindInput = byId("stageKindInput");
+  stageKindInput.setAttribute("aria-label", hierarchyEditorCopy.newStageTypeLabel);
   [...stageKindInput.options].forEach((option) => {
+    option.textContent = hierarchyEditorCopy.newStageTypes[option.value] || option.textContent;
     option.disabled = option.value !== "custom" && model.stages.some((stage) => (stage.kind || stage.id) === option.value);
   });
+  byId("addStageButton").textContent = hierarchyEditorCopy.addStage;
 }
 
 function makeField(labelText, value, name, multiline = false) {
@@ -790,17 +871,17 @@ function renderObjects() {
   card.className = "editor-card object-editor-card";
   const heading = document.createElement("h2"); heading.textContent = label;
   card.append(heading,
-    makeField("Nome público", data.title, "objectTitle"),
-    makeField("Descrição", data.description, "objectDescription"),
-    makeField("Destaques (um por linha)", data.benefits, "objectBenefits", true),
-    makeField("Componentes (um por linha)", data.components, "objectComponents", true),
-    makeField("Requisitos (um por linha)", data.requirements, "objectRequirements", true));
+    makeField(objectContentFieldCopy.publicName, data.title, "objectTitle"),
+    makeField(objectContentFieldCopy.description, data.description, "objectDescription"),
+    makeField(objectContentFieldCopy.benefitsPerLine, data.benefits, "objectBenefits", true),
+    makeField(objectContentFieldCopy.componentsPerLine, data.components, "objectComponents", true),
+    makeField(objectContentFieldCopy.requirementsPerLine, data.requirements, "objectRequirements", true));
   const handleProduct = model.handleProducts.find((item) => item.priceEntryId === id);
   if (handleProduct) {
     const section = document.createElement("section"); section.className = "handle-colors";
-    const title = document.createElement("h3"); title.textContent = "Materiais deste puxador";
+    const title = document.createElement("h3"); title.textContent = materialAvailabilityCopy.handleMaterialsHeading;
     const note = document.createElement("p"); note.className = "admin-note";
-    note.textContent = handleProduct.materialIds.map((materialId) => model.materials.find((item) => item.id === materialId)?.label).filter(Boolean).join(" · ") || "Nenhum material associado. Configure a lista na aba Cores e acabamentos.";
+    note.textContent = handleProduct.materialIds.map((materialId) => model.materials.find((item) => item.id === materialId)?.label).filter(Boolean).join(" · ") || materialAvailabilityCopy.handleMaterialsEmptyState;
     section.append(title, note); card.append(section);
   }
   card.dataset.objectId = id;
@@ -812,24 +893,29 @@ function renderObjectAssets(id, label) {
   objectAssetsList.replaceChildren();
   const assets = model.objectAssets[id] || { imageAsset: "", detailImageAsset: "", maskAsset: "" };
   const card = document.createElement("article"); card.className = "editor-card"; card.dataset.assetObjectId = id;
-  const heading = document.createElement("h2"); heading.textContent = `${label} · arquivos da cena`;
+  const heading = document.createElement("h2"); heading.textContent = formatAdminCopy(objectAssetsCopy.heading, { item: label });
   card.append(heading);
   const hasSceneEntity = scene.entities.some((entity) => entity.id === id);
-  [["imageAsset", "Imagem da cena", assetChoices("imageAsset")], ["detailImageAsset", "Imagem dos detalhes", assetChoices("imageAsset")], ["maskAsset", "Máscara de acabamento", assetChoices("maskAsset")]].forEach(([field, title, choices]) => {
+  const noteId = `object-asset-policy-${id}`;
+  [["imageAsset", "sceneImage", assetChoices("imageAsset")], ["detailImageAsset", "detailImage", assetChoices("imageAsset")], ["maskAsset", "finishMask", assetChoices("maskAsset")]].forEach(([field, copyKey, choices]) => {
+    const title = objectAssetsCopy.fields[copyKey];
     const labelNode = document.createElement("label"); labelNode.className = "data-field"; labelNode.append(document.createTextNode(title));
     const select = document.createElement("select"); select.dataset.objectAsset = field;
-    const empty = document.createElement("option"); empty.value = ""; empty.textContent = "Usar o padrão / sem máscara"; select.append(empty);
+    const empty = document.createElement("option"); empty.value = ""; empty.textContent = objectAssetsCopy.defaultSelection; select.append(empty);
     choices.forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; select.append(option); });
-    select.value = assets[field] || ""; select.disabled = !hasSceneEntity; labelNode.append(select);
+    select.value = assets[field] || ""; select.disabled = !hasSceneEntity;
+    if (select.disabled) select.setAttribute("aria-describedby", noteId);
+    labelNode.append(select);
     const previewPath = assets[field] || (field !== "maskAsset" ? scene.entities.find((entity) => entity.id === id)?.asset || "" : "");
     const preview = document.createElement("div"); preview.className = `asset-preview${field === "maskAsset" ? " asset-preview--mask" : ""}`;
     if (previewPath) {
-      const image = document.createElement("img"); image.src = previewPath; image.alt = `${title} · ${label}`; image.loading = "lazy"; image.decoding = "async";
-      image.addEventListener("error", () => { preview.textContent = "Prévia indisponível"; }, { once: true }); preview.append(image);
-    } else { const empty = document.createElement("span"); empty.textContent = "Sem máscara · usar o recorte padrão"; preview.append(empty); }
+      const image = document.createElement("img"); image.src = previewPath; image.alt = formatAdminCopy(objectAssetsCopy.previewAlt, { asset: title, item: label }); image.loading = "lazy"; image.decoding = "async";
+      image.addEventListener("error", () => { preview.textContent = objectAssetsCopy.previewUnavailable; }, { once: true }); preview.append(image);
+    } else { const empty = document.createElement("span"); empty.textContent = objectAssetsCopy.emptyPreview; preview.append(empty); }
     labelNode.append(preview); card.append(labelNode);
   });
-  const note = document.createElement("p"); note.className = "admin-note"; note.textContent = hasSceneEntity ? "A lista contém apenas arquivos já presentes na cena. O painel não carrega arquivos novos nem permite caminhos externos." : "Este item não possui camada visual própria na cena. Configure cores e texturas na biblioteca de materiais.";
+  const note = document.createElement("p"); note.className = "admin-note"; note.id = noteId;
+  note.textContent = hasSceneEntity ? objectAssetsCopy.sceneEntityPolicy : objectAssetsCopy.nonSceneEntityPolicy;
   card.append(note); objectAssetsList.append(card);
 }
 
@@ -855,37 +941,62 @@ function renderFinishes() {
     const enabled = document.createElement("input");
     enabled.type = "checkbox";
     enabled.checked = finish.enabled;
-    enabled.disabled = finish.scope === "global" && finish.enabled && globalOptions === 1;
+    const onlyGlobalFinish = finish.scope === "global" && finish.enabled && globalOptions === 1;
+    const globalPolicyId = `finish-policy-${finish.id}`;
+    enabled.disabled = onlyGlobalFinish;
     enabled.dataset.finishEnabled = finish.id;
-    active.append(enabled, document.createTextNode("Disponível para clientes"));
+    enabled.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.customerAvailabilityAriaLabel, { finish: source.label }));
+    if (onlyGlobalFinish) enabled.setAttribute("aria-describedby", globalPolicyId);
+    active.append(enabled, document.createTextNode(finishAvailabilityCopy.customerAvailability));
     const scopeLabel = document.createElement("label");
     scopeLabel.className = "data-field";
-    scopeLabel.append(document.createTextNode("Aplicação"));
+    scopeLabel.append(document.createTextNode(finishAvailabilityCopy.scopeLabel));
     const scope = document.createElement("select");
     scope.dataset.finishScope = finish.id;
-    [["global", "Global · conjunto todo"], ["local", "Local · módulo individual"]].forEach(([value, label]) => {
+    scope.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.scopeAriaLabel, { finish: source.label }));
+    scope.disabled = onlyGlobalFinish;
+    Object.entries(finishAvailabilityCopy.scopeOptions).forEach(([value, label]) => {
       const option = document.createElement("option"); option.value = value; option.textContent = label;
-      option.disabled = value === "local" && finish.enabled && finish.scope === "global" && globalOptions === 1;
       scope.append(option);
     });
+    if (scope.disabled) scope.setAttribute("aria-describedby", globalPolicyId);
     scope.value = finish.scope;
     scopeLabel.append(scope);
     card.append(swatch, heading, active, scopeLabel);
+    if (onlyGlobalFinish) {
+      const policyNote = document.createElement("p");
+      policyNote.className = "admin-note finish-admin-card__policy-note";
+      policyNote.id = globalPolicyId;
+      policyNote.textContent = finishAvailabilityCopy.globalAvailabilityPolicy;
+      card.append(policyNote);
+    }
     if (finish.scope === "local") {
       const modules = document.createElement("div");
       modules.className = "finish-module-options";
-      modules.setAttribute("aria-label", `Módulos que aceitam ${source.label}`);
+      modules.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.moduleOptionsAriaLabel, { finish: source.label }));
+      const onlyModuleId = finish.moduleIds.length === 1 ? finish.moduleIds[0] : null;
+      const modulePolicyId = `finish-module-policy-${finish.id}`;
       catalog.modules.forEach((module) => {
         const label = document.createElement("label");
         const input = document.createElement("input");
         input.type = "checkbox";
         input.checked = finish.moduleIds.includes(module.entityId);
-        input.disabled = input.checked && finish.moduleIds.length === 1;
+        input.disabled = input.checked && module.entityId === onlyModuleId;
         input.dataset.finishModule = `${finish.id}:${module.entityId}`;
+        input.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.moduleAvailabilityAriaLabel,
+          { finish: source.label, module: module.referenceLabel }));
+        if (input.disabled) input.setAttribute("aria-describedby", modulePolicyId);
         label.append(input, document.createTextNode(module.referenceLabel));
         modules.append(label);
       });
       card.append(modules);
+      if (onlyModuleId) {
+        const policyNote = document.createElement("p");
+        policyNote.className = "admin-note finish-admin-card__policy-note";
+        policyNote.id = modulePolicyId;
+        policyNote.textContent = finishAvailabilityCopy.localAssociationPolicy;
+        card.append(policyNote);
+      }
     }
     finishesList.append(card);
   });
@@ -895,17 +1006,17 @@ function renderFinishes() {
 function renderPager(container, index, pages, onPage) {
   if (!container) return;
   container.replaceChildren();
-  const previous = document.createElement("button"); previous.type = "button"; previous.className = "button button--secondary"; previous.textContent = "← Anterior"; previous.disabled = index <= 0;
+  const previous = document.createElement("button"); previous.type = "button"; previous.className = "button button--secondary"; previous.textContent = paginationCopy.previous; previous.disabled = index <= 0;
   previous.addEventListener("click", () => onPage(index - 1));
   const status = document.createElement("span"); status.textContent = `${index + 1} / ${pages}`; status.setAttribute("aria-live", "polite");
-  const next = document.createElement("button"); next.type = "button"; next.className = "button button--secondary"; next.textContent = "Próxima →"; next.disabled = index >= pages - 1;
+  const next = document.createElement("button"); next.type = "button"; next.className = "button button--secondary"; next.textContent = paginationCopy.next; next.disabled = index >= pages - 1;
   next.addEventListener("click", () => onPage(index + 1)); container.append(previous, status, next);
 }
 
 function materialTargetOptions() {
   return [
-    ["fronts-all", "Frentes"], ["stone-all", "Pedra e rodapé"],
-    ...model.handleProducts.map((item) => [`handle:${item.id}`, `Puxador · ${item.label}`])
+    ["fronts-all", materialAvailabilityCopy.frontTarget], ["stone-all", materialAvailabilityCopy.stoneTarget],
+    ...model.handleProducts.map((item) => [`handle:${item.id}`, `${materialAvailabilityCopy.handleTargetPrefix} · ${item.label}`])
   ];
 }
 
@@ -917,7 +1028,7 @@ function setMaterialTarget(materialId, targetId, enabled) {
     return;
   }
   const group = model.materialGroups.find((item) => item.id === targetId); if (!group) return;
-  if (!enabled && group.materialIds.length === 1) return setMessage(saveMessage, "Mantenha pelo menos um material nesta opção.", "error");
+  if (!enabled && group.materialIds.length === 1) return setMessage(saveMessage, materialAvailabilityCopy.lastMaterialValidation, "error");
   group.materialIds = enabled ? [...new Set([...group.materialIds, materialId])] : group.materialIds.filter((id) => id !== materialId);
   material.groupIds = model.materialGroups.filter((item) => ["fronts-all", "stone-all"].includes(item.id) && item.materialIds.includes(materialId)).map((item) => item.id);
   if (targetId === "fronts-all") {
@@ -953,24 +1064,34 @@ function renderMaterials() {
     const card = document.createElement("article"); card.className = "editor-card material-editor-card"; card.dataset.materialId = material.id;
     const chip = document.createElement("span"); chip.className = "material-chip"; chip.style.backgroundColor = material.color || "transparent"; if (material.textureAsset) chip.style.backgroundImage = `url("${material.textureAsset}")`;
     const title = document.createElement("h2"); title.textContent = material.label;
-    card.append(chip, title, makeField("Nome", material.label, "materialLabel"));
-    const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode("Cor base"));
+    card.append(chip, title, makeField(materialAvailabilityCopy.name, material.label, "materialLabel"));
+    const colorLabel = document.createElement("label"); colorLabel.className = "data-field"; colorLabel.append(document.createTextNode(materialAvailabilityCopy.baseColor));
     const color = document.createElement("input"); color.type = "color"; color.value = material.color || "#b7b0a7"; color.disabled = material.color === null; color.dataset.materialColor = "true"; colorLabel.append(color); card.append(colorLabel);
+    if (color.disabled) {
+      const colorReason = document.createElement("p"); colorReason.className = "admin-note"; colorReason.id = `material-color-disabled-reason-${material.id}`;
+      colorReason.textContent = materialAvailabilityCopy.colorDisabledReason;
+      color.setAttribute("aria-describedby", colorReason.id); card.append(colorReason);
+    }
     const noColorLabel = document.createElement("label"); noColorLabel.className = "data-field";
     const noColor = document.createElement("input"); noColor.type = "checkbox"; noColor.checked = material.color === null; noColor.disabled = material.kind !== "texture"; noColor.dataset.materialNoColor = "true";
-    noColorLabel.append(noColor, document.createTextNode(" Sem cor/tinta base")); card.append(noColorLabel);
-    const kindLabel = document.createElement("label"); kindLabel.className = "data-field"; kindLabel.append(document.createTextNode("Tipo de material"));
+    noColorLabel.append(noColor, document.createTextNode(` ${materialAvailabilityCopy.noColor}`)); card.append(noColorLabel);
+    const kindLabel = document.createElement("label"); kindLabel.className = "data-field"; kindLabel.append(document.createTextNode(materialAvailabilityCopy.kindLabel));
     const kind = document.createElement("select"); kind.dataset.materialKind = "true";
-    [["color", "Cor sólida"], ["texture", "Textura"]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
+    [["color", materialAvailabilityCopy.kindOptions.solidColor], ["texture", materialAvailabilityCopy.kindOptions.texture]].forEach(([value, text]) => { const option = document.createElement("option"); option.value = value; option.textContent = text; kind.append(option); });
     kind.value = material.kind; kindLabel.append(kind); card.append(kindLabel);
-    const assetLabel = document.createElement("label"); assetLabel.className = "data-field"; assetLabel.append(document.createTextNode("Textura (arquivo existente)"));
+    if (noColor.disabled) {
+      const noColorReason = document.createElement("p"); noColorReason.className = "admin-note"; noColorReason.id = `material-no-color-disabled-reason-${material.id}`;
+      noColorReason.textContent = materialAvailabilityCopy.noColorDisabledReason;
+      noColor.setAttribute("aria-describedby", noColorReason.id); card.append(noColorReason);
+    }
+    const assetLabel = document.createElement("label"); assetLabel.className = "data-field"; assetLabel.append(document.createTextNode(materialAvailabilityCopy.textureAssetLabel));
     const assetSelect = document.createElement("select"); assetSelect.dataset.materialTexture = "true";
-    const noTexture = document.createElement("option"); noTexture.value = ""; noTexture.textContent = "Somente cor"; assetSelect.append(noTexture);
+    const noTexture = document.createElement("option"); noTexture.value = ""; noTexture.textContent = materialAvailabilityCopy.onlyColor; assetSelect.append(noTexture);
     materialAssetChoices().forEach((path) => { const option = document.createElement("option"); option.value = path; option.textContent = path; assetSelect.append(option); });
     assetSelect.value = material.textureAsset || ""; assetLabel.append(assetSelect); card.append(assetLabel);
-    if (material.textureAsset) { const thumb = document.createElement("img"); thumb.className = "material-texture-preview"; thumb.src = material.textureAsset; thumb.alt = `Textura ${material.label}`; thumb.loading = "lazy"; card.append(thumb); }
+    if (material.textureAsset) { const thumb = document.createElement("img"); thumb.className = "material-texture-preview"; thumb.src = material.textureAsset; thumb.alt = materialAvailabilityCopy.texturePreviewAlt.replace("{material}", () => material.label); thumb.loading = "lazy"; card.append(thumb); }
     const targetSelect = document.createElement("details"); targetSelect.className = "material-targets";
-    const summary = document.createElement("summary"); summary.textContent = "Válido para…"; targetSelect.append(summary);
+    const summary = document.createElement("summary"); summary.textContent = materialAvailabilityCopy.validForSummary; targetSelect.append(summary);
     const targetList = document.createElement("div"); targetList.className = "material-targets__list";
     materialTargetOptions().forEach(([id, label]) => {
       const selected = id.startsWith("handle:")
@@ -980,7 +1101,7 @@ function renderMaterials() {
       optionLabel.append(input, document.createTextNode(label)); targetList.append(optionLabel);
     });
     targetSelect.append(targetList); card.append(targetSelect);
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = "Remover material"; remove.dataset.removeMaterial = material.id;
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = materialAvailabilityCopy.removeMaterial; remove.dataset.removeMaterial = material.id;
     remove.disabled = (material.locked && ["base-light", "stone-existing", "none"].includes(material.id)) || material.groupIds.some((id) => model.materialGroups.find((group) => group.id === id)?.materialIds.length <= 1);
     card.append(remove); materialsList.append(card);
   });
@@ -996,27 +1117,27 @@ function renderMaterialGroups() {
   selectedMaterialTarget = targetId;
   const card = document.createElement("article"); card.className = "editor-card material-target-page";
   if (!targetId.startsWith("handle:")) card.dataset.materialGroupId = targetId;
-  const heading = document.createElement("h2"); heading.textContent = `${title} · opções válidas`; card.append(heading);
+  const heading = document.createElement("h2"); heading.textContent = `${title} · ${materialAvailabilityCopy.validOptionsSuffix}`; card.append(heading);
   if (targetId.startsWith("handle:")) {
     const product = model.handleProducts.find((item) => item.id === targetId.slice(7));
     const handles = model.materialGroups.find((item) => item.id === "handles-all");
     const available = document.createElement("label"); available.className = "switch material-availability";
     const toggle = document.createElement("input"); toggle.type = "checkbox"; toggle.checked = handles.materialIds.includes(product.id); toggle.dataset.handleAvailability = product.id;
-    available.append(toggle, document.createTextNode("Disponível para clientes")); card.append(available);
-    const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "Definir depois não é um puxador e não recebe materiais."; card.append(note);
-    appendMaterialAvailabilityList(card, "Cores e materiais deste puxador", model.materials, product.materialIds, `handle:${product.id}`);
-    card.append(makeRuleSelect("Puxador selecionado inicialmente", model.initialState.handleId, "initialHandle", [["none", "Definir depois"], ...handles.materialIds.map((id) => { const item = model.handleProducts.find((entry) => entry.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
+    available.append(toggle, document.createTextNode(finishAvailabilityCopy.customerAvailability)); card.append(available);
+    const note = document.createElement("p"); note.className = "admin-note"; note.textContent = materialAvailabilityCopy.handleAvailabilityNote; card.append(note);
+    appendMaterialAvailabilityList(card, materialAvailabilityCopy.handleMaterialsHeading, model.materials, product.materialIds, `handle:${product.id}`);
+    card.append(makeRuleSelect(materialAvailabilityCopy.initialHandleLabel, model.initialState.handleId, "initialHandle", [["none", materialAvailabilityCopy.defineLater], ...handles.materialIds.map((id) => { const item = model.handleProducts.find((entry) => entry.id === id); return [item?.priceEntryId || "", item?.label || id]; })]));
   } else {
     const group = model.materialGroups.find((item) => item.id === targetId);
-    card.append(makeField("Nome da opção", group.label, "materialGroupLabel"));
-    if (targetId === "stone-all") appendMaterialAvailabilityList(card, "Pedras e texturas disponíveis para bancada e rodapé", model.materials, group.materialIds, targetId);
-    else card.append(makeMaterialCheckboxDropdown("Materiais válidos para frentes", model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
+    card.append(makeField(materialAvailabilityCopy.groupName, group.label, "materialGroupLabel"));
+    if (targetId === "stone-all") appendMaterialAvailabilityList(card, materialAvailabilityCopy.stoneAvailabilityHeading, model.materials, group.materialIds, targetId);
+    else card.append(makeMaterialCheckboxDropdown(materialAvailabilityCopy.frontMaterialsLabel, model.materials.map((item) => [item.id, item.label, item.color, item.textureAsset]), group.materialIds, targetId));
     if (targetId === "fronts-all") {
       const available = model.finishes.filter((finish) => finish.enabled && finish.scope === "global" && group.materialIds.includes(finish.id));
-      card.append(makeRuleSelect("Cor selecionada inicialmente", model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
+      card.append(makeRuleSelect(materialAvailabilityCopy.initialColorLabel, model.initialState.finishId, "initialFinish", available.map((finish) => [finish.id, model.materials.find((item) => item.id === finish.id)?.label || finish.id])));
     } else {
-      card.append(makeRuleSelect("Pedra selecionada inicialmente", model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
-      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = "A disponibilidade do serviço de rodapé é controlada separadamente na etapa; pedra e rodapé compartilham o material escolhido."; card.append(note);
+      card.append(makeRuleSelect(materialAvailabilityCopy.initialStoneLabel, model.initialState.stonePackageId, "initialStone", group.materialIds.map((id) => [id, model.materials.find((item) => item.id === id)?.label || id])));
+      const note = document.createElement("p"); note.className = "admin-note"; note.textContent = materialAvailabilityCopy.baseboardAvailabilityNote; card.append(note);
     }
   }
   materialGroupsList.append(card);
@@ -1025,7 +1146,7 @@ function renderMaterialGroups() {
 
 function appendMaterialAvailabilityList(container, label, materials, selectedIds, targetId) {
   const section = document.createElement("section"); section.className = "material-availability-list";
-  const heading = document.createElement("h3"); heading.textContent = `${label} · ${selectedIds.length} disponível(is)`;
+  const heading = document.createElement("h3"); heading.textContent = `${label} · ${selectedIds.length} ${materialAvailabilityCopy.availableCountSuffix}`;
   const options = materials.slice().sort((left, right) => left.label.localeCompare(right.label, "pt-BR"));
   const pages = Math.max(1, Math.ceil(options.length / MATERIALS_PER_PAGE));
   materialAvailabilityPage = Math.min(materialAvailabilityPage, pages - 1);
@@ -1045,7 +1166,7 @@ function appendMaterialAvailabilityList(container, label, materials, selectedIds
 
 function makeMaterialCheckboxDropdown(label, options, selectedIds, targetId) {
   const details = document.createElement("details"); details.className = "multi-picker";
-  const summary = document.createElement("summary"); summary.textContent = `${label} · ${selectedIds.length} selecionado(s)`; details.append(summary);
+  const summary = document.createElement("summary"); summary.textContent = `${label} · ${selectedIds.length} ${materialAvailabilityCopy.selectedCountSuffix}`; details.append(summary);
   const list = document.createElement("div"); list.className = "multi-picker__list";
   options.forEach(([id, name, color, texture]) => {
     const option = document.createElement("label"); option.className = "multi-picker__option";
@@ -1074,47 +1195,58 @@ function entityOptions() {
 }
 
 function eventTriggerOptions() {
-  return [...entityOptions(), ...catalog.services.map((item) => [item.id, item.title]), ["stone-skirting", "Rodapé de pedra"]];
+  const options = [...entityOptions(), ...catalog.services.map((item) => [item.id, item.title])];
+  const unique = new Map();
+  options.forEach(([id, label]) => { if (!unique.has(id)) unique.set(id, [id, label]); });
+  return [...unique.values()];
 }
 
 function renderDependencies() {
+  byId("dependenciesHeading").textContent = rulesCopy.dependenciesHeading;
+  byId("dependenciesHint").textContent = rulesCopy.dependenciesHint;
+  byId("addDependencyButton").textContent = rulesCopy.addDependency;
   dependenciesList.replaceChildren();
   const entities = entityOptions();
   model.dependencies.forEach((rule) => {
     const card = document.createElement("article"); card.className = "editor-card material-rule-card"; card.dataset.dependencyId = rule.id;
-    const heading = document.createElement("h2"); heading.textContent = "Item dependente";
-    card.append(heading, makeRuleSelect("Este item", rule.dependentId, "dependencyDependent", entities), makeRuleSelect("Requer todos estes itens", rule.requires, "dependencyRequires", entities, true));
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove rule-wide"; remove.textContent = "Remover dependência"; remove.dataset.removeDependency = rule.id; card.append(remove);
+    const heading = document.createElement("h2"); heading.textContent = rulesCopy.dependencyItemHeading;
+    card.append(heading, makeRuleSelect(rulesCopy.dependencyEntityLabel, rule.dependentId, "dependencyDependent", entities), makeRuleSelect(rulesCopy.dependencyRequirementsLabel, rule.requires, "dependencyRequires", entities, true));
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove rule-wide"; remove.textContent = rulesCopy.removeDependency; remove.dataset.removeDependency = rule.id; card.append(remove);
     dependenciesList.append(card);
   });
 }
 
 function renderEvents() {
+  byId("eventsHeading").textContent = rulesCopy.eventsHeading;
+  byId("eventsHint").textContent = rulesCopy.eventsHint;
+  byId("addEventButton").textContent = rulesCopy.addEvent;
   eventsList.replaceChildren();
   const entities = eventTriggerOptions();
   model.events.forEach((rule) => {
     const card = document.createElement("article"); card.className = "editor-card material-rule-card"; card.dataset.eventId = rule.id;
     const legacyDepth = rule.action === "set-depth";
     const stateChange = rule.action === "set-enabled";
-    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? "Ajuste legado de profundidade" : stateChange ? "Ativar ou desativar item" : "Ajuste de dimensão";
+    const heading = document.createElement("h2"); heading.textContent = legacyDepth ? rulesCopy.eventHeadings.legacyDepth : stateChange ? rulesCopy.eventHeadings.stateChange : rulesCopy.eventHeadings.dimension;
     card.append(heading,
-      makeRuleSelect("Ação", rule.action || "set-dimension", "eventAction", [["set-dimension", "Alterar dimensão de módulo"], ["set-enabled", "Ativar ou desativar módulo ou serviço"], ["set-depth", "Profundidade fixa do Módulo 07"]]),
-      makeRuleSelect("Quando este item", rule.triggerId, "eventTrigger", entities),
-      makeRuleSelect("Estiver", rule.when, "eventWhen", [["enabled", "Ativado"], ["disabled", "Desativado"]]));
+      makeRuleSelect(rulesCopy.eventActionLabel, rule.action || "set-dimension", "eventAction", [["set-dimension", rulesCopy.eventActions.setDimension], ["set-enabled", rulesCopy.eventActions.setEnabled], ["set-depth", rulesCopy.eventActions.setDepth]]),
+      makeRuleSelect(rulesCopy.eventTriggerLabel, rule.triggerId, "eventTrigger", entities),
+      makeRuleSelect(rulesCopy.eventConditionLabel, rule.when, "eventWhen", [["enabled", rulesCopy.eventConditions.enabled], ["disabled", rulesCopy.eventConditions.disabled]]));
     if (legacyDepth) {
-      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Aplicar ao Módulo 07 · Profundidade em mm"));
+      const target = document.createElement("label"); target.className = "rule-field";
+      const targetLabel = entities.find(([id]) => id === (rule.targetId || "module-07"))?.[1] || "";
+      target.append(document.createTextNode(rulesCopy.legacyDepthTargetLabel.replace("{target}", () => targetLabel)));
       const value = document.createElement("input"); value.type = "number"; value.min = "300"; value.max = "700"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventDepth = "true"; target.append(value); card.append(target);
     } else if (stateChange) {
-      card.append(makeRuleSelect("Aplicar a", rule.targetId || "module-07", "eventTarget", entities));
-      card.append(makeRuleSelect("Definir estado", String(Boolean(rule.enabled)), "eventEnabled", [["true", "Ativado"], ["false", "Desativado"]]));
+      card.append(makeRuleSelect(rulesCopy.eventTargetLabel, rule.targetId || "module-07", "eventTarget", entities));
+      card.append(makeRuleSelect(rulesCopy.eventStateLabel, String(Boolean(rule.enabled)), "eventEnabled", [["true", rulesCopy.eventStates.enabled], ["false", rulesCopy.eventStates.disabled]]));
     } else {
       const modules = catalog.modules.map((item) => [item.entityId, `${item.referenceLabel} · ${model.objects[item.entityId]?.title || item.title}`]);
-      card.append(makeRuleSelect("Aplicar ao módulo", rule.targetId || "module-07", "eventTarget", modules));
-      card.append(makeRuleSelect("Dimensão", rule.dimension || "depth", "eventDimension", [["width", "Largura"], ["height", "Altura"], ["depth", "Profundidade"]]));
-      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode("Valor em mm"));
+      card.append(makeRuleSelect(rulesCopy.eventModuleLabel, rule.targetId || "module-07", "eventTarget", modules));
+      card.append(makeRuleSelect(rulesCopy.eventDimensionLabel, rule.dimension || "depth", "eventDimension", [["width", rulesCopy.eventDimensions.width], ["height", rulesCopy.eventDimensions.height], ["depth", rulesCopy.eventDimensions.depth]]));
+      const target = document.createElement("label"); target.className = "rule-field"; target.append(document.createTextNode(rulesCopy.eventValueMmLabel));
       const value = document.createElement("input"); value.type = "number"; value.min = "1"; value.max = "5000"; value.step = "1"; value.value = String(rule.valueMm); value.dataset.eventValue = "true"; target.append(value); card.append(target);
     }
-    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = "Remover evento"; remove.dataset.removeEvent = rule.id; card.append(remove);
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "button button--secondary rule-remove"; remove.textContent = rulesCopy.removeEvent; remove.dataset.removeEvent = rule.id; card.append(remove);
     eventsList.append(card);
   });
 }
@@ -1145,7 +1277,7 @@ function renderPricing() {
   const publicationCard = document.createElement("article");
   publicationCard.className = "editor-card pricing-publication-card";
   const publicationTitle = document.createElement("h2");
-  publicationTitle.textContent = "Exibição pública no Viewer";
+  publicationTitle.textContent = viewerBasePricePublicationCopy.title;
   const publicationLabel = document.createElement("label");
   publicationLabel.className = "pricing-publication-switch";
   const publicationInput = document.createElement("input");
@@ -1153,18 +1285,20 @@ function renderPricing() {
   publicationInput.dataset.viewerBasePricePublication = "true";
   publicationInput.checked = model.viewerPricePublication?.enabled === true;
   publicationInput.disabled = publishedSource?.schemaVersion !== hierarchyCore.SCHEMA;
-  publicationLabel.append(publicationInput, document.createTextNode("Mostrar preços base no Viewer"));
+  publicationLabel.append(publicationInput, document.createTextNode(viewerBasePricePublicationCopy.label));
   const publicationNote = document.createElement("p");
+  publicationNote.id = "viewer-base-price-publication-note";
+  publicationInput.setAttribute("aria-describedby", publicationNote.id);
   publicationNote.className = "admin-note";
   publicationNote.textContent = publicationInput.disabled
-    ? "Esta opção exige uma configuração V5 publicada."
-    : "Inicialmente desativado. Somente os valores base válidos dos módulos publicados e visíveis serão exibidos; não inclui opções e serviços. Alterar esta opção não publica nada até clicar em Publicar configuração.";
+    ? viewerBasePricePublicationCopy.requiresV5
+    : viewerBasePricePublicationCopy.explanation;
   publicationCard.append(publicationTitle, publicationLabel, publicationNote);
   pricingList.append(publicationCard);
-  pricingRoles.forEach(([role, title]) => {
+  pricingRoles.forEach((role) => {
     const card = document.createElement("article");
     card.className = "editor-card pricing-card";
-    const heading = document.createElement("h2"); heading.textContent = title; card.append(heading);
+    const heading = document.createElement("h2"); heading.textContent = pricingEditorCopy.roleLabels[role]; card.append(heading);
     const capabilities = pricingContract.ROLE_CAPABILITIES[role];
     Object.entries(model.pricing.roles[role]).forEach(([id, rule]) => {
       const percentage = rule.type === "percentage";
@@ -1182,7 +1316,7 @@ function renderPricing() {
         select.dataset.priceRuleType = "true";
         select.dataset.priceRole = role;
         select.dataset.priceId = id;
-        select.setAttribute("aria-label", `Tipo de preço: ${publicLabel}`);
+        select.setAttribute("aria-label", formatAdminCopy(pricingEditorCopy.typeAriaLabel, { label: publicLabel }));
         capabilities.types.forEach((type) => {
           const option = document.createElement("option");
           option.value = type;
@@ -1203,7 +1337,7 @@ function renderPricing() {
       input.dataset.priceRole = role;
       input.dataset.priceId = id;
       input.dataset.priceType = rule.type;
-      input.setAttribute("aria-label", `Valor de ${publicLabel}`);
+      input.setAttribute("aria-label", formatAdminCopy(pricingEditorCopy.valueAriaLabel, { label: publicLabel }));
 
       const unit = document.createElement("small");
       unit.className = "pricing-unit";
@@ -1222,7 +1356,7 @@ function renderPricing() {
   });
   const note = document.createElement("p");
   note.className = "admin-note";
-  note.textContent = "Os valores publicados são estimativas para clientes. Custos, margens e dados de fornecedores não entram neste painel.";
+  note.textContent = pricingEditorCopy.publishedValuesNotice;
   pricingList.append(note);
 }
 
@@ -1281,20 +1415,25 @@ function refreshHandlesRepairState() {
 }
 
 async function loadSettings() {
-  const response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-  if (!response.ok) throw new Error(response.status === 404 ? "A API de configuração ainda não foi publicada." : "Não foi possível carregar a configuração.");
+  let response;
+  try {
+    response = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
+  } catch {
+    throw new Error(adminLoadCopy.configurationLoadFailure);
+  }
+  if (!response.ok) throw new Error(response.status === 404 ? adminLoadCopy.configurationNotPublished : adminLoadCopy.configurationLoadFailure);
   const published = await response.json();
   publishedSource = structuredClone(published);
   model = baselineHierarchyFor(published);
-  byId("revisionLabel").textContent = "Versão " + (model.revision || 1) + " · editor hierárquico";
+  setAdminRevisionLabel(model.revision);
   const repair = refreshHandlesRepairState();
   setMessage(
     saveMessage,
     repair?.ok && repair.needed
-      ? "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica."
+      ? adminLoadCopy.handlesRepairNeeded
       : published.schemaVersion === hierarchyCore.SCHEMA
-        ? "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação."
-        : "Hierarquia carregada. Alterações estruturais permanecem em rascunho até a publicação hierárquica ser habilitada."
+        ? adminLoadCopy.version5Loaded
+        : adminLoadCopy.hierarchyDraftLoaded
   );
   renderAdminTabs();
 }
@@ -1396,7 +1535,7 @@ materialGroupsList.addEventListener("change", (event) => {
   if (event.target.matches("[data-target-material]")) setMaterialTarget(event.target.dataset.materialId, event.target.dataset.targetMaterial, event.target.checked);
   if (event.target.matches("[data-handle-availability]")) {
     const handles = model.materialGroups.find((item) => item.id === "handles-all"); const id = event.target.dataset.handleAvailability;
-    if (!event.target.checked && handles.materialIds.length === 1) { event.target.checked = true; return setMessage(saveMessage, "Mantenha pelo menos um puxador disponível.", "error"); }
+    if (!event.target.checked && handles.materialIds.length === 1) { event.target.checked = true; return setMessage(saveMessage, materialAvailabilityCopy.lastHandleAvailabilityValidation, "error"); }
     handles.materialIds = event.target.checked ? [...new Set([...handles.materialIds, id])] : handles.materialIds.filter((item) => item !== id);
     reconcileInitialMaterials();
   }
@@ -1436,11 +1575,11 @@ function newRuleId(prefix, records) {
   let index = 1; while (records.some((item) => item.id === `${prefix}-${index}`)) index += 1; return `${prefix}-${index}`;
 }
 byId("addStageButton").addEventListener("click", () => {
-  if (model.stages.length >= 12) return setMessage(saveMessage, "O limite é 12 etapas.", "error");
+  if (model.stages.length >= 12) return setMessage(saveMessage, hierarchyEditorCopy.stageLimitValidation.replace("{limit}", "12"), "error");
   const kind = byId("stageKindInput").value;
   if (kind !== "custom" && model.stages.some((stage) => (stage.kind || stage.id) === kind)) return;
   const defaultLabel = kind === "finishes" ? "Acabamentos" : kind === "services" ? "Serviços" : "Nova etapa";
-  const label = window.prompt("Nome da nova etapa", defaultLabel);
+  const label = window.prompt(hierarchyEditorCopy.newStagePrompt, defaultLabel);
   if (!label?.trim()) return;
   let id = `stage-${label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 28) || "extra"}`;
   const base = id; let suffix = 2; while (model.stages.some((stage) => stage.id === id)) id = `${base}-${suffix++}`;
@@ -1448,7 +1587,7 @@ byId("addStageButton").addEventListener("click", () => {
   renderStages();
 });
 byId("addMaterialButton").addEventListener("click", () => {
-  const label = window.prompt("Nome da nova cor ou textura", "Novo material"); if (!label?.trim()) return;
+  const label = window.prompt(materialAvailabilityCopy.createPrompt, materialAvailabilityCopy.createDefault); if (!label?.trim()) return;
   let id = label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "material";
   const base = id; let suffix = 2; while (model.materials.some((item) => item.id === id)) id = `${base}-${suffix++}`;
   const material = { id, label: label.trim().slice(0, 60), kind: "color", color: "#cbbcaa", textureAsset: "", textureSize: "cover", groupIds: ["fronts-all"], locked: false };
@@ -1495,8 +1634,8 @@ pricingList.addEventListener("change", (event) => {
     }
     model.viewerPricePublication = { enabled: publicationSwitch.checked };
     setMessage(saveMessage, publicationSwitch.checked
-      ? "Exibição de preços base ativada apenas no rascunho. Clique em Publicar configuração para autorizar valores públicos."
-      : "Exibição de preços base desativada apenas no rascunho. Clique em Publicar configuração para retirar valores da API pública.");
+      ? viewerBasePricePublicationCopy.enabledDraft
+      : viewerBasePricePublicationCopy.disabledDraft);
     return;
   }
   const typeSelect = event.target.closest("[data-price-rule-type]");
@@ -1514,7 +1653,7 @@ pricingList.addEventListener("change", (event) => {
     } else {
       rules[id] = { type: "amount", cents: 0 };
     }
-    setMessage(saveMessage, "Tipo de preço alterado. O valor foi zerado para evitar conversão implícita entre R$ e %.", "success");
+    setMessage(saveMessage, pricingEditorCopy.typeChangedResetNotice, "success");
     renderPricing();
     return;
   }
@@ -1547,7 +1686,7 @@ async function showUser(user) {
     deniedPanel.hidden = false;
     return;
   }
-  byId("userLabel").textContent = user.email || "Administrador";
+  byId("userLabel").textContent = user.email || adminShellCopy.header.userFallback;
   try {
     await ensureAdminData();
     if (runId !== adminViewRun) return;
@@ -1557,12 +1696,12 @@ async function showUser(user) {
   } catch (error) {
     if (runId !== adminViewRun) return;
     adminServiceError.hidden = false;
-    setMessage(adminServiceError, error.message || "Falha ao carregar os dados administrativos.", "error");
+    setMessage(adminServiceError, error.message || adminLoadCopy.adminDataLoadFallback, "error");
     if (error.code === "forbidden") return;
     const retry = document.createElement("button");
     retry.type = "button";
     retry.className = "button button--secondary";
-    retry.textContent = "Tentar novamente";
+    retry.textContent = adminLoadCopy.retryLoad;
     retry.addEventListener("click", async () => {
       retry.disabled = true;
       let currentUser = null;
@@ -1576,7 +1715,11 @@ async function showUser(user) {
 async function ensureAdminData() {
   if (!adminDataPromise) {
     adminDataPromise = (async () => {
-      const payload = await fetchAdminBootstrap({ fetchImpl: fetch, getUserImpl: getUser });
+      const payload = await fetchAdminBootstrap({
+        fetchImpl: fetch,
+        getUserImpl: getUser,
+        failureMessages: adminLoadCopy.bootstrapFailures,
+      });
       priceBook = payload.priceBook;
       catalogPricing = pricingContract.normalize(priceBook.pricing);
     })().catch((error) => {
@@ -1593,21 +1736,21 @@ function showPasswordAction(type, token) {
   loginForm.hidden = true;
   passwordActionForm.hidden = false;
   byId("passwordActionTitle").textContent = type === "invite"
-    ? "Defina uma senha para concluir o convite de administrador."
-    : "Defina uma nova senha para acessar a administração.";
-  byId("passwordActionButton").textContent = type === "invite" ? "Aceitar convite" : "Atualizar senha";
+    ? authenticationCopy.inviteTitle
+    : authenticationCopy.recoveryTitle;
+  byId("passwordActionButton").textContent = type === "invite" ? authenticationCopy.acceptInvite : authenticationCopy.updatePassword;
 }
 
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const submit = loginForm.querySelector("button[type=submit]");
   submit.disabled = true;
-  setMessage(loginMessage, "Entrando…");
+  setMessage(loginMessage, authenticationCopy.loginProgress);
   try {
     await login(byId("emailInput").value.trim(), byId("passwordInput").value);
     setMessage(loginMessage, "");
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível entrar. Confira os dados e tente novamente.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.loginFallback, "error");
   } finally {
     submit.disabled = false;
   }
@@ -1615,12 +1758,12 @@ loginForm.addEventListener("submit", async (event) => {
 
 byId("recoveryButton").addEventListener("click", async () => {
   const email = byId("emailInput").value.trim();
-  if (!email) return setMessage(loginMessage, "Informe seu e-mail para receber o link de recuperação.", "error");
+  if (!email) return setMessage(loginMessage, authenticationCopy.missingEmail, "error");
   try {
     await requestPasswordRecovery(email);
-    setMessage(loginMessage, "Se a conta existir, você receberá um link para redefinir a senha.", "success");
+    setMessage(loginMessage, authenticationCopy.recoverySuccess, "success");
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível solicitar a recuperação.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.recoveryFallback, "error");
   }
 });
 
@@ -1634,7 +1777,7 @@ passwordActionForm.addEventListener("submit", async (event) => {
     window.location.hash = "";
     window.location.reload();
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível atualizar a senha.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.updatePasswordFallback, "error");
   }
 });
 
@@ -1724,7 +1867,7 @@ stagesList.addEventListener("change", (event) => {
     const value = Number(nominalDimension.value);
     if (!Number.isFinite(value) || Math.abs(value * 10 - Math.round(value * 10)) > 1e-6 || value < 1 || value > 5000) {
       nominalDimension.value = String(model.moduleDimensions[itemId]?.[axis] || "");
-      setMessage(saveMessage, "Informe uma medida nominal entre 1 e 5.000 mm, com até uma casa decimal.", "error");
+      setMessage(saveMessage, nominalDimensionsCopy.invalidValueMessage, "error");
       return;
     }
     if (model.moduleDimensions[itemId] && ["width", "height", "depth"].includes(axis)) {
@@ -1790,7 +1933,7 @@ stagesList.addEventListener("click", (event) => {
 
   const splitItem = event.target.closest("[data-split-hierarchy-item]");
   if (splitItem) {
-    const label = window.prompt("Nome da nova seção", itemLabel(splitItem.dataset.stageId, splitItem.dataset.splitHierarchyItem));
+    const label = window.prompt(hierarchyEditorCopy.newSectionPrompt, itemLabel(splitItem.dataset.stageId, splitItem.dataset.splitHierarchyItem));
     if (!label?.trim()) return;
     const stage = model.stages.find((entry) => entry.id === splitItem.dataset.stageId);
     const sectionIds = new Set((stage?.groups || []).flatMap((group) => group.sections.map((section) => section.id)));
@@ -1812,7 +1955,7 @@ stagesList.addEventListener("click", (event) => {
     const [stageId, groupId, sectionId] = splitSection.dataset.splitHierarchySection.split("|");
     const stage = model.stages.find((entry) => entry.id === stageId);
     const section = stage?.groups.find((group) => group.id === groupId)?.sections.find((entry) => entry.id === sectionId);
-    const label = window.prompt("Nome do novo grupo", section?.label || "Novo grupo");
+    const label = window.prompt(hierarchyEditorCopy.newGroupPrompt, section?.label || "Novo grupo");
     if (!label?.trim()) return;
     const groupIds = new Set((stage?.groups || []).map((group) => group.id));
     const nextGroupId = hierarchyEditor.uniqueId(groupIds, label, "grupo");
@@ -1855,23 +1998,23 @@ persistHandlesButton.addEventListener("click", async () => {
   persistHandlesButton.disabled = true;
   saveButton.disabled = true;
   try {
-    if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
-    if (publishedSource.schemaVersion !== configurationCore.SCHEMA) throw new Error("A persistência isolada de Puxadores é exclusiva do v3.");
+    if (!publishedSource) throw new Error(publicationCopy.publishedSettingsNotLoaded);
+    if (publishedSource.schemaVersion !== configurationCore.SCHEMA) throw new Error(publicationCopy.handlesRequireV3);
     const baseline = baselineHierarchyFor(publishedSource);
     const hasLocalDraft = JSON.stringify(model) !== JSON.stringify(baseline);
     if (hasLocalDraft) {
       const confirmed = window.confirm(
-        "Há alterações locais no painel. Esta operação publicará somente Puxadores no schema v3 e recarregará o painel; outras alterações locais não serão publicadas. Continuar?"
+        publicationCopy.handlesConfirmation
       );
       if (!confirmed) {
-        setMessage(saveMessage, "Persistência de Puxadores cancelada; nenhuma alteração foi publicada.");
+        setMessage(saveMessage, publicationCopy.handlesCancelled);
         return;
       }
     }
 
-    setMessage(saveMessage, "Relendo a configuração publicada antes de persistir Puxadores…");
+    setMessage(saveMessage, publicationCopy.handlesRechecking);
     const freshResponse = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-    if (!freshResponse.ok) throw new Error("Não foi possível reler a configuração publicada.");
+    if (!freshResponse.ok) throw new Error(publicationCopy.configurationReadFailed);
     const fresh = await freshResponse.json();
 
     if (JSON.stringify(fresh) !== JSON.stringify(publishedSource)) {
@@ -1879,27 +2022,27 @@ persistHandlesButton.addEventListener("click", async () => {
       model = baselineHierarchyFor(fresh);
       refreshHandlesRepairState();
       renderAdminTabs();
-      throw new Error("A configuração mudou desde que o painel foi aberto. O painel foi recarregado; revise o estado antes de tentar novamente.");
+      throw new Error(publicationCopy.handlesReloadBeforeRetry);
     }
 
     const plan = handlesRepairPlan(fresh);
-    if (!plan?.ok) throw new Error(plan?.message || "Não foi possível preparar a atribuição de Puxadores.");
+    if (!plan?.ok) throw new Error(plan?.message || publicationCopy.handlesPlanFallback);
     if (!plan.needed) {
       publishedSource = structuredClone(fresh);
       model = baselineHierarchyFor(fresh);
       refreshHandlesRepairState();
       renderAdminTabs();
-      setMessage(saveMessage, "Puxadores já está persistido em Acabamentos.", "success");
+      setMessage(saveMessage, publicationCopy.handlesAlreadyPersisted, "success");
       return;
     }
 
     const delta = legacyStageRepair.verifyHandlesOnlyDelta(fresh, plan.candidate, configurationCore.SCHEMA);
-    if (!delta.ok) throw new Error(delta.message || "A alteração proposta não é exclusivamente a atribuição de Puxadores.");
+    if (!delta.ok) throw new Error(delta.message || publicationCopy.handlesDeltaFallback);
 
     const validationErrors = configurationCore.validateConfiguratorSettings(plan.candidate, catalog, priceBook, scene);
     if (validationErrors.length) throw new Error(validationErrors[0]);
 
-    setMessage(saveMessage, "Persistindo apenas Puxadores em Acabamentos no schema v3…");
+    setMessage(saveMessage, publicationCopy.handlesPersisting);
     const response = await fetch("/api/configuration", {
       method: "PUT",
       credentials: "same-origin",
@@ -1910,37 +2053,35 @@ persistHandlesButton.addEventListener("click", async () => {
       body: JSON.stringify(plan.candidate)
     });
     const payload = await response.json().catch(() => null);
-    if (response.status === 401 || response.status === 403) throw new Error("Sua sessão não tem permissão para persistir Puxadores.");
-    if (response.status === 409) throw new Error("A configuração mudou durante a gravação. Recarregue o painel antes de tentar novamente.");
-    if (!response.ok) throw new Error(payload?.message || "A API recusou a gravação isolada de Puxadores.");
+    if (response.status === 401 || response.status === 403) throw new Error(publicationCopy.handlesForbidden);
+    if (response.status === 409) throw new Error(publicationCopy.handlesConflict);
+    if (!response.ok) throw new Error(payload?.message || publicationCopy.handlesWriteFallback);
 
     const expected = configurationCore.normalizeConfiguratorSettings(plan.candidate, catalog, priceBook, scene);
     expected.revision = fresh.revision + 1;
     if (JSON.stringify(payload) !== JSON.stringify(expected)) {
-      throw new Error("A resposta da gravação não corresponde ao candidato v3 esperado.");
+      throw new Error(publicationCopy.handlesWriteMismatch);
     }
 
     const readbackResponse = await fetch("/api/configuration", { credentials: "same-origin", cache: "no-store" });
-    if (!readbackResponse.ok) throw new Error("Puxadores foi gravado, mas a releitura de confirmação falhou.");
+    if (!readbackResponse.ok) throw new Error(publicationCopy.handlesReadbackFailed);
     const readback = await readbackResponse.json();
     if (JSON.stringify(readback) !== JSON.stringify(expected)) {
-      throw new Error("A releitura não corresponde exatamente ao v3 esperado após persistir Puxadores.");
+      throw new Error(publicationCopy.handlesReadbackMismatch);
     }
 
     publishedSource = structuredClone(readback);
     model = baselineHierarchyFor(readback);
-    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setAdminRevisionLabel(model.revision);
     refreshHandlesRepairState();
     renderAdminTabs();
     setMessage(
       saveMessage,
-      hasLocalDraft
-        ? "Puxadores foi persistido em Acabamentos no v3 publicado. O painel foi recarregado a partir do publicado; outras alterações locais não foram enviadas."
-        : "Puxadores foi persistido em Acabamentos no v3 publicado. A publicação hierárquica v5 continua bloqueada.",
+      hasLocalDraft ? publicationCopy.handlesPersistedWithDraft : publicationCopy.handlesPersisted,
       "success"
     );
   } catch (error) {
-    setMessage(saveMessage, error.message || "Falha ao persistir Puxadores.", "error");
+    setMessage(saveMessage, error.message || publicationCopy.handlesFailureFallback, "error");
   } finally {
     saveButton.disabled = false;
     if (!persistHandlesButton.hidden) persistHandlesButton.disabled = false;
@@ -1952,17 +2093,17 @@ saveButton.addEventListener("click", async () => {
   try {
     const hierarchyValidation = hierarchyErrors(model);
     if (hierarchyValidation.length) throw new Error(hierarchyValidation[0]);
-    if (!publishedSource) throw new Error("A configuração publicada ainda não foi carregada.");
+    if (!publishedSource) throw new Error(publicationCopy.publishedSettingsNotLoaded);
 
     if (publishedSource.schemaVersion === hierarchyCore.SCHEMA) {
       if (model.revision !== publishedSource.revision) {
-        throw new Error("O rascunho não corresponde à revisão publicada. Recarregue antes de salvar.");
+        throw new Error(publicationCopy.hierarchyRevisionMismatch);
       }
       const candidate = hierarchyCore.normalize(model);
       const expected = hierarchyCore.normalize({
         ...structuredClone(candidate), revision: publishedSource.revision + 1
       });
-      setMessage(saveMessage, "Publicando configuração hierárquica v5…");
+      setMessage(saveMessage, publicationCopy.hierarchyPublishing);
       const response = await fetch("/api/configuration", {
         method: "PUT",
         credentials: "same-origin",
@@ -1971,37 +2112,37 @@ saveButton.addEventListener("click", async () => {
       });
       const payload = await response.json().catch(() => null);
       if (response.status === 401 || response.status === 403) {
-        throw new Error("Sua sessão não tem permissão para publicar esta configuração.");
+        throw new Error(publicationCopy.publishForbidden);
       }
       if (response.status === 409) {
-        throw new Error("A configuração mudou em outra sessão. Recarregue o painel antes de salvar.");
+        throw new Error(publicationCopy.publishConflict);
       }
-      if (!response.ok) throw new Error(payload?.message || payload?.error || "A API recusou a publicação v5.");
+      if (!response.ok) throw new Error(payload?.message || payload?.error || publicationCopy.hierarchyPublishFallback);
       if (JSON.stringify(payload) !== JSON.stringify(expected)) {
-        throw new Error("A resposta de publicação v5 não corresponde ao documento esperado.");
+        throw new Error(publicationCopy.hierarchyWriteMismatch);
       }
 
       const readbackResponse = await fetch("/api/configuration", {
         credentials: "same-origin", cache: "no-store"
       });
       if (!readbackResponse.ok) {
-        throw new Error("A publicação v5 foi aceita, mas a releitura de confirmação falhou.");
+        throw new Error(publicationCopy.hierarchyReadbackFailed);
       }
       const readback = await readbackResponse.json();
       if (JSON.stringify(readback) !== JSON.stringify(expected)) {
-        throw new Error("A releitura v5 não corresponde à revisão publicada; nenhuma confirmação foi assumida.");
+        throw new Error(publicationCopy.hierarchyReadbackMismatch);
       }
       publishedSource = structuredClone(readback);
       model = baselineHierarchyFor(readback);
-      byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+      setAdminRevisionLabel(model.revision);
       refreshHandlesRepairState();
       renderAdminTabs();
-      setMessage(saveMessage, "Configuração v5 publicada e verificada por releitura.", "success");
+      setMessage(saveMessage, publicationCopy.hierarchyPublished, "success");
       return;
     }
 
     if (publishedSource.schemaVersion !== configurationCore.SCHEMA) {
-      throw new Error("O schema publicado não é compatível com este editor.");
+      throw new Error(publicationCopy.incompatibleSchema);
     }
 
     const projection = hierarchyCore.projectToLegacy(
@@ -2017,7 +2158,7 @@ saveButton.addEventListener("click", async () => {
       if (projection.code === "hierarchy_requires_publication") {
         setMessage(
           saveMessage,
-          "A hierarquia foi alterada. Este rascunho não será achatado no schema publicado; publique a hierarquia apenas no checkpoint autenticado.",
+          publicationCopy.hierarchyDraftBlocked,
           "error"
         );
         return;
@@ -2025,36 +2166,36 @@ saveButton.addEventListener("click", async () => {
       if (projection.code === "pricing_requires_publication") {
         setMessage(
           saveMessage,
-          "Este tipo de preço exige a futura publicação consolidada. Nenhuma configuração foi publicada; use Percentual para manter compatibilidade com o schema atual.",
+          publicationCopy.pricePublicationBlocked,
           "error"
         );
         return;
       }
-      throw new Error(projection.errors?.[0] || "A hierarquia não pode ser publicada com segurança.");
+      throw new Error(projection.errors?.[0] || publicationCopy.hierarchyProjectionFallback);
     }
 
-    setMessage(saveMessage, "Publicando configuração compatível…");
+    setMessage(saveMessage, publicationCopy.compatiblePublishing);
     const response = await fetch("/api/configuration", {
       method: "PUT",
       credentials: "same-origin",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(projection.value)
     });
-    if (response.status === 401 || response.status === 403) throw new Error("Sua sessão não tem permissão para publicar esta configuração.");
-    if (response.status === 409) throw new Error("A configuração mudou em outra sessão. Recarregue o painel antes de salvar.");
+    if (response.status === 401 || response.status === 403) throw new Error(publicationCopy.publishForbidden);
+    if (response.status === 409) throw new Error(publicationCopy.publishConflict);
     const payload = await response.json().catch(() => null);
     if (!response.ok) {
-      if (payload?.error === "hierarchy_publication_required") throw new Error("A API bloqueou uma publicação hierárquica antes do checkpoint autorizado.");
-      throw new Error(payload?.message || "A configuração não foi aceita. Confira nomes e itens selecionados.");
+      if (payload?.error === "hierarchy_publication_required") throw new Error(publicationCopy.hierarchyCheckpointBlocked);
+      throw new Error(payload?.message || publicationCopy.compatiblePayloadRejected);
     }
     model = hierarchyCore.upgrade(payload, configurationCore, flowCore, catalog, priceBook, scene, hierarchyDefaults);
     publishedSource = structuredClone(payload);
-    byId("revisionLabel").textContent = `Versão ${model.revision} · editor hierárquico`;
+    setAdminRevisionLabel(model.revision);
     refreshHandlesRepairState();
-    setMessage(saveMessage, "Configuração compatível publicada. A hierarquia estrutural continua protegida contra publicação prematura.", "success");
+    setMessage(saveMessage, publicationCopy.compatiblePublished, "success");
     renderAdminTabs();
   } catch (error) {
-    setMessage(saveMessage, error.message || "Falha ao publicar a configuração.", "error");
+    setMessage(saveMessage, error.message || publicationCopy.publicationFailureFallback, "error");
   } finally {
     saveButton.disabled = false;
   }
@@ -2089,7 +2230,7 @@ async function initializeAdminAccess() {
       else await showUser(await getUser());
     }
   } catch (error) {
-    setMessage(loginMessage, error.message || "Não foi possível concluir o acesso.", "error");
+    setMessage(loginMessage, error.message || authenticationCopy.accessInitializationFallback, "error");
     await showUser(await getUser());
   }
 }
