@@ -220,7 +220,8 @@ for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
   assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc006-private-session-lookup-retry-1"), file + " busts the old private menu bundle cache");
-  assert(read(file).includes("ui-copy.js?v=arc13-loc006-config-mini-scene-labels-1"), file + " busts the old shared copy catalog cache");
+  const copyRevision = file === "app/config/index.html" ? "shared-technical-copy-1" : "arc13-loc006-config-mini-scene-labels-1";
+  assert(read(file).includes("ui-copy.js?v=" + copyRevision), file + " busts the old shared copy catalog cache");
 }
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html"]) {
   const logoutMarkup = read(file);
@@ -264,8 +265,10 @@ for (const file of shells) {
   const copyVersion = ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"].includes(file)
     ? "arc13-loc004-comparison-copy-1"
     : file === "app/viewer/index.html"
-      ? "viewer-copy-runtime-2"
-    : ["app/access/index.html", "app/access/manage.html", "app/config/index.html", "app/admin.html"].includes(file)
+      ? "shared-technical-copy-1"
+    : file === "app/config/index.html"
+      ? "shared-technical-copy-1"
+    : ["app/access/index.html", "app/access/manage.html", "app/admin.html"].includes(file)
       ? "arc13-loc006-config-mini-scene-labels-1"
     : "arc13-loc003-copy-1";
   assert(html.includes(`src="/core/ui-copy.js?v=${copyVersion}"`), file + " copy catalog bootstrap");

@@ -25,6 +25,7 @@ on:
       - 'tests/arc13_line_ending_normalization_test.py'
       - 'tests/auth-first-login-recovery.test.mjs'
       - 'tests/ui-theme-contract.cjs'
+      - 'tests/technical-drawings-copy.test.cjs'
       - '.github/workflows/arc13-inventory-integrity.yml'
   push:
     branches: [main, development]
@@ -49,6 +50,7 @@ on:
       - 'tests/arc13_line_ending_normalization_test.py'
       - 'tests/auth-first-login-recovery.test.mjs'
       - 'tests/ui-theme-contract.cjs'
+      - 'tests/technical-drawings-copy.test.cjs'
       - '.github/workflows/arc13-inventory-integrity.yml'
 
 permissions:
@@ -76,6 +78,8 @@ jobs:
         run: python tests/arc13_line_ending_normalization_test.py
       - name: Verify catalog-backed theme and menu labels
         run: node tests/ui-theme-contract.cjs
+      - name: Verify shared technical drawing descriptions and fallback
+        run: node --test tests/technical-drawings-copy.test.cjs
       - name: Verify primary page compiler output
         run: node scripts/compile-primary-pages.mjs --check
       - name: Confirm the generated report remains tracked
@@ -141,6 +145,17 @@ jobs:
           for (const source of viewerFixedSources) {
             assert.equal(source.consumerRefs?.length, 1, `${source.valuePath} has one proven consumer`);
             assert.equal(source.consumerRefs[0].flow, 'bounded-catalog-copy-to-viewer');
+          }
+          const drawingSources = inventory.sourceEntries.filter((entry) =>
+            entry.source === 'app/core/ui-copy.js' && entry.sourceRole === 'technical-drawing-copy');
+          assert.equal(drawingSources.length, 8);
+          for (const source of drawingSources) {
+            assert.equal(source.consumerRefs?.length, source.valuePath.endsWith('.amplification') ? 2 : 1,
+              `${source.valuePath} has its bounded consumers`);
+            for (const consumer of source.consumerRefs) {
+              assert.equal(consumer.flow, 'bounded-catalog-copy-to-technical-drawing');
+              assert.deepEqual(consumer.routeConsumers, ['/config/', '/viewer/']);
+            }
           }
           assert(!inventory.sourceEntries.some((entry) =>
             entry.source === 'app/core/admin-bootstrap-retry.mjs'
