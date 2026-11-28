@@ -21,5 +21,3 @@ export default async (request) => {
     return jsonResponse({ error: "access_service_unavailable" }, 503);
   }
 };
-
-export const config = { path: "/api/access/session" };

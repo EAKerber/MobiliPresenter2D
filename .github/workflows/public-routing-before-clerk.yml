@@ -11,6 +11,7 @@ on:
       - 'app/core/public-module-projection.js'
       - 'app/core/scene-component.js'
       - 'netlify/functions/public-modules.mjs'
+      - 'netlify/functions/access-session-status.mjs'
       - 'netlify.toml'
       - 'tests/public-*.cjs'
       - 'app/tools/test-public-modules-endpoint.js'
@@ -23,6 +24,7 @@ on:
       - 'app/landing/**'
       - 'app/viewer/**'
       - 'netlify/functions/public-modules.mjs'
+      - 'netlify/functions/access-session-status.mjs'
       - '.github/workflows/public-routing-before-clerk.yml'
 
 permissions:
@@ -87,6 +89,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Anonymous status is a read-only POST. A custom function path can
+          # otherwise leave this rewrite pointing at an unavailable endpoint.
+          for i in $(seq 1 10); do
+            session_status=$(curl -sS -o /tmp/session-status.json -w '%{http_code}' -X POST -H "Origin: $PUBLIC_PAGES_URL" -H 'Content-Type: application/json' --data '{}' "$PUBLIC_PAGES_URL/api/access/session")
+            [[ "$session_status" == 404 && "$i" -lt 10 ]] || break
+            sleep 3
+          done
+          test "$session_status" = 200
+          node -e 'const assert=require("node:assert/strict"); assert.deepEqual(JSON.parse(require("node:fs").readFileSync("/tmp/session-status.json","utf8")), {authenticated:false})'
           # The preview HTML may be reachable before its function route has
           # propagated. Retry only that transient 404; other failures fail closed.
           for i in $(seq 1 10); do
