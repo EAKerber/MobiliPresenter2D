@@ -565,16 +565,16 @@ test("static /access/ logout control receives the shared temporary-session logou
   const location = { pathname: "/access/", origin: "https://site.test", assign(value) { this.assigned = value; } };
   const window = { location, CASA_UI_THEME: { getCopy(_key, fallback) { return fallback; } } };
   let logoutCalls = 0;
-  let failLogoutRequest = true;
+  const logoutOutcomes = ["network", 503, 403, 200];
   const fetchCalls = [];
   const fetchImpl = async (url, options) => {
     fetchCalls.push({ url, options });
     if (url === "/api/access/session/logout") {
-      if (failLogoutRequest) {
-        failLogoutRequest = false;
+      const outcome = logoutOutcomes.shift();
+      if (outcome === "network") {
         throw new Error("network details must not reach the UI");
       }
-      return { ok: true, status: 200, json: async () => ({ ok: true }) };
+      return { ok: outcome === 200, status: outcome, json: async () => ({ ok: outcome === 200 }) };
     }
     return { ok: true, status: 200, json: async () => ({ authenticated: true, email: "temporary@example.test", accessType: "temporary" }) };
   };
@@ -590,14 +590,16 @@ test("static /access/ logout control receives the shared temporary-session logou
   );
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(logoutButton.hidden, false, "a verified temporary session reveals the existing static control");
-  await logoutButton.dispatch("click");
   const logoutStatus = account.children.find((node) => node.getAttribute("role") === "status");
-  assert.equal(logoutStatus.hidden, false, "a transport failure leaves a generic live message visible");
-  assert.equal(logoutStatus.textContent, "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
-  assert.equal(logoutStatus.textContent.includes("network details"), false, "transport details never appear in the UI");
-  assert.equal(logoutButton.disabled, false, "the temporary-session logout can be retried");
-  assert.equal(logoutCalls, 0, "Identity logout is not treated as revoking a temporary session");
-  assert.equal(location.assigned, undefined, "a transport failure does not claim logout succeeded");
+  for (const failure of ["network", 503, 403]) {
+    await logoutButton.dispatch("click");
+    assert.equal(logoutStatus.hidden, false, `${failure} leaves a generic live message visible`);
+    assert.equal(logoutStatus.textContent, "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+    assert.equal(logoutStatus.textContent.includes("network details"), false, "transport details never appear in the UI");
+    assert.equal(logoutButton.disabled, false, "the temporary-session logout can be retried");
+    assert.equal(logoutCalls, 0, "Identity logout is not treated as revoking a temporary session");
+    assert.equal(location.assigned, undefined, `${failure} does not claim logout succeeded`);
+  }
   await logoutButton.dispatch("click");
   assert.equal(logoutStatus.hidden, true, "retry clears the previous failure message");
   assert.ok(fetchCalls.some((call) => call.url === "/api/access/session/logout" && call.options.method === "POST"), "static control revokes the temporary session");
