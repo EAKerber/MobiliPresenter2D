@@ -811,6 +811,8 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     lastHandleAvailabilityValidation: "Mantenha pelo menos um puxador disponível.",
     availableCountSuffix: "disponível(is)",
     selectedCountSuffix: "selecionado(s)",
+    createPrompt: "Nome da nova cor ou textura",
+    createDefault: "Novo material",
     baseColor: "Cor base",
     noColor: "Sem cor/tinta base",
     colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",
@@ -829,6 +831,17 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
     key: element.dataset.adminMaterialsCopy,
     text: element.textContent
   }))), Object.entries(materialStateCopy.librarySection).map(([key, text]) => ({ key, text })), "all seven static materials-library labels bind to their catalog entries");
+  const materialCountBeforePrompt = await page.locator("[data-material-id]").count();
+  let capturedMaterialPrompt = false;
+  page.once("dialog", (dialog) => {
+    assert.equal(dialog.message(), materialStateCopy.createPrompt, "material creation prompt comes from the copy catalog");
+    assert.equal(dialog.defaultValue(), materialStateCopy.createDefault, "material prompt default comes from the copy catalog");
+    capturedMaterialPrompt = true;
+    dialog.dismiss();
+  });
+  await page.locator("#addMaterialButton").click();
+  assert.equal(capturedMaterialPrompt, true, "the material creation prompt was reviewed");
+  assert.equal(await page.locator("[data-material-id]").count(), materialCountBeforePrompt, "dismissing material creation preserves the current draft");
   const solidMaterialCard = page.locator('[data-material-id="base-light"]');
   const authoredBaseLabel = await page.evaluate(() => window.CASA_EM_MODULOS_CATALOG.options.finishes.find((item) => item.id === "base-light").publicLabel);
   assert.equal((await solidMaterialCard.locator("h2").textContent()).trim(), authoredBaseLabel, "material names continue to come from authored data");
