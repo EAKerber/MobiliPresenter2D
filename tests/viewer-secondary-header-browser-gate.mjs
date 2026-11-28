@@ -163,6 +163,34 @@ for(const engine of [chromium,webkit]){
      "Viewer retains both detail headings if the catalog fails to load");
    assert.deepEqual(errors,[],"catalog failure must not interrupt Viewer startup");
   }finally{await fallbackContext.close();}
+  const sceneContext=await browser.newContext({viewport:{width:1366,height:900},reducedMotion:"reduce"});
+  try{
+   const page=await sceneContext.newPage(),errors=[];
+   page.on("pageerror",error=>errors.push(error.message));
+   const hiddenFixture=structuredClone(viewerFixture);
+   hiddenFixture.publicState.viewerEntities[moduleIds[1]]=false;
+   await page.route("**/api/public-modules",route=>route.fulfill({
+     status:200,contentType:"application/json",body:JSON.stringify(hiddenFixture)
+   }));
+   await page.goto(ORIGIN+"/viewer/",{waitUntil:"domcontentloaded"});
+   const stage=page.locator("#sceneStage"),first=stage.locator(`[data-select-scene-entity="${moduleIds[0]}"]`),
+     hidden=stage.locator(`[data-select-scene-entity="${moduleIds[1]}"]`),
+     next=stage.locator(`[data-select-scene-entity="${moduleIds[2]}"]`);
+   await first.waitFor({state:"visible",timeout:12000});
+   assert.equal(await first.getAttribute("aria-pressed"),"true","initial public selection is reflected in the scene");
+   assert.equal(await hidden.isHidden(),true,"an unpublished module hotspot is hidden");
+   assert.equal(await hidden.isDisabled(),true,"an unpublished module hotspot is disabled");
+   assert.equal(await hidden.getAttribute("tabindex"),"-1","an unpublished module cannot be tabbed to");
+   assert.equal(await hidden.getAttribute("aria-disabled"),"true");
+   await first.focus();
+   await page.keyboard.press("ArrowRight");
+   assert.equal(await next.getAttribute("aria-pressed"),"true","keyboard selection skips hidden modules");
+   assert.equal(await first.getAttribute("aria-pressed"),"false");
+   assert.equal(await next.evaluate(node=>node===document.activeElement),true,"selection moves focus to the visible hotspot");
+   await page.keyboard.press("2");
+   assert.equal(await next.getAttribute("aria-pressed"),"true","numeric shortcut cannot select hidden modules");
+   assert.deepEqual(errors,[]);
+  }finally{await sceneContext.close();}
  }finally{await browser.close();}
 }
 await writeFile(artifact+"/report.json",JSON.stringify({schema:"ViewerSecondaryHeaderGate0.1",results},null,2));

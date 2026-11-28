@@ -102,9 +102,16 @@ const {chromium} = require('playwright');
   await page.keyboard.press('ArrowRight');
   await page.waitForFunction(() => document.body.classList.contains('has-module-detail'));
   assert.equal(await selectedNumber(), 1, 'ArrowRight with no current module opens module 01');
+  const sceneFirst = page.locator('#sceneHotspots [data-select-scene-entity="module-01"]');
+  assert.equal(await sceneFirst.getAttribute('aria-pressed'), 'true', 'Configurator scene reflects the keyboard selection');
+  assert.equal(await sceneFirst.isDisabled(), false, 'visible Configurator hotspot remains enabled');
+  assert.equal(await sceneFirst.getAttribute('tabindex'), '0', 'visible Configurator hotspot is keyboard reachable');
 
   await page.keyboard.press('ArrowRight');
   assert.equal(await selectedNumber(), 2, 'ArrowRight advances to the next module');
+  assert.equal(await sceneFirst.getAttribute('aria-pressed'), 'false', 'previous Configurator hotspot is unselected');
+  assert.equal(await page.locator('#sceneHotspots [data-select-scene-entity="module-02"]').getAttribute('aria-pressed'), 'true',
+    'next Configurator hotspot reflects the keyboard selection');
 
   await page.keyboard.press('ArrowLeft');
   assert.equal(await selectedNumber(), 1, 'ArrowLeft returns to the previous module');
