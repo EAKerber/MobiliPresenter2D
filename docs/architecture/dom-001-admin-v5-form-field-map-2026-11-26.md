@@ -54,8 +54,14 @@ Selected tab, paging, selected object, previews, and the unsaved local draft are
 - `app/tools/test-v5-normal-save.js`: conditional write/readback failure modes, revision conflicts, and mocked concurrent-edit race.
 - `tests/admin-v5-save-browser.cjs`: browser save flow, structural edits, pricing, conflict, and readback mismatch with stubbed auth/API. Its fixture differs between main and development.
 
-The browser harness does not exercise every form control. No focused UI-to-persisted-field round-trip was found for object copy/assets, material creation/removal, finish availability, initial-state controls, dependencies, and events; nor an assertion that every immutable V5 field survives unrelated edits. The fake-store race does not establish real Netlify Blob concurrency.
+The browser harness does not exercise every form control. A focused round-trip now covers finish scope and module association (see the exact-head follow-up below); remaining focused gaps include object copy/assets, material creation/removal, the finish enabled toggle and all availability guards, initial-state controls, dependencies, events, and assertions that every immutable V5 field survives unrelated edits. The fake-store race does not establish real Netlify Blob concurrency.
 
 ## Remaining work
 
 This map closes only the observed Admin control-to-schema path. DOM-001 remains partial until field-level round-trip coverage is proportionate to the exposed controls, full compatibility/default inventories and all prioritized route consumers are reconciled, and actual hosted Identity/Blob write/readback is proven in an authorized non-production environment. Keep Buyer and public Viewer projections as distinct consumers and preserve their separate allowlists.
+
+## Exact-head follow-up: finish scope and module association
+
+PR #563 (`fb5846df215792cd3e1a2b66919a8c0ed54b4725`) added a browser round-trip for cocoa finish availability: change global to local, remove one module association, leave edits as a draft until explicit V5 save, verify normalized response and fresh reload. The Admin hierarchy browser gate run `46086574803` and development test-impact plan `46086574838` passed on the exact head; PR #563 was squash-integrated into development at `91c242c7ee869975dbd33df230052a45a8036df6`.
+
+This fixture uses an in-memory endpoint and stubbed Identity. It does not test the enabled toggle, every availability guard, hosted Identity/Blob behavior, or all Admin controls. The covered scope/module-association case is removed from the uncovered list; DOM-001 remains partial.
