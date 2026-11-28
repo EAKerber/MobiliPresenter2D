@@ -50,7 +50,8 @@
 
   function renderOverview(target, module) {
     target.replaceChildren();
-    target.append(element("p", "module-kicker", `${module.category} · Módulo ${module.number}`));
+    target.append(element("p", "module-kicker", viewerText("overview.kicker", "{category} · Módulo {number}")
+      .replace("{category}", () => String(module.category)).replace("{number}", () => String(module.number))));
     target.append(element("h2", "overview-title", module.title));
     if (module.benefits?.length) {
       const highlights = element("ul", "overview-highlights");
@@ -68,7 +69,7 @@
       if (module.dimensionLabel) footer.append(element("p", "dimension-pill", module.dimensionLabel));
       if (basePriceCents !== null) {
         const amount = element("div", "overview-base-price");
-        amount.append(element("span", "overview-base-price__label", "Valor base do módulo"));
+        amount.append(element("span", "overview-base-price__label", viewerText("overview.basePrice", "Valor base do módulo")));
         amount.append(element("strong", "overview-base-price__amount",
           new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(basePriceCents / 100)));
         footer.append(amount);
@@ -135,8 +136,8 @@
   renderers.set("overview", (module) => renderOverview(root.querySelector("#block-overview"), module));
   renderers.set("scene", (module) => {
     root.querySelector("#sceneSelection").textContent = viewerSceneCopy("selected", "Selecionado: {number} · {title}")
-      .replace("{number}", String(module.number))
-      .replace("{title}", String(module.title));
+      .replace("{number}", () => String(module.number))
+      .replace("{title}", () => String(module.title));
   });
   renderers.set("views", (module) => renderViews(root.querySelector("#block-views"), module));
   renderers.set("details", (module) => renderDetails(root.querySelector("#block-details"), module));
@@ -152,7 +153,7 @@
       const caption = element("div", "scene-caption"); caption.id = "sceneSelection";
       block.append(stage, caption); root.append(block); adapter.mount(stage);
     } else if (blockId === "views") {
-      const block = section("views", "block-views", "Vistas técnicas", "Desenhos orientativos a partir das dimensões disponíveis.");
+      const block = section("views", "block-views", viewerText("sections.viewsTitle", "Vistas técnicas"), viewerText("sections.viewsDescription", "Desenhos orientativos a partir das dimensões disponíveis."));
       const controls = element("div", "view-controls");
       const previous = element("button", "", "←"); previous.type = "button"; previous.dataset.viewPrevious = ""; previous.setAttribute("aria-label", viewerViewCopy("previous", "Vista anterior"));
       const counter = element("span", "view-counter", "1 / 1");
@@ -160,7 +161,7 @@
       controls.append(previous, counter, next); block.querySelector(".block-heading").append(controls);
       block.append(element("div", "view-stage"), element("div", "mobile-view-nav")); root.append(block);
     } else if (blockId === "details") {
-      const block = section("details", "block-details", "Detalhes do módulo", "Informações organizadas para consulta rápida.");
+      const block = section("details", "block-details", viewerText("sections.detailsTitle", "Detalhes do módulo"), viewerText("sections.detailsDescription", "Informações organizadas para consulta rápida."));
       block.append(element("div", "detail-grid")); root.append(block);
     }
   });
@@ -197,6 +198,10 @@
     return theme && typeof theme.getCopy === "function"
       ? theme.getCopy("viewer.state." + key, fallback)
       : fallback;
+  }
+  function viewerText(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function" ? theme.getCopy("viewer." + key, fallback) : fallback;
   }
   function viewerViewCopy(key, fallback) {
     const theme = window.CASA_UI_THEME;
