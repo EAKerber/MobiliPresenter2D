@@ -132,11 +132,11 @@ function configuredHierarchyItemLabel(itemId) {
 }
 
 const pricingRoles = [
-  ["itemBase", "Valores de módulos e acessórios"],
-  ["handleChoiceTotal", "Puxadores"],
-  ["frontFinishAdjustment", "Adicional por acabamento"],
-  ["localAdjustment", "Adicionais locais"],
-  ["globalAdjustment", "Adicionais globais"]
+  "itemBase",
+  "handleChoiceTotal",
+  "frontFinishAdjustment",
+  "localAdjustment",
+  "globalAdjustment"
 ];
 
 const pricingTypeLabels = pricingEditorCopy.typeLabels;
@@ -1289,10 +1289,10 @@ function renderPricing() {
     : viewerBasePricePublicationCopy.explanation;
   publicationCard.append(publicationTitle, publicationLabel, publicationNote);
   pricingList.append(publicationCard);
-  pricingRoles.forEach(([role, title]) => {
+  pricingRoles.forEach((role) => {
     const card = document.createElement("article");
     card.className = "editor-card pricing-card";
-    const heading = document.createElement("h2"); heading.textContent = title; card.append(heading);
+    const heading = document.createElement("h2"); heading.textContent = pricingEditorCopy.roleLabels[role]; card.append(heading);
     const capabilities = pricingContract.ROLE_CAPABILITIES[role];
     Object.entries(model.pricing.roles[role]).forEach(([id, rule]) => {
       const percentage = rule.type === "percentage";
@@ -1350,7 +1350,7 @@ function renderPricing() {
   });
   const note = document.createElement("p");
   note.className = "admin-note";
-  note.textContent = "Os valores publicados são estimativas para clientes. Custos, margens e dados de fornecedores não entram neste painel.";
+  note.textContent = pricingEditorCopy.publishedValuesNotice;
   pricingList.append(note);
 }
 

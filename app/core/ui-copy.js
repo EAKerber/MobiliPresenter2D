@@ -349,6 +349,14 @@
       }),
       pricing: Object.freeze({
         editor: Object.freeze({
+          roleLabels: Object.freeze({
+            itemBase: "Valores de módulos e acessórios",
+            handleChoiceTotal: "Puxadores",
+            frontFinishAdjustment: "Adicional por acabamento",
+            localAdjustment: "Adicionais locais",
+            globalAdjustment: "Adicionais globais"
+          }),
+          publishedValuesNotice: "Os valores publicados são estimativas para clientes. Custos, margens e dados de fornecedores não entram neste painel.",
           typeLabels: Object.freeze({
             amount: "Valor fixo",
             percentage: "Percentual"
