@@ -48,6 +48,8 @@ async function snapshot(page) {
       return {
         id: el.dataset.step, hasLabel: !!span,
         compactText: span?.dataset.compactLabel || "",
+        fullText: span?.textContent || "",
+        accessibleName: el.getAttribute("aria-label") || "",
         fontSize: style ? parseFloat(style.fontSize) : null,
         afterFont: after ? parseFloat(after.fontSize) : null,
         afterContent: after?.content || "",
@@ -114,9 +116,12 @@ async function snapshot(page) {
               assert.ok(state.contentWidth > 0 && state.navClientWidth > 0, context + " measurable container");
               assert.ok(state.navScrollWidth <= state.navClientWidth + 2, context + " nav overflow");
               assert.ok(state.buttons.every(b => b.hasLabel && b.geometry > 0), context + " visible steps");
+              assert.ok(state.buttons.every(b => b.fullText && b.accessibleName === b.fullText),
+                context + " accessible name preserves the full stage label");
               assert.ok(state.buttons.every(b =>
-                compact ? b.fontSize === 0 && b.afterFont >= 8 && b.afterContent !== "none" && b.compactText
-                  : b.fontSize > 0
+                compact ? b.fontSize === 0 && b.afterFont >= 8 && b.compactText &&
+                  b.afterContent === JSON.stringify(b.compactText)
+                  : b.fontSize > 0 && b.afterContent === "none"
               ), context + " labels disagree with effective 500px container query: " +
                 JSON.stringify({contentWidth: state.contentWidth, buttons: state.buttons}));
               rows[detail ? "detail" : "ordinary"].push({width: controlWidth,

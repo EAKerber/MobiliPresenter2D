@@ -1127,10 +1127,15 @@
         {
           "source": "Busca dos inventários arquivados e scan lexical das folhas atuais",
           "sha": "4f352c56268335ead6655653828ccc5620bfdfe6",
-          "detail": "A origem do conjunto histórico de 98 pares ainda não foi localizada. Os snapshots preservados visual-inventory (Product 1878ae1), dom-css-static-crosswalk-2026-10-20 e v0b-css-class-coload-and-ownership-2026-10-21 (Product 840a0c9) não carregam aqueles IDs. O scan atual deriva 107 nomes duplicados e 79 co-carregados; estes resultados não podem substituir nem ser mapeados por inferência para os 98 IDs. Todos os 98 permanecem UNKNOWN até recuperar a lista e classificar U1-U8."
+          "detail": "Na ocasião, a busca em visual-inventory (Product 1878ae1), dom-css-static-crosswalk-2026-10-20 e v0b-css-class-coload-and-ownership-2026-10-21 (Product 840a0c9) não localizou a origem dos 98 casos. O scan lexical derivou 107 nomes duplicados e 79 co-carregados, que não substituem a captura histórica. A origem foi localizada posteriormente; veja a evidência seguinte."
+        },
+        {
+          "source": "Design System main@a405dff, evidence/ds05a-runtime-2026-11-09/runtime_cssom.json and README.md",
+          "sha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
+          "detail": "A captura histórica preserva 98 ocorrências incertas: 49 por tema em 390, 1050 e 1366 px, todas sinalizadas por backdrop-filter; inclui registros de botões e filhos e não fornece 98 IDs originais distintos. O SHA-256 com quebras LF é aad1f18832d988d13ed635216a91db2eeeb3f5f1cb8fce9bb004131828bb1291. O recibo registra fixture sintética, Product development@1a69ff76 e uma regra candidata de module-number, sem aprovar o estado atual. Na árvore Product c5ad839a0c2ef28657ea8a1e69afcfc05ff75445, uma captura local na fixture sintética encontrou os mesmos 98 caminhos/textos e cores/camadas no estado inicial. Em 390 e 1366, os textos compactos visíveis são gerados por ::after a 9px enquanto o texto direto tem font-size:0; o scanner histórico lê textContent e não prova esses glifos. A evidência não cobre pintura completa, contraste em todos os estados, ambiente publicado ou dispositivos reais. CSS-01 permanece parcial."
         }
       ],
-      "nextAction": "Localizar o recibo/lista original dos 98 IDs e classificar cada linha com contexto/consumidor; não usar a lista lexical atual como substituta."
+      "nextAction": "Classificar as ocorrências históricas preservadas por rota, elemento visível, consumidor e cadeia de pintura; reconhecer sobreposição pai/filho sem descartar estados distintos. Medir pseudo-elementos compactos e regiões com backdrop-filter no código integrado e nos estados relevantes, separando fixture local de validação hospedada; avaliar cada pacote afetado e manter pendências explícitas."
     },
     {
       "order": 44,

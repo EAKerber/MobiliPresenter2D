@@ -1,6 +1,11 @@
 name: Development nav label 500px named container gate (localhost)
 
 on:
+  pull_request:
+    branches: [development]
+    paths:
+      - 'tests/ci/nav-label500-invariant.cjs'
+      - '.github/workflows/development-ci-label500.yml'
   push:
     branches:
       - development
