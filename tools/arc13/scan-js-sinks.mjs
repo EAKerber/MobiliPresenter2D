@@ -240,7 +240,7 @@ const knownCustomErrorMessages = new Map([
     messageArgumentIndex: 1,
     target: {
       source: "app/admin/admin.js",
-      line: 1693,
+      line: 1699,
       sink: "helper:setMessage",
       expression: "error.message || adminLoadCopy.adminDataLoadFallback",
       flow: "bounded-custom-error-to-admin-status",
@@ -293,7 +293,7 @@ const knownCatalogSourcePaths = new Map([
     evidence: "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper.",
     target: {
       source: "app/admin/admin.js",
-      line: 1693,
+      line: 1699,
       sink: "helper:setMessage",
       expression: "error.message || adminLoadCopy.adminDataLoadFallback",
       flow: "bounded-custom-error-to-admin-status",

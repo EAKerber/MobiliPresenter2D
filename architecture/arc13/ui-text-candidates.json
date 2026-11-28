@@ -12,7 +12,7 @@
     },
     {
       "path": "tools/arc13/scan-js-sinks.mjs",
-      "sha256": "0a49ab9ecc309bdc48f7bdb8446c38f4a147c070e57a69f8fa4d371de3f7dc98"
+      "sha256": "8308c6a82601e20de264b85192c50b41b87188fd34f939d2db858c70569b5c8c"
     },
     {
       "path": "scripts/compile-primary-pages.mjs",
@@ -100,8 +100,8 @@
     "javascriptTextSourceRecordsUnconsumed": 2,
     "javascriptTextSourceRecordsNeedsFlowReview": 32,
     "javascriptTextSourceRecordsDiagnostic": 37,
-    "javascriptTextSourceRecordsWithSinkLinks": 29,
-    "javascriptTextSourceSinkLinks": 30,
+    "javascriptTextSourceRecordsWithSinkLinks": 34,
+    "javascriptTextSourceSinkLinks": 35,
     "javascriptTextSourceRecordsWithFailureFallbacks": 18,
     "javascriptTextSourceFailureFallbackLinks": 19,
     "javascriptTextSourceRoles": {
@@ -35441,7 +35441,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
+      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35458,7 +35458,20 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "4ad7e5278061990f"
+      "id": "4ad7e5278061990f",
+      "consumerRefs": [
+        {
+          "sinkId": "873b59d46a5c7a8a",
+          "source": "app/admin/admin.js",
+          "line": 1699,
+          "sink": "helper:setMessage",
+          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-custom-error-to-admin-status"
+        }
+      ]
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35479,7 +35492,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
+      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35496,7 +35509,20 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "1c6fcc49671070d8"
+      "id": "1c6fcc49671070d8",
+      "consumerRefs": [
+        {
+          "sinkId": "873b59d46a5c7a8a",
+          "source": "app/admin/admin.js",
+          "line": 1699,
+          "sink": "helper:setMessage",
+          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-custom-error-to-admin-status"
+        }
+      ]
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35517,7 +35543,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
+      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35534,7 +35560,20 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "c472d91ff308865d"
+      "id": "c472d91ff308865d",
+      "consumerRefs": [
+        {
+          "sinkId": "873b59d46a5c7a8a",
+          "source": "app/admin/admin.js",
+          "line": 1699,
+          "sink": "helper:setMessage",
+          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-custom-error-to-admin-status"
+        }
+      ]
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35555,7 +35594,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
+      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35572,7 +35611,20 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "4fc5236525fa383f"
+      "id": "4fc5236525fa383f",
+      "consumerRefs": [
+        {
+          "sinkId": "873b59d46a5c7a8a",
+          "source": "app/admin/admin.js",
+          "line": 1699,
+          "sink": "helper:setMessage",
+          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-custom-error-to-admin-status"
+        }
+      ]
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35593,7 +35645,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "declared-sink-not-indexed",
+      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35610,7 +35662,20 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "2d8f84487ec73a55"
+      "id": "2d8f84487ec73a55",
+      "consumerRefs": [
+        {
+          "sinkId": "873b59d46a5c7a8a",
+          "source": "app/admin/admin.js",
+          "line": 1699,
+          "sink": "helper:setMessage",
+          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
+          "routeConsumers": [
+            "/admin"
+          ],
+          "flow": "bounded-custom-error-to-admin-status"
+        }
+      ]
     },
     {
       "source": "app/core/ui-copy.js",
