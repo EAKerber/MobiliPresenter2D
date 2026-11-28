@@ -300,7 +300,7 @@ const knownCatalogSourcePaths = new Map([
       },
     })),
     ...[
-      ["overview", "kicker", "app/viewer/viewer.js", 53, "helper:element", 'viewerText("overview.kicker", "{category} · Módulo {number}")\n      .replace("{category}", () => String(module.category)).replace("{number}", () => String(module.number))'],
+      ["overview", "kicker", "app/viewer/viewer.js", 53, "helper:element", 'viewerText("overview.kicker", "{category} · Módulo {number}")\n      .replace(/\\{(category|number)\\}/g, (_, key) => String(module[key]))'],
       ["overview", "basePrice", "app/viewer/viewer.js", 72, "helper:element", 'viewerText("overview.basePrice", "Valor base do módulo")'],
       ["sections", "viewsTitle", "app/viewer/viewer.js", 156, "helper:section", 'viewerText("sections.viewsTitle", "Vistas técnicas")'],
       ["sections", "viewsDescription", "app/viewer/viewer.js", 156, "helper:section", 'viewerText("sections.viewsDescription", "Desenhos orientativos a partir das dimensões disponíveis.")'],
