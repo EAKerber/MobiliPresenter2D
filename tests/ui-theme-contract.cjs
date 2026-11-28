@@ -9,6 +9,15 @@ const root = path.resolve(__dirname, "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 const code = read("app/core/ui-theme.js");
 const copy = require("../app/core/ui-copy.js");
+const privateMenuVersions = new Set();
+for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
+  const version = read(file).match(/private-navigation\.bundle\.js\?v=([a-zA-Z0-9_-]+)/);
+  assert(version, file + " loads a versioned private menu bundle");
+  privateMenuVersions.add(version[1]);
+}
+assert.equal(privateMenuVersions.size, 1, "private pages share the same menu bundle revision");
+assert.match(read("app/access/index.html"), /id="logoutButton"[^>]*data-private-logout=""/,
+  "the access page delegates its existing logout control to the shared menu");
 const adminFallback = read("app/admin.html");
 for (const key of ["restrictedEyebrow", "loginHeading", "loginIntro", "emailLabel", "passwordLabel", "submitLogin", "requestRecovery", "newPasswordLabel", "savePassword", "deniedHeading", "deniedIntroBefore", "deniedIntroAfter"]) {
   assert(adminFallback.includes(`data-admin-auth-copy="${key}">${copy.admin.authentication[key]}</`), `Admin retains the ${key} static login fallback`);
