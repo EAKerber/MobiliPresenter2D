@@ -43,6 +43,14 @@ function parseBrl(text) {
     await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
   }
 
+  const compactLabels = await page.locator(".flow-nav .flow-step__label").evaluateAll(labels =>
+    Object.fromEntries(labels.map(label => [label.closest("[data-step]")?.dataset.step, label.dataset.compactLabel]))
+  );
+  assert.equal(compactLabels.modules, "Módulos", "modules keeps its canonical compact stage label");
+  assert.equal(compactLabels.finishes, "Acab.", "finishes keeps its canonical compact stage label");
+  assert.equal(compactLabels.services, "Serv.", "services keeps its canonical compact stage label");
+  assert.equal(compactLabels.summary, "Resumo", "summary keeps its canonical compact stage label");
+
   const valueText = () => page.locator('#configurationValue strong').textContent();
   const currentTotal = async () => parseBrl(await valueText());
   const waitTotalChange = before => page.waitForFunction(previous => {

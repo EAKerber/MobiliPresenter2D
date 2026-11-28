@@ -667,6 +667,11 @@
           "source": "docs/architecture/ci/m2d-ops-cleanup-readback-2026-11-28.md",
           "sha": "06645101efe4edc81f7e56abf5787ed14c8f29f9",
           "detail": "PR #564 cleanup run 46090330349/job 140809491129/artifact 15240892958 (sha256:b483223af982ca4d1b0b7e5ac149e09fe540d927aacc4263eb2e6a03f5ab118b) deleted exact source head 1800cae0eddde05f16e6e0755a290e1d9e8f52b0. PR #565 cleanup run 46092433397/job 140816190515/artifact 15241468844 (sha256:c69805b8e06a75785e2c12a82ec958a4d14c5ca2eb80a0df88bba3ad9221768f) deleted exact source head 0ba3e886bbb5dc546c0182b5bfced5a3f7b71aba. Both logs prove SQUASH_TREE_IDENTICAL, deletion and PASS readback; live Product branch listing after #565 contained 8 refs. These are two verified executions, not proof of all cleanup paths; GIT-020 remains partial."
+        },
+        {
+          "source": "docs/architecture/ci/m2d-ops-cleanup-readback-2026-11-28.md",
+          "sha": "bf9a6be774c288242d2bfa622333f1d70f2b0b89",
+          "detail": "PR #566 cleanup run 46093984884/job 140821057937/artifact 15242965273 (sha256:dfc4023c0d2b40db7c393d9b78735b845bc3657a54eabbddf4392332295c59a2) deleted exact source head 9e3e11db8f63822120cda7671c101f005851fdf6. The log proves SQUASH_TREE_IDENTICAL against development tree 21c03e3b73b8f17ce14ff7b0086766a20e924925, deletion, PASS readback, and 8 remaining Product branches. GIT-020 remains partial; this receipt proves only the three recorded runs. Live readback at 2026-11-28T01:57:50Z found 8 unprotected Product refs and no open PRs; no exact cleanup candidate met integrated-PR, squash-tree identity, and no-open-use checks. Preserve all refs pending their own integration or an exact proof; count above preferred steady-state size does not override the missing proof."
         }
       ],
       "nextAction": "Keep the automatic-cleanup policy partial. On subsequent merged PRs, inspect the pull_request_target run, artifact, and exact ref readback for causal proof; do not infer success from a branch being absent."
@@ -2205,6 +2210,11 @@
           "source": "Product development ARC-13 inventory at exact HEAD after PR #565",
           "sha": "66fbe5bb529c5f0550cb139f43b3dc3cf1306400",
           "detail": "Exact Product development HEAD 66fbe5bb529c5f0550cb139f43b3dc3cf1306400 contains inventory blob aefb9280db710d34bc2b195bb803eccd7c5211ad, SHA-256 5d7a7ef0761e287092670b45341bd39939410b221c83688e177d512a721e7d59. ARC-13 exact-head workflow run 46092254843 passed after PR #565: schema v4, 561 HTML occurrences, 454 JS sink sites, 271 text-source records, 1,015 globally unreviewed occurrences, 0 parse errors, 68 source files, 420 mapped primary-page occurrences, and 0 unresolved mappings. Keep inventory reconciliation and semantic classification partial; main is a separate source snapshot."
+        },
+        {
+          "source": "Product development ARC-13 inventory at exact HEAD after PR #566",
+          "sha": "674bfa6693d9905439653c371cae2a354c7b52bf",
+          "detail": "Exact Product development HEAD 674bfa6693d9905439653c371cae2a354c7b52bf contains inventory blob 2f46d5b267a6eed3c6302eab231aa4e571dbdf6f, SHA-256 e3910bf48800335463175d7686ef5c1887dedb6d2443f587f426eea68951a020. PR #566 exact-head ARC-13 gate passed; schema v4, candidate-unreviewed, 561 HTML occurrences, 454 JS sink sites, 271 JS text-source records, 1,015 unreviewed occurrences, 0 parse errors, 68 source files, 420 mapped primary-page occurrences, and 0 unresolved mappings. This is the development snapshot only; main remains a separate source snapshot."
         }
       ],
       "nextAction": "Reconcile the exact current main and development ARC-13 snapshots by stable source/consumer identity; do not transfer positional IDs or infer review from generated classifications. Preserve unreviewed status until owner, authority, sink and consumer are resolved."
@@ -2494,9 +2504,14 @@
           "source": "Product PR #565 exact-head gates, ARC-13 inventory and development readback",
           "sha": "66fbe5bb529c5f0550cb139f43b3dc3cf1306400",
           "detail": "Five fixed Admin pricing-role headings and the publication notice now read from uiCopy.admin.pricing.editor. Exact wording, role order, IDs, pricing data, persistence and publication behavior remain unchanged. The Admin browser asserts all five rendered headings in order and exact notice parity with the catalog. Exact head 0ba3e886bbb5dc546c0182b5bfced5a3f7b71aba passed all 12 applicable Actions workflows; Supabase Preview was skipped because branch previews are disabled. Local page compiler check, ARC03C source-authority tests (6/6), JavaScript syntax and diff checks passed. ARC-13 regenerated deterministically at 1,015 globally unreviewed occurrences, 454 JS sinks, 0 parse errors, 0 unassigned owner/routes, 0 unresolved primary-page mappings and 420 mapped occurrences. Squash-integrated into development at this SHA; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PR #566 exact-head gates and development readback; cleanup receipt docs/architecture/ci/m2d-ops-cleanup-readback-2026-11-28.md",
+          "sha": "674bfa6693d9905439653c371cae2a354c7b52bf",
+          "detail": "The fixed Admin material-creation prompt and default now use the shared uiCopy.admin.materials strings; exact text, cancel/submit handling, generated IDs, draft model, and persistence remain unchanged. The Admin browser verifies exact dialog message/default and that dismissing leaves the material count unchanged. Exact head 9e3e11db8f63822120cda7671c101f005851fdf6 passed all 12 applicable Actions workflows; Admin hierarchy browser run 46093798900 passed, ARC-13 inventory and build passed, and Supabase Preview was skipped because branch previews are disabled. ARC-13 remains at 1,015 unreviewed candidates, 454 sinks, 0 parse errors/unassigned owners/routes/unresolved primary-page mappings and 420 mapped occurrences. Squash-integrated into development at this SHA; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
         }
       ],
-      "nextAction": "Continue with the next bounded Admin/Configurator fixed-copy family identified from the exact candidate inventory. Preserve business behavior, keep authored material/module/service/price data out of the catalog, and leave LOC-006 partial until the wider inventory and consumers are reconciled."
+      "nextAction": "After this bounded compact-navigation slice passes exact-head browser validation and integrates in development, continue with remaining fixed-copy candidates by consumer family. Keep custom-stage labels data-backed and preserve behavior. The regenerated ARC-13 snapshot has 267 JavaScript source records and 1,015 unreviewed occurrences; consumer sink-links fell from 4 to 0 because the scanner does not resolve the uiCopy-key-to-CSS-data-attribute path. Treat this as a provenance coverage gap, not a zero-consumer conclusion; keep LOC-006 partial and address the scoped crosswalk or scanner rule before claiming sink-level reconciliation."
     },
     {
       "order": 107,
@@ -2848,13 +2863,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-28T01:25:03Z",
+    "capturedAt": "2026-11-28T01:42:35Z",
     "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
-    "productDevelopmentSha": "66fbe5bb529c5f0550cb139f43b3dc3cf1306400",
+    "productDevelopmentSha": "674bfa6693d9905439653c371cae2a354c7b52bf",
     "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
     "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
-    "productDevelopmentTree": "0aee7e6245731b16659b0036d47c52b97c2cd691",
+    "productDevelopmentTree": "21c03e3b73b8f17ce14ff7b0086766a20e924925",
     "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
-    "meaning": "Live Product refs read after PR #565 and verified cleanup: main remains ecaa38c/tree 45dafef; development is the integration buffer at 66fbe5b/tree 0aee7e6; Design System main is a405dff/tree d0daa64, and Design System development returns 404. GitHub compare uses merge base 221b54b2: Product development is 685 commits ahead and main is 46 ahead. This broad divergence is not a whole-tree integration candidate; promote complete validated families selectively. Product main remains unchanged."
+    "meaning": "Live Product refs read after PR #566 and its verified cleanup: main remains ecaa38c/tree 45dafef; development is the integration buffer at 674bfa6/tree 21c03e3; Design System main remains a405dff/tree d0daa64 and Design System development returns 404. GitHub compare uses merge base 221b54b2: Product development is 686 commits ahead and main is 46 ahead. Product and Design System open-PR lists were empty at readback; remote ref counts were 8 and 6 respectively. This broad divergence is not a whole-tree integration candidate; promote complete validated families selectively. Product main remains unchanged."
   }
 }

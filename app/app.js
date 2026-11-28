@@ -1772,7 +1772,7 @@
       number.textContent = String(index + 1);
       const label = document.createElement("span");
       label.className = "flow-step__label";
-      label.dataset.compactLabel = ({ modules: "Módulos", finishes: "Acab.", services: "Serv.", summary: "Resumo", custom: stage.label })[stageKind(stage)];
+      label.dataset.compactLabel = stageKind(stage) === "custom" ? stage.label : uiCopy(`configurator.stageNavigation.compactLabels.${stageKind(stage)}`, stage.label);
       label.textContent = stage.label;
       button.setAttribute("aria-label", stage.label);
       button.append(number, label);
