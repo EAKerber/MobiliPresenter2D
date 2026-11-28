@@ -152,6 +152,16 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   const browserOptions = { headless: true };
   if (process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH) browserOptions.executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
   browser = await chromium.launch(browserOptions);
+  const noScriptContext = await browser.newContext({ javaScriptEnabled: false });
+  const noScriptPage = await noScriptContext.newPage();
+  await noScriptPage.goto(baseUrl + "/admin-test.html", { waitUntil: "domcontentloaded" });
+  assert.equal(await noScriptPage.title(), "Administração — Casa em Módulos");
+  assert.equal(await noScriptPage.getByRole("heading", { name: "Painel administrativo" }).count(), 1);
+  assert.equal(await noScriptPage.getByLabel("E-mail").count(), 1);
+  assert.equal(await noScriptPage.getByLabel("Senha", { exact: true }).count(), 1);
+  assert.equal(await noScriptPage.getByRole("button", { name: "Mostrar senha" }).count(), 1);
+  assert.equal(await noScriptPage.getByRole("button", { name: "Entrar" }).count(), 1);
+  await noScriptContext.close();
   const authPage = await browser.newPage();
   await authPage.goto("http://127.0.0.1:" + server.address().port + "/admin-test.html?logged-out=1", { waitUntil: "networkidle" });
   const authCopy = await authPage.evaluate(() => window.CASA_UI_COPY.admin.authentication);
