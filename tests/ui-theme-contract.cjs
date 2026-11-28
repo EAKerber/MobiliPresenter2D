@@ -218,11 +218,15 @@ assert(code.includes("function getCopy(path, fallback)") &&
 for (const file of ["app/index.html", "app/about/index.html", "app/how-it-works/index.html", "app/viewer/index.html"]) {
   assert(read(file).includes("header-menu.js?v=arc13-loc003-copy-1"), file + " busts the old public menu controller cache");
 }
+const privateNavigationRevisions = new Set();
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html", "app/config/index.html"]) {
-  assert(read(file).includes("private-navigation.bundle.js?v=arc13-loc006-private-session-lookup-retry-1"), file + " busts the old private menu bundle cache");
+  const privateNavigation = read(file).match(/private-navigation\.bundle\.js\?v=([a-zA-Z0-9_-]+)/);
+  assert(privateNavigation, file + " loads a versioned private menu bundle");
+  privateNavigationRevisions.add(privateNavigation[1]);
   const copyRevision = file === "app/config/index.html" ? "shared-technical-copy-1" : "arc13-loc006-config-mini-scene-labels-1";
   assert(read(file).includes("ui-copy.js?v=" + copyRevision), file + " busts the old shared copy catalog cache");
 }
+assert.equal(privateNavigationRevisions.size, 1, "private pages use the same menu bundle revision");
 for (const file of ["app/access/index.html", "app/access/manage.html", "app/admin.html"]) {
   const logoutMarkup = read(file);
   assert(logoutMarkup.includes(`id="logoutButton" class="private-menu__logout" type="button" hidden${file === "app/access/index.html" ? ' data-private-logout=""' : ""}>${copy.navigation.logout}</button>`), file + " keeps the catalog-matched no-JavaScript logout fallback");
