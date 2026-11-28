@@ -2343,9 +2343,14 @@
           "source": "Product PR #575 exact-head checks and development readback",
           "sha": "9b1fdced48a2d7e5b7c33933e0ecffa92b7e0169",
           "detail": "Viewer overview, section headings and technical-view fixed copy use the pt-BR catalog with fallbacks; product values stay data-backed. Literal replacement characters in module titles are preserved. The exact PR head 9687b3155bffc3511a7548e833a5350e947e5c8b passed 14 applicable workflows, including the Viewer cross-engine browser, price contract and inventory. The Viewer-specific internal SVG label flows through a shared sink; its configurator consumer does not use that Viewer catalog entry. Integrated into development at this SHA. Viewer static HTML and other JS consumers remain for reconciliation; no full-family or main completion is claimed."
+        },
+        {
+          "source": "Product PR #576 exact-head checks and development readback",
+          "sha": "fff5be92995f3c33a0e8a9f89e844a1e2416021a",
+          "detail": "Shared technical-drawing SVG descriptions use the catalog in the Viewer and Configurator, preserving fallback, overrides, product values and geometry. Unit tests cover both normal and thin-panel descriptions, internal labels and literal special characters; browser tests exercise both consumers. Exact head 5d77035337f82be2c5b76e8471fbde22fdc57cdc passed all 15 applicable workflows. Integrated into development at this SHA; broader JS localization and promotion remain open."
         }
       ],
-      "nextAction": "Reconciliar controladores e componentes restantes por consumidor, incluindo o renderizador técnico compartilhado em validação e as demais famílias do Configurador. Preservar textos de produto e distinguir desenvolvimento de promoção para main."
+      "nextAction": "Reconciliar controladores e componentes restantes por consumidor, incluindo as demais famílias do Configurador. Preservar textos de produto e distinguir desenvolvimento de promoção para main."
     },
     {
       "order": 106,

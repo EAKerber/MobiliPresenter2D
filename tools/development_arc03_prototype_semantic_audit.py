@@ -22,7 +22,11 @@ def git(*a):
 def require(v,msg):
     if not v: raise RuntimeError(msg)
 def main():
-    require(git("rev-parse","origin/main")==MAIN,"MAIN_DRIFT")
+    live_main=git("rev-parse","origin/main")
+    # The baseline is the historical comparison point, not a permanent pin
+    # on main. Preserve that proof while accepting an evolved descendant.
+    require(subprocess.run(["git","merge-base","--is-ancestor",MAIN,live_main]).returncode==0,
+            "HISTORICAL_MAIN_BASE_NOT_ANCESTOR")
     require(git("cat-file","-t",OLD)=="commit","OLD_COMMIT_MISSING")
     base=git("merge-base",MAIN,OLD)
     changed=set(git("diff","--name-only",base,OLD).splitlines())
@@ -64,7 +68,8 @@ def main():
     require("malformed source" in old_test and "Unsafe" not in old_test,
             "HISTORIC_TEST_DRIFT")
     return {"schema":"M2DARC03PrototypeSupersession/0.1","status":"STATIC_PROVENANCE_PASS",
-            "historicalSha":OLD,"sourcePaths":sorted(changed),
+            "historicalSha":OLD,"historicalMainBase":MAIN,"observedMain":live_main,
+            "sourcePaths":sorted(changed),
             "fragmentBlob":frag_old,
             "sourceStatus":old_routes["status"],"destinationStatus":new_routes["status"],
             "newCompiler":"scripts/compile-primary-pages.mjs",

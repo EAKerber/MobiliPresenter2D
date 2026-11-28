@@ -19,6 +19,9 @@ const MAP=[
  {route:"/about/",source:"architecture/pages/about.page.html",output:"app/about/index.html"},
  {route:"/how-it-works/",source:"architecture/pages/how-it-works.page.html",output:"app/how-it-works/index.html"}
 ];
+// Viewer owns its NAV-005 header; it uses the same static-copy compiler but
+// never receives the shared primary header fragment.
+const VIEWER={route:"/viewer/",source:"architecture/pages/viewer.page.html",output:"app/viewer/index.html"};
 const KEYS=["brandHref","ambientesHref","ambientesCurrent","howHref","howCurrent","aboutHref","aboutCurrent","whatsAppIconAriaHidden","copy.brand.homeLinkAriaLabel","copy.brand.logoAlt","copy.navigation.primaryLabel","copy.navigation.menu.open","copy.navigation.environments","copy.navigation.howItWorks","copy.navigation.about","copy.navigation.contactAriaLabel","copy.navigation.contact"];
 const COPY_POINTERS={
  "copy.brand.homeLinkAriaLabel":"/brand/homeLinkAriaLabel",
@@ -32,6 +35,24 @@ const COPY_POINTERS={
  "copy.navigation.contact":"/navigation/contact"
 };
 const PAGE_COPY_POINTERS={
+ "architecture/pages/viewer.page.html":{
+  "copy.viewer.shell.description":"/viewer/shell/description",
+  "copy.viewer.shell.title":"/viewer/shell/title",
+  "copy.viewer.shell.brandLink":"/viewer/shell/brandLink",
+  "copy.brand.logoAlt":"/brand/logoAlt",
+  "copy.viewer.shell.back":"/viewer/shell/back",
+  "copy.navigation.menu.open":"/navigation/menu/open",
+  "copy.viewer.shell.navigationLabel":"/viewer/shell/navigationLabel",
+  "copy.navigation.environments":"/navigation/environments",
+  "copy.navigation.howItWorks":"/navigation/howItWorks",
+  "copy.navigation.about":"/navigation/about",
+  "copy.navigation.contactAriaLabel":"/navigation/contactAriaLabel",
+  "copy.navigation.contact":"/navigation/contact",
+  "copy.viewer.shell.eyebrow":"/viewer/shell/eyebrow",
+  "copy.viewer.shell.heading":"/viewer/shell/heading",
+  "copy.viewer.shell.instruction":"/viewer/shell/instruction",
+  "copy.home.footer.environmentsLink":"/home/footer/environmentsLink"
+ },
  "architecture/pages/root.page.html":{
   "copy.home.hero.eyebrow":"/home/hero/eyebrow",
   "copy.home.hero.heading.assemble":"/home/hero/heading/assemble",
@@ -308,6 +329,23 @@ export async function projectPages() {
    sourceMap:{segments:pageSegments}});
   pages.push({output:p.output,html,sourceMap:pageSegments});
  }
+ const viewerSource=await readCanonical(VIEWER.source);
+ assert.ok(headerHasClass(viewerSource,"viewer-header"),"Viewer must retain its independent header");
+ assert.equal([...viewerSource.matchAll(/<header\b/gi)].length,1,"Viewer must have exactly one header");
+ assert.ok(!headerHasClass(viewerSource,"site-header")&&!viewerSource.includes(SLOT),"Viewer must not use the primary header");
+ const viewer=renderPageCopy(viewerSource,VIEWER.source,0,catalog);
+ assert.ok(!viewer.text.includes("{{"),"Unresolved Viewer page copy");
+ let viewerCursor=0;
+ for(const segment of viewer.segments) {
+  assert.equal(segment.output.start,viewerCursor,"Viewer source-map gap or overlap");
+  assert.ok(segment.output.end>segment.output.start,"Empty Viewer source-map segment");
+  viewerCursor=segment.output.end;
+ }
+ assert.equal(viewerCursor,codePointLength(viewer.text),"Viewer source map must cover its complete output");
+ manifest.pages.push({route:VIEWER.route,source:VIEWER.source,output:VIEWER.output,
+  sourceGitBlobSha:gitBlobSha(viewerSource),outputGitBlobSha:gitBlobSha(viewer.text),
+  sourceMap:{segments:viewer.segments}});
+ pages.push({output:VIEWER.output,html:viewer.text,sourceMap:viewer.segments});
  return {manifest,pages,text:JSON.stringify(manifest,null,2)+"\n"};
 }
 async function check(r) {

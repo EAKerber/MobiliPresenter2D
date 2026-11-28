@@ -165,7 +165,8 @@ jobs:
           const expectedOutputs = [
             { path: 'app/index.html', route: '/' },
             { path: 'app/about/index.html', route: '/about/' },
-            { path: 'app/how-it-works/index.html', route: '/how-it-works/' }
+            { path: 'app/how-it-works/index.html', route: '/how-it-works/' },
+            { path: 'app/viewer/index.html', route: '/viewer/' }
           ];
           assert.deepEqual(
             inventory.primaryPageAuthoringProvenance.outputs.map(({ path, route, status }) => ({ path, route, status })),
@@ -179,7 +180,7 @@ jobs:
           }
           assert.equal(summary.primaryPageAuthoringMappedOccurrences,
             inventory.entries.filter((entry) => entry.authoring?.status === 'mapped'
-              && ['app/index.html', 'app/about/index.html', 'app/how-it-works/index.html'].includes(entry.source)).length);
+              && ['app/index.html', 'app/about/index.html', 'app/how-it-works/index.html', 'app/viewer/index.html'].includes(entry.source)).length);
           console.log(JSON.stringify(summary, null, 2));
           NODE
       - name: Confirm the tracked report is reproducible

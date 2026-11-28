@@ -18,7 +18,8 @@ const SOURCE_PATHS=[
   ROUTES,
   "architecture/pages/root.page.html",
   "architecture/pages/about.page.html",
-  "architecture/pages/how-it-works.page.html"
+  "architecture/pages/how-it-works.page.html",
+  "architecture/pages/viewer.page.html"
 ];
 function runIsolated(mutator) {
   const root=mkdtempSync(join(tmpdir(),"m2d-arc03-legacy-contract-"));
@@ -51,8 +52,8 @@ test("current ARC03C renders the same single-current NAV004 header and preserves
   assert.equal(config.routes.length,3);
   assert.ok(config.scope.doesNotInclude.includes("/viewer/"));
   const r=await projectPages();
-  assert.equal(r.pages.length,3);
-  for(let i=0;i<r.pages.length;i++){
+  assert.equal(r.pages.length,4);
+  for(let i=0;i<config.routes.length;i++){
     const {html,output}=r.pages[i],route=config.routes[i];
     assert.equal(html,readFileSync(output,"utf8"),"generated markup must be byte-identical to checked-in page");
     const fragments=[...html.matchAll(/<header class="site-header(?:\s[^"]*)?">[\s\S]*?<\/header>/g)];
