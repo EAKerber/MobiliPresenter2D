@@ -10,18 +10,21 @@ const ROOT=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const SLOT="<!-- ARC03_PRIMARY_HEADER -->";
 const SOURCE_INPUTS=[
  "scripts/compile-primary-pages.mjs",
+ "app/core/ui-copy.js",
  "architecture/fragments/primary-header.fragment.html",
  "architecture/fragments/primary-header.routes.json",
  "architecture/pages/root.page.html",
  "architecture/pages/about.page.html",
- "architecture/pages/how-it-works.page.html"
+ "architecture/pages/how-it-works.page.html",
+ "architecture/pages/viewer.page.html"
 ];
 const ISOLATED_INPUTS=[
  ...SOURCE_INPUTS,
  "architecture/generated/primary-pages.manifest.json",
  "app/index.html",
  "app/about/index.html",
- "app/how-it-works/index.html"
+ "app/how-it-works/index.html",
+ "app/viewer/index.html"
 ];
 const gate=(mode="--check",root=ROOT)=>spawnSync(
  process.execPath,[join(root,"scripts/compile-primary-pages.mjs"),mode],
@@ -55,14 +58,14 @@ async function assertRejectedMutation(path,mutate,expected) {
  await assert.rejects(access(r.root),{code:"ENOENT"},"the temporary fixture must be removed");
 }
 
-test("three generated pages and provenance manifest match authoritative source",async()=>{
+test("generated pages and provenance manifest match authoritative source",async()=>{
  const r=await projectPages();
  assert.equal(r.manifest.authority,"architecture/pages");
- assert.deepEqual(r.manifest.pages.map(x=>x.route),["/","/about/","/how-it-works/"]);
+ assert.deepEqual(r.manifest.pages.map(x=>x.route),["/","/about/","/how-it-works/","/viewer/"]);
  assert.equal(await readFile("architecture/generated/primary-pages.manifest.json","utf8"),r.text);
  for(const p of r.pages) {
   assert.equal(await readFile(p.output,"utf8"),p.html);
-  assert.match(p.html,/<header class="site-header site-header--public">/);
+  assert.match(p.html,p.output==="app/viewer/index.html"?/<header class="viewer-header">/:/<header class="site-header site-header--public">/);
   assert.doesNotMatch(p.html,/<!-- ARC03_PRIMARY_HEADER -->/);
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
@@ -103,6 +106,15 @@ test("compiler rejects unsafe and out-of-scope sources in isolated fixtures",asy
  await assertRejectedMutation("architecture/pages/root.page.html",
   (target,before)=>writeFile(target,before+'\n<header class="viewer-header"></header>\n'),
   /NAV-005 excluded/);
+ await assertRejectedMutation("architecture/pages/viewer.page.html",
+  (target,before)=>writeFile(target,before.replace('class="viewer-header"','class="site-header"')),
+  /Viewer must retain its independent header/);
+ await assertRejectedMutation("architecture/pages/viewer.page.html",
+  (target,before)=>writeFile(target,before+'\n<header class="viewer-header"></header>\n'),
+  /Viewer must have exactly one header/);
+ await assertRejectedMutation("architecture/pages/viewer.page.html",
+  (target,before)=>writeFile(target,before.replace("{{copy.viewer.shell.heading}}","{{copy.viewer.shell.unapproved}}")),
+  /Page copy placeholder is not approved/);
  await assertRejectedMutation("architecture/fragments/primary-header.routes.json",
   async(target)=> {
    const config=JSON.parse(await readFile(target,"utf8"));
@@ -114,4 +126,11 @@ test("Viewer NAV-005 stays independently authored",async()=>{
  const html=await readFile("app/viewer/index.html","utf8");
  assert.match(html,/<header class="viewer-header">/);
  assert.doesNotMatch(html,/<header class="site-header/);
+ assert.match(html,/aria-label="Casa em Módulos — início"/);
+ assert.match(html,/<nav id="primaryNav" class="viewer-header__nav" aria-label="Navegação pública">/);
+ assert.match(html,/<h1>Cozinha Casa em Módulos<\/h1>/);
+ assert.match(html,/<a href="\/">Voltar aos ambientes ↑<\/a>/);
+ const viewer=(await projectPages()).pages.find(page=>page.output==="app/viewer/index.html");
+ assert.ok(viewer.sourceMap.some(segment=>segment.origin.pointer==="/viewer/shell/heading"));
+ assert.doesNotMatch(viewer.html,/\{\{copy\./);
 });

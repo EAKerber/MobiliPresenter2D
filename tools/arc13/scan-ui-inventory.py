@@ -26,13 +26,94 @@ PRIMARY_PAGE_MANIFEST = ROOT / "architecture" / "generated" / "primary-pages.man
 PRIMARY_PAGE_COMPILER = ROOT / "scripts" / "compile-primary-pages.mjs"
 PRIMARY_FRAGMENT = "architecture/fragments/primary-header.fragment.html"
 PRIMARY_ROUTES = "architecture/fragments/primary-header.routes.json"
-PRIMARY_MAP_SCHEMA = "M2DARC03CProvenanceMap/1"
+PRIMARY_COPY = "app/core/ui-copy.js"
+PRIMARY_MAP_SCHEMA = "M2DARC03CProvenanceMap/2"
 PRIMARY_PAGES = {
     "app/index.html": {"route": "/", "source": "architecture/pages/root.page.html"},
     "app/about/index.html": {"route": "/about/", "source": "architecture/pages/about.page.html"},
     "app/how-it-works/index.html": {
         "route": "/how-it-works/",
         "source": "architecture/pages/how-it-works.page.html",
+    },
+    "app/viewer/index.html": {"route": "/viewer/", "source": "architecture/pages/viewer.page.html"},
+}
+PRIMARY_PAGE_COPY_KEYS = {
+    "architecture/pages/viewer.page.html": {
+        "copy.viewer.shell.description", "copy.viewer.shell.title", "copy.viewer.shell.brandLink",
+        "copy.brand.logoAlt", "copy.viewer.shell.back", "copy.navigation.menu.open",
+        "copy.viewer.shell.navigationLabel", "copy.navigation.environments",
+        "copy.navigation.howItWorks", "copy.navigation.about",
+        "copy.navigation.contactAriaLabel", "copy.navigation.contact",
+        "copy.viewer.shell.eyebrow", "copy.viewer.shell.heading", "copy.viewer.shell.instruction",
+        "copy.home.footer.environmentsLink",
+    },
+    "architecture/pages/root.page.html": {
+        "copy.home.hero.eyebrow",
+        "copy.home.hero.heading.assemble",
+        "copy.home.hero.heading.choose",
+        "copy.home.hero.heading.enjoy",
+        "copy.home.hero.lead",
+        "copy.home.hero.description",
+        "copy.home.hero.artworkAlt",
+        "copy.home.benefits.miniLabel",
+        "copy.home.benefits.stripLabel",
+        "copy.home.hero.video.groupLabel",
+        "copy.home.hero.video.playLabel",
+        "copy.video.fullscreen.open",
+        "copy.home.environments.eyebrow",
+        "copy.home.environments.heading",
+        "copy.home.environments.carousel.previous",
+        "copy.home.environments.carousel.page",
+        "copy.home.environments.carousel.next",
+        "copy.home.story.eyebrow",
+        "copy.home.story.heading",
+        "copy.home.story.description",
+        "copy.home.story.action",
+        "copy.actions.exploreEnvironments",
+        "copy.home.hero.aboutLink",
+        "copy.video.youtubeLink",
+        "copy.brand.logoAlt",
+        "copy.home.footer.environmentsLink",
+        "copy.footer.tagline",
+    },
+    "architecture/pages/about.page.html": {
+        "copy.actions.exploreEnvironments",
+        "copy.footer.homeLink",
+        "copy.brand.logoAlt",
+        "copy.footer.tagline",
+    },
+    "architecture/pages/how-it-works.page.html": {
+        "copy.video.youtubeLink",
+        "copy.footer.homeLink",
+        "copy.brand.logoAlt",
+        "copy.footer.tagline",
+        "copy.comparison.labels.adaptation",
+        "copy.comparison.labels.quality",
+        "copy.comparison.labels.personalization",
+        "copy.comparison.labels.cost",
+        "copy.comparison.labels.stagedPurchase",
+        "copy.comparison.labels.production",
+        "copy.comparison.cards.readyMade",
+        "copy.comparison.cards.traditional",
+        "copy.comparison.cards.modular",
+        "copy.comparison.details.readyMade.adaptation",
+        "copy.comparison.details.readyMade.quality",
+        "copy.comparison.details.readyMade.personalization",
+        "copy.comparison.details.readyMade.cost",
+        "copy.comparison.details.readyMade.stagedPurchase",
+        "copy.comparison.details.readyMade.production",
+        "copy.comparison.details.traditional.adaptation",
+        "copy.comparison.details.traditional.quality",
+        "copy.comparison.details.traditional.personalization",
+        "copy.comparison.details.traditional.cost",
+        "copy.comparison.details.traditional.stagedPurchase",
+        "copy.comparison.details.traditional.production",
+        "copy.comparison.details.modular.adaptation",
+        "copy.comparison.details.modular.quality",
+        "copy.comparison.details.modular.personalization",
+        "copy.comparison.details.modular.cost",
+        "copy.comparison.details.modular.stagedPurchase",
+        "copy.comparison.details.modular.production",
     },
 }
 TEXT_ATTRIBUTES = {
@@ -70,8 +151,12 @@ VOID_TAGS = {
 
 
 def sha256(data: bytes) -> str:
-    # Text-file identities must not vary with the checkout line ending.
     return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
+
+
+def decode_source_map_text(data: bytes) -> str:
+    """Decode source-map text in a platform-independent LF coordinate space."""
+    return data.decode("utf-8").replace("\r\n", "\n")
 
 
 def git_blob_sha(data: bytes) -> str:
@@ -121,12 +206,50 @@ def _source_map_template(fragment: str, template: object, route_index: int) -> s
     return "/routes/" + str(route_index) + "/" + match.group(1)
 
 
+def _source_map_template_key(template_texts: dict[str, str], template: object) -> str:
+    if not isinstance(template, dict) or template.get("path") not in template_texts:
+        raise ValueError("source-map template must point to an approved page or shared fragment")
+    template_path = template["path"]
+    template_text = template_texts[template_path]
+    source_range = template.get("range")
+    if not isinstance(source_range, dict):
+        raise ValueError("source-map template range is missing")
+    start, end = source_range.get("start"), source_range.get("end")
+    if not isinstance(start, int) or isinstance(start, bool) or not isinstance(end, int) or isinstance(end, bool):
+        raise ValueError("source-map template offsets must be integers")
+    if start < 0 or end <= start or end > len(template_text):
+        raise ValueError("source-map template range is outside its source")
+    placeholder = template_text[start:end]
+    match = re.fullmatch(r"\{\{(copy\.[A-Za-z0-9.]+)\}\}", placeholder)
+    if not match:
+        raise ValueError("source-map template range does not identify one catalog key")
+    return match.group(1)
+
+
+def _load_copy_catalog() -> dict:
+    script = "const c=require(process.argv[1]);process.stdout.write(JSON.stringify(c));"
+    result = subprocess.run(
+        ["node", "-e", script, str(ROOT / PRIMARY_COPY)],
+        check=True, capture_output=True, text=True, encoding="utf-8",
+    )
+    catalog = json.loads(result.stdout)
+    if not isinstance(catalog, dict) or catalog.get("schema") != "M2DUIStringCatalog/1":
+        raise ValueError("shared UI copy catalog schema is invalid")
+    return catalog
+
+
+def _escape_catalog_html(value: str) -> str:
+    return (value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+            .replace('"', "&quot;").replace("'", "&#39;"))
+
+
 def _validated_primary_page_context(
     manifest: dict,
     manifest_sha256: str,
     output_path: str,
     route_index: int,
     route_config: dict,
+    copy_catalog: dict,
     shared_texts: dict[str, str],
 ) -> dict:
     expected = PRIMARY_PAGES[output_path]
@@ -142,17 +265,18 @@ def _validated_primary_page_context(
         raise ValueError("source Git blob hash mismatch for " + expected["source"])
     if git_blob_sha(output_bytes) != page.get("outputGitBlobSha"):
         raise ValueError("output Git blob hash mismatch for " + output_path)
-    source_text = source_bytes.decode("utf-8").replace("\r\n", "\n")
-    output_text = output_bytes.decode("utf-8").replace("\r\n", "\n")
+    source_text = decode_source_map_text(source_bytes)
+    output_text = decode_source_map_text(output_bytes)
     source_map = page.get("sourceMap")
     segments = source_map.get("segments") if isinstance(source_map, dict) else None
     if not isinstance(segments, list):
         raise ValueError("source-map segments missing for " + output_path)
 
-    known_sources = {expected["source"], PRIMARY_FRAGMENT, PRIMARY_ROUTES}
+    known_sources = {expected["source"], PRIMARY_FRAGMENT, PRIMARY_ROUTES, PRIMARY_COPY}
     cursor = 0
     output_length = len(output_text)
     fragment = shared_texts[PRIMARY_FRAGMENT]
+    template_texts = {**shared_texts, expected["source"]: source_text}
     for segment in segments:
         if not isinstance(segment, dict):
             raise ValueError("source-map segment is not an object")
@@ -202,6 +326,30 @@ def _validated_primary_page_context(
                 raise ValueError("route-config placeholder must resolve to a string")
             if output_text[start:end] != value:
                 raise ValueError("route-config output does not match its declared pointer value")
+        elif kind == "catalog-key":
+            pointer = origin.get("pointer")
+            if origin.get("path") != PRIMARY_COPY or transform != "catalog-key-substitution":
+                raise ValueError("catalog-key origin or transform is invalid")
+            template = origin.get("template")
+            key = _source_map_template_key(template_texts, template)
+            template_path = template.get("path")
+            if (
+                template_path != PRIMARY_FRAGMENT
+                and key not in PRIMARY_PAGE_COPY_KEYS.get(template_path, set())
+            ):
+                raise ValueError("page catalog key is outside the approved source map")
+            expected_pointer = "/" + key.removeprefix("copy.").replace(".", "/")
+            if pointer != expected_pointer:
+                raise ValueError("catalog pointer does not match its template key")
+            if manifest.get("copyCatalog", {}).get("schema") != copy_catalog.get("schema"):
+                raise ValueError("UI copy catalog schema differs from the manifest")
+            if manifest.get("copyCatalog", {}).get("locale") != copy_catalog.get("locale"):
+                raise ValueError("UI copy catalog locale differs from the manifest")
+            value = json_pointer_value(copy_catalog, pointer)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError("catalog key must resolve to a nonblank string")
+            if output_text[start:end] != _escape_catalog_html(value):
+                raise ValueError("catalog-key output does not match its declared key")
         elif kind == "generator-rule":
             if transform != "conditional-attribute-generation":
                 raise ValueError("generator-rule transform is invalid")
@@ -267,8 +415,8 @@ def load_primary_page_contexts() -> dict[str, dict]:
         manifest_bytes = PRIMARY_PAGE_MANIFEST.read_bytes()
         manifest_sha256 = sha256(manifest_bytes)
         manifest = json.loads(manifest_bytes.decode("utf-8"))
-        if manifest.get("schema") != "M2DARC03CPublishedPages/2":
-            raise ValueError("primary-page manifest schema is not /2")
+        if manifest.get("schema") != "M2DARC03CPublishedPages/3":
+            raise ValueError("primary-page manifest schema is not /3")
         source_map = manifest.get("sourceMap")
         if not isinstance(source_map, dict) or source_map.get("schema") != PRIMARY_MAP_SCHEMA:
             raise ValueError("primary-page source-map schema is unsupported")
@@ -289,12 +437,21 @@ def load_primary_page_contexts() -> dict[str, dict]:
             raise ValueError("primary header fragment path mismatch")
         if manifest.get("routesConfig", {}).get("path") != PRIMARY_ROUTES:
             raise ValueError("primary route configuration path mismatch")
-        fragment = fragment_bytes.decode("utf-8").replace("\r\n", "\n")
+        copy_record = manifest.get("copyCatalog")
+        if not isinstance(copy_record, dict) or copy_record.get("path") != PRIMARY_COPY:
+            raise ValueError("UI copy catalog identity is missing from the manifest")
+        copy_bytes = (ROOT / PRIMARY_COPY).read_bytes()
+        if git_blob_sha(copy_bytes) != copy_record.get("gitBlobSha"):
+            raise ValueError("UI copy catalog Git blob hash mismatch")
+        catalog = _load_copy_catalog()
+        if (copy_record.get("schema"), copy_record.get("locale")) != (catalog.get("schema"), catalog.get("locale")):
+            raise ValueError("UI copy catalog metadata differs from the manifest")
+        fragment = decode_source_map_text(fragment_bytes)
         route_config = json.loads(route_bytes.decode("utf-8"))
         shared_texts = {PRIMARY_FRAGMENT: fragment}
         for index, output in enumerate(PRIMARY_PAGES):
             contexts[output] = _validated_primary_page_context(
-                manifest, manifest_sha256, output, index, route_config, shared_texts
+                manifest, manifest_sha256, output, index, route_config, catalog, shared_texts
             )
     except Exception as error:
         reason = "primary-page-provenance-invalid: " + str(error)
@@ -321,9 +478,14 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
             if segment["output"]["start"] <= offset
             and end_offset <= segment["output"]["end"]
         ]
-    if len(matches) != 1:
-        return {"status": "unresolved", "reason": "sink-crosses-source-map-segments-or-gap"}
-    segment = matches[0]
+    composed_whitespace = None
+    if len(matches) == 1:
+        segment = matches[0]
+    else:
+        composed = _catalog_key_with_template_whitespace(context, offset, end_offset)
+        if composed is None:
+            return {"status": "unresolved", "reason": "sink-crosses-source-map-segments-or-gap"}
+        segment, composed_whitespace = composed
     origin = dict(segment["origin"])
     result = {
         "status": "mapped",
@@ -336,6 +498,9 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
             "offsetUnit": "unicode-codepoints",
         },
     }
+    if composed_whitespace is not None:
+        result["transform"] = "catalog-key-substitution-plus-template-whitespace"
+        result["evidence"]["templateWhitespaceSuffix"] = composed_whitespace
     if origin["kind"] in {"page", "shared-fragment"}:
         source_offset = origin["range"]["start"] + offset - segment["output"]["start"]
         line, column = offset_location(context["texts"][origin["path"]], source_offset)
@@ -348,10 +513,67 @@ def authoring_at_offset(context: dict, offset: int | None, end_offset: int | Non
     elif origin["kind"] == "route-config":
         result["origin"].update({"path": origin["path"], "pointer": origin["pointer"]})
         result["template"] = origin["template"]
+    elif origin["kind"] == "catalog-key":
+        result["origin"].update({"path": origin["path"], "pointer": origin["pointer"]})
+        result["template"] = origin["template"]
     else:
         result["origin"].update({"rule": origin["rule"], "inputs": origin["inputs"]})
         result["template"] = origin["template"]
     return result
+
+
+def _catalog_key_with_template_whitespace(context: dict, offset: int, end_offset: int):
+    """Map a static text sink made of one catalog value plus copied template whitespace."""
+    overlapping = sorted(
+        (
+            segment for segment in context["segments"]
+            if segment["output"]["start"] < end_offset
+            and offset < segment["output"]["end"]
+        ),
+        key=lambda segment: segment["output"]["start"],
+    )
+    if len(overlapping) < 2 or overlapping[0]["output"]["start"] != offset:
+        return None
+    first = overlapping[0]
+    first_origin = first.get("origin", {})
+    if first_origin.get("kind") != "catalog-key" or first.get("transform") != "catalog-key-substitution":
+        return None
+    template_path = first_origin.get("template", {}).get("path")
+    if not isinstance(template_path, str) or first["output"]["end"] >= end_offset:
+        return None
+
+    cursor = first["output"]["end"]
+    suffix_parts = []
+    for segment in overlapping[1:]:
+        output_range = segment.get("output", {})
+        start, end = output_range.get("start"), output_range.get("end")
+        origin = segment.get("origin", {})
+        source_range = origin.get("range")
+        source_offset = source_range.get("start") if isinstance(source_range, dict) else None
+        if (
+            not isinstance(start, int) or isinstance(start, bool)
+            or not isinstance(end, int) or isinstance(end, bool)
+            or not isinstance(source_offset, int) or isinstance(source_offset, bool)
+            or start != cursor
+            or origin.get("kind") != "page"
+            or origin.get("path") != template_path
+            or segment.get("transform") != "copy"
+        ):
+            return None
+        portion_end = min(end_offset, end)
+        source_start = source_offset + cursor - start
+        source_end = source_start + portion_end - cursor
+        source = context.get("texts", {}).get(template_path, "")
+        if not isinstance(source_start, int) or source_start < 0 or source_end > len(source):
+            return None
+        suffix = source[source_start:source_end]
+        if not suffix or not suffix.isspace():
+            return None
+        suffix_parts.append(suffix)
+        cursor = portion_end
+        if cursor == end_offset:
+            return first, "".join(suffix_parts)
+    return None
 
 
 def raw_start_tag_attribute_offsets(raw_tag: str) -> list[tuple[str, int | None, int | None]] | None:

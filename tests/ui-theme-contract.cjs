@@ -8,6 +8,7 @@ const crypto = require("node:crypto");
 const root = path.resolve(__dirname, "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 const code = read("app/core/ui-theme.js");
+const copy = require("../app/core/ui-copy.js");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/config/index.html", "app/admin.html",
@@ -27,6 +28,9 @@ for (const file of shells) {
   const themeScript = html.match(themeScriptPattern);
   const themeStylesheet = html.match(themeStylesheetPattern);
   assert(themeScript, file + " theme bootstrap");
+  assert(html.includes('src="/core/ui-copy.js?v=shared-technical-copy-1"'), file + " shared copy catalog");
+  assert(html.indexOf("ui-copy.js") < themeScript.index, file + " catalog loads before the theme");
+  assert(themeScript[0].includes("shared-copy-v1"), file + " refreshes the theme bootstrap");
   assert(themeStylesheet, file + " theme CSS");
   assert(themeScript.index < themeStylesheet.index, file + " theme before stylesheet");
   if (faviconShells.has(file)) {
@@ -161,34 +165,50 @@ for (const [file, expected] of Object.entries(expectedBlobs)) {
   const hash = crypto.createHash("sha1").update(`blob ${bytes.length}\0`).update(bytes).digest("hex");
   assert.equal(hash, expected, "homologated asset unchanged: " + file);
 }
-function harness(osDark, initialMode) {
+function harness(osDark, initialMode, withCatalog = true) {
   const saved = initialMode ? { "casa-ui-theme-mode-v1": initialMode } : {};
   const hooks = {};
   const media = { matches: osDark, addEventListener: (name, cb) => { hooks["media:" + name] = cb; } };
   const attrs = {};
   const rootElement = { style: {}, setAttribute: (k,v) => { attrs[k] = v; } };
-  const images = [];
+  const images = [], controls = [];
   const document = {
     documentElement: rootElement,
     readyState: "loading",
-    querySelectorAll(selector) { return selector === "img[data-brand-variant]" ? images : []; },
+    querySelectorAll(selector) {
+      return selector === "img[data-brand-variant]" ? images : selector === "[data-ui-theme-toggle]" ? controls : [];
+    },
     querySelector() { return null; },
     addEventListener(name, fn) { hooks["doc:" + name] = fn; }
   };
   const window = {
+    CASA_UI_COPY: withCatalog ? copy : undefined,
     matchMedia() { return media; },
     localStorage: { getItem(k) { return saved[k] || null; }, setItem(k,v) { saved[k] = v; } },
     addEventListener(name, fn) { hooks["win:" + name] = fn; }
   };
   vm.runInNewContext(code, { window, document }, { filename: "app/core/ui-theme.js" });
-  return { hooks, media, attrs, saved, window, images };
+  return { hooks, media, attrs, saved, window, images, controls };
 }
 const darkDefault = harness(true);
+assert.equal(darkDefault.window.CASA_UI_THEME.getCopy("viewer.shell.heading", "fallback"), copy.viewer.shell.heading);
+assert.equal(harness(false, null, false).window.CASA_UI_THEME.getCopy("viewer.shell.heading", "fallback"), "fallback",
+  "theme and Viewer copy retain a readable fallback if the catalog is unavailable");
+const controlAttributes = {}, controlText = {};
+darkDefault.controls.push({
+  setAttribute(name, value) { controlAttributes[name] = value; },
+  querySelector(selector) {
+    return { set textContent(value) { controlText[selector] = value; } };
+  }
+});
 assert.equal(darkDefault.window.CASA_UI_THEME.getMode(), "auto");
 assert.equal(darkDefault.window.CASA_UI_THEME.getResolved(), "dark");
 assert.equal(darkDefault.attrs["data-theme"], "dark");
 assert.equal(Object.keys(darkDefault.saved).length, 0, "auto default must not persist");
 assert.equal(darkDefault.window.CASA_UI_THEME.setMode("light"), true);
+assert.equal(controlAttributes["aria-label"], "Tema atual: Claro. Ativar Escuro.");
+assert.equal(controlAttributes.title, "Tema: Claro (próximo: Escuro)");
+assert.equal(controlText[".ui-theme-toggle__label-long"], "Claro");
 assert.equal(darkDefault.attrs["data-theme"], "light");
 assert.equal(darkDefault.saved["casa-ui-theme-mode-v1"], "light");
 assert.equal(darkDefault.window.CASA_UI_THEME.setMode("invalid"), false);

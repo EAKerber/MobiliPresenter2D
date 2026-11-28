@@ -9,12 +9,16 @@ on:
       - 'app/how-it-works/**'
       - 'app/index.html'
       - 'app/landing/**'
-      - 'app/viewer/index.html'
+      - 'app/viewer/**'
+      - 'app/core/ui-copy.js'
+      - 'app/core/ui-theme.js'
+      - 'app/core/technical-drawings.js'
       - 'architecture/fragments/**'
       - 'architecture/pages/**'
       - 'scripts/compile-primary-pages.mjs'
       - 'tests/arc03c-source-authority.test.mjs'
       - 'tests/ci/public-navigation-semantic-browser.mjs'
+      - 'tests/viewer-secondary-header-browser-gate.mjs'
       - '.github/workflows/nav005-public-header-browser.yml'
 
 permissions:
@@ -46,6 +50,8 @@ jobs:
         run: |
           npm install --prefix /tmp/m2d-nav005 --no-audit --no-fund playwright@1.62.1
           node -e 'const p=require("/tmp/m2d-nav005/node_modules/playwright/package.json");if(p.version!=="1.62.1")process.exit(1)'
+          mkdir -p node_modules
+          ln -s /tmp/m2d-nav005/node_modules/playwright node_modules/playwright
       - name: Serve only the local static app
         shell: bash
         run: |
@@ -62,3 +68,5 @@ jobs:
           NODE_PATH: /tmp/m2d-nav005/node_modules
           M2D_PUBLIC_LOOPBACK_URL: http://127.0.0.1:8123
         run: node tests/ci/public-navigation-semantic-browser.mjs
+      - name: Verify Viewer copy, selection and catalog fallback in both engines
+        run: node tests/viewer-secondary-header-browser-gate.mjs
