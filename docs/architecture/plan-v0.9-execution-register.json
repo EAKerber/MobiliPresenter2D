@@ -1,6 +1,6 @@
 {
   "schema": "PlanV09OperationalRegister/1",
-  "updatedAt": "2026-11-27",
+  "updatedAt": "2026-11-28",
   "statusSemantics": {
     "planState": "Copiado do Anexo A; é o estado editorial inicial, não uma afirmação de implementação atual.",
     "unreviewed": "Reconciliação operacional ainda não feita; não significa ausência de código.",
@@ -431,9 +431,14 @@
           "source": "Product PR #562 exact-head gates and TST-001 artifact #46084847131",
           "sha": "3b65a0215e80e3c5c8dfae05f53679755c864bf7",
           "detail": "At exact main@ecaa38cf0be54e8d586458a86d1062b90c0b9691 and development base@647f4791c4e980d205942a5da48d3256f5d4f517, run #46084847131 generated and uploaded artifact #15238627077 (sha256:eff3dc646b8c36fd6476160fda61a2af36bf28364ff76a19bd2ea36bdbdb6bc3), preserved at docs/architecture/ci/tst-001-workflow-inventory-live-2026-11-27-run-46084847131.json. Inventory: 28 main workflows, 65 development workflows, 26 shared, 2 main-only, 39 development-only, 67 path definitions, 86 unique definitions, zero parser warnings; candidate PR #562 changes one workflow. Inventory and plan jobs passed; app build/test passed with the development UI theme contract added to npm test. This proves workflow-definition inventory and exact changed-path reachability, not the separate command-to-assertion-to-contract/results crosswalk."
+        },
+        {
+          "source": "docs/architecture/ci/m2d-ops-shadow-readback-2026-11-28.md",
+          "sha": "d5b5923093a4d78b792a093e1facbfa5a8d5e743",
+          "detail": "PR #517 M2D Operations v0.1 was exercised in disposable clones pinned to Product main@ecaa38cf0be54e8d586458a86d1062b90c0b9691, development@91c242c7ee869975dbd33df230052a45a8036df6, and Design System main@a405dff0b77ec3780cd8bcfb313dbad76e9be461. Its opt-in unit suite passed 16/16; snapshot/validate accepted all 125 IDs structurally; status matched exact pinned blobs; reconcile matched an independent 526-path Git diff with zero set differences and no automatic merge. This supports tool readback reliability only; the command-to-assertion-to-contract crosswalk and semantic review remain open, and this suite is not wired into CI."
         }
       ],
-      "nextAction": "Complete the current command-to-assertion-to-contract/result crosswalk across the exact workflow inventory; treat the historical 21/21 baseline as historical and reconcile any remaining main/development coverage differences without copying triggers wholesale."
+      "nextAction": "Complete the command-to-assertion-to-contract/result crosswalk on exact current workflow refs; treat the #517 shadow run as structural tooling evidence only, not as completion of the historical 21/21 baseline or semantic validation."
     },
     {
       "order": 20,
@@ -473,9 +478,14 @@
           "source": "Product PR #449 hierarchy transfer and round-trip continuation",
           "sha": "b85313662bb71fdf5e625fc012904c68d3752fc1",
           "detail": "Added a representative cross-group section transfer with V5 save and reload readback, retaining section identity and exact item ownership; split/merge cases continue afterward. Added the advisory admin-hierarchy-editing impact bundle and selector assertions routed to the existing Admin browser workflow. PR description reports the local Admin V5 browser fixture, selector tests (23/23), and workflow inventory (8/8) passed; evidence uses an in-memory V5 endpoint and Identity stub and does not establish live Netlify/Identity behavior. Integrated in development at this squash SHA. TST-002 remains partial."
+        },
+        {
+          "source": "docs/architecture/dom-001-admin-v5-form-field-map-2026-11-26.md",
+          "sha": "1536da831e181c867631c2e5e216b4e0ddf7175f",
+          "detail": "Product PR #563 exact head fb5846df215792cd3e1a2b66919a8c0ed54b4725 adds one Admin V5 browser round-trip for finish scope and module association. Exact-head Admin hierarchy run #46086574803 and development impact-plan run #46086574838 passed; squash-integrated into development at 91c242c7ee869975dbd33df230052a45a8036df6. The in-memory endpoint and stubbed Identity do not prove hosted Identity/Blob behavior; broad risk-based assertions remain open."
         }
       ],
-      "nextAction": "Expand the risk-based assertion matrix beyond Buyer, access-surface, and the representative Admin transfer/split/merge round-trips; keep fixture-only, exact-head CI, and live Identity/Blob evidence distinct. Continue the remaining schema, denial, recovery, and consumer-boundary assertions; TST-002 remains partial."
+      "nextAction": "Expand the risk-based assertion matrix beyond Buyer, access-surface, representative hierarchy, and the finish scope/module-association round-trip; continue schema, denial, recovery, and consumer-boundary assertions. Keep local fixture, exact-head CI, and live Identity/Blob evidence distinct."
     },
     {
       "order": 21,
@@ -578,9 +588,14 @@
           "source": "Live open Product PR readback",
           "sha": "6750d9b67a9b5d8b52c022093fdac50f288c0339",
           "detail": "Only open Product PR is draft #517, head 3079610c6688e50604a26a4fb10580b8e3d7304d, based on development@f864fed27026b5bddbd3b79318e68b3cf470036c. The current development ref has advanced to 6750d9b67a9b5d8b52c022093fdac50f288c0339; #517 remains a proposal and its source-readback/real-clone shadow evidence is not current."
+        },
+        {
+          "source": "docs/architecture/ci/m2d-ops-shadow-readback-2026-11-28.md",
+          "sha": "d5b5923093a4d78b792a093e1facbfa5a8d5e743",
+          "detail": "PR #517 M2D Operations v0.1 is integrated into Product development (merge commit 647f4791c4e980d205942a5da48d3256f5d4f517); its eight tool files remain present at development@91c242c7ee869975dbd33df230052a45a8036df6 and were exercised in the exact-ref shadow readback. Live GitHub open-PR lists returned empty for both Product and Design System at the 2026-11-28 readback. The shadow CLI itself does not read remote PR state."
         }
       ],
-      "nextAction": "Keep #517 as a draft proposal until its tests and real-clone shadow comparison are run against current Product and Design System refs; refresh the open-PR register before each new package."
+      "nextAction": "Before each new package, refresh both live PR rosters and record exact base/head, intent, changed paths, gates, and disposition. #517 is integrated; do not describe it as a draft. Keep the register partial until open-PR intent tracking is current for each package."
     },
     {
       "order": 24,
@@ -628,7 +643,7 @@
       "planState": "in_progress",
       "reconciliation": "partial",
       "local": "unknown",
-      "development": "unknown",
+      "development": "partial",
       "main": "unknown",
       "technicalValidation": "partial",
       "approvalPublication": "unknown",
@@ -642,9 +657,14 @@
           "source": "Current Product ref readback after PR #432 and Branch Hygiene vNext receipt audit",
           "sha": "5c6e652693bd30218e6915bf8cb160bde03ac719",
           "detail": "Readback vivo em 2026-11-26: somente main@5c6e652693bd30218e6915bf8cb160bde03ac719 e development@ef943910f5513c423ce22b84b4ced548f9c042f2; API de PRs abertas retornou vazio. O recibo diretamente confirmado #462 removeu a branch exata após árvore idêntica e readback. Não foi possível associar recibos específicos de auto-cleanup aos merges #407/#432/#445/#475; as refs ausentes não provam, sozinhas, que vNext as removeu."
+        },
+        {
+          "source": "docs/architecture/ci/m2d-ops-shadow-readback-2026-11-28.md",
+          "sha": "d5b5923093a4d78b792a093e1facbfa5a8d5e743",
+          "detail": "After PR #563 squash merge to development@91c242c7ee869975dbd33df230052a45a8036df6, merged-PR cleanup run #46086839752/job 140798284411 succeeded and artifact #15239666399 (sha256:6be5cb1529c85ab72fd4e2bdc070e0ebf547834139832bc114806fc28436d618) proves exact source head fb5846df215792cd3e1a2b66919a8c0ed54b4725, SQUASH_TREE_IDENTICAL against development tree c83d4bde14a815501963eb6f47ccfd6540f940a8, deletion, and readback PASS. This is one verified cleanup execution; remaining cleanup scenarios are unproven."
         }
       ],
-      "nextAction": "No próximo merge, verificar run/artifact do pull_request_target e o ref readback para confirmar causalidade; não remover refs manualmente sem plano e recibo exatos."
+      "nextAction": "Keep the automatic-cleanup policy partial. On subsequent merged PRs, inspect the pull_request_target run, artifact, and exact ref readback for causal proof; do not infer success from a branch being absent."
     },
     {
       "order": 26,
@@ -890,9 +910,14 @@
           "source": "docs/architecture/dom-001-admin-v5-form-field-map-2026-11-26.md",
           "sha": "bb4a4a2e21a9a3ecab12491ad1e3fcec2b9f867c",
           "detail": "Bounded read-only mapping of the Admin V5 editor to persisted schema paths, editable versus retained fields, UI constraints, normalization/save/readback behavior, and existing test ownership. Reviewed source code on main@463327ce25687f29859a152a41f0915af51e9264 and development@6e6bf126870af9ce1489ea4dafad3b9b3b4fcb5c; later live refs main@ef9f073542c54ec44bf3c8808ab13d880222d329 and development@ab518623bbfe59ef37a36a8bbc347ff9e03882c0 were checked for relevant Admin/schema/test changes. No tests were run. This closes the observed form-to-schema field map only; field-level UI round trips, exhaustive default/compatibility and route closure, hosted Identity/Blob concurrency, and real hosted save/readback remain open."
+        },
+        {
+          "source": "docs/architecture/dom-001-admin-v5-form-field-map-2026-11-26.md",
+          "sha": "1536da831e181c867631c2e5e216b4e0ddf7175f",
+          "detail": "PR #563 exact head fb5846df215792cd3e1a2b66919a8c0ed54b4725 tested cocoa finish scope global→local and removal of one module association through explicit V5 save, normalization, and fresh reload; runs #46086574803 and #46086574838 passed; merged to development at 91c242c7ee869975dbd33df230052a45a8036df6. Scope/module association is no longer an uncovered case. Finish enabled toggle and all guards, other controls, immutable-field retention, hosted Identity/Blob, compatibility/defaults, and CMP-001 consumers remain open."
         }
       ],
-      "nextAction": "Close field-level Admin-to-persisted V5 round-trip gaps for object copy/assets, materials, finishes, initial-state controls, dependencies/events and retained fields; complete defaults/compatibility and CMP-001 route-consumer closure; separately obtain hosted Identity/Blob save/readback evidence. Keep DOM-001 partial until the full DoD is proven."
+      "nextAction": "Close remaining field-level gaps for object copy/assets, material create/remove, finish enabled toggle and availability guards, initial-state controls, dependencies/events, and retained fields; complete defaults/compatibility and CMP-001 route consumers; separately obtain hosted Identity/Blob save/readback. Keep DOM-001 partial."
     },
     {
       "order": 36,
@@ -2808,13 +2833,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-27T15:45:00Z",
+    "capturedAt": "2026-11-28T00:46:19Z",
     "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
-    "productDevelopmentSha": "d1197d90e0c7524c8f2416b43d2014bba42beaf6",
+    "productDevelopmentSha": "91c242c7ee869975dbd33df230052a45a8036df6",
     "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
     "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
-    "productDevelopmentTree": "82c04c30d24b0c82da15a3717d7b87726f474a92",
+    "productDevelopmentTree": "c83d4bde14a815501963eb6f47ccfd6540f940a8",
     "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
-    "meaning": "Live ref and tree readback after Product PR #560. Product main remains stable at ecaa38c (tree 45dafef); Product development is the integration buffer at d1197d9 (tree 82c04c3); Design System main remains a405dff (tree d0daa64), and the Design System development ref lookup returns 404. Product main→development is divergent from merge base 221b54b2: development is 679 commits ahead and main is 46 ahead. This broad divergence is not a candidate for whole-tree integration; promote complete, validated architectural families selectively. Product code and registers have not been promoted to main."
+    "meaning": "Live refs and trees were read after Product PR #563 and M2D Operations v0.1 shadow validation. Product main remains stable at ecaa38c/tree 45dafef; development is the integration buffer at 91c242c/tree c83d4bd; Design System main is a405dff/tree d0daa64, and the Design System development ref lookup returns 404. Current GitHub compare uses merge base 221b54b2: Product development is 683 commits ahead and main is 46 ahead. This broad divergence is not a candidate for whole-tree integration; promote complete, validated architectural families selectively. Product implementation and register updates remain in development."
   }
 }

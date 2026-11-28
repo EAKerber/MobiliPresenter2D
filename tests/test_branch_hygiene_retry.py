@@ -38,6 +38,10 @@ class RetryTests(unittest.TestCase):
                   "GITHUB_ACTIONS":"true","GITHUB_EVENT_NAME":"push",
                   "GITHUB_REF":"refs/heads/main","GITHUB_SHA":self.sha,
                   "GITHUB_RUN_ID":"123","GITHUB_RUN_ATTEMPT":"2"}
+        self.env["PATH"] = os.environ.get("PATH", os.defpath)
+        for name in ("SYSTEMROOT", "WINDIR", "TEMP", "TMP"):
+            if os.environ.get(name):
+                self.env[name] = os.environ[name]
 
     def git(self,*args):
         return subprocess.run(["git",*args],check=True,text=True,capture_output=True).stdout.strip()
