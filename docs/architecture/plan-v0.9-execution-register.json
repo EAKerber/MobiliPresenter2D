@@ -2555,9 +2555,14 @@
           "source": "Product PR #567 compact stage labels exact-head gates and development readback",
           "sha": "0b75ae1de5ef1ef2bf0fb27ccf651f0c363c0841",
           "detail": "Four fixed compact configurator stage labels now use uiCopy.configurator.stageNavigation.compactLabels; exact visible/full stage labels, full accessible names, configured custom-stage labels, responsive behavior and pricing/data behavior remain unchanged. Catalog, runtime, source contract and browser checks cover the four compact values. Exact head 9f58b6d3cfd34dc4ffdccc5ffc82d15b5e284e1a passed 14 applicable GitHub checks; Supabase Preview was skipped because branch previews are disabled. Local core test, primary-page compiler, ARC03C source-authority (6/6), UI theme contract, ARC-13 line-ending tests (3/3), syntax and diff checks passed. ARC-13 regenerated twice deterministically: 267 JS text-source records, 1,015 unreviewed occurrences, 454 sinks, 0 parse errors, 0 unresolved mappings; sink-links changed from 4 to 0 because ARC-13 does not follow uiCopy keys to the CSS data attribute. This is a provenance coverage gap, not a zero-consumer result. Squash-integrated into development at this SHA/tree 56135b96d2543edb7f1062462cd4d6b16f3011a2; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
+        },
+        {
+          "source": "Product PRs #585, #588 and #589; exact-head CI and authenticated Deploy Preview #589",
+          "sha": "6db44a5ba9d63f9b76fb9337ae9a639b5baac490",
+          "detail": "The Admin copy, literal-safe data interpolation and accessible policy guidance were selectively integrated into main. Static sign-in labels are preserved. All ten applicable PR #589 workflows passed on head 7cc2fa9cde91c0b2f4795793239522cc5102d4d8; authenticated preview inspection confirmed loaded stages, finishes and pricing without writes. V5 save/readback and isolated repair were tested with synthetic fixtures, not against the hosted data. Netlify production deploy 6b0b38fcc9c029e98d2fe012 is ready on this exact main commit. Private navigation remains separately divergent; remaining Configurator and Admin text coverage is not claimed complete."
         }
       ],
-      "nextAction": "Reconciliar os textos fixos remanescentes do Admin e do Configurador com seus consumidores e evidências atuais, mantendo dados comerciais como dados. Avaliar famílias completas para promoção seletiva; LOC-006 continua parcial."
+      "nextAction": "Reconciliar os textos fixos remanescentes do Admin e do Configurador com seus consumidores e evidências atuais, mantendo dados comerciais como dados. Avaliar a navegação privada e as famílias restantes separadamente; LOC-006 continua parcial."
     },
     {
       "order": 107,
