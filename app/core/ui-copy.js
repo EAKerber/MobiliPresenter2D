@@ -484,6 +484,16 @@
       internalSegment: "{label} {size} milímetros"
     }),
     viewer: Object.freeze({
+      shell: Object.freeze({
+        description: "Conheça os módulos da cozinha Casa em Módulos.",
+        title: "Cozinha modular | Casa em Módulos",
+        brandLink: "Casa em Módulos — início",
+        back: "← Ambientes",
+        navigationLabel: "Navegação pública",
+        eyebrow: "Conheça os módulos",
+        heading: "Cozinha Casa em Módulos",
+        instruction: "Selecione uma peça na cena para ver suas informações, vistas e detalhes."
+      }),
       overview: Object.freeze({ kicker: "{category} · Módulo {number}", basePrice: "Valor base do módulo" }),
       sections: Object.freeze({
         viewsTitle: "Vistas técnicas", viewsDescription: "Desenhos orientativos a partir das dimensões disponíveis.",

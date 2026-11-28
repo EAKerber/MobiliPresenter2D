@@ -16,14 +16,16 @@ const SOURCE_INPUTS=[
  "architecture/fragments/primary-header.routes.json",
  "architecture/pages/root.page.html",
  "architecture/pages/about.page.html",
- "architecture/pages/how-it-works.page.html"
+ "architecture/pages/how-it-works.page.html",
+ "architecture/pages/viewer.page.html"
 ];
 const ISOLATED_INPUTS=[
  ...SOURCE_INPUTS,
  "architecture/generated/primary-pages.manifest.json",
  "app/index.html",
  "app/about/index.html",
- "app/how-it-works/index.html"
+ "app/how-it-works/index.html",
+ "app/viewer/index.html"
 ];
 const gate=(mode="--check",root=ROOT)=>spawnSync(
  process.execPath,[join(root,"scripts/compile-primary-pages.mjs"),mode],
@@ -57,14 +59,14 @@ async function assertRejectedMutation(path,mutate,expected) {
  await assert.rejects(access(r.root),{code:"ENOENT"},"the temporary fixture must be removed");
 }
 
-test("three generated pages and provenance manifest match authoritative source",async()=>{
+test("generated public pages and provenance manifest match authoritative source",async()=>{
  const r=await projectPages();
  assert.equal(r.manifest.authority,"architecture/pages");
- assert.deepEqual(r.manifest.pages.map(x=>x.route),["/","/about/","/how-it-works/"]);
+ assert.deepEqual(r.manifest.pages.map(x=>x.route),["/","/about/","/how-it-works/","/viewer/"]);
  assert.equal(normalizeNewlines(await readFile("architecture/generated/primary-pages.manifest.json","utf8")),r.text);
  for(const p of r.pages) {
   assert.equal(normalizeNewlines(await readFile(p.output,"utf8")),p.html);
-  assert.match(p.html,/<header class="site-header site-header--public">/);
+  assert.match(p.html,p.output==="app/viewer/index.html"?/<header class="viewer-header">/:/<header class="site-header site-header--public">/);
   assert.doesNotMatch(p.html,/<!-- ARC03_PRIMARY_HEADER -->/);
  }
  const x=gate();assert.equal(x.status,0,x.stderr);
@@ -83,7 +85,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
  ];
  assert.equal(r.manifest.schema,"M2DARC03CPublishedPages/3");
  assert.equal(r.manifest.copyCatalog.path,"app/core/ui-copy.js");
- for(const page of r.pages) {
+ for(const page of r.pages.filter(page=>page.output!=="app/viewer/index.html")) {
   const catalogVersion=["app/index.html","app/about/index.html","app/how-it-works/index.html"].includes(page.output)
    ? "arc13-loc004-comparison-copy-1"
    : "arc13-loc003-copy-1";
@@ -177,7 +179,7 @@ test("public copy is catalog-backed and remains static in generated HTML",async(
   "About environments CTA retains its route and remains usable without JavaScript");
  assert.match(howItWorks.html,/<footer class="site-footer">[\s\S]*?<a href="\.\.\/">Voltar ao início ↑<\/a><\/footer>/,
   "How it works footer preserves its relative home destination without JavaScript");
- for(const page of r.pages)assert.match(page.html,/<footer class="site-footer"[^>]*>[\s\S]*?<span>Móveis modulares pensados para a vida real\.<\/span>/,
+ for(const page of r.pages.filter(page=>page.output!=="app/viewer/index.html"))assert.match(page.html,/<footer class="site-footer"[^>]*>[\s\S]*?<span>Móveis modulares pensados para a vida real\.<\/span>/,
   "the shared footer tagline stays static and exact on every primary page");
  for(const page of r.pages)assert.doesNotMatch(page.html,/\{\{copy\.[^{}]+\}\}/,
   "generated HTML contains no unresolved page-copy placeholders");
@@ -224,6 +226,15 @@ test("compiler rejects unsafe and out-of-scope sources in isolated fixtures",asy
  await assertRejectedMutation("architecture/pages/root.page.html",
   (target,before)=>writeFile(target,before.replace("{{copy.home.hero.aboutLink}}","{{copy.home.hero.unapproved}}")),
   /Page copy placeholder is not approved/);
+ await assertRejectedMutation("architecture/pages/viewer.page.html",
+  (target,before)=>writeFile(target,before.replace('class="viewer-header"','class="site-header"')),
+  /Viewer must retain its independent header/);
+ await assertRejectedMutation("architecture/pages/viewer.page.html",
+  (target,before)=>writeFile(target,before+'\n<header class="viewer-header"></header>\n'),
+  /Viewer must have exactly one header/);
+ await assertRejectedMutation("architecture/pages/viewer.page.html",
+  (target,before)=>writeFile(target,before.replace("{{copy.viewer.shell.heading}}","{{copy.viewer.shell.unapproved}}")),
+  /Page copy placeholder is not approved/);
  await assertRejectedMutation("architecture/fragments/primary-header.routes.json",
   async(target)=> {
    const config=JSON.parse(await readFile(target,"utf8"));
@@ -244,4 +255,12 @@ test("Viewer NAV-005 stays independently authored",async()=>{
  const html=await readFile("app/viewer/index.html","utf8");
  assert.match(html,/<header class="viewer-header">/);
  assert.doesNotMatch(html,/<header class="site-header/);
+ const viewer=(await projectPages()).pages.find(page=>page.output==="app/viewer/index.html");
+ assert.equal(viewer.html,normalizeNewlines(html));
+ assert.match(viewer.html,/aria-label="Casa em Módulos — início"/);
+ assert.match(viewer.html,/<nav id="primaryNav" class="viewer-header__nav" aria-label="Navegação pública">/);
+ assert.match(viewer.html,/<h1>Cozinha Casa em Módulos<\/h1>/);
+ assert.match(viewer.html,/<a href="\/">Voltar aos ambientes ↑<\/a>/);
+ assert.ok(viewer.sourceMap.some(segment=>segment.origin.pointer==="/viewer/shell/heading"));
+ assert.doesNotMatch(viewer.html,/\{\{copy\./);
 });

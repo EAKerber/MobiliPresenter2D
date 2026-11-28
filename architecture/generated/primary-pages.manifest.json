@@ -6,12 +6,12 @@
     "offsetUnit": "unicode-codepoints",
     "generator": {
       "path": "scripts/compile-primary-pages.mjs",
-      "gitBlobSha": "767c46cde2756ba8c589060c734a3a53083fa4d6"
+      "gitBlobSha": "59a0d33848e37af3e215383665ddd063c8889249"
     }
   },
   "copyCatalog": {
     "path": "app/core/ui-copy.js",
-    "gitBlobSha": "4049d97af18ec26628f9b93553b7069e4435170a",
+    "gitBlobSha": "d7a780552f0e2fd3929560e45f7b0087bee1f21d",
     "schema": "M2DUIStringCatalog/1",
     "locale": "pt-BR"
   },
@@ -4367,6 +4367,610 @@
               "range": {
                 "start": 32200,
                 "end": 32538
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "route": "/viewer/",
+      "source": "architecture/pages/viewer.page.html",
+      "output": "app/viewer/index.html",
+      "sourceGitBlobSha": "3b987bddff338e8964703dd55dc5857065e99e00",
+      "outputGitBlobSha": "46217f330ab109a3d09c0530ea0585040a9314ef",
+      "sourceMap": {
+        "segments": [
+          {
+            "output": {
+              "start": 0,
+              "end": 695
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 0,
+                "end": 695
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 695,
+              "end": 741
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/description",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 695,
+                  "end": 728
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 741,
+              "end": 753
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 728,
+                "end": 740
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 753,
+              "end": 786
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/title",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 740,
+                  "end": 767
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 786,
+              "end": 1134
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 767,
+                "end": 1115
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1134,
+              "end": 1158
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/brandLink",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1115,
+                  "end": 1146
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1158,
+              "end": 1366
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1146,
+                "end": 1354
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1366,
+              "end": 1381
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/brand/logoAlt",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1354,
+                  "end": 1376
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1381,
+              "end": 1501
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1376,
+                "end": 1496
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1501,
+              "end": 1512
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/back",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1496,
+                  "end": 1522
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1512,
+              "end": 1669
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1522,
+                "end": 1679
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1669,
+              "end": 1679
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/menu/open",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1679,
+                  "end": 1708
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1679,
+              "end": 1796
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1708,
+                "end": 1825
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1796,
+              "end": 1813
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/navigationLabel",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1825,
+                  "end": 1862
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1813,
+              "end": 1846
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1862,
+                "end": 1895
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1846,
+              "end": 1855
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/environments",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1895,
+                  "end": 1927
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1855,
+              "end": 1893
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1927,
+                "end": 1965
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1893,
+              "end": 1906
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/howItWorks",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 1965,
+                  "end": 1995
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1906,
+              "end": 1937
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 1995,
+                "end": 2026
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1937,
+              "end": 1947
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/about",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2026,
+                  "end": 2051
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1947,
+              "end": 1997
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2051,
+                "end": 2101
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 1997,
+              "end": 2023
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contactAriaLabel",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2101,
+                  "end": 2137
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2023,
+              "end": 2025
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2137,
+                "end": 2139
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2025,
+              "end": 2037
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/navigation/contact",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2139,
+                  "end": 2166
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2037,
+              "end": 2158
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2166,
+                "end": 2287
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2158,
+              "end": 2176
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/eyebrow",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2287,
+                  "end": 2316
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2176,
+              "end": 2184
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2316,
+                "end": 2324
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2184,
+              "end": 2207
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/heading",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2324,
+                  "end": 2353
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2207,
+              "end": 2215
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2353,
+                "end": 2361
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2215,
+              "end": 2287
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/viewer/shell/instruction",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2361,
+                  "end": 2394
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2287,
+              "end": 2402
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2394,
+                "end": 2509
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2402,
+              "end": 2417
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/brand/logoAlt",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2509,
+                  "end": 2531
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2417,
+              "end": 2436
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2531,
+                "end": 2550
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2436,
+              "end": 2458
+            },
+            "transform": "catalog-key-substitution",
+            "origin": {
+              "kind": "catalog-key",
+              "path": "app/core/ui-copy.js",
+              "pointer": "/home/footer/environmentsLink",
+              "template": {
+                "path": "architecture/pages/viewer.page.html",
+                "range": {
+                  "start": 2550,
+                  "end": 2587
+                }
+              }
+            }
+          },
+          {
+            "output": {
+              "start": 2458,
+              "end": 3492
+            },
+            "transform": "copy",
+            "origin": {
+              "kind": "page",
+              "path": "architecture/pages/viewer.page.html",
+              "range": {
+                "start": 2587,
+                "end": 3621
               }
             }
           }

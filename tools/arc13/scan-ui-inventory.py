@@ -35,8 +35,18 @@ PRIMARY_PAGES = {
         "route": "/how-it-works/",
         "source": "architecture/pages/how-it-works.page.html",
     },
+    "app/viewer/index.html": {"route": "/viewer/", "source": "architecture/pages/viewer.page.html"},
 }
 PRIMARY_PAGE_COPY_KEYS = {
+    "architecture/pages/viewer.page.html": {
+        "copy.viewer.shell.description", "copy.viewer.shell.title", "copy.viewer.shell.brandLink",
+        "copy.brand.logoAlt", "copy.viewer.shell.back", "copy.navigation.menu.open",
+        "copy.viewer.shell.navigationLabel", "copy.navigation.environments",
+        "copy.navigation.howItWorks", "copy.navigation.about",
+        "copy.navigation.contactAriaLabel", "copy.navigation.contact",
+        "copy.viewer.shell.eyebrow", "copy.viewer.shell.heading", "copy.viewer.shell.instruction",
+        "copy.home.footer.environmentsLink",
+    },
     "architecture/pages/root.page.html": {
         "copy.home.hero.eyebrow",
         "copy.home.hero.heading.assemble",
