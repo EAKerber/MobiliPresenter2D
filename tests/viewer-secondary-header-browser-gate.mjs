@@ -182,6 +182,9 @@ for(const engine of [chromium,webkit]){
    assert.equal(await hidden.isDisabled(),true,"an unpublished module hotspot is disabled");
    assert.equal(await hidden.getAttribute("tabindex"),"-1","an unpublished module cannot be tabbed to");
    assert.equal(await hidden.getAttribute("aria-disabled"),"true");
+   const hiddenLayer=stage.locator(`.layer-group[data-entity-id="${moduleIds[1]}"]`);
+   assert.equal(await hiddenLayer.getAttribute("aria-hidden"),"true","hidden hotspot and layer agree");
+   assert.equal(await hiddenLayer.evaluate(node=>node.classList.contains("is-hidden")),true);
    await first.focus();
    await page.keyboard.press("ArrowRight");
    assert.equal(await next.getAttribute("aria-pressed"),"true","keyboard selection skips hidden modules");
@@ -206,12 +209,20 @@ for(const engine of [chromium,webkit]){
        try{adapter.mount(document.createElement("div"));}catch(error){otherTargetRejected=true;}
        const finish=adapter.getFinishes().find(entry=>entry.id!==adapter.getState().finishId);
        if(!finish)throw Error("fixture needs a second permitted finish");
+       const beforeLayer=target.querySelector('.layer-group[data-entity-id="module-01"] .finish-layer');
+       if(!beforeLayer)throw Error("fixture needs the real masked finish layer");
+       const before={maskAsset:beforeLayer.dataset.maskAsset,mask:beforeLayer.style.getPropertyValue("--mask-image"),
+         color:beforeLayer.style.backgroundColor,image:beforeLayer.style.backgroundImage};
        const finishAccepted=adapter.setGlobalFinish(finish.id);
+       const afterLayer=target.querySelector('.layer-group[data-entity-id="module-01"] .finish-layer');
+       const after={maskAsset:afterLayer?.dataset.maskAsset,mask:afterLayer?.style.getPropertyValue("--mask-image"),
+         color:afterLayer?.style.backgroundColor,image:afterLayer?.style.backgroundImage};
+       const rejected=adapter.setGlobalFinish("not-published");
        window.__sceneLifecycleProbe=adapter;
        return {keyBindings,otherTargetRejected,finishAccepted,finishId:adapter.getState().finishId,
          expectedFinish:finish.id,selected:adapter.getState().selectedEntityId,
          pressed:target.querySelector('[aria-pressed="true"]')?.dataset.entityId,
-         frameHidden:target.querySelector(".selection-frame")?.hidden};
+         frameHidden:target.querySelector(".selection-frame")?.hidden,before,after,rejected,texture:finish.textureAsset};
      }finally{document.addEventListener=original;}
    },{modules:hiddenFixture.modules,publicState:hiddenFixture.publicState});
    assert.equal(lifecycle.keyBindings,1,"same-target remount and finish rerender bind one keyboard listener");
@@ -220,8 +231,29 @@ for(const engine of [chromium,webkit]){
    assert.equal(lifecycle.finishId,lifecycle.expectedFinish,"allowed finish survives rerender");
    assert.equal(lifecycle.pressed,lifecycle.selected,"selection remains reflected after finish rerender");
    assert.equal(lifecycle.frameHidden,false,"selected frame remains available after finish rerender");
+   assert.equal(lifecycle.rejected,false,"a finish outside the public allowlist is rejected");
+   assert.ok(lifecycle.before.mask && lifecycle.after.mask,"both real finish layers have masks");
+   assert.equal(lifecycle.after.maskAsset,lifecycle.before.maskAsset,"finish change keeps the resolved module mask");
+   assert.equal(lifecycle.after.mask,lifecycle.before.mask,"finish change preserves mask data");
+   assert.notEqual(lifecycle.after.color,lifecycle.before.color,"allowed finish changes the real layer color");
+   assert.ok(lifecycle.after.image.includes(lifecycle.texture),"allowed finish changes the real layer texture");
    assert.deepEqual(errors,[]);
   }finally{await sceneContext.close();}
+  const missingAssetContext=await browser.newContext({viewport:{width:390,height:844}});
+  try{
+   const page=await missingAssetContext.newPage(),errors=[];
+   page.on("pageerror",error=>errors.push(error.message));
+   await page.route("**/api/public-modules",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify(viewerFixture)}));
+   await page.route("**/"+scene.baseAsset,route=>route.abort());
+   await page.goto(ORIGIN+"/viewer/",{waitUntil:"domcontentloaded"});
+   const stage=page.locator("#sceneStage"),fallback=stage.locator(".scene-image-fallback");
+   await fallback.waitFor({state:"visible",timeout:12000});
+   assert.equal(await fallback.getAttribute("role"),"alert");
+   assert.equal(await stage.getAttribute("data-scene-image-unavailable"),"true");
+   assert.equal(await stage.locator(".scene-hotspots").isHidden(),true,"failed base image covers the interactive scene");
+   assert.equal(await stage.locator(".selection-frame").isHidden(),true);
+   assert.deepEqual(errors,[]);
+  }finally{await missingAssetContext.close();}
  }finally{await browser.close();}
 }
 await writeFile(artifact+"/report.json",JSON.stringify({schema:"ViewerSecondaryHeaderGate0.1",results},null,2));
