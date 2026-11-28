@@ -1709,7 +1709,11 @@ async function showUser(user) {
 async function ensureAdminData() {
   if (!adminDataPromise) {
     adminDataPromise = (async () => {
-      const payload = await fetchAdminBootstrap({ fetchImpl: fetch, getUserImpl: getUser });
+      const payload = await fetchAdminBootstrap({
+        fetchImpl: fetch,
+        getUserImpl: getUser,
+        failureMessages: adminLoadCopy.bootstrapFailures,
+      });
       priceBook = payload.priceBook;
       catalogPricing = pricingContract.normalize(priceBook.pricing);
     })().catch((error) => {

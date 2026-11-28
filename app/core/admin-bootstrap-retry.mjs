@@ -11,6 +11,7 @@ export class AdminBootstrapRequestError extends Error {
 export async function fetchAdminBootstrap({
   fetchImpl,
   getUserImpl,
+  failureMessages,
   wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   retryDelaysMs = [250, 500],
 }) {
@@ -26,7 +27,7 @@ export async function fetchAdminBootstrap({
         cache: "no-store",
       });
     } catch {
-      throw new AdminBootstrapRequestError("network", "Não foi possível conectar à administração. Tente novamente.");
+      throw new AdminBootstrapRequestError("network", failureMessages.network);
     }
     if (response.status === 401 && attempt < retryDelaysMs.length) {
       // A just-established Identity login may briefly precede server validation.
@@ -39,20 +40,20 @@ export async function fetchAdminBootstrap({
       }
     }
     if (response.status === 401) {
-      throw new AdminBootstrapRequestError("unauthorized", "Sessão ainda não confirmada. Verifique o acesso e tente novamente.");
+      throw new AdminBootstrapRequestError("unauthorized", failureMessages.unauthorized);
     }
     if (response.status === 403) {
-      throw new AdminBootstrapRequestError("forbidden", "Sua conta não tem permissão administrativa.");
+      throw new AdminBootstrapRequestError("forbidden", failureMessages.forbidden);
     }
     if (!response.ok) {
-      throw new AdminBootstrapRequestError("unavailable", "Não foi possível carregar os dados administrativos. Tente novamente.");
+      throw new AdminBootstrapRequestError("unavailable", failureMessages.unavailable);
     }
     let payload;
     try { payload = await response.json(); } catch {
-      throw new AdminBootstrapRequestError("invalid", "Os dados administrativos recebidos são inválidos.");
+      throw new AdminBootstrapRequestError("invalid", failureMessages.invalid);
     }
     if (!payload?.priceBook?.pricing) {
-      throw new AdminBootstrapRequestError("invalid", "Os dados administrativos recebidos são inválidos.");
+      throw new AdminBootstrapRequestError("invalid", failureMessages.invalid);
     }
     return payload;
   }
