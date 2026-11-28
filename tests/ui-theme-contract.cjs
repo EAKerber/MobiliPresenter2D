@@ -9,6 +9,13 @@ const root = path.resolve(__dirname, "..");
 const read = (name) => fs.readFileSync(path.join(root, name), "utf8");
 const code = read("app/core/ui-theme.js");
 const copy = require("../app/core/ui-copy.js");
+const adminFallback = read("app/admin.html");
+for (const key of ["restrictedEyebrow", "loginHeading", "loginIntro", "emailLabel", "passwordLabel", "submitLogin", "requestRecovery", "newPasswordLabel", "savePassword", "deniedHeading", "deniedIntroBefore", "deniedIntroAfter"]) {
+  assert(adminFallback.includes(`data-admin-auth-copy="${key}">${copy.admin.authentication[key]}</`), `Admin retains the ${key} static login fallback`);
+}
+assert(adminFallback.includes(`data-admin-shell-copy="documentTitle">${copy.admin.shell.documentTitle}</title>`), "Admin retains its static document title");
+assert.equal((adminFallback.match(/aria-label="Mostrar senha" title="Mostrar senha">Mostrar<\/button>/g) || []).length, 2,
+  "both password reveal controls retain their static accessible name and label");
 const shells = [
   "app/index.html", "app/about/index.html", "app/how-it-works/index.html",
   "app/viewer/index.html", "app/config/index.html", "app/admin.html",

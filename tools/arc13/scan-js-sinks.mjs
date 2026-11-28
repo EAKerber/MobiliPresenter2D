@@ -208,12 +208,12 @@ const knownErrorConsumerTargets = new Map([
     useStatus: "active",
     consumerLinkStatus: "manual-consumer-review",
     consumerConfidence: "conditional",
-    consumerEvidence: ["Exact chain: admin.js:1288 calls baselineHierarchyFor(published), which calls AdministrationV5.upgrade at :1242; if the API decodes a null JSON body, this throw rejects loadSettings(), awaited by showUser() and displayed at admin.js:1560. The normal published payload is non-null, so keep this conditional and diagnostic."],
+    consumerEvidence: ["Exact chain: admin.js:1427 calls baselineHierarchyFor(published), which calls AdministrationV5.upgrade at :1376; if the API decodes a null JSON body, this throw rejects loadSettings(), awaited by showUser() and displayed at admin.js:1699. The normal published payload is non-null, so keep this conditional and diagnostic."],
     target: {
       source: "app/admin/admin.js",
-      line: 1560,
+      line: 1699,
       sink: "helper:setMessage",
-      expression: "error.message || \"Falha ao carregar os dados administrativos.\"",
+      expression: "error.message || adminLoadCopy.adminDataLoadFallback",
       flow: "bounded-admin-load-settings-to-set-message",
     },
   }],
@@ -240,9 +240,9 @@ const knownCustomErrorMessages = new Map([
     messageArgumentIndex: 1,
     target: {
       source: "app/admin/admin.js",
-      line: 1560,
+      line: 1699,
       sink: "helper:setMessage",
-      expression: "error.message || \"Falha ao carregar os dados administrativos.\"",
+      expression: "error.message || adminLoadCopy.adminDataLoadFallback",
       flow: "bounded-custom-error-to-admin-status",
     },
     evidence: "AdminBootstrapRequestError(code, message) is rethrown by ensureAdminData(); showUser() displays error.message through the fixed Admin status helper.",
@@ -285,6 +285,19 @@ const knownCatalogSourcePaths = new Map([
         ? "The default internal drawing description is used by the Configurator; Viewer supplies its own ariaLabel. The sink routeConsumers list both routes."
         : "The shared drawing renderer composes this fixed text into the SVG accessible description used by the Configurator and Viewer; amplification is conditional.",
       targets: targets.map((name) => drawingTargets[name]),
+    })),
+    ...["network", "unauthorized", "forbidden", "unavailable", "invalid"].map((code) => ({
+    path: ["admin", "loadState", "bootstrapFailures", code],
+    role: "error-message-source",
+    binding: "uiCopy.admin.loadState.bootstrapFailures",
+    evidence: "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper.",
+    target: {
+      source: "app/admin/admin.js",
+      line: 1699,
+      sink: "helper:setMessage",
+      expression: "error.message || adminLoadCopy.adminDataLoadFallback",
+      flow: "bounded-custom-error-to-admin-status",
+    },
     })),
     ...["components", "requirements"].map((kind) => ({
       path: ["viewer", "detailHeadings", kind],
