@@ -235,6 +235,12 @@ for (const file of [
   assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
 }
 const adminHeaderFallback = read("app/admin.html");
+for (const key of ["restrictedEyebrow", "loginHeading", "loginIntro", "emailLabel", "passwordLabel", "submitLogin", "requestRecovery", "newPasswordLabel", "savePassword", "deniedHeading", "deniedIntroBefore", "deniedIntroAfter"]) {
+  assert(adminHeaderFallback.includes(`data-admin-auth-copy="${key}">${copy.admin.authentication[key]}</`), `Admin retains the ${key} static login fallback`);
+}
+assert(adminHeaderFallback.includes(`data-admin-shell-copy="documentTitle">${copy.admin.shell.documentTitle}</title>`), "Admin retains its static document title");
+assert.equal((adminHeaderFallback.match(/aria-label="Mostrar senha" title="Mostrar senha">Mostrar<\/button>/g) || []).length, 2,
+  "both password reveal controls retain their static accessible name and label");
 assert.match(adminHeaderFallback, /src="admin\/admin\.bundle\.js\?v=[a-zA-Z0-9_-]+"/, "Admin loads a versioned compiled bundle");
 assert(adminHeaderFallback.includes(`aria-label="${copy.brand.homeLinkAriaLabel}"`), "Admin keeps the catalog-matched brand-link fallback");
 assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps the catalog-matched logo alternative fallback");

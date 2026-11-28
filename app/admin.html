@@ -10,7 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
-    <title data-admin-shell-copy="documentTitle"></title>
+    <title data-admin-shell-copy="documentTitle">Administração — Casa em Módulos</title>
     <link rel="stylesheet" href="admin/admin.css?v=viewer-price-main-v1" />
   <link rel="stylesheet" href="/ui-theme.css?v=arc03-fnd01-v1">
 </head>
@@ -31,37 +31,37 @@
     </header>
     <main class="admin-main">
       <section id="loginPanel" class="admin-card auth-card">
-        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow"></p>
-        <h1 data-admin-auth-copy="loginHeading"></h1>
-        <p class="intro" data-admin-auth-copy="loginIntro"></p>
+        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow">Acesso restrito</p>
+        <h1 data-admin-auth-copy="loginHeading">Painel administrativo</h1>
+        <p class="intro" data-admin-auth-copy="loginIntro">Entre com uma conta administrativa convidada para editar as etapas e os itens disponíveis no configurador.</p>
         <form id="loginForm" class="admin-form" method="post">
-          <label><span data-admin-auth-copy="emailLabel"></span><input id="emailInput" type="email" autocomplete="username" required /></label>
+          <label><span data-admin-auth-copy="emailLabel">E-mail</span><input id="emailInput" type="email" autocomplete="username" required /></label>
           <div class="admin-field">
-            <label for="passwordInput" data-admin-auth-copy="passwordLabel"></label>
+            <label for="passwordInput" data-admin-auth-copy="passwordLabel">Senha</label>
             <div class="password-field">
               <input id="passwordInput" type="password" autocomplete="current-password" required />
-              <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false"></button>
+              <button class="password-reveal" type="button" data-password-reveal="passwordInput" aria-controls="passwordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
             </div>
           </div>
-          <div class="auth-actions"><button class="button button--primary" type="submit" data-admin-auth-copy="submitLogin"></button><button id="recoveryButton" class="text-button" type="button" data-admin-auth-copy="requestRecovery"></button></div>
+          <div class="auth-actions"><button class="button button--primary" type="submit" data-admin-auth-copy="submitLogin">Entrar</button><button id="recoveryButton" class="text-button" type="button" data-admin-auth-copy="requestRecovery">Esqueci minha senha</button></div>
         </form>
         <form id="passwordActionForm" class="admin-form" hidden>
           <p id="passwordActionTitle" class="intro"></p>
           <div class="admin-field">
-            <label for="newPasswordInput" data-admin-auth-copy="newPasswordLabel"></label>
+            <label for="newPasswordInput" data-admin-auth-copy="newPasswordLabel">Nova senha</label>
             <div class="password-field">
               <input id="newPasswordInput" type="password" autocomplete="new-password" minlength="8" required />
-              <button class="password-reveal" type="button" data-password-reveal="newPasswordInput" aria-controls="newPasswordInput" aria-pressed="false"></button>
+              <button class="password-reveal" type="button" data-password-reveal="newPasswordInput" aria-controls="newPasswordInput" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">Mostrar</button>
             </div>
           </div>
-          <button id="passwordActionButton" class="button button--primary" type="submit" data-admin-auth-copy="savePassword"></button>
+          <button id="passwordActionButton" class="button button--primary" type="submit" data-admin-auth-copy="savePassword">Salvar senha</button>
         </form>
         <p id="loginMessage" class="message" aria-live="polite"></p>
       </section>
 
       <section id="deniedPanel" class="admin-card" hidden>
-        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow"></p><h1 data-admin-auth-copy="deniedHeading"></h1>
-        <p class="intro"><span data-admin-auth-copy="deniedIntroBefore"></span><code>admin</code><span data-admin-auth-copy="deniedIntroAfter"></span></p>
+        <p class="eyebrow" data-admin-auth-copy="restrictedEyebrow">Acesso restrito</p><h1 data-admin-auth-copy="deniedHeading">Esta conta não é administradora</h1>
+        <p class="intro"><span data-admin-auth-copy="deniedIntroBefore">Peça a um responsável para adicionar o papel </span><code>admin</code><span data-admin-auth-copy="deniedIntroAfter"> à sua conta no Netlify Identity.</span></p>
       </section>
       <p id="adminServiceError" class="message" role="alert" hidden></p>
 
