@@ -474,6 +474,21 @@
       })
     }),
     viewer: Object.freeze({
+      overview: Object.freeze({ kicker: "{category} · Módulo {number}", basePrice: "Valor base do módulo" }),
+      sections: Object.freeze({
+        viewsTitle: "Vistas técnicas", viewsDescription: "Desenhos orientativos a partir das dimensões disponíveis.",
+        detailsTitle: "Detalhes do módulo", detailsDescription: "Informações organizadas para consulta rápida."
+      }),
+      technical: Object.freeze({
+        isometric: "Projeção isométrica", side: "Vista lateral", front: "Vista frontal",
+        frontsConfirmed: "Número de frentes confirmado; proporções internas orientativas.",
+        nominalDrawing: "Desenho proporcional · cotas nominais.", internal: "Vista interna",
+        internalDescription: "Vãos internos confirmados; medidas não representam o envelope externo.",
+        internalAria: "Vista interna frontal com segmentos confirmados: {segments}.",
+        internalSegment: "{label}, {size} milímetros", focus: "Detalhe do módulo",
+        focusUnavailable: "Recorte do módulo indisponível.", focusAria: "Recorte isolado de {title}",
+        focusDescription: "Recorte do módulo selecionado na cena."
+      }),
       detailHeadings: Object.freeze({
         components: "Componentes",
         requirements: "Requisitos"

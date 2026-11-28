@@ -264,7 +264,7 @@ for (const file of shells) {
   const copyVersion = ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"].includes(file)
     ? "arc13-loc004-comparison-copy-1"
     : file === "app/viewer/index.html"
-      ? "arc13-loc006-viewer-detail-headings-1"
+      ? "viewer-copy-runtime-2"
     : ["app/access/index.html", "app/access/manage.html", "app/config/index.html", "app/admin.html"].includes(file)
       ? "arc13-loc006-config-mini-scene-labels-1"
     : "arc13-loc003-copy-1";

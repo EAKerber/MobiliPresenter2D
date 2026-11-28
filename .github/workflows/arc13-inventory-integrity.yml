@@ -135,6 +135,13 @@ jobs:
             assert.equal(source.consumerRefs[0].flow, 'bounded-catalog-copy-to-viewer-detail-heading');
             assert.deepEqual(source.consumerRefs[0].routeConsumers, ['/viewer/']);
           }
+          const viewerFixedSources = inventory.sourceEntries.filter((entry) =>
+            entry.source === 'app/core/ui-copy.js' && entry.sourceRole === 'fixed-viewer-copy');
+          assert.equal(viewerFixedSources.length, 19, 'the bounded Viewer copy family must remain inventoried');
+          for (const source of viewerFixedSources) {
+            assert.equal(source.consumerRefs?.length, 1, `${source.valuePath} has one proven consumer`);
+            assert.equal(source.consumerRefs[0].flow, 'bounded-catalog-copy-to-viewer');
+          }
           assert(!inventory.sourceEntries.some((entry) =>
             entry.source === 'app/core/admin-bootstrap-retry.mjs'
             && entry.sourceRole === 'error-message-source'

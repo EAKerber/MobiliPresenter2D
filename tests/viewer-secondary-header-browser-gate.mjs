@@ -51,6 +51,21 @@ for(const engine of [chromium,webkit]){
    }));
    assert.deepEqual(detailHeadingState.rendered,[detailHeadingState.expected.components,detailHeadingState.expected.requirements],
      "Viewer detail headings follow the shared catalog in stable order");
+   const fixedCopy=await page.evaluate(()=>({
+     copy:window.CASA_UI_COPY.viewer,
+     viewsTitle:document.querySelector("#block-views .block-heading h2").textContent,
+     viewsDescription:document.querySelector("#block-views .block-heading p").textContent,
+     detailsTitle:document.querySelector("#block-details .block-heading h2").textContent,
+     detailsDescription:document.querySelector("#block-details .block-heading p").textContent,
+     technicalTitles:[...document.querySelectorAll("#block-views .technical-view h3")].map(node=>node.textContent)
+   }));
+   assert.equal(fixedCopy.viewsTitle,fixedCopy.copy.sections.viewsTitle);
+   assert.equal(fixedCopy.viewsDescription,fixedCopy.copy.sections.viewsDescription);
+   assert.equal(fixedCopy.detailsTitle,fixedCopy.copy.sections.detailsTitle);
+   assert.equal(fixedCopy.detailsDescription,fixedCopy.copy.sections.detailsDescription);
+   assert.ok(fixedCopy.technicalTitles.length>0 && fixedCopy.technicalTitles.every(title=>
+     [fixedCopy.copy.technical.focus,fixedCopy.copy.technical.front,fixedCopy.copy.technical.side,
+       fixedCopy.copy.technical.internal,fixedCopy.copy.technical.isometric].includes(title)),"technical views use fixed catalog labels");
    const initial=await page.evaluate(()=>{
      const rect=sel=>{
        const r=document.querySelector(sel).getBoundingClientRect();
@@ -152,15 +167,24 @@ for(const engine of [chromium,webkit]){
   const fallbackContext=await browser.newContext({viewport:{width:390,height:844}});
   try{
    const page=await fallbackContext.newPage(),errors=[];
+   const fallbackFixture=structuredClone(viewerFixture);
+   fallbackFixture.modules.find(module=>module.id===moduleIds[1]).title="Módulo $& $1";
    page.on("pageerror",error=>errors.push(error.message));
    await page.route("**/core/ui-copy.js*",route=>route.abort());
    await page.route("**/api/public-modules",route=>route.fulfill({
-     status:200,contentType:"application/json",body:JSON.stringify(viewerFixture)
+     status:200,contentType:"application/json",body:JSON.stringify(fallbackFixture)
    }));
    await page.goto(ORIGIN+"/viewer/?module="+encodeURIComponent(moduleIds[1]),{waitUntil:"domcontentloaded"});
    await page.locator("#block-details .detail-grid h3").nth(1).waitFor({state:"visible",timeout:12000});
    assert.deepEqual(await page.locator("#block-details .detail-grid h3").allTextContents(),["Componentes","Requisitos"],
      "Viewer retains both detail headings if the catalog fails to load");
+   assert.equal(await page.locator("#block-views .block-heading h2").textContent(),"Vistas técnicas");
+   assert.equal(await page.locator("#block-details .block-heading h2").textContent(),"Detalhes do módulo");
+   assert.equal(await page.locator("#block-views .technical-view h3").first().textContent(),"Detalhe do módulo");
+   assert.equal(await page.locator("#block-views .technical-view--focus svg").getAttribute("aria-label"),"Recorte isolado de Módulo $& $1",
+     "template expansion preserves literal replacement characters in published product titles");
+   assert.ok((await page.locator("#sceneSelection").textContent()).endsWith("Módulo $& $1"),
+     "scene selection preserves literal replacement characters in published product titles");
    assert.deepEqual(errors,[],"catalog failure must not interrupt Viewer startup");
   }finally{await fallbackContext.close();}
   const sceneContext=await browser.newContext({viewport:{width:1366,height:900},reducedMotion:"reduce"});
