@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/**'
       - 'tools/ci/build-workflow-inventory.mjs'
+      - 'tools/m2d_ops/**'
       - 'docs/architecture/ci/**'
       - 'docs/architecture/plan-v0.9-execution-register.json'
   pull_request:
@@ -43,6 +44,16 @@ jobs:
           node-version: '22'
       - name: Validate impact map, inventory evidence and historical path cases
         run: node --test tests/ci/test-impact-selector.test.mjs tests/ci/workflow-inventory.test.mjs
+      - name: Validate operations tool when changed
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if git diff --quiet "$BASE_SHA" "$HEAD_SHA" -- tools/m2d_ops; then
+            echo "Operations tool unchanged; no additional test run"
+          else
+            python3 -m unittest discover -s tools/m2d_ops/tests -v
+          fi
       - name: Report affected contract bundles
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}

@@ -60,6 +60,27 @@ class OpsTests(unittest.TestCase):
         self.assertEqual(self.capture(),self.o);self.assertEqual(g(self.repo,'status','--porcelain'),before);self.assertEqual(g(self.repo,'show-ref'),refs);self.assertEqual(g(self.repo,'rev-parse','HEAD'),head)
     def test_plan_and_hints(self):
         self.assertTrue(self.o['plan_check']['complete']);self.assertTrue(self.o['planPinMatches']);self.assertEqual(self.o['plan_hints']['DOM-010'][0]['mentions'],['DOM-004','DOM-008']);self.assertIn('DTO restrito.',ops.context(self.o,self.n,'DOM-010')['plan_source_sections'][0]['criteria'][0]['text']);self.assertEqual(ops.candidates(self.o,self.n)['candidates'][0]['state'],'review_candidate')
+    def test_bold_objectives_and_headed_dod_have_bounded_exact_sources(self):
+        text = (
+            "### Marco M0\n\n**MD-001 — Congelar inventário**\n"
+            "**Dependências:** GIT-001\n1. Comparar árvores.\n"
+            "**Concluído quando:** cada item ativo tiver identidade.\n\n"
+            "**MD-002 — Reconciliar consumidores**\n"
+            "**Concluído quando:** cada obrigação tiver evidência.\n"
+            "### LOC-004 — Páginas estáticas\n#### DoD específico\n"
+            "HTML legível sem JavaScript.\n### LOC-005 — Componentes\n"
+        )
+        ids = {'MD-001', 'MD-002', 'LOC-004', 'LOC-005', 'GIT-001'}
+        sections = ops.plan_sections(text, ids)
+        one, two, static = sections['MD-001'][0], sections['MD-002'][0], sections['LOC-004'][0]
+        self.assertEqual(one['heading'], '**MD-001 — Congelar inventário**')
+        self.assertEqual(one['startLine'], 3)
+        self.assertLess(one['endLine'], two['startLine'])
+        self.assertEqual(one['criteria'][0]['text'], '**Concluído quando:** cada item ativo tiver identidade.')
+        self.assertEqual(two['criteria'][0]['text'], '**Concluído quando:** cada obrigação tiver evidência.')
+        self.assertIn('HTML legível sem JavaScript.', static['criteria'][0]['text'])
+        self.assertEqual(ops.plan_hints(text, ids)['MD-001'][0]['mentions'], ['GIT-001'])
+        self.assertNotIn('MD-002', ops.plan_hints(text, ids))
     def test_no_unreviewed_is_not_started(self):
         c=ops.candidates(self.o,self.n);t=next(x for x in c['candidates'] if x.get('id')=='TST-011');self.assertEqual(t['kind'],'reconcile_existing_first');self.assertTrue(c['possible_groups'])
     def test_explicit_dependencies_and_cycles(self):
