@@ -149,6 +149,20 @@ for(const engine of [chromium,webkit]){
    console.log("VIEWER_NAV005_SECONDARY_PASS "+JSON.stringify(scenario));
    await context.close();
   }
+  const fallbackContext=await browser.newContext({viewport:{width:390,height:844}});
+  try{
+   const page=await fallbackContext.newPage(),errors=[];
+   page.on("pageerror",error=>errors.push(error.message));
+   await page.route("**/core/ui-copy.js*",route=>route.abort());
+   await page.route("**/api/public-modules",route=>route.fulfill({
+     status:200,contentType:"application/json",body:JSON.stringify(viewerFixture)
+   }));
+   await page.goto(ORIGIN+"/viewer/?module="+encodeURIComponent(moduleIds[1]),{waitUntil:"domcontentloaded"});
+   await page.locator("#block-details .detail-grid h3").nth(1).waitFor({state:"visible",timeout:12000});
+   assert.deepEqual(await page.locator("#block-details .detail-grid h3").allTextContents(),["Componentes","Requisitos"],
+     "Viewer retains both detail headings if the catalog fails to load");
+   assert.deepEqual(errors,[],"catalog failure must not interrupt Viewer startup");
+  }finally{await fallbackContext.close();}
  }finally{await browser.close();}
 }
 await writeFile(artifact+"/report.json",JSON.stringify({schema:"ViewerSecondaryHeaderGate0.1",results},null,2));
