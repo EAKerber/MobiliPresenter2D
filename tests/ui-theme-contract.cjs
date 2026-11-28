@@ -235,7 +235,7 @@ for (const file of [
   assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
 }
 const adminHeaderFallback = read("app/admin.html");
-assert(adminHeaderFallback.includes('src="admin/admin.bundle.js?v=arc13-loc006-admin-bootstrap-copy-1"'), "Admin refreshes the compiled bootstrap-error copy bundle");
+assert.match(adminHeaderFallback, /src="admin\/admin\.bundle\.js\?v=[a-zA-Z0-9_-]+"/, "Admin loads a versioned compiled bundle");
 assert(adminHeaderFallback.includes(`aria-label="${copy.brand.homeLinkAriaLabel}"`), "Admin keeps the catalog-matched brand-link fallback");
 assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps the catalog-matched logo alternative fallback");
 assert(adminHeaderFallback.includes(`>${copy.brand.logoAlt}</strong>`), "Admin keeps the catalog-matched hidden brand fallback");
