@@ -51,7 +51,7 @@
   function renderOverview(target, module) {
     target.replaceChildren();
     target.append(element("p", "module-kicker", viewerText("overview.kicker", "{category} · Módulo {number}")
-      .replace("{category}", () => String(module.category)).replace("{number}", () => String(module.number))));
+      .replace(/\{(category|number)\}/g, (_, key) => String(module[key]))));
     target.append(element("h2", "overview-title", module.title));
     if (module.benefits?.length) {
       const highlights = element("ul", "overview-highlights");
@@ -136,8 +136,8 @@
   renderers.set("overview", (module) => renderOverview(root.querySelector("#block-overview"), module));
   renderers.set("scene", (module) => {
     root.querySelector("#sceneSelection").textContent = viewerSceneCopy("selected", "Selecionado: {number} · {title}")
-      .replace("{number}", () => String(module.number))
-      .replace("{title}", () => String(module.title));
+      .replace(/\{(number|title)\}/g,
+        (_, key) => String(module[key]));
   });
   renderers.set("views", (module) => renderViews(root.querySelector("#block-views"), module));
   renderers.set("details", (module) => renderDetails(root.querySelector("#block-details"), module));

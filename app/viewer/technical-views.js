@@ -35,7 +35,7 @@
       segments,
       frame: { x: 28, y: 28, width: 124, height: 68 },
       segmentScaleMm: segments.reduce((total, part) => total + Number(part.spanMm || part.span || 0), 0),
-      ariaLabel: copy("internalAria", "Vista interna frontal com segmentos confirmados: {segments}.").replace("{segments}", () => segments.map((part) => copy("internalSegment", "{label}, {size} milímetros").replace("{label}", () => String(part.label)).replace("{size}", () => dimension(part.spanMm || part.span))).join("; "))
+      ariaLabel: copy("internalAria", "Vista interna frontal com segmentos confirmados: {segments}.").replace("{segments}", () => segments.map((part) => copy("internalSegment", "{label}, {size} milímetros").replace(/\{(label|size)\}/g, (_, key) => key === "label" ? String(part.label) : dimension(part.spanMm || part.span))).join("; "))
     });
     const figure = document.createElement("article"); figure.className = "technical-view";
     figure.append(Object.assign(document.createElement("h3"), { textContent: copy("internal", "Vista interna") }), svg,

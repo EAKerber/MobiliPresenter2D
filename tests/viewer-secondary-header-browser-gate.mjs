@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import {mkdir,writeFile} from "node:fs/promises";
+import {mkdir,readFile,writeFile} from "node:fs/promises";
 import {createRequire} from "node:module";
 import { chromium, webkit } from "playwright";
 
@@ -174,6 +174,11 @@ for(const engine of [chromium,webkit]){
    fallbackFixture.modules.find(module=>module.id===moduleIds[1]).title="Módulo $& $1";
    page.on("pageerror",error=>errors.push(error.message));
    await page.route("**/core/ui-copy.js*",route=>route.abort());
+   const catalogSource=await readFile("app/data/catalog-data.js","utf8");
+   const catalogMarker='entityId: "module-02", referenceLabel: "Módulo 02", category: "Inferior"';
+   assert.ok(catalogSource.includes(catalogMarker),"fixture locates the Viewer category in the physical catalog");
+   await page.route("**/data/catalog-data.js*",route=>route.fulfill({status:200,contentType:"text/javascript",body:
+     catalogSource.replace(catalogMarker,()=>catalogMarker.replace('category: "Inferior"',()=> 'category: "Linha {number} $&"'))}));
    await page.route("**/api/public-modules",route=>route.fulfill({
      status:200,contentType:"application/json",body:JSON.stringify(fallbackFixture)
    }));
@@ -188,6 +193,13 @@ for(const engine of [chromium,webkit]){
      "template expansion preserves literal replacement characters in published product titles");
    assert.ok((await page.locator("#sceneSelection").textContent()).endsWith("Módulo $& $1"),
      "scene selection preserves literal replacement characters in published product titles");
+   assert.match(await page.locator(".module-kicker").textContent(),/^Linha \{number\} \$& · Módulo /,
+     "overview leaves placeholder-like text in authored category intact");
+   const internalLabel=await page.evaluate(()=>window.CASA_PUBLIC_TECHNICAL_VIEWS.render({
+     dimensions:{width:100},internalLayout:[{label:"Nicho {size} $&",spanMm:100}]
+   },"internal").querySelector("svg").getAttribute("aria-label"));
+   assert.equal(internalLabel,"Vista interna frontal com segmentos confirmados: Nicho {size} $&, 100 milímetros.",
+     "technical segment labels remain literal when they resemble another placeholder");
    assert.deepEqual(errors,[],"catalog failure must not interrupt Viewer startup");
   }finally{await fallbackContext.close();}
   const sceneContext=await browser.newContext({viewport:{width:1366,height:900},reducedMotion:"reduce"});

@@ -4377,8 +4377,8 @@
       "route": "/viewer/",
       "source": "architecture/pages/viewer.page.html",
       "output": "app/viewer/index.html",
-      "sourceGitBlobSha": "3b987bddff338e8964703dd55dc5857065e99e00",
-      "outputGitBlobSha": "46217f330ab109a3d09c0530ea0585040a9314ef",
+      "sourceGitBlobSha": "c5ff568d87ed12648a9c90bb7cc50c74937d8f8e",
+      "outputGitBlobSha": "ae6e8652d7d4429e7ab4e872850b3b9434bd3008",
       "sourceMap": {
         "segments": [
           {
