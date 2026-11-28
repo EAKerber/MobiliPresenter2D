@@ -707,6 +707,17 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   assert.equal(await page.locator("#persistHandlesButton").textContent(), adminPublicationCopy.actions.persistHandles, "isolated handle persistence action uses the canonical catalog label");
   assert.equal(await page.locator("#saveButton").textContent(), adminPublicationCopy.actions.publishConfiguration, "configuration publication action uses the canonical catalog label");
   const pricingEditorCopy = await page.evaluate(() => window.CASA_UI_COPY.admin.pricing.editor);
+  const pricingRoleOrder = ["itemBase", "handleChoiceTotal", "frontFinishAdjustment", "localAdjustment", "globalAdjustment"];
+  assert.deepEqual(
+    await page.locator(".pricing-card h2").allTextContents(),
+    pricingRoleOrder.map((role) => pricingEditorCopy.roleLabels[role]),
+    "all five fixed pricing-role headings come from the shared catalog in stable role order"
+  );
+  assert.equal(
+    await page.locator("#pricingList > .admin-note").textContent(),
+    pricingEditorCopy.publishedValuesNotice,
+    "the pricing publication notice comes from the shared catalog"
+  );
   assert.equal(await page.locator(".pricing-publication-card h2").textContent(), publicationCopy.title, "publication title comes from the shared copy catalog");
   assert.equal((await publicationToggle.locator("xpath=..").textContent()).trim(), publicationCopy.label, "publication checkbox name comes from the shared copy catalog");
   assert.equal(await publicationToggle.isDisabled(), true, "legacy configuration cannot enable V5 base-price publication");
