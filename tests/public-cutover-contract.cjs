@@ -28,6 +28,10 @@ assert.match(viewerJS,/CASA_PUBLIC_VIEWER_DATA\.load\(\)/);
 assert.doesNotMatch(viewerJS,/if \(integration\.usePublishedApi === true\)/);
 assert.doesNotMatch(viewerJS,/else\s*\{\s*start\(\);/);
 assert.match(toml,/from = "\/api\/public-modules"/);
+assert.match(toml,/from = "\/api\/access\/session"\s+to = "\/\.netlify\/functions\/access-session-status"\s+status = 200\s+force = true/,
+  "session status rewrites to the default function URL");
+assert.doesNotMatch(read("netlify/functions/access-session-status.mjs"), /export const config\s*=\s*\{\s*path:/,
+  "a custom function path must not disable the rewrite destination");
 assert.match(toml,/from = "\/landing"[\s\S]*?to = "\/"[\s\S]*?status = 301/);
 assert.match(toml,/from = "\/landing\/"[\s\S]*?to = "\/"[\s\S]*?status = 301/);
 assert.match(toml,/from = "\/landing\/index\.html"[\s\S]*?to = "\/"[\s\S]*?status = 301/);

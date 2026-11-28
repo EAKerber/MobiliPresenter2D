@@ -464,7 +464,8 @@ test('Admin and temporary-session access changes select their authorization boun
     'app/core/private-navigation.js',
     'netlify/functions/access-grants.mjs',
     'tests/ci/access-surface-boundaries.test.mjs',
-    'tests/access-session-browser.cjs'
+    'tests/access-session-browser.cjs',
+    'tests/private-menu-logout-browser.cjs'
   ];
   const selection = selectBundles(focusedPaths, map);
   assert.deepEqual(ids(selection), ['access-surface']);
@@ -476,7 +477,7 @@ test('Admin and temporary-session access changes select their authorization boun
   for (const eventName of ['pull_request', 'push']) {
     const event = workflow.events.find((candidate) => candidate.name === eventName);
     assert(event, workflowPath + ' must retain ' + eventName);
-    assert.deepEqual(event.branches, ['development']);
+    assert.deepEqual(event.branches, ['main', 'development']);
     for (const changedPath of focusedPaths) {
       assert(event.paths.includes(changedPath), workflowPath + ' must watch ' + changedPath);
     }
@@ -484,7 +485,8 @@ test('Admin and temporary-session access changes select their authorization boun
 
   const routes = [
     ['authorization-contract', 'node --test tests/ci/access-surface-boundaries.test.mjs'],
-    ['access-session-browser', 'node tests/access-session-browser.cjs']
+    ['access-session-browser', 'node tests/access-session-browser.cjs'],
+    ['access-session-browser', 'node tests/private-menu-logout-browser.cjs']
   ];
   for (const [jobId, command] of routes) {
     assert(selection.selectedBundles[0].execution.some((entry) =>

@@ -13,6 +13,7 @@ on:
       - 'app/data/catalog-data.js'
       - 'app/data/scene-data.js'
       - 'netlify/functions/public-modules.mjs'
+      - 'netlify/functions/access-session-status.mjs'
       - 'netlify.toml'
       - 'tests/public-cutover-contract.cjs'
       - 'tests/public-module-projection.test.cjs'
@@ -31,6 +32,7 @@ on:
       - 'app/data/catalog-data.js'
       - 'app/data/scene-data.js'
       - 'netlify/functions/public-modules.mjs'
+      - 'netlify/functions/access-session-status.mjs'
       - 'netlify.toml'
       - 'tests/public-cutover-contract.cjs'
       - 'tests/public-module-projection.test.cjs'
@@ -102,6 +104,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Anonymous session status is read-only and tests the deployed rewrite.
+          for i in $(seq 1 10); do
+            session_status=$(curl -sS -o /tmp/session-status.json -w '%{http_code}' -X POST -H "Origin: $PUBLIC_PAGES_URL" -H 'Content-Type: application/json' --data '{}' "$PUBLIC_PAGES_URL/api/access/session")
+            [[ "$session_status" == 404 && "$i" -lt 10 ]] || break
+            sleep 3
+          done
+          test "$session_status" = 200
+          node -e 'const assert=require("node:assert/strict"); assert.deepEqual(JSON.parse(require("node:fs").readFileSync("/tmp/session-status.json","utf8")), {authenticated:false})'
           # The preview HTML may be reachable before its function route has
           # propagated. Retry only that transient 404; other failures fail closed.
           for i in $(seq 1 10); do

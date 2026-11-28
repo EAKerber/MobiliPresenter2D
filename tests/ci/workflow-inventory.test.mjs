@@ -214,7 +214,7 @@ test('read-only output, comments, and identifiers do not become mutation signals
   assert.equal(workflow.classification, 'manual-or-event-driven');
 });
 
-test('expected rejected HTTP write-method probes carry their assertion and execution conditions', () => {
+test('negative HTTP probes remain distinct from conservatively flagged POST requests', () => {
   const source = readFileSync(path.join(root, '.github/workflows/public-routing-before-clerk.yml'), 'utf8');
   const workflow = definition(source, '.github/workflows/public-routing-before-clerk.yml', 'blob-sha');
   const probe = workflow.negativeHttpMethodProbes.find(({ method }) => method === 'PUT');
@@ -224,8 +224,11 @@ test('expected rejected HTTP write-method probes carry their assertion and execu
   assert.equal(probe.jobIf, "github.event_name == 'pull_request' && github.event.pull_request.draft != true && github.base_ref == 'main'");
   assert.equal(probe.step, 'Public projection and negative endpoint checks');
   assert.match(probe.commandLine, /test .*curl.*-X PUT.*= 405/);
-  assert.deepEqual(workflow.mutationSignals, [],
-    'an HTTP method that is asserted to be rejected is not a mutation signal');
+  assert.match(workflow.commands.find(({ step }) => step === 'Public projection and negative endpoint checks').command,
+    /-X POST[^\n]*\/api\/access\/session/,
+    'the separate session status request uses POST for a read-only endpoint');
+  assert.deepEqual(workflow.mutationSignals, ['write/deploy command in run step'],
+    'without proving endpoint semantics the inventory conservatively flags POST for manual review');
 });
 
 

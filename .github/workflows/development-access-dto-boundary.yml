@@ -1,8 +1,9 @@
-name: Development CP-PUBLIC-03a authorization boundary (offline)
+name: Access and temporary-session boundaries (offline)
 
 on:
   push:
     branches:
+      - main
       - development
     paths:
       - 'app/access/**'
@@ -32,6 +33,7 @@ on:
       - '.github/workflows/development-access-dto-boundary.yml'
   pull_request:
     branches:
+      - main
       - development
     paths:
       - 'app/access/**'

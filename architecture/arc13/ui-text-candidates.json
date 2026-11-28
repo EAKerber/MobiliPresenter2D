@@ -12,7 +12,7 @@
     },
     {
       "path": "tools/arc13/scan-js-sinks.mjs",
-      "sha256": "90f73bb516ce4b0fcbbc87e64cf11789ee8d8b3f3550477d19134808ccb189e2"
+      "sha256": "cc3abfedfef07b810ca61cd0d7177e1f5711599a9b8e4628419f01e7aac093e4"
     },
     {
       "path": "scripts/compile-primary-pages.mjs",
@@ -98,12 +98,12 @@
     "javascriptTextSourceRecordsActive": 215,
     "javascriptTextSourceRecordsPassedButUnused": 7,
     "javascriptTextSourceRecordsUnconsumed": 2,
-    "javascriptTextSourceRecordsNeedsFlowReview": 32,
-    "javascriptTextSourceRecordsDiagnostic": 37,
+    "javascriptTextSourceRecordsNeedsFlowReview": 31,
+    "javascriptTextSourceRecordsDiagnostic": 38,
     "javascriptTextSourceRecordsWithSinkLinks": 35,
     "javascriptTextSourceSinkLinks": 36,
-    "javascriptTextSourceRecordsWithFailureFallbacks": 18,
-    "javascriptTextSourceFailureFallbackLinks": 19,
+    "javascriptTextSourceRecordsWithFailureFallbacks": 19,
+    "javascriptTextSourceFailureFallbackLinks": 20,
     "javascriptTextSourceRoles": {
       "benefit-label": 4,
       "brand-name": 1,
@@ -34899,14 +34899,14 @@
       "literalSegments": [
         "session_lookup_failed"
       ],
-      "classification": "unreviewed",
+      "classification": "diagnostic",
       "classificationHints": [
-        "source-needs-consumer-and-domain-review"
+        "error-literal-not-displayed-fixed-fallback-is-shown"
       ],
-      "consumerLinkStatus": "manual-consumer-review",
-      "useStatus": "diagnostic-or-user-message-review",
+      "consumerLinkStatus": "fixed-fallback-only",
+      "useStatus": "diagnostic",
       "consumerEvidence": [
-        "no bounded display flow has been linked yet; review the catch/source boundary"
+        "A failed session lookup is caught by syncFromAuth(), which renders a generic retry note instead of exposing the internal error."
       ],
       "sourceExpression": "\"session_lookup_failed\"",
       "selectionOperators": [],
@@ -34918,7 +34918,25 @@
         "/config/"
       ],
       "sourceSha256": "12e1df1fe3282f7622e6171f5cb9508e3d929e1fd11965f97a380b924615cce9",
-      "id": "6d04abe02b62cca6"
+      "id": "6d04abe02b62cca6",
+      "failureFallbackRefs": [
+        {
+          "sinkId": "5c783aa0523e3203",
+          "source": "app/core/private-navigation.js",
+          "line": 131,
+          "sink": "property:textContent",
+          "expression": "copy(\"navigation.privateAccessState.lookupFailure\", \"Não foi possível verificar o acesso. Feche e abra o menu para tentar novamente.\")",
+          "routeConsumers": [
+            "/access/",
+            "/access/manage",
+            "/admin",
+            "/config/"
+          ],
+          "relationship": "error-to-fixed-fallback",
+          "evidence": "A failed session lookup is caught by syncFromAuth(), which renders a generic retry note instead of exposing the internal error."
+        }
+      ],
+      "failureFallbackLinkStatus": "bounded-error-to-fixed-fallback"
     },
     {
       "source": "app/core/public-module-projection.js",
