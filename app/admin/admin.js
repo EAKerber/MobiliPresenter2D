@@ -43,6 +43,12 @@ let catalogPricing = null;
 let adminDataPromise = null;
 let adminViewRun = 0;
 const byId = (id) => document.getElementById(id);
+// Replace placeholders in one pass so authored names remain literal, including
+// dollar sequences and text that resembles another placeholder.
+function formatAdminCopy(template, values) {
+  return template.replace(/\{([A-Za-z]+)\}/g, (match, key) =>
+    Object.hasOwn(values, key) ? String(values[key]) : match);
+}
 byId("revisionLabel").textContent = adminLoadCopy.revisionPending;
 
 function setAdminRevisionLabel(revision) {
@@ -290,7 +296,7 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = Boolean(model.initialState.entities[itemId]);
     initial.dataset.initialConfiguratorEntity = itemId;
-    initial.setAttribute("aria-label", initialStateCopy.entityVisibilityAriaLabel.replace("{item}", item.label));
+    initial.setAttribute("aria-label", formatAdminCopy(initialStateCopy.entityVisibilityAriaLabel, { item: item.label }));
     const label = document.createElement("label");
     label.className = "initial-state-option";
     label.append(initial, document.createTextNode(initialStateCopy.entityVisibility));
@@ -300,7 +306,7 @@ function appendInitialStateControl(option, itemId, item) {
       viewer.type = "checkbox";
       viewer.checked = Boolean(model.initialState.viewerEntities[itemId]);
       viewer.dataset.initialViewerEntity = itemId;
-      viewer.setAttribute("aria-label", initialStateCopy.viewerVisibilityAriaLabel.replace("{item}", item.label));
+      viewer.setAttribute("aria-label", formatAdminCopy(initialStateCopy.viewerVisibilityAriaLabel, { item: item.label }));
       const viewerLabel = document.createElement("label");
       viewerLabel.className = "initial-state-option";
       viewerLabel.append(viewer, document.createTextNode(initialStateCopy.viewerVisibility));
@@ -312,7 +318,7 @@ function appendInitialStateControl(option, itemId, item) {
     initial.type = "checkbox";
     initial.checked = model.initialState.services.includes(itemId);
     initial.dataset.initialService = itemId;
-    initial.setAttribute("aria-label", initialStateCopy.serviceActiveAriaLabel.replace("{item}", item.label));
+    initial.setAttribute("aria-label", formatAdminCopy(initialStateCopy.serviceActiveAriaLabel, { item: item.label }));
     const label = document.createElement("label");
     label.className = "initial-state-option";
     label.append(initial, document.createTextNode(initialStateCopy.serviceActive));
@@ -345,7 +351,7 @@ function appendNominalDimensionControls(option, itemId, label) {
     input.value = String(dimensions[axis]);
     input.dataset.moduleDimension = itemId;
     input.dataset.dimensionAxis = axis;
-    input.setAttribute("aria-label", nominalDimensionsCopy.axisAriaLabel.replace("{module}", () => label).replace("{axis}", () => axisLabel));
+    input.setAttribute("aria-label", formatAdminCopy(nominalDimensionsCopy.axisAriaLabel, { module: label, axis: axisLabel }));
     fieldLabel.append(input);
     fieldset.append(fieldLabel);
   });
@@ -770,7 +776,7 @@ function renderStages() {
     enabledInput.checked = stage.enabled;
     enabledInput.dataset.stageEnabled = stage.id;
     enabledInput.disabled = isRequiredStage || !hasStageItems;
-    enabledInput.setAttribute("aria-label", stageAvailabilityCopy.availabilityAriaLabel.replace("{stage}", stage.label));
+    enabledInput.setAttribute("aria-label", formatAdminCopy(stageAvailabilityCopy.availabilityAriaLabel, { stage: stage.label }));
     if (enabledInput.disabled && disabledReason) enabledInput.setAttribute("aria-describedby", disabledReasonId);
     enabledLabel.append(enabledInput, document.createTextNode(
       stage.enabled ? stageAvailabilityCopy.availabilityActive : stageAvailabilityCopy.availabilityInactive
@@ -887,7 +893,7 @@ function renderObjectAssets(id, label) {
   objectAssetsList.replaceChildren();
   const assets = model.objectAssets[id] || { imageAsset: "", detailImageAsset: "", maskAsset: "" };
   const card = document.createElement("article"); card.className = "editor-card"; card.dataset.assetObjectId = id;
-  const heading = document.createElement("h2"); heading.textContent = objectAssetsCopy.heading.replace("{item}", label);
+  const heading = document.createElement("h2"); heading.textContent = formatAdminCopy(objectAssetsCopy.heading, { item: label });
   card.append(heading);
   const hasSceneEntity = scene.entities.some((entity) => entity.id === id);
   const noteId = `object-asset-policy-${id}`;
@@ -903,7 +909,7 @@ function renderObjectAssets(id, label) {
     const previewPath = assets[field] || (field !== "maskAsset" ? scene.entities.find((entity) => entity.id === id)?.asset || "" : "");
     const preview = document.createElement("div"); preview.className = `asset-preview${field === "maskAsset" ? " asset-preview--mask" : ""}`;
     if (previewPath) {
-      const image = document.createElement("img"); image.src = previewPath; image.alt = objectAssetsCopy.previewAlt.replace("{asset}", title).replace("{item}", label); image.loading = "lazy"; image.decoding = "async";
+      const image = document.createElement("img"); image.src = previewPath; image.alt = formatAdminCopy(objectAssetsCopy.previewAlt, { asset: title, item: label }); image.loading = "lazy"; image.decoding = "async";
       image.addEventListener("error", () => { preview.textContent = objectAssetsCopy.previewUnavailable; }, { once: true }); preview.append(image);
     } else { const empty = document.createElement("span"); empty.textContent = objectAssetsCopy.emptyPreview; preview.append(empty); }
     labelNode.append(preview); card.append(labelNode);
@@ -939,7 +945,7 @@ function renderFinishes() {
     const globalPolicyId = `finish-policy-${finish.id}`;
     enabled.disabled = onlyGlobalFinish;
     enabled.dataset.finishEnabled = finish.id;
-    enabled.setAttribute("aria-label", finishAvailabilityCopy.customerAvailabilityAriaLabel.replace("{finish}", source.label));
+    enabled.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.customerAvailabilityAriaLabel, { finish: source.label }));
     if (onlyGlobalFinish) enabled.setAttribute("aria-describedby", globalPolicyId);
     active.append(enabled, document.createTextNode(finishAvailabilityCopy.customerAvailability));
     const scopeLabel = document.createElement("label");
@@ -947,7 +953,7 @@ function renderFinishes() {
     scopeLabel.append(document.createTextNode(finishAvailabilityCopy.scopeLabel));
     const scope = document.createElement("select");
     scope.dataset.finishScope = finish.id;
-    scope.setAttribute("aria-label", finishAvailabilityCopy.scopeAriaLabel.replace("{finish}", source.label));
+    scope.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.scopeAriaLabel, { finish: source.label }));
     scope.disabled = onlyGlobalFinish;
     Object.entries(finishAvailabilityCopy.scopeOptions).forEach(([value, label]) => {
       const option = document.createElement("option"); option.value = value; option.textContent = label;
@@ -967,7 +973,7 @@ function renderFinishes() {
     if (finish.scope === "local") {
       const modules = document.createElement("div");
       modules.className = "finish-module-options";
-      modules.setAttribute("aria-label", finishAvailabilityCopy.moduleOptionsAriaLabel.replace("{finish}", source.label));
+      modules.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.moduleOptionsAriaLabel, { finish: source.label }));
       const onlyModuleId = finish.moduleIds.length === 1 ? finish.moduleIds[0] : null;
       const modulePolicyId = `finish-module-policy-${finish.id}`;
       catalog.modules.forEach((module) => {
@@ -977,8 +983,8 @@ function renderFinishes() {
         input.checked = finish.moduleIds.includes(module.entityId);
         input.disabled = input.checked && module.entityId === onlyModuleId;
         input.dataset.finishModule = `${finish.id}:${module.entityId}`;
-        input.setAttribute("aria-label", finishAvailabilityCopy.moduleAvailabilityAriaLabel
-          .replace("{finish}", source.label).replace("{module}", module.referenceLabel));
+        input.setAttribute("aria-label", formatAdminCopy(finishAvailabilityCopy.moduleAvailabilityAriaLabel,
+          { finish: source.label, module: module.referenceLabel }));
         if (input.disabled) input.setAttribute("aria-describedby", modulePolicyId);
         label.append(input, document.createTextNode(module.referenceLabel));
         modules.append(label);
@@ -1310,7 +1316,7 @@ function renderPricing() {
         select.dataset.priceRuleType = "true";
         select.dataset.priceRole = role;
         select.dataset.priceId = id;
-        select.setAttribute("aria-label", pricingEditorCopy.typeAriaLabel.replace("{label}", publicLabel));
+        select.setAttribute("aria-label", formatAdminCopy(pricingEditorCopy.typeAriaLabel, { label: publicLabel }));
         capabilities.types.forEach((type) => {
           const option = document.createElement("option");
           option.value = type;
@@ -1331,7 +1337,7 @@ function renderPricing() {
       input.dataset.priceRole = role;
       input.dataset.priceId = id;
       input.dataset.priceType = rule.type;
-      input.setAttribute("aria-label", pricingEditorCopy.valueAriaLabel.replace("{label}", publicLabel));
+      input.setAttribute("aria-label", formatAdminCopy(pricingEditorCopy.valueAriaLabel, { label: publicLabel }));
 
       const unit = document.createElement("small");
       unit.className = "pricing-unit";

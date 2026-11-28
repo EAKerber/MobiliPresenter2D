@@ -235,6 +235,32 @@ async function sectionItemIds(page, stageId, groupId, sectionId) {
   await finishPolicyPage.close();
   current = defaultCurrent;
 
+  // Authored labels are data, even when they contain replacement syntax.
+  const literalLabelFixture = structuredClone(defaultCurrent);
+  const authoredStageLabel = "Etapa $& {module}";
+  literalLabelFixture.stages.find((stage) => stage.id === "finishes").label = authoredStageLabel;
+  const literalFinish = literalLabelFixture.finishes[1];
+  const authoredFinishLabel = "Cor $& {module}";
+  literalLabelFixture.materials.find((material) => material.id === literalFinish.id).label = authoredFinishLabel;
+  literalFinish.enabled = true;
+  literalFinish.scope = "local";
+  literalFinish.moduleIds = [catalog.modules[0].entityId];
+  current = literalLabelFixture;
+  const literalLabelPage = await browser.newPage();
+  await literalLabelPage.goto(baseUrl + "/admin-test.html", { waitUntil: "networkidle" });
+  const literalStageToggle = literalLabelPage.locator('[data-stage-enabled="finishes"]');
+  await literalStageToggle.waitFor();
+  assert.equal(await literalStageToggle.getAttribute("aria-label"), `Ativar etapa ${authoredStageLabel}`,
+    "authored replacement syntax is rendered literally in the stage accessible name");
+  await literalLabelPage.locator('[data-admin-tab="finishes"]').click();
+  const literalFinishModule = literalLabelPage.locator(`[data-finish-module="${literalFinish.id}:${catalog.modules[0].entityId}"]`);
+  assert.equal(await literalFinishModule.getAttribute("aria-label"),
+    `${authoredFinishLabel}: disponível para o módulo ${catalog.modules[0].referenceLabel}`,
+    "one placeholder does not reinterpret authored text as another placeholder");
+  assert.equal(putCount, 0, "checking literal labels performs no save");
+  await literalLabelPage.close();
+  current = defaultCurrent;
+
   const page = await browser.newPage({ viewport: { width: 1440, height: 1100 } });
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
