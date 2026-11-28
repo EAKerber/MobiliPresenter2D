@@ -1,3 +1,5 @@
+> **Historical snapshot — October 2026.** Preserved as provenance, not current instructions or permission to repeat an operation. Use [CURRENT_STATE.md](../../CURRENT_STATE.md) for current authority and verify live refs before acting.
+
 # CP-PUBLIC — RETOMADA ATUAL / handoff sem contexto do chat
 
 **Checkpoint local atualizado em 2026-10-12 (America/Sao_Paulo).** O foco atual é concluir o gate de acesso temporário ao configurador com Netlify Identity, Supabase Postgres e Gmail, antes de qualquer cutover de produção.
