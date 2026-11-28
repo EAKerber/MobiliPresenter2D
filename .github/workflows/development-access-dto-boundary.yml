@@ -24,6 +24,7 @@ on:
       - 'netlify/access/**'
       - 'tests/ci/access-dto-boundary.test.mjs'
       - 'tests/access-session-browser.cjs'
+      - 'tests/private-menu-logout-browser.cjs'
       - 'tests/ci/access-surface-boundaries.test.mjs'
       - 'tests/auth-first-login-recovery.test.mjs'
       - 'netlify/functions/configuration.mjs'
@@ -52,6 +53,7 @@ on:
       - 'netlify/access/**'
       - 'tests/ci/access-dto-boundary.test.mjs'
       - 'tests/access-session-browser.cjs'
+      - 'tests/private-menu-logout-browser.cjs'
       - 'tests/ci/access-surface-boundaries.test.mjs'
       - 'tests/auth-first-login-recovery.test.mjs'
       - 'netlify/functions/configuration.mjs'
@@ -105,3 +107,7 @@ jobs:
         env:
           NODE_PATH: /tmp/access-session-tools/node_modules
         run: node tests/access-session-browser.cjs
+      - name: Verify temporary-session logout and retry in browser
+        env:
+          NODE_PATH: /tmp/access-session-tools/node_modules
+        run: node tests/private-menu-logout-browser.cjs
