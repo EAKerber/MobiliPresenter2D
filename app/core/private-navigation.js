@@ -88,8 +88,8 @@ if (header) {
             return;
           }
         }
-        // This function also expires the cookie when its store returns 503.
-        if (temporarySession && response && !response.ok && response.status !== 503) {
+        // A non-success response cannot establish that the session was revoked.
+        if (temporarySession && response && !response.ok) {
           showLogoutFailure();
           return;
         }
