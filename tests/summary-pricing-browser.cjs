@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
+const {requireConfiguratorTarget, assertConfiguratorResponse, isPreflightError, requirePublishedV5} = require('./ci/config-target-preflight.cjs');
 
 function parseBrl(text) {
   const normalized = String(text || '').replace(/[^0-9,.-]/g, '').replace(/\./g, '').replace(',', '.');
@@ -13,7 +14,7 @@ function parseBrl(text) {
 (async () => {
   const output = process.argv[2] || '/tmp/summary-pricing-browser';
   fs.mkdirSync(output, { recursive: true });
-  const targetUrl = process.env.SUMMARY_PRICING_BROWSER_URL || 'https://mobilipresenter2d.netlify.app/';
+  const targetUrl = requireConfiguratorTarget(process.env.SUMMARY_PRICING_BROWSER_URL, 'SUMMARY_PRICING_BROWSER_URL');
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined,  viewport: { width: 1366, height: 900 } });
   const errors = [];
@@ -23,7 +24,8 @@ function parseBrl(text) {
   let lastError;
   for (let attempt = 0; attempt < 18; attempt += 1) {
     try {
-      await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      const response = await page.goto(targetUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      assertConfiguratorResponse(page.url(), response?.status());
       await page.waitForFunction(() => {
         const debug = window.CASA_EM_MODULOS_DEBUG;
         const value = document.querySelector('#configurationValue strong')?.textContent || '';
@@ -32,6 +34,7 @@ function parseBrl(text) {
       lastError = null;
       break;
     } catch (error) {
+      if (isPreflightError(error)) throw error;
       lastError = error;
       await page.waitForTimeout(3000);
     }
@@ -39,9 +42,7 @@ function parseBrl(text) {
   if (lastError) throw lastError;
   // Authenticated preview: the legacy UI initializes before the async V5
   // published configuration is applied. Start interactions only after commit.
-  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
-    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
-  }
+  await requirePublishedV5(page, process.env.CI_EXPECT_PUBLISHED_V5 === "1");
 
   const compactLabels = await page.locator(".flow-nav .flow-step__label").evaluateAll(labels =>
     Object.fromEntries(labels.map(label => [label.closest("[data-step]")?.dataset.step, label.dataset.compactLabel]))

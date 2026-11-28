@@ -1,18 +1,15 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const {pathToFileURL} = require('node:url');
 const {chromium} = require('playwright');
+const {requireConfiguratorTarget, assertConfiguratorResponse, isPreflightError, requirePublishedV5} = require('./ci/config-target-preflight.cjs');
 
 (async () => {
   const output = process.argv[2] || '/tmp/stone-browser';
   fs.mkdirSync(output, {recursive: true});
-  const targetUrl = process.env.STONE_BROWSER_URL || pathToFileURL(path.resolve(__dirname, '../app/index.html')).href;
-  const mode = process.env.STONE_BROWSER_URL ? 'deployed' : 'local';
-  const browser = await chromium.launch({
-    headless: true,
-    args: mode === 'local' ? ['--allow-file-access-from-files'] : []
-  });
+  const targetUrl = requireConfiguratorTarget(process.env.STONE_BROWSER_URL, 'STONE_BROWSER_URL');
+  const mode = ['127.0.0.1', 'localhost', '[::1]'].includes(new URL(targetUrl).hostname) ? 'local-http' : 'hosted';
+  const browser = await chromium.launch({headless: true});
   const page = await browser.newPage({storageState: process.env.PLAYWRIGHT_AUTH_STATE_FILE || undefined, viewport: {width: 1366, height: 900}});
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -22,7 +19,8 @@ const {chromium} = require('playwright');
     let lastError;
     for (let attempt = 0; attempt < 18; attempt += 1) {
       try {
-        await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
+        const response = await page.goto(targetUrl, {waitUntil: 'domcontentloaded', timeout: 15000});
+        assertConfiguratorResponse(page.url(), response?.status());
         await page.waitForFunction(() => {
           const defaults = window.CASA_EM_MODULOS_CONFIGURATOR_DEFAULTS;
           const finishes = defaults?.stages?.find(stage => stage.id === 'finishes');
@@ -35,8 +33,8 @@ const {chromium} = require('playwright');
         await page.evaluate(() => Promise.all(Array.from(document.images, image => image.decode().catch(() => {}))));
         return;
       } catch (error) {
+        if (isPreflightError(error)) throw error;
         lastError = error;
-        if (mode === 'local') break;
         await page.waitForTimeout(3000);
       }
     }
@@ -44,9 +42,7 @@ const {chromium} = require('playwright');
   }
 
   await openCurrentRuntime();
-  if (process.env.CI_EXPECT_PUBLISHED_V5 === "1") {
-    await page.waitForFunction(() => document.documentElement.dataset.publishedConfigurationStatus === "validated", null, {timeout:30000});
-  }
+  await requirePublishedV5(page, process.env.CI_EXPECT_PUBLISHED_V5 === "1");
 
   const settle = () => page.waitForTimeout(350);
   const screenshot = name => page.screenshot({path: path.join(output, `${name}.png`), fullPage: true, animations: 'disabled'});

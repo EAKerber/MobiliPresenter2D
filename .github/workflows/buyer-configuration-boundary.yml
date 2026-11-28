@@ -22,6 +22,8 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/stop-local-v5-browser.sh'
       - 'tests/ci/assert-local-v5-url.cjs'
+      - 'tests/ci/config-target-preflight.cjs'
+      - 'tests/ci/config-target-preflight.test.cjs'
       - '.github/workflows/buyer-configuration-boundary.yml'
   push:
     branches: [main, development]
@@ -43,6 +45,8 @@ on:
       - 'tests/ci/prepare-local-v5-browser.sh'
       - 'tests/ci/stop-local-v5-browser.sh'
       - 'tests/ci/assert-local-v5-url.cjs'
+      - 'tests/ci/config-target-preflight.cjs'
+      - 'tests/ci/config-target-preflight.test.cjs'
       - '.github/workflows/buyer-configuration-boundary.yml'
 
 permissions:
@@ -73,3 +77,5 @@ jobs:
         run: node --test tests/buyer-configuration-endpoint.test.mjs
       - name: Verify local Buyer V5 fixture readiness and shutdown
         run: node --test tests/ci/local-buyer-config-server-contract.test.mjs
+      - name: Verify Configurator browser target diagnostics
+        run: node --test tests/ci/config-target-preflight.test.cjs
