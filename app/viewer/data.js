@@ -13,7 +13,7 @@ window.CASA_PUBLIC_VIEWER = {
     isometric: { label: "Vista isométrica", kind: "isometric" }
   },
   detailLayout: [
-    { id: "components", title: "Componentes", source: "components", placeholder: "assets/icon-placeholder.svg" },
-    { id: "requirements", title: "Requisitos", source: "requirements", placeholder: "assets/icon-placeholder.svg" }
+    { id: "components", source: "components", placeholder: "assets/icon-placeholder.svg" },
+    { id: "requirements", source: "requirements", placeholder: "assets/icon-placeholder.svg" }
   ]
 };

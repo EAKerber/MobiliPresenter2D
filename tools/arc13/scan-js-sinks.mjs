@@ -248,11 +248,13 @@ const knownCustomErrorMessages = new Map([
     evidence: "AdminBootstrapRequestError(code, message) is rethrown by ensureAdminData(); showUser() displays error.message through the fixed Admin status helper.",
   }],
 ]);
-const knownCatalogErrorMessagePaths = new Map([
-  ["app/core/ui-copy.js", ["network", "unauthorized", "forbidden", "unavailable", "invalid"].map((code) => ({
+const knownCatalogSourcePaths = new Map([
+  ["app/core/ui-copy.js", [
+    ...["network", "unauthorized", "forbidden", "unavailable", "invalid"].map((code) => ({
     path: ["admin", "loadState", "bootstrapFailures", code],
     role: "error-message-source",
     binding: "uiCopy.admin.loadState.bootstrapFailures",
+    evidence: "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper.",
     target: {
       source: "app/admin/admin.js",
       line: 1693,
@@ -260,7 +262,21 @@ const knownCatalogErrorMessagePaths = new Map([
       expression: "error.message || adminLoadCopy.adminDataLoadFallback",
       flow: "bounded-custom-error-to-admin-status",
     },
-  }))],
+    })),
+    ...["components", "requirements"].map((kind) => ({
+      path: ["viewer", "detailHeadings", kind],
+      role: "detail-heading",
+      binding: "uiCopy.viewer.detailHeadings",
+      evidence: "The fixed Viewer heading is selected by the closed detailLayout ID set and rendered by viewer.js through the text-only element helper.",
+      target: {
+        source: "app/viewer/viewer.js",
+        line: 124,
+        sink: "helper:element",
+        expression: "detailHeadingsCopy[descriptor.id]",
+        flow: "bounded-catalog-copy-to-viewer-detail-heading",
+      },
+    })),
+  ]],
 ]);
 const knownOptionFactoryFunctions = new Map([
   ["app/admin/admin.js::materialTargetOptions", {
@@ -292,7 +308,6 @@ const textDataSchemas = new Map([
     globalName: "CASA_PUBLIC_VIEWER",
     fields: [
       { path: ["viewTypes", "*", "label"], role: "view-label", use: "passed-but-unused", evidence: ["app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"] },
-      { path: ["detailLayout", "*", "title"], role: "detail-heading", use: "active", evidence: ["app/viewer/viewer.js:123 -> element text"] },
     ],
   }],
 ]);
@@ -528,16 +543,18 @@ function visitSources(node, file) {
     return;
   }
   if (node.type === "ReturnStatement" && node.argument) {
-    const catalogPaths = knownCatalogErrorMessagePaths.get(file.path) || [];
+    const catalogPaths = knownCatalogSourcePaths.get(file.path) || [];
     const catalogRoot = node.argument.type === "CallExpression" && calleeName(node.argument.callee) === "freeze"
       ? node.argument.arguments[0]
       : node.argument;
     for (const config of catalogPaths) {
       addSourceNodes(file, extractPath(catalogRoot, config.path), config.role, config.binding, {
         useStatus: "active",
-        consumerEvidence: ["Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."],
+        consumerEvidence: [config.evidence],
         consumerTargets: [config.target],
-        classificationHints: ["user-visible-operational-message", "catalog-error-copy-to-admin-status"],
+        classificationHints: config.role === "error-message-source"
+          ? ["user-visible-operational-message", "catalog-error-copy-to-admin-status"]
+          : ["user-visible-heading", "catalog-copy-to-viewer-detail-heading"],
       });
     }
   }

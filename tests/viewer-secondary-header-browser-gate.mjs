@@ -1,11 +1,33 @@
 import assert from "node:assert/strict";
 import {mkdir,writeFile} from "node:fs/promises";
+import {createRequire} from "node:module";
 import { chromium, webkit } from "playwright";
 
+const require=createRequire(import.meta.url);
+const {project}=require("../app/core/public-module-projection.js");
+const catalog=require("../app/data/catalog-data.js");
+const scene=require("../app/data/scene-data.js");
 const ORIGIN="http://127.0.0.1:8123", artifact="artifacts/viewer-secondary-header";
 const widths=[320,390,486,768,1366],themes=["light","dark"];
 await mkdir(artifact,{recursive:true});
 const results=[];
+const moduleIds=catalog.modules.map(module=>module.entityId);
+const finishes=catalog.options.finishes;
+const published={
+ schemaVersion:"ConfiguratorAdministration2D 5.0",revision:1,
+ pricing:{internal:"must-not-leak"},
+ stages:[{id:"modules-test",kind:"modules",enabled:true,groups:[{sections:[{itemIds:moduleIds}]}]}],
+ objects:Object.fromEntries(catalog.modules.map(module=>[module.entityId,{
+   title:module.title,description:"",benefits:[...module.benefits],
+   components:[...module.components],requirements:[...module.requirements]
+ }])),
+ finishes:finishes.map(finish=>({id:finish.id,enabled:finish.status==="published",scope:"global"})),
+ materialGroups:[{id:"fronts-all",materialIds:finishes.map(finish=>finish.id)}],
+ materials:finishes.map(finish=>({id:finish.id,label:finish.publicLabel,kind:"texture",
+   color:finish.color,textureAsset:finish.textureAsset,textureSize:finish.textureSize})),
+ initialState:{entities:Object.fromEntries(moduleIds.map(id=>[id,true])),finishId:"base-light"}
+};
+const viewerFixture=project(published,catalog,scene);
 for(const engine of [chromium,webkit]){
  const browser=await engine.launch({headless:true});
  try{
@@ -15,10 +37,20 @@ for(const engine of [chromium,webkit]){
    await context.addInitScript(mode=>{localStorage.setItem("casa-ui-theme-mode-v1",mode);},theme);
    const page=await context.newPage(),errors=[];
    page.on("pageerror",e=>errors.push(e.message));
-   const r=await page.goto(ORIGIN+"/viewer/",{waitUntil:"domcontentloaded",timeout:30000});
+   await page.route("**/api/public-modules",route=>route.fulfill({
+     status:200,contentType:"application/json",body:JSON.stringify(viewerFixture)
+   }));
+   const r=await page.goto(ORIGIN+"/viewer/?module="+encodeURIComponent(moduleIds[1]),{waitUntil:"domcontentloaded",timeout:30000});
    assert.equal(r?.status(),200);
    await page.waitForSelector("[data-ui-theme-toggle]");
+   await page.locator("#block-details .detail-grid h3").nth(1).waitFor({state:"visible",timeout:12000});
    await page.evaluate(async()=>{await document.fonts?.ready;});
+   const detailHeadingState=await page.evaluate(()=>({
+     rendered:[...document.querySelectorAll("#block-details .detail-grid h3")].map(node=>node.textContent),
+     expected:window.CASA_UI_COPY.viewer.detailHeadings
+   }));
+   assert.deepEqual(detailHeadingState.rendered,[detailHeadingState.expected.components,detailHeadingState.expected.requirements],
+     "Viewer detail headings follow the shared catalog in stable order");
    const initial=await page.evaluate(()=>{
      const rect=sel=>{
        const r=document.querySelector(sel).getBoundingClientRect();
@@ -107,7 +139,7 @@ for(const engine of [chromium,webkit]){
    await themeButton.click();
    assert.notEqual(await page.locator("html").getAttribute("data-theme-mode"),theme);
    assert.deepEqual(errors,[]);
-   const scenario={engine:engine.name(),width,theme,nav:true,secondary:true,themeInside:true,
+   const scenario={engine:engine.name(),width,theme,nav:true,secondary:true,themeInside:true,detailHeadings:true,
      singleRow:true,keyboard:true,outsideClick:true,errors:0};
    results.push(scenario);
    if(width===320||width===1366){

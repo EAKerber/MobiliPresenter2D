@@ -120,6 +120,21 @@ jobs:
             assert.equal(source.consumerRefs[0].flow, 'bounded-custom-error-to-admin-status');
             assert.deepEqual(source.consumerRefs[0].routeConsumers, ['/admin']);
           }
+          const viewerDetailHeadingSources = inventory.sourceEntries.filter((entry) =>
+            entry.source === 'app/core/ui-copy.js'
+            && entry.sourceRole === 'detail-heading'
+            && entry.valuePath?.startsWith('viewer.detailHeadings.'));
+          assert.deepEqual(
+            viewerDetailHeadingSources.map((entry) => entry.valuePath).sort(),
+            ['viewer.detailHeadings.components', 'viewer.detailHeadings.requirements'],
+            'the two fixed Viewer detail headings must be catalogued'
+          );
+          for (const source of viewerDetailHeadingSources) {
+            assert.equal(source.consumerRefs?.length, 1, `${source.valuePath} has one proven Viewer sink`);
+            assert.equal(source.consumerRefs[0].sink, 'helper:element');
+            assert.equal(source.consumerRefs[0].flow, 'bounded-catalog-copy-to-viewer-detail-heading');
+            assert.deepEqual(source.consumerRefs[0].routeConsumers, ['/viewer/']);
+          }
           assert(!inventory.sourceEntries.some((entry) =>
             entry.source === 'app/core/admin-bootstrap-retry.mjs'
             && entry.sourceRole === 'error-message-source'

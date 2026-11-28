@@ -474,6 +474,10 @@
       })
     }),
     viewer: Object.freeze({
+      detailHeadings: Object.freeze({
+        components: "Componentes",
+        requirements: "Requisitos"
+      }),
       state: Object.freeze({
         empty: "Nenhum módulo está visível no viewer neste momento.",
         loading: "Carregando informações publicadas…",
