@@ -2559,10 +2559,15 @@
         {
           "source": "Product PRs #585, #588 and #589; exact-head CI and authenticated Deploy Preview #589",
           "sha": "6db44a5ba9d63f9b76fb9337ae9a639b5baac490",
-          "detail": "The Admin copy, literal-safe data interpolation and accessible policy guidance were selectively integrated into main. Static sign-in labels are preserved. All ten applicable PR #589 workflows passed on head 7cc2fa9cde91c0b2f4795793239522cc5102d4d8; authenticated preview inspection confirmed loaded stages, finishes and pricing without writes. V5 save/readback and isolated repair were tested with synthetic fixtures, not against the hosted data. Netlify production deploy 6b0b38fcc9c029e98d2fe012 is ready on this exact main commit. Private navigation remains separately divergent; remaining Configurator and Admin text coverage is not claimed complete."
+          "detail": "The Admin copy, literal-safe data interpolation and accessible policy guidance were selectively integrated into main. Static sign-in labels are preserved. All ten applicable PR #589 workflows passed on head 7cc2fa9cde91c0b2f4795793239522cc5102d4d8; authenticated preview inspection confirmed loaded stages, finishes and pricing without writes. V5 save/readback and isolated repair were tested with synthetic fixtures, not against the hosted data. Netlify production deploy 6b0b38fcc9c029e98d2fe012 was ready on this exact main commit. Private navigation was separately reconciled in the subsequent evidence; remaining Configurator and Admin text coverage is not claimed complete."
+        },
+        {
+          "source": "Product PRs #591, #593 and #594; deployed route and private menu checks",
+          "sha": "c06e813c92d0003b6a4c178c4625116329930117",
+          "detail": "Session-status routing was corrected in #593 after an anonymous production request returned 404; the exact preview and subsequent production readback returned 200 with authenticated:false. Private navigation and temporary logout retry were selectively integrated in #594 after all 12 applicable workflows passed on head a2bd38ca3409d18279655d2b590514f772b27a56 (one transient negative-route job passed on rerun). The exact preview displayed the anonymous menu. Local browser tests used synthetic HttpOnly cookies to verify that an upstream 503 retains the cookie and does not redirect, while a subsequent successful logout clears it. Netlify production deploy 6b0b3f1288f246e8cee97bea was ready at this main SHA. A real hosted temporary grant, revocation during storage failure and overall LOC-006 coverage remain unproven."
         }
       ],
-      "nextAction": "Reconciliar os textos fixos remanescentes do Admin e do Configurador com seus consumidores e evidências atuais, mantendo dados comerciais como dados. Avaliar a navegação privada e as famílias restantes separadamente; LOC-006 continua parcial."
+      "nextAction": "Reconciliar os textos fixos remanescentes do Admin e do Configurador com seus consumidores e evidências atuais, mantendo dados comerciais como dados. Validar separadamente o ciclo hospedado de concessão temporária quando houver fixture adequada; LOC-006 continua parcial."
     },
     {
       "order": 107,
