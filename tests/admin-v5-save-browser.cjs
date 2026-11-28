@@ -289,6 +289,7 @@ async function main() {
       "reloading Admin reads back the removed module association");
     assert.deepEqual(current.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish);
 
+    await page.locator('[data-admin-tab="stages"]').click();
     await page.locator('[data-stage-label="finishes"]').fill("Acabamentos rejeitados");
     forceConflict = true;
     await page.locator("#saveButton").click();
