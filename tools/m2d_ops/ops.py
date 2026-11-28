@@ -58,14 +58,22 @@ def read_blob(repo, sha, path, entries, required=True):
 def merge_bases(repo, a, b):
     return git(repo,'merge-base','--all',a,b,allowed=(0,1)).decode().splitlines()
 
+def plan_heading(line):
+    """Return an objective ID and heading depth, including bold M0/M1 entries."""
+    normal = re.match(r'^(#{2,6})\s+`?([A-Z][A-Z0-9]*(?:-[A-Z]+)*-\d+)`?(?:\s|$)', line)
+    if normal:
+        return normal.group(2), len(normal.group(1))
+    bold = re.match(r'^\*\*`?([A-Z][A-Z0-9]*(?:-[A-Z]+)*-\d+)`?\s+[—–-]\s+.+\*\*\s*$', line)
+    return (bold.group(1), None) if bold else None
+
 def plan_hints(markdown, ids):
     """Source-preserving dependency mentions, never inferred hard blockers."""
     found = collections.defaultdict(list)
     current = None
     for n,line in enumerate(markdown.splitlines(), 1):
-        head = re.match(r'^#{2,6}\s+`?([A-Z][A-Z0-9]*(?:-[A-Z]+)*-\d+)`?(?:\s|$)',line)
+        head = plan_heading(line)
         if re.match(r'^#{1,3}\s+',line) or head:
-            current = head.group(1) if head and head.group(1) in ids else None
+            current = head[0] if head and head[0] in ids else None
         dep = re.match(r'^\s*\*\*Dependências?:\*\*\s*(.*)$',line)
         if current and dep:
             raw = dep.group(1).strip()
@@ -75,22 +83,25 @@ def plan_hints(markdown, ids):
 def plan_sections(markdown, ids):
     """Collect exact heading ranges and DoD excerpts, preserving multiple matches."""
     lines=markdown.splitlines(); hits=collections.defaultdict(list)
-    heading=re.compile(r'^(#{2,6})\s+`?([A-Z][A-Z0-9]*(?:-[A-Z]+)*-\d+)`?(?:\s|$)')
     for n,line in enumerate(lines):
-        h=heading.match(line)
-        if not h or h.group(2) not in ids: continue
-        depth=len(h.group(1)); end=n+1
+        h=plan_heading(line)
+        if not h or h[0] not in ids: continue
+        ident,depth=h; end=n+1
         while end<len(lines):
             other=re.match(r'^(#{1,6})\s+',lines[end])
-            if other and len(other.group(1))<=depth: break
+            if depth is None:
+                if plan_heading(lines[end]) or (other and len(other.group(1))<=3): break
+            elif other and len(other.group(1))<=depth: break
             end+=1
         excerpts=[]
         for j in range(n+1,end):
-            if re.match(r'^#{2,6}\s+(?:Critério de conclusão|Critérios de conclusão|Critérios|Definition of Done)\s*$',lines[j],re.I):
+            if re.match(r'^#{2,6}\s+(?:Critério de conclusão|Critérios de conclusão|Critérios|Definition of Done|DoD(?: específico)?)\s*$',lines[j],re.I):
                 k=j+1
                 while k<end and not re.match(r'^#{1,6}\s+',lines[k]): k+=1
                 excerpts.append({'line':j+1,'text':'\n'.join(lines[j:k]).strip()})
-        hits[h.group(2)].append({'heading':line,'startLine':n+1,'endLine':end,'criteria':excerpts})
+            elif re.match(r'^\*\*Concluído quando:\*\*\s*\S',lines[j],re.I):
+                excerpts.append({'line':j+1,'text':lines[j].strip()})
+        hits[ident].append({'heading':line,'startLine':n+1,'endLine':end,'criteria':excerpts})
     return dict(hits)
 
 def read_inputs(register, plan_text, impact):

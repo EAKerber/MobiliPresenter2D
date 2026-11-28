@@ -64,6 +64,8 @@ Preserve o plano, decisões, contratos e recibos históricos. Não crie uma segu
 
 Uma evidência de escopo declarado é comparada com as entradas exatas (modo, tipo, OID) da árvore do destino. `declared_scope_unchanged` significa somente que o escopo fornecido não mudou; não garante abrangência, validade semântica, sucesso de teste ou publicação. Um recibo pode sobreviver a alterações não relacionadas.
 
+O contexto identifica tanto títulos Markdown quanto itens do plano apresentados em negrito, com intervalos de linhas e critérios de conclusão quando reconhecidos. Esses trechos são pistas para leitura da fonte, não avaliação automática de cumprimento; formatos não reconhecidos podem continuar sem extração.
+
 Para disposições de divergência, a reutilização entre observações exige fingerprint da diferença, pin do plano e escopos declarados em ambos os destinos. Sem esses escopos, vale apenas para a observação original. A decisão continua identificada como `agent_asserted_*`, nunca como prova independente.
 
 ## Segurança e adoção
