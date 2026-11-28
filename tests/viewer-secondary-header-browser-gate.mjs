@@ -66,6 +66,9 @@ for(const engine of [chromium,webkit]){
    assert.ok(fixedCopy.technicalTitles.length>0 && fixedCopy.technicalTitles.every(title=>
      [fixedCopy.copy.technical.focus,fixedCopy.copy.technical.front,fixedCopy.copy.technical.side,
        fixedCopy.copy.technical.internal,fixedCopy.copy.technical.isometric].includes(title)),"technical views use fixed catalog labels");
+   const drawingLabels=await page.locator("#block-views .technical-view svg[aria-label]").evaluateAll(nodes=>nodes.map(node=>node.getAttribute("aria-label")));
+   assert.ok(drawingLabels.some(label=>/^(Vista frontal|Vista lateral|Projeção isométrica orientativa): .* milímetros/.test(label)),
+     "the Viewer renders a shared technical drawing with its accessible dimensions");
    const initial=await page.evaluate(()=>{
      const rect=sel=>{
        const r=document.querySelector(sel).getBoundingClientRect();

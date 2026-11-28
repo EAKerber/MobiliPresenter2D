@@ -2331,15 +2331,21 @@
       "title": "Extrair textos de controladores e componentes JS",
       "chapter": "V",
       "priority": "P1",
-      "planState": "not_started",
-      "reconciliation": "unreviewed",
-      "local": "unknown",
-      "development": "unknown",
+      "planState": "in_progress",
+      "reconciliation": "partial",
+      "local": "partial",
+      "development": "partial",
       "main": "unknown",
-      "technicalValidation": "unknown",
+      "technicalValidation": "partial",
       "approvalPublication": "unknown",
-      "evidence": [],
-      "nextAction": "Reconciliar este ID com código, consumidores, testes e evidência exata de branch/PR antes de alterar o estado."
+      "evidence": [
+        {
+          "source": "Product PR #575 exact-head checks and development readback",
+          "sha": "9b1fdced48a2d7e5b7c33933e0ecffa92b7e0169",
+          "detail": "Viewer overview, section headings and technical-view fixed copy use the pt-BR catalog with fallbacks; product values stay data-backed. Literal replacement characters in module titles are preserved. The exact PR head 9687b3155bffc3511a7548e833a5350e947e5c8b passed 14 applicable workflows, including the Viewer cross-engine browser, price contract and inventory. The Viewer-specific internal SVG label flows through a shared sink; its configurator consumer does not use that Viewer catalog entry. Integrated into development at this SHA. Viewer static HTML and other JS consumers remain for reconciliation; no full-family or main completion is claimed."
+        }
+      ],
+      "nextAction": "Reconciliar controladores e componentes restantes por consumidor, incluindo o renderizador técnico compartilhado em validação e as demais famílias do Configurador. Preservar textos de produto e distinguir desenvolvimento de promoção para main."
     },
     {
       "order": 106,
@@ -2531,7 +2537,7 @@
           "detail": "Four fixed compact configurator stage labels now use uiCopy.configurator.stageNavigation.compactLabels; exact visible/full stage labels, full accessible names, configured custom-stage labels, responsive behavior and pricing/data behavior remain unchanged. Catalog, runtime, source contract and browser checks cover the four compact values. Exact head 9f58b6d3cfd34dc4ffdccc5ffc82d15b5e284e1a passed 14 applicable GitHub checks; Supabase Preview was skipped because branch previews are disabled. Local core test, primary-page compiler, ARC03C source-authority (6/6), UI theme contract, ARC-13 line-ending tests (3/3), syntax and diff checks passed. ARC-13 regenerated twice deterministically: 267 JS text-source records, 1,015 unreviewed occurrences, 454 sinks, 0 parse errors, 0 unresolved mappings; sink-links changed from 4 to 0 because ARC-13 does not follow uiCopy keys to the CSS data attribute. This is a provenance coverage gap, not a zero-consumer result. Squash-integrated into development at this SHA/tree 56135b96d2543edb7f1062462cd4d6b16f3011a2; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
         }
       ],
-      "nextAction": "The five fixed Admin bootstrap failure messages have been migrated and their exact Admin sink links are now inventoried. The active LOC-006 candidate moves only the Viewer's fixed 'Componentes' and 'Requisitos' detail headings to uiCopy.viewer.detailHeadings, preserving descriptor IDs/order, visibility, module data and rendered wording. Verify the exact PR head with the existing Viewer browser gate and ARC-13 source-link checks; record the merge evidence before choosing another bounded family. Keep LOC-006 partial."
+      "nextAction": "Reconciliar os textos fixos remanescentes do Admin e do Configurador com seus consumidores e evidências atuais, mantendo dados comerciais como dados. Avaliar famílias completas para promoção seletiva; LOC-006 continua parcial."
     },
     {
       "order": 107,

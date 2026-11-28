@@ -248,8 +248,44 @@ const knownCustomErrorMessages = new Map([
     evidence: "AdminBootstrapRequestError(code, message) is rethrown by ensureAdminData(); showUser() displays error.message through the fixed Admin status helper.",
   }],
 ]);
+const drawingTargets = {
+  elevation: {
+    source: "app/core/technical-drawings.js", line: 81, sink: "call:setAttribute",
+    expression: `format(copy("elevationAria", "{view}: {axis} {width} milímetros por A {height} milímetros{ending}"), {
+      view: isSide ? copy("side", "Vista lateral") : copy("front", "Vista frontal"),
+      axis: horizontalLabel, width: dimension(horizontalMm), height: dimension(spec.faceHeightMm), ending: ending(amplified)
+    })`,
+    flow: "bounded-catalog-copy-to-technical-drawing",
+  },
+  isometric: {
+    source: "app/core/technical-drawings.js", line: 113, sink: "call:setAttribute",
+    expression: `format(copy("isometricAria", "{prefix}: {axis} {width} milímetros, A {height} milímetros e {depthAxis} {depth} milímetros{ending}"), {
+      prefix: ariaPrefix, axis: spec.faceHorizontalLabel, width: dimension(spec.faceWidthMm),
+      height: dimension(spec.faceHeightMm), depthAxis: spec.extrusionLabel, depth: dimension(spec.extrusionMm), ending: ending(amplified)
+    })`,
+    flow: "bounded-catalog-copy-to-technical-drawing",
+  },
+  internal: {
+    source: "app/core/technical-drawings.js", line: 148, sink: "call:setAttribute",
+    expression: 'ariaLabel || format(copy("internalAria", "Vista interna frontal: {segments}."), { segments: describe })',
+    flow: "bounded-catalog-copy-to-technical-drawing",
+  },
+};
 const knownCatalogSourcePaths = new Map([
   ["app/core/ui-copy.js", [
+    ...[
+      ["side", ["elevation"]], ["front", ["elevation"]],
+      ["elevationAria", ["elevation"]], ["isometric", ["isometric"]],
+      ["isometricAria", ["isometric"]], ["amplification", ["elevation", "isometric"]],
+      ["internalAria", ["internal"]], ["internalSegment", ["internal"]],
+    ].map(([key, targets]) => ({
+      path: ["technicalDrawings", key], role: "technical-drawing-copy",
+      binding: "uiCopy.technicalDrawings",
+      evidence: key.startsWith("internal")
+        ? "The default internal drawing description is used by the Configurator; Viewer supplies its own ariaLabel. The sink routeConsumers list both routes."
+        : "The shared drawing renderer composes this fixed text into the SVG accessible description used by the Configurator and Viewer; amplification is conditional.",
+      targets: targets.map((name) => drawingTargets[name]),
+    })),
     ...["network", "unauthorized", "forbidden", "unavailable", "invalid"].map((code) => ({
     path: ["admin", "loadState", "bootstrapFailures", code],
     role: "error-message-source",
@@ -291,7 +327,7 @@ const knownCatalogSourcePaths = new Map([
       ["technical", "focusUnavailable", "app/viewer/technical-views.js", 50, "property:textContent", 'copy("focusUnavailable", "Recorte do módulo indisponível.")'],
       ["technical", "focusAria", "app/viewer/technical-views.js", 56, "call:setAttribute", 'copy("focusAria", "Recorte isolado de {title}").replace("{title}", () => String(module.title))'],
       ["technical", "focusDescription", "app/viewer/technical-views.js", 60, "property:textContent", 'copy("focusDescription", "Recorte do módulo selecionado na cena.")'],
-      ...["internalAria", "internalSegment"].map((key) => ["technical", key, "app/core/technical-drawings.js", 135, "call:setAttribute", 'ariaLabel || `Vista interna frontal: ${describe}.`']),
+      ...["internalAria", "internalSegment"].map((key) => ["technical", key, "app/core/technical-drawings.js", 148, "call:setAttribute", 'ariaLabel || format(copy("internalAria", "Vista interna frontal: {segments}."), { segments: describe })']),
     ].map(([group, key, source, line, sink, expression]) => ({
       path: ["viewer", group, key], role: "fixed-viewer-copy", binding: `uiCopy.viewer.${group}`,
       evidence: group === "technical" && (key === "internalAria" || key === "internalSegment")
@@ -574,12 +610,14 @@ function visitSources(node, file) {
       addSourceNodes(file, extractPath(catalogRoot, config.path), config.role, config.binding, {
         useStatus: "active",
         consumerEvidence: [config.evidence],
-        consumerTargets: [config.target],
+        consumerTargets: config.targets || [config.target],
         classificationHints: config.role === "error-message-source"
           ? ["user-visible-operational-message", "catalog-error-copy-to-admin-status"]
           : config.role === "detail-heading"
             ? ["user-visible-heading", "catalog-copy-to-viewer-detail-heading"]
-            : ["user-visible-viewer-copy", "catalog-copy-to-viewer"],
+            : config.role === "technical-drawing-copy"
+              ? ["accessible-technical-drawing-copy", "catalog-copy-to-shared-renderer"]
+              : ["user-visible-viewer-copy", "catalog-copy-to-viewer"],
       });
     }
   }

@@ -473,6 +473,16 @@
         })
       })
     }),
+    technicalDrawings: Object.freeze({
+      side: "Vista lateral",
+      front: "Vista frontal",
+      isometric: "Projeção isométrica orientativa",
+      amplification: ". A espessura foi ampliada apenas para legibilidade.",
+      elevationAria: "{view}: {axis} {width} milímetros por A {height} milímetros{ending}",
+      isometricAria: "{prefix}: {axis} {width} milímetros, A {height} milímetros e {depthAxis} {depth} milímetros{ending}",
+      internalAria: "Vista interna frontal: {segments}.",
+      internalSegment: "{label} {size} milímetros"
+    }),
     viewer: Object.freeze({
       overview: Object.freeze({ kicker: "{category} · Módulo {number}", basePrice: "Valor base do módulo" }),
       sections: Object.freeze({

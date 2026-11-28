@@ -328,6 +328,9 @@ const { chromium } = require("playwright");
   }, beforeSwipe, { timeout: 1500 });
   const afterSwipe = await activeIndex();
   assert.notEqual(afterSwipe, beforeSwipe, "horizontal touch swipe must change the module-detail carousel page");
+  const technicalLabel = await stage.locator(".module-detail__view--technical svg[aria-label]").getAttribute("aria-label");
+  assert.match(technicalLabel, /^(Vista frontal|Vista lateral|Projeção isométrica orientativa): .* milímetros/,
+    "the configurator renders a shared technical drawing with its accessible dimensions");
   assert(await page.evaluate(() => document.body.classList.contains("is-mobile-scene-pinned")),
     "PiP must remain pinned after navigating the module detail");
 
