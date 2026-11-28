@@ -189,6 +189,37 @@ for(const engine of [chromium,webkit]){
    assert.equal(await next.evaluate(node=>node===document.activeElement),true,"selection moves focus to the visible hotspot");
    await page.keyboard.press("2");
    assert.equal(await next.getAttribute("aria-pressed"),"true","numeric shortcut cannot select hidden modules");
+   const lifecycle=await page.evaluate(({modules,publicState})=>{
+     const original=document.addEventListener;
+     let keyBindings=0;
+     document.addEventListener=function(type,...args){
+       if(type==="keydown")keyBindings++;
+       return original.call(this,type,...args);
+     };
+     try{
+       const adapter=window.CASA_PUBLIC_SCENE_ADAPTERS.create({publicModules:modules,publicState});
+       const target=document.createElement("div"); target.id="sceneLifecycleProbe";
+       document.body.append(target);
+       adapter.mount(target);
+       adapter.mount(target);
+       let otherTargetRejected=false;
+       try{adapter.mount(document.createElement("div"));}catch(error){otherTargetRejected=true;}
+       const finish=adapter.getFinishes().find(entry=>entry.id!==adapter.getState().finishId);
+       if(!finish)throw Error("fixture needs a second permitted finish");
+       const finishAccepted=adapter.setGlobalFinish(finish.id);
+       window.__sceneLifecycleProbe=adapter;
+       return {keyBindings,otherTargetRejected,finishAccepted,finishId:adapter.getState().finishId,
+         expectedFinish:finish.id,selected:adapter.getState().selectedEntityId,
+         pressed:target.querySelector('[aria-pressed="true"]')?.dataset.entityId,
+         frameHidden:target.querySelector(".selection-frame")?.hidden};
+     }finally{document.addEventListener=original;}
+   },{modules:hiddenFixture.modules,publicState:hiddenFixture.publicState});
+   assert.equal(lifecycle.keyBindings,1,"same-target remount and finish rerender bind one keyboard listener");
+   assert.equal(lifecycle.otherTargetRejected,true,"mounting one adapter on a different target is rejected");
+   assert.equal(lifecycle.finishAccepted,true);
+   assert.equal(lifecycle.finishId,lifecycle.expectedFinish,"allowed finish survives rerender");
+   assert.equal(lifecycle.pressed,lifecycle.selected,"selection remains reflected after finish rerender");
+   assert.equal(lifecycle.frameHidden,false,"selected frame remains available after finish rerender");
    assert.deepEqual(errors,[]);
   }finally{await sceneContext.close();}
  }finally{await browser.close();}
