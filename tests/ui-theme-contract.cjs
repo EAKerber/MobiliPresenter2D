@@ -41,6 +41,12 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.privateAccessState)),
 });
 assert.equal(copy.navigation.contact, "Fale conosco");
 assert.equal(copy.navigation.contactAriaLabel, "Fale conosco pelo WhatsApp");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.configurator.stageNavigation.compactLabels)), {
+  modules: "Módulos",
+  finishes: "Acab.",
+  services: "Serv.",
+  summary: "Resumo"
+});
 assert.deepEqual(JSON.parse(JSON.stringify(copy.configurator.miniScene)), {
   viewerLabel: "Visualização da cozinha",
   controlsLabel: "Controles da mini-cena",

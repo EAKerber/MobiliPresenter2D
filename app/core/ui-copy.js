@@ -95,6 +95,7 @@
       homeLink: "Voltar ao início ↑"
     }),
     configurator: Object.freeze({
+      stageNavigation: Object.freeze({ compactLabels: Object.freeze({ modules: "Módulos", finishes: "Acab.", services: "Serv.", summary: "Resumo" }) }),
       miniScene: Object.freeze({
         viewerLabel: "Visualização da cozinha",
         controlsLabel: "Controles da mini-cena",
