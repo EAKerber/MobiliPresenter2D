@@ -1,0 +1,115 @@
+name: Access and temporary-session boundaries (offline)
+
+on:
+  push:
+    branches:
+      - main
+      - development
+    paths:
+      - 'app/access/**'
+      - 'app/admin/admin.js'
+      - 'app/core/admin-bootstrap-retry.mjs'
+      - 'app/core/private-navigation.js'
+      - 'netlify/edge-functions/access-gate.mjs'
+      - 'netlify/functions/access-check.mjs'
+      - 'netlify/functions/access-grants.mjs'
+      - 'netlify/functions/access-redeem.mjs'
+      - 'netlify/functions/access-session-logout.mjs'
+      - 'netlify/functions/access-session-status.mjs'
+      - 'netlify/functions/admin-bootstrap.mjs'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - 'netlify.toml'
+      - 'app/core/published-buyer-projection.js'
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'app/tools/test-access-policy.mjs'
+      - 'netlify/access/**'
+      - 'tests/ci/access-dto-boundary.test.mjs'
+      - 'tests/access-session-browser.cjs'
+      - 'tests/private-menu-logout-browser.cjs'
+      - 'tests/ci/access-surface-boundaries.test.mjs'
+      - 'tests/auth-first-login-recovery.test.mjs'
+      - 'netlify/functions/configuration.mjs'
+      - 'netlify/access/identity-policy.mjs'
+      - '.github/workflows/development-access-dto-boundary.yml'
+  pull_request:
+    branches:
+      - main
+      - development
+    paths:
+      - 'app/access/**'
+      - 'app/admin/admin.js'
+      - 'app/core/admin-bootstrap-retry.mjs'
+      - 'app/core/private-navigation.js'
+      - 'netlify/edge-functions/access-gate.mjs'
+      - 'netlify/functions/access-check.mjs'
+      - 'netlify/functions/access-grants.mjs'
+      - 'netlify/functions/access-redeem.mjs'
+      - 'netlify/functions/access-session-logout.mjs'
+      - 'netlify/functions/access-session-status.mjs'
+      - 'netlify/functions/admin-bootstrap.mjs'
+      - 'netlify/functions/buyer-configuration.mjs'
+      - 'netlify.toml'
+      - 'app/core/published-buyer-projection.js'
+      - 'app/tools/test-v5-endpoint-safety.js'
+      - 'app/tools/test-access-policy.mjs'
+      - 'netlify/access/**'
+      - 'tests/ci/access-dto-boundary.test.mjs'
+      - 'tests/access-session-browser.cjs'
+      - 'tests/private-menu-logout-browser.cjs'
+      - 'tests/ci/access-surface-boundaries.test.mjs'
+      - 'tests/auth-first-login-recovery.test.mjs'
+      - 'netlify/functions/configuration.mjs'
+      - 'netlify/access/identity-policy.mjs'
+      - '.github/workflows/development-access-dto-boundary.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: m2d-access-dto-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  authorization-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify syntax
+        run: |
+          node --check netlify/functions/configuration.mjs
+          node --check netlify/functions/buyer-configuration.mjs
+          node --check app/tools/test-v5-endpoint-safety.js
+      - name: Test authorization and role policy without credentials or network
+        run: |
+          node app/tools/test-access-policy.mjs
+          node app/tools/test-v5-endpoint-safety.js
+          node --test tests/ci/access-dto-boundary.test.mjs
+          node --test tests/ci/access-surface-boundaries.test.mjs
+          node app/tools/test-published-buyer-projection.js
+          node --test tests/auth-first-login-recovery.test.mjs
+
+  access-session-browser:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.62.1-noble
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Node package
+        run: npm install --prefix /tmp/access-session-tools --no-audit --no-fund playwright@1.62.1
+      - name: Verify token-free invitation state and same-origin redemption
+        env:
+          NODE_PATH: /tmp/access-session-tools/node_modules
+        run: node tests/access-session-browser.cjs
+      - name: Verify temporary-session logout and retry in browser
+        env:
+          NODE_PATH: /tmp/access-session-tools/node_modules
+        run: node tests/private-menu-logout-browser.cjs
