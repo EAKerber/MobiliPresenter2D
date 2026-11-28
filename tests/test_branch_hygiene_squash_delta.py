@@ -23,6 +23,9 @@ class ConcurrentSquashTests(unittest.TestCase):
         self.git("config", "user.name", "Fixture")
         self.git("config", "user.email", "fixture@example.invalid")
         self.git("config", "commit.gpgsign", "false")
+        # Index mode changes are intentional; do not treat the fixture worktree
+        # executable bit as an unstaged edit (also works on Windows).
+        self.git("config", "core.filemode", "false")
         self.put("modify.txt", b"old")
         self.put("remove.txt", b"old")
         self.put("mode.txt", b"old")
@@ -45,8 +48,10 @@ class ConcurrentSquashTests(unittest.TestCase):
         self.merged = self.git("rev-parse", "HEAD")
 
     def git(self, *args):
-        return subprocess.check_output(["git", *args], stderr=subprocess.PIPE,
-                                       text=True).strip()
+        proc = subprocess.run(["git", *args], capture_output=True, text=True, check=False)
+        if proc.returncode:
+            raise AssertionError(f"fixture git {args[0]} failed: {proc.stderr}")
+        return proc.stdout.strip()
 
     def put(self, name, content):
         path = self.root / name
