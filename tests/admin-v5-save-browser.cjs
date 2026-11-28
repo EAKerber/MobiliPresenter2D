@@ -255,11 +255,46 @@ async function main() {
       (sections) => sections.map((section) => section.dataset.hierarchySection)
     ), ["fronts"]);
 
+    await page.locator('[data-admin-tab="finishes"]').click();
+    await page.waitForSelector('[data-finish-scope="cocoa"]');
+    const cocoaFinishBefore = current.finishes.find((finish) => finish.id === "cocoa");
+    assert.ok(cocoaFinishBefore?.enabled && cocoaFinishBefore.scope === "global",
+      "finish availability fixture starts with an enabled global finish");
+    const removedModuleId = catalog.modules[catalog.modules.length - 1]?.entityId;
+    assert.ok(removedModuleId && cocoaFinishBefore.moduleIds.includes(removedModuleId),
+      "the local-availability case starts with the selected module association");
+    const expectedCocoaFinish = {
+      id: "cocoa",
+      enabled: true,
+      scope: "local",
+      moduleIds: cocoaFinishBefore.moduleIds.filter((id) => id !== removedModuleId)
+    };
+    await page.locator('[data-finish-scope="cocoa"]').selectOption("local");
+    await page.locator(`[data-finish-module="cocoa:${removedModuleId}"]`).uncheck();
+    assert.equal(putCount, 5, "changing finish scope and module availability remains an unsaved draft");
+    await page.locator("#saveButton").click();
+    await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("v5 publicada e verificada"));
+    assert.deepEqual(lastPut.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish,
+      "explicit V5 save sends the selected finish scope and module associations");
+    assert.deepEqual(current.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish,
+      "normalized V5 write/readback retains finish availability");
+    assert.equal(putCount, 6);
+
+    await page.reload({ waitUntil: "networkidle" });
+    await page.locator('[data-admin-tab="finishes"]').click();
+    await page.waitForSelector('[data-finish-scope="cocoa"]');
+    assert.equal(await page.locator('[data-finish-scope="cocoa"]').inputValue(), "local",
+      "reloading Admin reads back the persisted local finish scope");
+    assert.equal(await page.locator(`[data-finish-module="cocoa:${removedModuleId}"]`).isChecked(), false,
+      "reloading Admin reads back the removed module association");
+    assert.deepEqual(current.finishes.find((finish) => finish.id === "cocoa"), expectedCocoaFinish);
+
+    await page.locator('[data-admin-tab="stages"]').click();
     await page.locator('[data-stage-label="finishes"]').fill("Acabamentos rejeitados");
     forceConflict = true;
     await page.locator("#saveButton").click();
     await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("Recarregue o painel"));
-    assert.equal(putCount, 6);
+    assert.equal(putCount, 7);
     assert.equal(current.stages.find((s) => s.id === "finishes").label !== "Acabamentos rejeitados", true);
     forceConflict = false;
 
@@ -269,7 +304,7 @@ async function main() {
     await page.locator('[data-stage-label="finishes"]').fill("Publicação sem confirmação");
     await page.locator("#saveButton").click();
     await page.waitForFunction(() => document.querySelector("#saveMessage")?.textContent.includes("releitura v5 não corresponde"));
-    assert.equal(putCount, 7);
+    assert.equal(putCount, 8);
     assert.notEqual((await page.locator("#saveMessage").getAttribute("data-kind")), "success",
       "readback mismatch may not be reported as success");
 
