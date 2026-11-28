@@ -178,6 +178,13 @@
         configurationNotPublished: "A API de configuração ainda não foi publicada.",
         configurationLoadFailure: "Não foi possível carregar a configuração.",
         adminDataLoadFallback: "Falha ao carregar os dados administrativos.",
+        bootstrapFailures: Object.freeze({
+          network: "Não foi possível conectar à administração. Tente novamente.",
+          unauthorized: "Sessão ainda não confirmada. Verifique o acesso e tente novamente.",
+          forbidden: "Sua conta não tem permissão administrativa.",
+          unavailable: "Não foi possível carregar os dados administrativos. Tente novamente.",
+          invalid: "Os dados administrativos recebidos são inválidos."
+        }),
         retryLoad: "Tentar novamente",
         handlesRepairNeeded: "Puxadores ainda não está atribuído no v3 publicado. Persista Puxadores no v3 antes da futura publicação hierárquica.",
         version5Loaded: "Configuração v5 carregada. A hierarquia e os preços tipados podem ser publicados com validação.",

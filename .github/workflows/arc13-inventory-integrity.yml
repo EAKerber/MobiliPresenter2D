@@ -23,6 +23,7 @@ on:
       - 'tools/arc13/scan-js-sinks.mjs'
       - 'tools/arc13/scan-ui-inventory.py'
       - 'tests/arc13_line_ending_normalization_test.py'
+      - 'tests/auth-first-login-recovery.test.mjs'
       - 'tests/ui-theme-contract.cjs'
       - '.github/workflows/arc13-inventory-integrity.yml'
   push:
@@ -46,6 +47,7 @@ on:
       - 'tools/arc13/scan-js-sinks.mjs'
       - 'tools/arc13/scan-ui-inventory.py'
       - 'tests/arc13_line_ending_normalization_test.py'
+      - 'tests/auth-first-login-recovery.test.mjs'
       - 'tests/ui-theme-contract.cjs'
       - '.github/workflows/arc13-inventory-integrity.yml'
 
@@ -101,6 +103,28 @@ jobs:
           assert.equal(summary.unreviewedOccurrences, inventory.entries.length,
             'generated candidates remain unreviewed');
           assert(inventory.entries.every((entry) => entry.classification === 'unreviewed'));
+          const bootstrapFailureSources = inventory.sourceEntries.filter((entry) =>
+            entry.source === 'app/core/ui-copy.js'
+            && entry.sourceRole === 'error-message-source'
+            && entry.valuePath?.startsWith('admin.loadState.bootstrapFailures.'));
+          assert.deepEqual(
+            bootstrapFailureSources.map((entry) => entry.valuePath).sort(),
+            ['admin.loadState.bootstrapFailures.forbidden', 'admin.loadState.bootstrapFailures.invalid',
+              'admin.loadState.bootstrapFailures.network', 'admin.loadState.bootstrapFailures.unauthorized',
+              'admin.loadState.bootstrapFailures.unavailable'].sort(),
+            'the five fixed Admin bootstrap messages must be catalogued as bounded UI copy'
+          );
+          for (const source of bootstrapFailureSources) {
+            assert.equal(source.consumerRefs?.length, 1, `${source.valuePath} has one proven Admin sink`);
+            assert.equal(source.consumerRefs[0].sink, 'helper:setMessage');
+            assert.equal(source.consumerRefs[0].flow, 'bounded-custom-error-to-admin-status');
+            assert.deepEqual(source.consumerRefs[0].routeConsumers, ['/admin']);
+          }
+          assert(!inventory.sourceEntries.some((entry) =>
+            entry.source === 'app/core/admin-bootstrap-retry.mjs'
+            && entry.sourceRole === 'error-message-source'
+            && entry.consumerLinkStatus === 'declared-sink-not-indexed'),
+          'bootstrap error message catalog sources must resolve through the explicit source mapping');
           const expectedOutputs = [
             { path: 'app/index.html', route: '/' },
             { path: 'app/about/index.html', route: '/about/' },

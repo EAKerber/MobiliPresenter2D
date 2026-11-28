@@ -2,6 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fetchAdminBootstrap, AdminBootstrapRequestError } from "../app/core/admin-bootstrap-retry.mjs";
+import uiCopy from "../app/core/ui-copy.js";
+
+const failureMessages = uiCopy.admin.loadState.bootstrapFailures;
 
 const response = (status, payload = { priceBook: { pricing: { schemaVersion: "CommercialPricingRules 1.0" } } }) =>
   ({ status, ok: status >= 200 && status < 300, json: async () => payload });
@@ -11,6 +14,7 @@ const run = ({ statuses, user = { id: "test" }, wait = async () => {}, payload }
   return { calls, execute: () => fetchAdminBootstrap({
     fetchImpl: async (url,options) => { calls.push({url,options}); return queue.shift() || response(401); },
     getUserImpl: async () => user,
+    failureMessages,
     wait,
   }) };
 };
@@ -53,15 +57,27 @@ test("503 and 500 are not retried blindly",async()=>{
   }
 });
 test("network failure is explicit and not automatically retried",async()=>{
-  const e=()=>fetchAdminBootstrap({fetchImpl:async()=>{throw Error("offline")},getUserImpl:async()=>({id:"test"})});
-  await assert.rejects(e(),err=>err.code==="network");
+  const e=()=>fetchAdminBootstrap({fetchImpl:async()=>{throw Error("offline")},getUserImpl:async()=>({id:"test"}),failureMessages});
+  await assert.rejects(e(),err=>err.code==="network" && err.message===failureMessages.network);
 });
 test("malformed and missing pricing payloads fail closed",async()=>{
   for(const value of [{},{priceBook:{}},null]){
     const m=run({statuses:[200],payload:value});
-    await assert.rejects(m.execute(),e=>e.code==="invalid");
+    await assert.rejects(m.execute(),e=>e.code==="invalid" && e.message===failureMessages.invalid);
   }
-  await assert.rejects(()=>fetchAdminBootstrap({fetchImpl:async()=>({status:200,ok:true,json:async()=>{throw Error("malformed")}}),getUserImpl:async()=>null}),e=>e.code==="invalid");
+  await assert.rejects(()=>fetchAdminBootstrap({fetchImpl:async()=>({status:200,ok:true,json:async()=>{throw Error("malformed")}}),getUserImpl:async()=>null,failureMessages}),e=>e.code==="invalid" && e.message===failureMessages.invalid);
+});
+test("bootstrap failure codes use the exact catalog copy", async()=>{
+  const cases = [
+    { code: "network", expected: failureMessages.network, execute: () => fetchAdminBootstrap({ fetchImpl: async () => { throw Error("offline"); }, getUserImpl: async () => null, failureMessages }) },
+    { code: "unauthorized", expected: failureMessages.unauthorized, execute: () => run({ statuses: [401], user: null }).execute() },
+    { code: "forbidden", expected: failureMessages.forbidden, execute: () => run({ statuses: [403] }).execute() },
+    { code: "unavailable", expected: failureMessages.unavailable, execute: () => run({ statuses: [503] }).execute() },
+    { code: "invalid", expected: failureMessages.invalid, execute: () => run({ statuses: [200], payload: {} }).execute() },
+  ];
+  for (const item of cases) {
+    await assert.rejects(item.execute(), error => error.code === item.code && error.message === item.expected);
+  }
 });
 test("menu revalidates session on open, without introducing reload or polling",()=>{
   const code=readFileSync(new URL("../app/core/private-navigation.js",import.meta.url),"utf8");
@@ -76,7 +92,7 @@ test("admin offers explicit recovery after non-permission errors",()=>{
   assert.match(code,/retry\.textContent = adminLoadCopy\.retryLoad/);
   const copy = readFileSync(new URL("../app/core/ui-copy.js", import.meta.url), "utf8");
   assert.match(copy,/retryLoad: "Tentar novamente"/);
-  assert.match(code,/fetchAdminBootstrap\(\{ fetchImpl: fetch, getUserImpl: getUser \}\)/);
+  assert.match(code,/fetchAdminBootstrap\(\{[\s\S]*?fetchImpl: fetch,[\s\S]*?getUserImpl: getUser,[\s\S]*?failureMessages: adminLoadCopy\.bootstrapFailures/);
 });
 
 test("an anonymous in-flight lookup is never reused for a newer auth revision", async()=>{

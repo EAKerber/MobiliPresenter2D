@@ -26,6 +26,13 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
 });
 assert.equal(copy.navigation.logout, "Sair");
 assert.equal(copy.navigation.logoutFailure, "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.loadState.bootstrapFailures)), {
+  network: "Não foi possível conectar à administração. Tente novamente.",
+  unauthorized: "Sessão ainda não confirmada. Verifique o acesso e tente novamente.",
+  forbidden: "Sua conta não tem permissão administrativa.",
+  unavailable: "Não foi possível carregar os dados administrativos. Tente novamente.",
+  invalid: "Os dados administrativos recebidos são inválidos."
+});
 assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.privateMenu)), {
   privatePages: "Páginas privadas",
   publicPages: "Páginas públicas",
@@ -215,6 +222,7 @@ for (const file of [
   assert(read(file).includes('aria-label="Abrir menu"'), file + " keeps the static menu label as its no-JavaScript fallback");
 }
 const adminHeaderFallback = read("app/admin.html");
+assert(adminHeaderFallback.includes('src="admin/admin.bundle.js?v=arc13-loc006-admin-bootstrap-copy-1"'), "Admin refreshes the compiled bootstrap-error copy bundle");
 assert(adminHeaderFallback.includes(`aria-label="${copy.brand.homeLinkAriaLabel}"`), "Admin keeps the catalog-matched brand-link fallback");
 assert(adminHeaderFallback.includes(`alt="${copy.brand.logoAlt}"`), "Admin keeps the catalog-matched logo alternative fallback");
 assert(adminHeaderFallback.includes(`>${copy.brand.logoAlt}</strong>`), "Admin keeps the catalog-matched hidden brand fallback");

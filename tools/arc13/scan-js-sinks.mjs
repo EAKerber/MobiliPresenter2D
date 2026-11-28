@@ -240,13 +240,27 @@ const knownCustomErrorMessages = new Map([
     messageArgumentIndex: 1,
     target: {
       source: "app/admin/admin.js",
-      line: 1560,
+      line: 1693,
       sink: "helper:setMessage",
-      expression: "error.message || \"Falha ao carregar os dados administrativos.\"",
+      expression: "error.message || adminLoadCopy.adminDataLoadFallback",
       flow: "bounded-custom-error-to-admin-status",
     },
     evidence: "AdminBootstrapRequestError(code, message) is rethrown by ensureAdminData(); showUser() displays error.message through the fixed Admin status helper.",
   }],
+]);
+const knownCatalogErrorMessagePaths = new Map([
+  ["app/core/ui-copy.js", ["network", "unauthorized", "forbidden", "unavailable", "invalid"].map((code) => ({
+    path: ["admin", "loadState", "bootstrapFailures", code],
+    role: "error-message-source",
+    binding: "uiCopy.admin.loadState.bootstrapFailures",
+    target: {
+      source: "app/admin/admin.js",
+      line: 1693,
+      sink: "helper:setMessage",
+      expression: "error.message || adminLoadCopy.adminDataLoadFallback",
+      flow: "bounded-custom-error-to-admin-status",
+    },
+  }))],
 ]);
 const knownOptionFactoryFunctions = new Map([
   ["app/admin/admin.js::materialTargetOptions", {
@@ -458,6 +472,9 @@ function propertyValue(node, name) {
 }
 
 function extractPath(node, path, basePath = [], output = []) {
+  if (node?.type === "CallExpression" && calleeName(node.callee) === "freeze") {
+    node = node.arguments[0];
+  }
   if (!path.length) {
     staticStringNodes(node, basePath, output);
     return output;
@@ -509,6 +526,20 @@ function visitSources(node, file) {
   if (Array.isArray(node)) {
     node.forEach((child) => visitSources(child, file));
     return;
+  }
+  if (node.type === "ReturnStatement" && node.argument) {
+    const catalogPaths = knownCatalogErrorMessagePaths.get(file.path) || [];
+    const catalogRoot = node.argument.type === "CallExpression" && calleeName(node.argument.callee) === "freeze"
+      ? node.argument.arguments[0]
+      : node.argument;
+    for (const config of catalogPaths) {
+      addSourceNodes(file, extractPath(catalogRoot, config.path), config.role, config.binding, {
+        useStatus: "active",
+        consumerEvidence: ["Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."],
+        consumerTargets: [config.target],
+        classificationHints: ["user-visible-operational-message", "catalog-error-copy-to-admin-status"],
+      });
+    }
   }
   if (node.type === "VariableDeclarator") {
     const name = bindingName(node.id);
