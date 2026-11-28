@@ -121,19 +121,19 @@ const knownErrorFallbackTargets = new Map([
   ["app/app.js::2551", [{ source: "app/app.js", line: 2535, sink: "property:textContent", expression: "\"Não foi possível validar a configuração publicada. O configurador está temporariamente indisponível.\"", relationship: "error-to-fixed-fallback", evidence: "The failure handler logs the TypeError and writes a fixed alert." }]],
   ["app/app.js::2552", [{ source: "app/app.js", line: 2535, sink: "property:textContent", expression: "\"Não foi possível validar a configuração publicada. O configurador está temporariamente indisponível.\"", relationship: "error-to-fixed-fallback", evidence: "The failure handler logs the Error and writes a fixed alert." }]],
   ["app/landing/landing.js::54", [{ source: "app/index.html", line: 48, sink: "text:p", expression: "Imagem temporariamente indisponível.", relationship: "error-to-fixed-fallback", evidence: "The rejected image load reaches the static HTML fallback; the Error text is discarded." }]],
-  ["app/viewer/public-data.js::11", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The catch ignores the Error and appends a fixed viewer alert." }]],
-  ["app/viewer/public-data.js::18", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
-  ["app/viewer/public-data.js::22", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
-  ["app/viewer/public-data.js::25", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
-  ["app/viewer/public-data.js::30", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
-  ["app/viewer/public-data.js::37", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
-  ["app/viewer/public-data.js::40", [{ source: "app/viewer/viewer.js", line: 183, sink: "property:textContent", expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
+  ["app/viewer/public-data.js::11", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The catch ignores the Error and appends a fixed viewer alert." }]],
+  ["app/viewer/public-data.js::18", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
+  ["app/viewer/public-data.js::22", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
+  ["app/viewer/public-data.js::25", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
+  ["app/viewer/public-data.js::30", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
+  ["app/viewer/public-data.js::37", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
+  ["app/viewer/public-data.js::40", [{ source: "app/viewer/viewer.js", line: 191, sink: "property:textContent", expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")", relationship: "error-to-fixed-fallback", evidence: "The load rejection is caught by the viewer start chain; the TypeError text is discarded." }]],
 ]);
 const viewerPublicFailureTarget = {
   source: "app/viewer/viewer.js",
-  line: 183,
+  line: 191,
   sink: "property:textContent",
-  expression: "\"Informações temporariamente indisponíveis. Tente novamente mais tarde.\"",
+  expression: "viewerCopy(\"unavailable\", \"Informações temporariamente indisponíveis. Tente novamente mais tarde.\")",
   relationship: "error-to-fixed-fallback",
   evidence: "The Viewer startup promise catches this failure and renders its fixed alert; neither the exception text nor identifiers are displayed.",
 };
@@ -193,7 +193,7 @@ const knownBoundedServerFailureFlows = new Map([
   }]],
   ...[174, 212, 218, 221, 231, 247, 249, 267, 273, 279, 288, 299, 310].map((line) => [`app/viewer/scene-adapters.js::${line}`, [{
     ...viewerPublicFailureTarget,
-    evidence: `The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:176-184 renders this fixed alert.`,
+    evidence: `The error is thrown while start() creates or mounts the public adapter; start() is the fulfillment callback of the Viewer load promise, whose .catch at viewer.js:183-191 renders this fixed alert.`,
   }]]),
   ["app/access/manage.js::41", [
     { source: "app/access/manage.js", line: 95, sink: "property:textContent", expression: "\"Não foi possível carregar os acessos. Verifique a configuração do serviço.\"", relationship: "error-to-fixed-fallback", evidence: "The refreshGrants catch discards api() errors and writes this fixed status." },
@@ -248,6 +248,82 @@ const knownCustomErrorMessages = new Map([
     evidence: "AdminBootstrapRequestError(code, message) is rethrown by ensureAdminData(); showUser() displays error.message through the fixed Admin status helper.",
   }],
 ]);
+const drawingTargets = {
+  elevation: {
+    source: "app/core/technical-drawings.js", line: 81, sink: "call:setAttribute",
+    expression: `format(copy("elevationAria", "{view}: {axis} {width} milímetros por A {height} milímetros{ending}"), {
+      view: isSide ? copy("side", "Vista lateral") : copy("front", "Vista frontal"),
+      axis: horizontalLabel, width: dimension(horizontalMm), height: dimension(spec.faceHeightMm), ending: ending(amplified)
+    })`,
+    flow: "bounded-catalog-copy-to-technical-drawing",
+  },
+  isometric: {
+    source: "app/core/technical-drawings.js", line: 113, sink: "call:setAttribute",
+    expression: `format(copy("isometricAria", "{prefix}: {axis} {width} milímetros, A {height} milímetros e {depthAxis} {depth} milímetros{ending}"), {
+      prefix: ariaPrefix, axis: spec.faceHorizontalLabel, width: dimension(spec.faceWidthMm),
+      height: dimension(spec.faceHeightMm), depthAxis: spec.extrusionLabel, depth: dimension(spec.extrusionMm), ending: ending(amplified)
+    })`,
+    flow: "bounded-catalog-copy-to-technical-drawing",
+  },
+  internal: {
+    source: "app/core/technical-drawings.js", line: 148, sink: "call:setAttribute",
+    expression: 'ariaLabel || format(copy("internalAria", "Vista interna frontal: {segments}."), { segments: describe })',
+    flow: "bounded-catalog-copy-to-technical-drawing",
+  },
+};
+const knownCatalogSourcePaths = new Map([
+  ["app/core/ui-copy.js", [
+    ...[
+      ["side", ["elevation"]], ["front", ["elevation"]],
+      ["elevationAria", ["elevation"]], ["isometric", ["isometric"]],
+      ["isometricAria", ["isometric"]], ["amplification", ["elevation", "isometric"]],
+      ["internalAria", ["internal"]], ["internalSegment", ["internal"]],
+    ].map(([key, targets]) => ({
+      path: ["technicalDrawings", key], role: "technical-drawing-copy",
+      binding: "uiCopy.technicalDrawings",
+      evidence: key.startsWith("internal")
+        ? "The default internal drawing description is used by the Configurator; Viewer supplies its own ariaLabel. The sink routeConsumers list both routes."
+        : "The shared drawing renderer composes this fixed text into the SVG accessible description used by the Configurator and Viewer; amplification is conditional.",
+      targets: targets.map((name) => drawingTargets[name]),
+    })),
+    ...["components", "requirements"].map((kind) => ({
+      path: ["viewer", "detailHeadings", kind],
+      role: "detail-heading",
+      binding: "uiCopy.viewer.detailHeadings",
+      evidence: "The fixed Viewer heading is selected by the closed detailLayout ID set and rendered by viewer.js through the text-only element helper.",
+      target: {
+        source: "app/viewer/viewer.js",
+        line: 125,
+        sink: "helper:element",
+        expression: "detailHeadingsCopy[descriptor.id]",
+        flow: "bounded-catalog-copy-to-viewer-detail-heading",
+      },
+    })),
+    ...[
+      ["overview", "kicker", "app/viewer/viewer.js", 53, "helper:element", 'viewerText("overview.kicker", "{category} · Módulo {number}")\n      .replace("{category}", () => String(module.category)).replace("{number}", () => String(module.number))'],
+      ["overview", "basePrice", "app/viewer/viewer.js", 72, "helper:element", 'viewerText("overview.basePrice", "Valor base do módulo")'],
+      ["sections", "viewsTitle", "app/viewer/viewer.js", 156, "helper:section", 'viewerText("sections.viewsTitle", "Vistas técnicas")'],
+      ["sections", "viewsDescription", "app/viewer/viewer.js", 156, "helper:section", 'viewerText("sections.viewsDescription", "Desenhos orientativos a partir das dimensões disponíveis.")'],
+      ["sections", "detailsTitle", "app/viewer/viewer.js", 164, "helper:section", 'viewerText("sections.detailsTitle", "Detalhes do módulo")'],
+      ["sections", "detailsDescription", "app/viewer/viewer.js", 164, "helper:section", 'viewerText("sections.detailsDescription", "Informações organizadas para consulta rápida.")'],
+      ...["isometric", "side", "front"].map((key) => ["technical", key, "app/viewer/technical-views.js", 26, "property:textContent", "caption"]),
+      ...["frontsConfirmed", "nominalDrawing"].map((key) => ["technical", key, "app/viewer/technical-views.js", 27, "property:textContent", 'module.frontLayout?.status === "count-confirmed" && !isSide ? copy("frontsConfirmed", "Número de frentes confirmado; proporções internas orientativas.") : copy("nominalDrawing", "Desenho proporcional · cotas nominais.")']),
+      ["technical", "internal", "app/viewer/technical-views.js", 41, "property:textContent", 'copy("internal", "Vista interna")'],
+      ["technical", "internalDescription", "app/viewer/technical-views.js", 42, "property:textContent", 'copy("internalDescription", "Vãos internos confirmados; medidas não representam o envelope externo.")'],
+      ["technical", "focus", "app/viewer/technical-views.js", 48, "property:textContent", 'copy("focus", "Detalhe do módulo")'],
+      ["technical", "focusUnavailable", "app/viewer/technical-views.js", 50, "property:textContent", 'copy("focusUnavailable", "Recorte do módulo indisponível.")'],
+      ["technical", "focusAria", "app/viewer/technical-views.js", 56, "call:setAttribute", 'copy("focusAria", "Recorte isolado de {title}").replace("{title}", () => String(module.title))'],
+      ["technical", "focusDescription", "app/viewer/technical-views.js", 60, "property:textContent", 'copy("focusDescription", "Recorte do módulo selecionado na cena.")'],
+      ...["internalAria", "internalSegment"].map((key) => ["technical", key, "app/core/technical-drawings.js", 148, "call:setAttribute", 'ariaLabel || format(copy("internalAria", "Vista interna frontal: {segments}."), { segments: describe })']),
+    ].map(([group, key, source, line, sink, expression]) => ({
+      path: ["viewer", group, key], role: "fixed-viewer-copy", binding: `uiCopy.viewer.${group}`,
+      evidence: group === "technical" && (key === "internalAria" || key === "internalSegment")
+        ? "Viewer internalView supplies the composed label to CasaTechnicalDrawings.internalFront, which assigns it to its SVG. The sink's routeConsumers describe all routes using the shared sink; this catalog flow is confined to /viewer/."
+        : "Viewer renders the fixed catalog text through the named consumer; dynamic product values remain separate.",
+      target: { source, line, sink, expression, flow: "bounded-catalog-copy-to-viewer" },
+    })),
+  ]],
+]);
 const knownOptionFactoryFunctions = new Map([
   ["app/admin/admin.js::materialTargetOptions", {
     role: "admin-material-target-option-label",
@@ -278,7 +354,6 @@ const textDataSchemas = new Map([
     globalName: "CASA_PUBLIC_VIEWER",
     fields: [
       { path: ["viewTypes", "*", "label"], role: "view-label", use: "passed-but-unused", evidence: ["app/viewer/viewer.js:89 -> render argument; app/viewer/technical-views.js does not render label"] },
-      { path: ["detailLayout", "*", "title"], role: "detail-heading", use: "active", evidence: ["app/viewer/viewer.js:123 -> element text"] },
     ],
   }],
 ]);
@@ -458,6 +533,9 @@ function propertyValue(node, name) {
 }
 
 function extractPath(node, path, basePath = [], output = []) {
+  if (node?.type === "CallExpression" && calleeName(node.callee) === "freeze") {
+    node = node.arguments[0];
+  }
   if (!path.length) {
     staticStringNodes(node, basePath, output);
     return output;
@@ -509,6 +587,26 @@ function visitSources(node, file) {
   if (Array.isArray(node)) {
     node.forEach((child) => visitSources(child, file));
     return;
+  }
+  if (node.type === "ReturnStatement" && node.argument) {
+    const catalogPaths = knownCatalogSourcePaths.get(file.path) || [];
+    const catalogRoot = node.argument.type === "CallExpression" && calleeName(node.argument.callee) === "freeze"
+      ? node.argument.arguments[0]
+      : node.argument;
+    for (const config of catalogPaths) {
+      addSourceNodes(file, extractPath(catalogRoot, config.path), config.role, config.binding, {
+        useStatus: "active",
+        consumerEvidence: [config.evidence],
+        consumerTargets: config.targets || [config.target],
+        classificationHints: config.role === "error-message-source"
+          ? ["user-visible-operational-message", "catalog-error-copy-to-admin-status"]
+          : config.role === "detail-heading"
+            ? ["user-visible-heading", "catalog-copy-to-viewer-detail-heading"]
+            : config.role === "technical-drawing-copy"
+              ? ["accessible-technical-drawing-copy", "catalog-copy-to-shared-renderer"]
+              : ["user-visible-viewer-copy", "catalog-copy-to-viewer"],
+      });
+    }
   }
   if (node.type === "VariableDeclarator") {
     const name = bindingName(node.id);

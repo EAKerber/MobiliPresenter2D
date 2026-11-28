@@ -3,6 +3,11 @@
 
   const SVG_NS = "http://www.w3.org/2000/svg";
   const dimension = (value) => new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 }).format(value);
+  const copy = (key, fallback) => global.CASA_UI_THEME && typeof global.CASA_UI_THEME.getCopy === "function"
+    ? global.CASA_UI_THEME.getCopy("technicalDrawings." + key, fallback) : fallback;
+  const format = (template, values) => template.replace(/\{([A-Za-z]+)\}/g,
+    (match, key) => Object.prototype.hasOwnProperty.call(values, key) ? String(values[key]) : match);
+  const ending = (amplified) => amplified ? copy("amplification", ". A espessura foi ampliada apenas para legibilidade.") : ".";
 
   function fit(width, height, maxWidth = 104, maxHeight = 64) {
     const safeWidth = Math.max(Number(width) || 1, 1);
@@ -73,7 +78,10 @@
     const svg = document.createElementNS(SVG_NS, "svg");
     svg.setAttribute("viewBox", "0 0 180 126");
     svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `${isSide ? "Vista lateral" : "Vista frontal"}: ${horizontalLabel} ${dimension(horizontalMm)} milímetros por A ${dimension(spec.faceHeightMm)} milímetros${amplified ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
+    svg.setAttribute("aria-label", format(copy("elevationAria", "{view}: {axis} {width} milímetros por A {height} milímetros{ending}"), {
+      view: isSide ? copy("side", "Vista lateral") : copy("front", "Vista frontal"),
+      axis: horizontalLabel, width: dimension(horizontalMm), height: dimension(spec.faceHeightMm), ending: ending(amplified)
+    }));
     const make = factory(svg);
     const dimensionClass = classes.dimension || "module-detail__dimension-line";
     const shapeClass = classes.shape || "module-detail__view-shape";
@@ -90,7 +98,7 @@
     return svg;
   }
 
-  function isometric(spec, layout, ariaPrefix = "Projeção isométrica orientativa", classes = {}) {
+  function isometric(spec, layout, ariaPrefix = copy("isometric", "Projeção isométrica orientativa"), classes = {}) {
     const box = fit(spec.faceWidthMm, spec.faceHeightMm, 86, 58);
     const rawDepth = spec.extrusionMm * box.scale * 0.68;
     const amplified = spec.kind === "panel" && rawDepth < 4;
@@ -102,7 +110,10 @@
     const right = left + width, bottom = top + height;
     const svg = document.createElementNS(SVG_NS, "svg");
     svg.setAttribute("viewBox", "0 0 180 126"); svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", `${ariaPrefix}: ${spec.faceHorizontalLabel} ${dimension(spec.faceWidthMm)} milímetros, A ${dimension(spec.faceHeightMm)} milímetros e ${spec.extrusionLabel} ${dimension(spec.extrusionMm)} milímetros${amplified ? ". A espessura foi ampliada apenas para legibilidade." : "."}`);
+    svg.setAttribute("aria-label", format(copy("isometricAria", "{prefix}: {axis} {width} milímetros, A {height} milímetros e {depthAxis} {depth} milímetros{ending}"), {
+      prefix: ariaPrefix, axis: spec.faceHorizontalLabel, width: dimension(spec.faceWidthMm),
+      height: dimension(spec.faceHeightMm), depthAxis: spec.extrusionLabel, depth: dimension(spec.extrusionMm), ending: ending(amplified)
+    }));
     const make = factory(svg);
     const dimensionClass = classes.dimension || "module-detail__dimension-line";
     const shapeClass = classes.shape || "module-detail__view-shape";
@@ -131,8 +142,10 @@
     const svg = document.createElementNS(SVG_NS, "svg");
     svg.setAttribute("viewBox", "0 0 180 126"); svg.setAttribute("role", "img");
     const name = classes.dimension || "module-detail__dimension-line", shape = classes.shape || "module-detail__view-shape";
-    const describe = segments.map((segment) => `${segment.label} ${dimension(segment.spanMm || segment.span)} milímetros`).join(", ");
-    svg.setAttribute("aria-label", ariaLabel || `Vista interna frontal: ${describe}.`);
+    const describe = segments.map((segment) => format(copy("internalSegment", "{label} {size} milímetros"), {
+      label: segment.label, size: dimension(segment.spanMm || segment.span)
+    })).join(", ");
+    svg.setAttribute("aria-label", ariaLabel || format(copy("internalAria", "Vista interna frontal: {segments}."), { segments: describe }));
     const make = factory(svg), { x, y, width, height } = frame;
     make("line", { x1: x, y1: 17, x2: x + width, y2: 17, class: name });
     if (showEndTicks) {

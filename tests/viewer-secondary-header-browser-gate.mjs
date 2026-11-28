@@ -1,11 +1,33 @@
 import assert from "node:assert/strict";
 import {mkdir,writeFile} from "node:fs/promises";
+import {createRequire} from "node:module";
 import { chromium, webkit } from "playwright";
 
+const require=createRequire(import.meta.url);
+const {project}=require("../app/core/public-module-projection.js");
+const catalog=require("../app/data/catalog-data.js");
+const scene=require("../app/data/scene-data.js");
 const ORIGIN="http://127.0.0.1:8123", artifact="artifacts/viewer-secondary-header";
 const widths=[320,390,486,768,1366],themes=["light","dark"];
 await mkdir(artifact,{recursive:true});
 const results=[];
+const moduleIds=catalog.modules.map(module=>module.entityId);
+const finishes=catalog.options.finishes;
+const published={
+ schemaVersion:"ConfiguratorAdministration2D 5.0",revision:1,
+ pricing:{internal:"must-not-leak"},
+ stages:[{id:"modules-test",kind:"modules",enabled:true,groups:[{sections:[{itemIds:moduleIds}]}]}],
+ objects:Object.fromEntries(catalog.modules.map(module=>[module.entityId,{
+   title:module.title,description:"",benefits:[...module.benefits],
+   components:[...module.components],requirements:[...module.requirements]
+ }])),
+ finishes:finishes.map(finish=>({id:finish.id,enabled:finish.status==="published",scope:"global"})),
+ materialGroups:[{id:"fronts-all",materialIds:finishes.map(finish=>finish.id)}],
+ materials:finishes.map(finish=>({id:finish.id,label:finish.publicLabel,kind:"texture",
+   color:finish.color,textureAsset:finish.textureAsset,textureSize:finish.textureSize})),
+ initialState:{entities:Object.fromEntries(moduleIds.map(id=>[id,true])),finishId:"base-light"}
+};
+const viewerFixture=project(published,catalog,scene);
 for(const engine of [chromium,webkit]){
  const browser=await engine.launch({headless:true});
  try{
@@ -15,10 +37,38 @@ for(const engine of [chromium,webkit]){
    await context.addInitScript(mode=>{localStorage.setItem("casa-ui-theme-mode-v1",mode);},theme);
    const page=await context.newPage(),errors=[];
    page.on("pageerror",e=>errors.push(e.message));
-   const r=await page.goto(ORIGIN+"/viewer/",{waitUntil:"domcontentloaded",timeout:30000});
+   await page.route("**/api/public-modules",route=>route.fulfill({
+     status:200,contentType:"application/json",body:JSON.stringify(viewerFixture)
+   }));
+   const r=await page.goto(ORIGIN+"/viewer/?module="+encodeURIComponent(moduleIds[1]),{waitUntil:"domcontentloaded",timeout:30000});
    assert.equal(r?.status(),200);
    await page.waitForSelector("[data-ui-theme-toggle]");
+   await page.locator("#block-details .detail-grid h3").nth(1).waitFor({state:"visible",timeout:12000});
    await page.evaluate(async()=>{await document.fonts?.ready;});
+   const detailHeadingState=await page.evaluate(()=>({
+     rendered:[...document.querySelectorAll("#block-details .detail-grid h3")].map(node=>node.textContent),
+     expected:window.CASA_UI_COPY.viewer.detailHeadings
+   }));
+   assert.deepEqual(detailHeadingState.rendered,[detailHeadingState.expected.components,detailHeadingState.expected.requirements],
+     "Viewer detail headings follow the shared catalog in stable order");
+   const fixedCopy=await page.evaluate(()=>({
+     copy:window.CASA_UI_COPY.viewer,
+     viewsTitle:document.querySelector("#block-views .block-heading h2").textContent,
+     viewsDescription:document.querySelector("#block-views .block-heading p").textContent,
+     detailsTitle:document.querySelector("#block-details .block-heading h2").textContent,
+     detailsDescription:document.querySelector("#block-details .block-heading p").textContent,
+     technicalTitles:[...document.querySelectorAll("#block-views .technical-view h3")].map(node=>node.textContent)
+   }));
+   assert.equal(fixedCopy.viewsTitle,fixedCopy.copy.sections.viewsTitle);
+   assert.equal(fixedCopy.viewsDescription,fixedCopy.copy.sections.viewsDescription);
+   assert.equal(fixedCopy.detailsTitle,fixedCopy.copy.sections.detailsTitle);
+   assert.equal(fixedCopy.detailsDescription,fixedCopy.copy.sections.detailsDescription);
+   assert.ok(fixedCopy.technicalTitles.length>0 && fixedCopy.technicalTitles.every(title=>
+     [fixedCopy.copy.technical.focus,fixedCopy.copy.technical.front,fixedCopy.copy.technical.side,
+       fixedCopy.copy.technical.internal,fixedCopy.copy.technical.isometric].includes(title)),"technical views use fixed catalog labels");
+   const drawingLabels=await page.locator("#block-views .technical-view svg[aria-label]").evaluateAll(nodes=>nodes.map(node=>node.getAttribute("aria-label")));
+   assert.ok(drawingLabels.some(label=>/^(Vista frontal|Vista lateral|Projeção isométrica orientativa): .* milímetros/.test(label)),
+     "the Viewer renders a shared technical drawing with its accessible dimensions");
    const initial=await page.evaluate(()=>{
      const rect=sel=>{
        const r=document.querySelector(sel).getBoundingClientRect();
@@ -107,7 +157,7 @@ for(const engine of [chromium,webkit]){
    await themeButton.click();
    assert.notEqual(await page.locator("html").getAttribute("data-theme-mode"),theme);
    assert.deepEqual(errors,[]);
-   const scenario={engine:engine.name(),width,theme,nav:true,secondary:true,themeInside:true,
+   const scenario={engine:engine.name(),width,theme,nav:true,secondary:true,themeInside:true,detailHeadings:true,
      singleRow:true,keyboard:true,outsideClick:true,errors:0};
    results.push(scenario);
    if(width===320||width===1366){
@@ -117,6 +167,120 @@ for(const engine of [chromium,webkit]){
    console.log("VIEWER_NAV005_SECONDARY_PASS "+JSON.stringify(scenario));
    await context.close();
   }
+  const fallbackContext=await browser.newContext({viewport:{width:390,height:844}});
+  try{
+   const page=await fallbackContext.newPage(),errors=[];
+   const fallbackFixture=structuredClone(viewerFixture);
+   fallbackFixture.modules.find(module=>module.id===moduleIds[1]).title="Módulo $& $1";
+   page.on("pageerror",error=>errors.push(error.message));
+   await page.route("**/core/ui-copy.js*",route=>route.abort());
+   await page.route("**/api/public-modules",route=>route.fulfill({
+     status:200,contentType:"application/json",body:JSON.stringify(fallbackFixture)
+   }));
+   await page.goto(ORIGIN+"/viewer/?module="+encodeURIComponent(moduleIds[1]),{waitUntil:"domcontentloaded"});
+   await page.locator("#block-details .detail-grid h3").nth(1).waitFor({state:"visible",timeout:12000});
+   assert.deepEqual(await page.locator("#block-details .detail-grid h3").allTextContents(),["Componentes","Requisitos"],
+     "Viewer retains both detail headings if the catalog fails to load");
+   assert.equal(await page.locator("#block-views .block-heading h2").textContent(),"Vistas técnicas");
+   assert.equal(await page.locator("#block-details .block-heading h2").textContent(),"Detalhes do módulo");
+   assert.equal(await page.locator("#block-views .technical-view h3").first().textContent(),"Detalhe do módulo");
+   assert.equal(await page.locator("#block-views .technical-view--focus svg").getAttribute("aria-label"),"Recorte isolado de Módulo $& $1",
+     "template expansion preserves literal replacement characters in published product titles");
+   assert.ok((await page.locator("#sceneSelection").textContent()).endsWith("Módulo $& $1"),
+     "scene selection preserves literal replacement characters in published product titles");
+   assert.deepEqual(errors,[],"catalog failure must not interrupt Viewer startup");
+  }finally{await fallbackContext.close();}
+  const sceneContext=await browser.newContext({viewport:{width:1366,height:900},reducedMotion:"reduce"});
+  try{
+   const page=await sceneContext.newPage(),errors=[];
+   page.on("pageerror",error=>errors.push(error.message));
+   const hiddenFixture=structuredClone(viewerFixture);
+   hiddenFixture.publicState.viewerEntities[moduleIds[1]]=false;
+   await page.route("**/api/public-modules",route=>route.fulfill({
+     status:200,contentType:"application/json",body:JSON.stringify(hiddenFixture)
+   }));
+   await page.goto(ORIGIN+"/viewer/",{waitUntil:"domcontentloaded"});
+   const stage=page.locator("#sceneStage"),first=stage.locator(`[data-select-scene-entity="${moduleIds[0]}"]`),
+     hidden=stage.locator(`[data-select-scene-entity="${moduleIds[1]}"]`),
+     next=stage.locator(`[data-select-scene-entity="${moduleIds[2]}"]`);
+   await first.waitFor({state:"visible",timeout:12000});
+   assert.equal(await first.getAttribute("aria-pressed"),"true","initial public selection is reflected in the scene");
+   assert.equal(await hidden.isHidden(),true,"an unpublished module hotspot is hidden");
+   assert.equal(await hidden.isDisabled(),true,"an unpublished module hotspot is disabled");
+   assert.equal(await hidden.getAttribute("tabindex"),"-1","an unpublished module cannot be tabbed to");
+   assert.equal(await hidden.getAttribute("aria-disabled"),"true");
+   const hiddenLayer=stage.locator(`.layer-group[data-entity-id="${moduleIds[1]}"]`);
+   assert.equal(await hiddenLayer.getAttribute("aria-hidden"),"true","hidden hotspot and layer agree");
+   assert.equal(await hiddenLayer.evaluate(node=>node.classList.contains("is-hidden")),true);
+   await first.focus();
+   await page.keyboard.press("ArrowRight");
+   assert.equal(await next.getAttribute("aria-pressed"),"true","keyboard selection skips hidden modules");
+   assert.equal(await first.getAttribute("aria-pressed"),"false");
+   assert.equal(await next.evaluate(node=>node===document.activeElement),true,"selection moves focus to the visible hotspot");
+   await page.keyboard.press("2");
+   assert.equal(await next.getAttribute("aria-pressed"),"true","numeric shortcut cannot select hidden modules");
+   const lifecycle=await page.evaluate(({modules,publicState})=>{
+     const original=document.addEventListener;
+     let keyBindings=0;
+     document.addEventListener=function(type,...args){
+       if(type==="keydown")keyBindings++;
+       return original.call(this,type,...args);
+     };
+     try{
+       const adapter=window.CASA_PUBLIC_SCENE_ADAPTERS.create({publicModules:modules,publicState});
+       const target=document.createElement("div"); target.id="sceneLifecycleProbe";
+       document.body.append(target);
+       adapter.mount(target);
+       adapter.mount(target);
+       let otherTargetRejected=false;
+       try{adapter.mount(document.createElement("div"));}catch(error){otherTargetRejected=true;}
+       const finish=adapter.getFinishes().find(entry=>entry.id!==adapter.getState().finishId);
+       if(!finish)throw Error("fixture needs a second permitted finish");
+       const beforeLayer=target.querySelector('.layer-group[data-entity-id="module-01"] .finish-layer');
+       if(!beforeLayer)throw Error("fixture needs the real masked finish layer");
+       const before={maskAsset:beforeLayer.dataset.maskAsset,mask:beforeLayer.style.getPropertyValue("--mask-image"),
+         color:beforeLayer.style.backgroundColor,image:beforeLayer.style.backgroundImage};
+       const finishAccepted=adapter.setGlobalFinish(finish.id);
+       const afterLayer=target.querySelector('.layer-group[data-entity-id="module-01"] .finish-layer');
+       const after={maskAsset:afterLayer?.dataset.maskAsset,mask:afterLayer?.style.getPropertyValue("--mask-image"),
+         color:afterLayer?.style.backgroundColor,image:afterLayer?.style.backgroundImage};
+       const rejected=adapter.setGlobalFinish("not-published");
+       window.__sceneLifecycleProbe=adapter;
+       return {keyBindings,otherTargetRejected,finishAccepted,finishId:adapter.getState().finishId,
+         expectedFinish:finish.id,selected:adapter.getState().selectedEntityId,
+         pressed:target.querySelector('[aria-pressed="true"]')?.dataset.entityId,
+         frameHidden:target.querySelector(".selection-frame")?.hidden,before,after,rejected,texture:finish.textureAsset};
+     }finally{document.addEventListener=original;}
+   },{modules:hiddenFixture.modules,publicState:hiddenFixture.publicState});
+   assert.equal(lifecycle.keyBindings,1,"same-target remount and finish rerender bind one keyboard listener");
+   assert.equal(lifecycle.otherTargetRejected,true,"mounting one adapter on a different target is rejected");
+   assert.equal(lifecycle.finishAccepted,true);
+   assert.equal(lifecycle.finishId,lifecycle.expectedFinish,"allowed finish survives rerender");
+   assert.equal(lifecycle.pressed,lifecycle.selected,"selection remains reflected after finish rerender");
+   assert.equal(lifecycle.frameHidden,false,"selected frame remains available after finish rerender");
+   assert.equal(lifecycle.rejected,false,"a finish outside the public allowlist is rejected");
+   assert.ok(lifecycle.before.mask && lifecycle.after.mask,"both real finish layers have masks");
+   assert.equal(lifecycle.after.maskAsset,lifecycle.before.maskAsset,"finish change keeps the resolved module mask");
+   assert.equal(lifecycle.after.mask,lifecycle.before.mask,"finish change preserves mask data");
+   assert.notEqual(lifecycle.after.color,lifecycle.before.color,"allowed finish changes the real layer color");
+   assert.ok(lifecycle.after.image.includes(lifecycle.texture),"allowed finish changes the real layer texture");
+   assert.deepEqual(errors,[]);
+  }finally{await sceneContext.close();}
+  const missingAssetContext=await browser.newContext({viewport:{width:390,height:844}});
+  try{
+   const page=await missingAssetContext.newPage(),errors=[];
+   page.on("pageerror",error=>errors.push(error.message));
+   await page.route("**/api/public-modules",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify(viewerFixture)}));
+   await page.route("**/"+scene.baseAsset,route=>route.abort());
+   await page.goto(ORIGIN+"/viewer/",{waitUntil:"domcontentloaded"});
+   const stage=page.locator("#sceneStage"),fallback=stage.locator(".scene-image-fallback");
+   await fallback.waitFor({state:"visible",timeout:12000});
+   assert.equal(await fallback.getAttribute("role"),"alert");
+   assert.equal(await stage.getAttribute("data-scene-image-unavailable"),"true");
+   assert.equal(await stage.locator(".scene-hotspots").isHidden(),true,"failed base image covers the interactive scene");
+   assert.equal(await stage.locator(".selection-frame").isHidden(),true);
+   assert.deepEqual(errors,[]);
+  }finally{await missingAssetContext.close();}
  }finally{await browser.close();}
 }
 await writeFile(artifact+"/report.json",JSON.stringify({schema:"ViewerSecondaryHeaderGate0.1",results},null,2));

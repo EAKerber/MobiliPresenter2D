@@ -1,6 +1,7 @@
 (function () {
   "use strict";
   const data = window.CASA_PUBLIC_VIEWER;
+  const detailHeadingsCopy = { components: "Componentes", requirements: "Requisitos", ...window.CASA_UI_COPY?.viewer?.detailHeadings };
   const root = document.getElementById("viewerLayout");
   const renderers = new Map();
   const search = new URLSearchParams(window.location.search);
@@ -23,7 +24,7 @@
       const empty = document.createElement("p");
       empty.className = "viewer-empty-state";
       empty.setAttribute("role", "status");
-      empty.textContent = "Nenhum módulo está visível no viewer neste momento.";
+      empty.textContent = viewerCopy("empty", "Nenhum módulo está visível no viewer neste momento.");
       root.replaceChildren(empty);
       return;
     }
@@ -49,7 +50,8 @@
 
   function renderOverview(target, module) {
     target.replaceChildren();
-    target.append(element("p", "module-kicker", `${module.category} · Módulo ${module.number}`));
+    target.append(element("p", "module-kicker", viewerText("overview.kicker", "{category} · Módulo {number}")
+      .replace("{category}", () => String(module.category)).replace("{number}", () => String(module.number))));
     target.append(element("h2", "overview-title", module.title));
     if (module.benefits?.length) {
       const highlights = element("ul", "overview-highlights");
@@ -67,7 +69,7 @@
       if (module.dimensionLabel) footer.append(element("p", "dimension-pill", module.dimensionLabel));
       if (basePriceCents !== null) {
         const amount = element("div", "overview-base-price");
-        amount.append(element("span", "overview-base-price__label", "Valor base do módulo"));
+        amount.append(element("span", "overview-base-price__label", viewerText("overview.basePrice", "Valor base do módulo")));
         amount.append(element("strong", "overview-base-price__amount",
           new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(basePriceCents / 100)));
         footer.append(amount);
@@ -89,17 +91,17 @@
       const view = window.CASA_PUBLIC_TECHNICAL_VIEWS.render(module, spec.kind, spec.label, entity, entity && adapter.getAssetUrl(entity.asset), adapter.getSceneCanvas());
       view.classList.toggle("is-current", index === currentView); view.setAttribute("aria-current", String(index === currentView));
       stage.append(view);
-      const dot = element("button"); dot.type = "button"; dot.setAttribute("aria-label", `Mostrar vista ${index + 1}`); dot.setAttribute("aria-current", String(index === currentView));
+      const dot = element("button"); dot.type = "button"; dot.setAttribute("aria-label", viewerViewCopy("show", "Mostrar vista {index}").replace("{index}", String(index + 1))); dot.setAttribute("aria-current", String(index === currentView));
       dot.addEventListener("click", () => { currentView = index; syncViewNavigation(keys.length); }); nav.append(dot);
     });
-    counter.textContent = `${currentView + 1} / ${keys.length}`;
+    counter.textContent = viewerCounter(currentView, keys.length);
     const previous = target.querySelector("[data-view-previous]"); const next = target.querySelector("[data-view-next]");
     stage.style.setProperty("--view-count", String(keys.length));
     previous.disabled = keys.length < 2; next.disabled = keys.length < 2;
     previous.onclick = () => { currentView = (currentView - 1 + keys.length) % keys.length; syncViewNavigation(keys.length); };
     next.onclick = () => { currentView = (currentView + 1) % keys.length; syncViewNavigation(keys.length); };
     function syncViewNavigation(count) {
-      counter.textContent = `${currentView + 1} / ${count}`;
+      counter.textContent = viewerCounter(currentView, count);
       [...nav.children].forEach((dot, index) => dot.setAttribute("aria-current", String(index === currentView)));
       [...stage.children].forEach((view, index) => {
         view.classList.toggle("is-current", index === currentView);
@@ -120,7 +122,7 @@
     sections.forEach((descriptor) => {
       const value = valueFor(module, descriptor.source);
       const panel = element("section", `detail-panel detail-panel--${descriptor.id}`);
-      panel.append(element("h3", "", descriptor.title));
+      panel.append(element("h3", "", detailHeadingsCopy[descriptor.id]));
       const list = element("ul", "detail-list");
       (Array.isArray(value) ? value : [value]).forEach((item) => {
         const row = element("li", "detail-row");
@@ -132,7 +134,11 @@
   }
 
   renderers.set("overview", (module) => renderOverview(root.querySelector("#block-overview"), module));
-  renderers.set("scene", (module) => { root.querySelector("#sceneSelection").textContent = `Selecionado: ${module.number} · ${module.title}`; });
+  renderers.set("scene", (module) => {
+    root.querySelector("#sceneSelection").textContent = viewerSceneCopy("selected", "Selecionado: {number} · {title}")
+      .replace("{number}", () => String(module.number))
+      .replace("{title}", () => String(module.title));
+  });
   renderers.set("views", (module) => renderViews(root.querySelector("#block-views"), module));
   renderers.set("details", (module) => renderDetails(root.querySelector("#block-details"), module));
 
@@ -140,20 +146,22 @@
     if (blockId === "overview") {
       const block = section("overview", "block-overview"); block.setAttribute("aria-live", "polite"); root.append(block);
     } else if (blockId === "scene") {
-      const block = section("scene", "block-scene", "Cena interativa", "Clique em um módulo ou use ←/→ e as teclas 1–7.");
+      const block = section("scene", "block-scene",
+        viewerSceneCopy("heading", "Cena interativa"),
+        viewerSceneCopy("instruction", "Clique em um módulo ou use ←/→ e as teclas 1–7."));
       const stage = element("div", "scene-stage"); stage.id = "sceneStage";
       const caption = element("div", "scene-caption"); caption.id = "sceneSelection";
       block.append(stage, caption); root.append(block); adapter.mount(stage);
     } else if (blockId === "views") {
-      const block = section("views", "block-views", "Vistas técnicas", "Desenhos orientativos a partir das dimensões disponíveis.");
+      const block = section("views", "block-views", viewerText("sections.viewsTitle", "Vistas técnicas"), viewerText("sections.viewsDescription", "Desenhos orientativos a partir das dimensões disponíveis."));
       const controls = element("div", "view-controls");
-      const previous = element("button", "", "←"); previous.type = "button"; previous.dataset.viewPrevious = ""; previous.setAttribute("aria-label", "Vista anterior");
+      const previous = element("button", "", "←"); previous.type = "button"; previous.dataset.viewPrevious = ""; previous.setAttribute("aria-label", viewerViewCopy("previous", "Vista anterior"));
       const counter = element("span", "view-counter", "1 / 1");
-      const next = element("button", "", "→"); next.type = "button"; next.dataset.viewNext = ""; next.setAttribute("aria-label", "Próxima vista");
+      const next = element("button", "", "→"); next.type = "button"; next.dataset.viewNext = ""; next.setAttribute("aria-label", viewerViewCopy("next", "Próxima vista"));
       controls.append(previous, counter, next); block.querySelector(".block-heading").append(controls);
       block.append(element("div", "view-stage"), element("div", "mobile-view-nav")); root.append(block);
     } else if (blockId === "details") {
-      const block = section("details", "block-details", "Detalhes do módulo", "Informações organizadas para consulta rápida.");
+      const block = section("details", "block-details", viewerText("sections.detailsTitle", "Detalhes do módulo"), viewerText("sections.detailsDescription", "Informações organizadas para consulta rápida."));
       block.append(element("div", "detail-grid")); root.append(block);
     }
   });
@@ -170,7 +178,7 @@
   integration.onSelectionChange?.(adapter.getSelection());
   }
   {
-    root.textContent = "Carregando informações publicadas…";
+    root.textContent = viewerCopy("loading", "Carregando informações publicadas…");
     window.CASA_PUBLIC_VIEWER_DATA.load()
       .then((projection) => start(projection))
       .catch(() => {
@@ -180,8 +188,36 @@
         const message = document.createElement("p");
         message.className = "viewer-public-error";
         message.setAttribute("role", "alert");
-        message.textContent = "Informações temporariamente indisponíveis. Tente novamente mais tarde.";
+        message.textContent = viewerCopy("unavailable", "Informações temporariamente indisponíveis. Tente novamente mais tarde.");
         root.append(message);
       });
+  }
+
+  function viewerCopy(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.state." + key, fallback)
+      : fallback;
+  }
+  function viewerText(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function" ? theme.getCopy("viewer." + key, fallback) : fallback;
+  }
+  function viewerViewCopy(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.views." + key, fallback)
+      : fallback;
+  }
+  function viewerCounter(current, total) {
+    return viewerViewCopy("counter", "{current} / {total}")
+      .replace("{current}", String(current + 1))
+      .replace("{total}", String(total));
+  }
+  function viewerSceneCopy(key, fallback) {
+    const theme = window.CASA_UI_THEME;
+    return theme && typeof theme.getCopy === "function"
+      ? theme.getCopy("viewer.scene." + key, fallback)
+      : fallback;
   }
 })();
