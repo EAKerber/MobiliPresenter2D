@@ -1,6 +1,7 @@
 (function () {
   "use strict";
   const data = window.CASA_PUBLIC_VIEWER;
+  const detailHeadingsCopy = window.CASA_UI_COPY.viewer.detailHeadings;
   const root = document.getElementById("viewerLayout");
   const renderers = new Map();
   const search = new URLSearchParams(window.location.search);
@@ -120,7 +121,7 @@
     sections.forEach((descriptor) => {
       const value = valueFor(module, descriptor.source);
       const panel = element("section", `detail-panel detail-panel--${descriptor.id}`);
-      panel.append(element("h3", "", descriptor.title));
+      panel.append(element("h3", "", detailHeadingsCopy[descriptor.id]));
       const list = element("ul", "detail-list");
       (Array.isArray(value) ? value : [value]).forEach((item) => {
         const row = element("li", "detail-row");

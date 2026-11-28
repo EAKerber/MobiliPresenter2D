@@ -2220,6 +2220,11 @@
           "source": "Product development ARC-13 inventory at exact HEAD after PR #567",
           "sha": "0b75ae1de5ef1ef2bf0fb27ccf651f0c363c0841",
           "detail": "Exact Product development HEAD 0b75ae1de5ef1ef2bf0fb27ccf651f0c363c0841 contains inventory blob aa6e558049747f245b0306ea8a08d3d2c3524a5c, SHA-256 f58c2e6c3ee9bb76bb9018c0229ac57c92427bd7a561caf8963f4e5dc8310c8f. PR #567 exact-head ARC-13 gate passed; schema v4, candidate-unreviewed, 561 HTML occurrences, 454 JS sink sites, 267 JS text-source records, 1,015 unreviewed occurrences, 0 parse errors, 68 source files, 420 mapped primary-page occurrences, 0 unresolved mappings. ARC-13 sink-links are now 0 after cataloging compact stage labels (previously 4); the scanner does not resolve uiCopy-key-to-CSS-data-attribute flow. Treat this as missing provenance coverage, not evidence of no consumer; keep inventory reconciliation partial."
+        },
+        {
+          "source": "Product development ARC-13 inventory at exact HEAD after PR #568",
+          "sha": "4078994eda22f2266c0f879d9394f578c6d537f3",
+          "detail": "Exact Product development HEAD 4078994eda22f2266c0f879d9394f578c6d537f3 contains inventory blob aa56038564c2e285bcecbfde9efb556f8d6937b9, SHA-256 9ac179005aeadf830539333f1cf5d2bebaff0ba981453e7c50456395d16c882b. ARC-13 schema v4 remains candidate-unreviewed: 561 HTML occurrences, 454 JS sinks, 266 JS text-source records, 1,015 unreviewed occurrences, 0 parse errors, 68 source files, 420 mapped primary-page occurrences and 0 unresolved mappings. The five Admin bootstrap failure strings now have five exact source-to-status-sink links; this is provenance, not a semantic review of all candidates."
         }
       ],
       "nextAction": "Reconcile the exact current main and development ARC-13 snapshots by stable source/consumer identity; do not transfer positional IDs or infer review from generated classifications. Preserve unreviewed status until owner, authority, sink and consumer are resolved. Specifically close the scoped uiCopy-to-consumer provenance gaps before claiming end-to-end sink linkage."
@@ -2521,7 +2526,7 @@
           "detail": "Four fixed compact configurator stage labels now use uiCopy.configurator.stageNavigation.compactLabels; exact visible/full stage labels, full accessible names, configured custom-stage labels, responsive behavior and pricing/data behavior remain unchanged. Catalog, runtime, source contract and browser checks cover the four compact values. Exact head 9f58b6d3cfd34dc4ffdccc5ffc82d15b5e284e1a passed 14 applicable GitHub checks; Supabase Preview was skipped because branch previews are disabled. Local core test, primary-page compiler, ARC03C source-authority (6/6), UI theme contract, ARC-13 line-ending tests (3/3), syntax and diff checks passed. ARC-13 regenerated twice deterministically: 267 JS text-source records, 1,015 unreviewed occurrences, 454 sinks, 0 parse errors, 0 unresolved mappings; sink-links changed from 4 to 0 because ARC-13 does not follow uiCopy keys to the CSS data attribute. This is a provenance coverage gap, not a zero-consumer result. Squash-integrated into development at this SHA/tree 56135b96d2543edb7f1062462cd4d6b16f3011a2; main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691. LOC-006 remains partial."
         }
       ],
-      "nextAction": "Continue with the five fixed Admin bootstrap failure messages (six literal sites) in app/core/admin-bootstrap-retry.mjs. Add focused coverage for message/code pairs, terminal 403 and unchanged retry behavior. Before moving literals, preserve their ARC-13 consumer links with a narrowly scoped scanner rule or exact source-to-consumer receipt; 0 generated links must not be read as no consumer. Keep LOC-006 partial."
+      "nextAction": "The five fixed Admin bootstrap failure messages have been migrated and their exact Admin sink links are now inventoried. The active LOC-006 candidate moves only the Viewer's fixed 'Componentes' and 'Requisitos' detail headings to uiCopy.viewer.detailHeadings, preserving descriptor IDs/order, visibility, module data and rendered wording. Verify the exact PR head with the existing Viewer browser gate and ARC-13 source-link checks; record the merge evidence before choosing another bounded family. Keep LOC-006 partial."
     },
     {
       "order": 107,
@@ -2873,13 +2878,13 @@
     "blobSha": "59bb530b14172eb9772b9f89bb62272173f4381c"
   },
   "baselineReadback": {
-    "capturedAt": "2026-11-28T02:08:00Z",
+    "capturedAt": "2026-11-28T03:02:06Z",
     "productMainSha": "ecaa38cf0be54e8d586458a86d1062b90c0b9691",
-    "productDevelopmentSha": "0b75ae1de5ef1ef2bf0fb27ccf651f0c363c0841",
+    "productDevelopmentSha": "4078994eda22f2266c0f879d9394f578c6d537f3",
     "designSystemMainSha": "a405dff0b77ec3780cd8bcfb313dbad76e9be461",
     "productMainTree": "45dafef8c70e8421a360a044b71ee96b03737f8a",
-    "productDevelopmentTree": "56135b96d2543edb7f1062462cd4d6b16f3011a2",
+    "productDevelopmentTree": "9a6f4ab569fdb6ed2af7903c2feab01981bf6e63",
     "designSystemMainTree": "d0daa64675d7ce9a1792944809dfd866a63ebc0e",
-    "meaning": "Live readback after PR #567: Product main remains ecaa38c/tree 45dafef; development is 0b75ae1/tree 56135b9; Design System main remains a405dff/tree d0daa64 and development returned 404 at the previous independent read. GitHub compare uses merge base 221b54b2: development is 687 commits ahead and main is 46 ahead. Product open-PR list was empty; Product had 8 branches after cleanup run #46096513204, and Design System had 6 branches at readback. Whole-tree integration remains unsuitable; promote validated families selectively. Product main remains unchanged."
+    "meaning": "Live GitHub readback after PR #568: Product main remains ecaa38cf0be54e8d586458a86d1062b90c0b9691/tree 45dafef8c70e8421a360a044b71ee96b03737f8a; development is 4078994eda22f2266c0f879d9394f578c6d537f3/tree 9a6f4ab569fdb6ed2af7903c2feab01981bf6e63. Design System main is a405dff0b77ec3780cd8bcfb313dbad76e9be461/tree d0daa64675d7ce9a1792944809dfd866a63ebc0e. Compare base is 221b54b2: development 688 commits ahead and main 46 ahead. Product main remains unchanged; promote validated families selectively."
   }
 }

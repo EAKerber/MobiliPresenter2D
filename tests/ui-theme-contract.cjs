@@ -26,6 +26,18 @@ assert.deepEqual(JSON.parse(JSON.stringify(copy.navigation.menu)), {
 });
 assert.equal(copy.navigation.logout, "Sair");
 assert.equal(copy.navigation.logoutFailure, "Não foi possível encerrar o acesso. Verifique a conexão e tente novamente.");
+assert.deepEqual(JSON.parse(JSON.stringify(copy.viewer.detailHeadings)), {
+  components: "Componentes",
+  requirements: "Requisitos"
+});
+const viewerDetailData = read("app/viewer/data.js");
+const viewerDetailRenderer = read("app/viewer/viewer.js");
+assert(viewerDetailData.includes('{ id: "components", source: "components"')
+  && viewerDetailData.includes('{ id: "requirements", source: "requirements"')
+  && !viewerDetailData.includes('title: "Componentes"')
+  && !viewerDetailData.includes('title: "Requisitos"'), "Viewer detail layout keeps data sources and IDs separate from catalog copy");
+assert(viewerDetailRenderer.includes("detailHeadingsCopy[descriptor.id]")
+  && !viewerDetailRenderer.includes("descriptor.title"), "Viewer renders detail headings from the shared catalog");
 assert.deepEqual(JSON.parse(JSON.stringify(copy.admin.loadState.bootstrapFailures)), {
   network: "Não foi possível conectar à administração. Tente novamente.",
   unauthorized: "Sessão ainda não confirmada. Verifique o acesso e tente novamente.",
@@ -252,7 +264,7 @@ for (const file of shells) {
   const copyVersion = ["app/index.html", "app/about/index.html", "app/how-it-works/index.html"].includes(file)
     ? "arc13-loc004-comparison-copy-1"
     : file === "app/viewer/index.html"
-      ? "arc13-loc005-scene-interaction-1"
+      ? "arc13-loc006-viewer-detail-headings-1"
     : ["app/access/index.html", "app/access/manage.html", "app/config/index.html", "app/admin.html"].includes(file)
       ? "arc13-loc006-config-mini-scene-labels-1"
     : "arc13-loc003-copy-1";

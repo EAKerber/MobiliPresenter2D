@@ -8,11 +8,14 @@ on:
       - 'tools/development_nav005_semantic_audit.py'
       - 'tests/ui-theme-contract.cjs'
       - 'tests/viewer-secondary-header-browser-gate.mjs'
+      - 'app/core/ui-copy.js'
+      - 'app/viewer/data.js'
+      - 'app/viewer/viewer.js'
+      - '.github/workflows/development-viewer-nav005-semantic.yml'
       - 'app/viewer/index.html'
       - 'app/viewer/viewer.css'
       - 'app/core/ui-theme.js'
       - 'architecture/fragments/primary-header.routes.json'
-      - '.github/workflows/development-viewer-nav005-semantic.yml'
   push:
     branches:
       - development
@@ -20,11 +23,14 @@ on:
       - 'tools/development_nav005_semantic_audit.py'
       - 'tests/ui-theme-contract.cjs'
       - 'tests/viewer-secondary-header-browser-gate.mjs'
+      - 'app/core/ui-copy.js'
+      - 'app/viewer/data.js'
+      - 'app/viewer/viewer.js'
+      - '.github/workflows/development-viewer-nav005-semantic.yml'
       - 'app/viewer/index.html'
       - 'app/viewer/viewer.css'
       - 'app/core/ui-theme.js'
       - 'architecture/fragments/primary-header.routes.json'
-      - '.github/workflows/development-viewer-nav005-semantic.yml'
   workflow_dispatch:
 
 permissions:
@@ -70,7 +76,7 @@ jobs:
           curl --fail http://127.0.0.1:8123/ >/dev/null
           curl --fail http://127.0.0.1:8123/about/ >/dev/null
           curl --fail http://127.0.0.1:8123/how-it-works/ >/dev/null
-      - name: Depth-2 Viewer geometry, links, theme and keyboard contract (20 cases)
+      - name: Depth-2 Viewer headings, geometry, links, theme and keyboard contract (20 cases)
         run: node tests/viewer-secondary-header-browser-gate.mjs
       - uses: actions/upload-artifact@v4
         if: always()
