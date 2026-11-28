@@ -333,6 +333,8 @@
         lastHandleAvailabilityValidation: "Mantenha pelo menos um puxador disponível.",
         availableCountSuffix: "disponível(is)",
         selectedCountSuffix: "selecionado(s)",
+        createPrompt: "Nome da nova cor ou textura",
+        createDefault: "Novo material",
         baseColor: "Cor base",
         noColor: "Sem cor/tinta base",
         colorDisabledReason: "Cor base indisponível enquanto “Sem cor/tinta base” estiver marcado.",

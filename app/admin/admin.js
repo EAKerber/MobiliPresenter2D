@@ -1581,7 +1581,7 @@ byId("addStageButton").addEventListener("click", () => {
   renderStages();
 });
 byId("addMaterialButton").addEventListener("click", () => {
-  const label = window.prompt("Nome da nova cor ou textura", "Novo material"); if (!label?.trim()) return;
+  const label = window.prompt(materialAvailabilityCopy.createPrompt, materialAvailabilityCopy.createDefault); if (!label?.trim()) return;
   let id = label.trim().toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 32) || "material";
   const base = id; let suffix = 2; while (model.materials.some((item) => item.id === id)) id = `${base}-${suffix++}`;
   const material = { id, label: label.trim().slice(0, 60), kind: "color", color: "#cbbcaa", textureAsset: "", textureSize: "cover", groupIds: ["fronts-all"], locked: false };
