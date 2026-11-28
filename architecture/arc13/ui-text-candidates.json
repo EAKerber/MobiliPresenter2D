@@ -100,8 +100,8 @@
     "javascriptTextSourceRecordsUnconsumed": 2,
     "javascriptTextSourceRecordsNeedsFlowReview": 32,
     "javascriptTextSourceRecordsDiagnostic": 37,
-    "javascriptTextSourceRecordsWithSinkLinks": 34,
-    "javascriptTextSourceSinkLinks": 35,
+    "javascriptTextSourceRecordsWithSinkLinks": 29,
+    "javascriptTextSourceSinkLinks": 30,
     "javascriptTextSourceRecordsWithFailureFallbacks": 18,
     "javascriptTextSourceFailureFallbackLinks": 19,
     "javascriptTextSourceRoles": {
@@ -321,7 +321,7 @@
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1705,
+      "line": 1711,
       "column": 30,
       "kind": "javascript-excluded-sink",
       "sink": "call:createTextNode",
@@ -330,11 +330,11 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1745,
+      "line": 1751,
       "column": 5,
       "kind": "javascript-excluded-sink",
       "sink": "helper:setMessage",
@@ -343,7 +343,7 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385"
     },
     {
       "source": "app/app.js",
@@ -4373,7 +4373,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "7b0753494b736d68"
     },
     {
@@ -4398,7 +4398,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "bbf5c710a80c36d6"
     },
     {
@@ -4423,7 +4423,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "9edcbc09de57dabf"
     },
     {
@@ -4448,7 +4448,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "a3b6222b2b967ccd"
     },
     {
@@ -4473,7 +4473,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "34b357f4b8b82539"
     },
     {
@@ -4498,7 +4498,7 @@
       "classificationHints": [
         "non-translatable-reference"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "ff6bef0e24842a23"
     },
     {
@@ -4523,7 +4523,7 @@
       "classificationHints": [
         "accessibility-text"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "42744b3303a51cf3"
     },
     {
@@ -4548,7 +4548,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "51446131d3e37d56"
     },
     {
@@ -4573,7 +4573,7 @@
       "classificationHints": [
         "non-translatable-reference"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "31841ccf46a2a89c"
     },
     {
@@ -4598,7 +4598,7 @@
       "classificationHints": [
         "non-translatable-reference"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "fe36632025cec163"
     },
     {
@@ -4623,7 +4623,7 @@
       "classificationHints": [
         "non-translatable-reference"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "622833e234728bb4"
     },
     {
@@ -4648,7 +4648,7 @@
       "classificationHints": [
         "non-translatable-reference"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "856d910364d6c4b6"
     },
     {
@@ -4673,7 +4673,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "104918f03244c8c7"
     },
     {
@@ -4698,7 +4698,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "58c1e4517b3c3aa5"
     },
     {
@@ -4723,7 +4723,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "5e341181d884abbd"
     },
     {
@@ -4748,7 +4748,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "c73f155ce1e7f142"
     },
     {
@@ -4773,7 +4773,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "80de0da5a8521d07"
     },
     {
@@ -4798,7 +4798,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "2e2482d5b0686127"
     },
     {
@@ -4823,7 +4823,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "24535a736a4cab10"
     },
     {
@@ -4848,7 +4848,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "4cf6c2327e81548e"
     },
     {
@@ -4873,7 +4873,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "ea3897ccde9d69d2"
     },
     {
@@ -4898,7 +4898,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "19d6a232ead1df24"
     },
     {
@@ -4923,7 +4923,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "35f0c4b0a3e0819a"
     },
     {
@@ -4948,7 +4948,7 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "29749c7f0e088003"
     },
     {
@@ -4973,12 +4973,12 @@
       "classificationHints": [
         "visible-or-accessible-ui"
       ],
-      "sourceSha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499",
+      "sourceSha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97",
       "id": "d0fb41b279381af0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 46,
+      "line": 52,
       "column": 1,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -4995,12 +4995,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "632a01e2e2df2577"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "9f321dfbea64a9f8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 49,
+      "line": 55,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5019,12 +5019,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "56fad784f5a1323b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0495bbbcd7357a26"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 86,
+      "line": 92,
       "column": 52,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5041,12 +5041,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "c4c0b396d1c8ea01"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "22fd56f265a126bc"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 96,
+      "line": 102,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5063,12 +5063,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "be541d01761fecfc"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5b5cfbec764f28aa"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 101,
+      "line": 107,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -5085,12 +5085,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "7193311c662fba06"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "3cf1c9a93d603a6b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 106,
+      "line": 112,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -5107,12 +5107,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "87041cc12698739b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "af38cc9abed15b6c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 111,
+      "line": 117,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5129,12 +5129,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6a575d2154853fda"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e46c10852e86aa39"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 116,
+      "line": 122,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5151,12 +5151,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "475c03bc956a82d8"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "264aec5944d667e9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 146,
+      "line": 152,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5173,12 +5173,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9a4759ce8658c7b2"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f66d7959a31c1518"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 156,
+      "line": 162,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -5195,12 +5195,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "0d306c7b44c17c1a"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "645f66d5e26cee9b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 157,
+      "line": 163,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -5217,12 +5217,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b9c2501920e0f396"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "13db9eddcd68461c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 158,
+      "line": 164,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5239,12 +5239,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6794e7b1f641ca7c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c1ab71873a2abb31"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 227,
+      "line": 233,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -5262,12 +5262,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b8966f126a330021"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "d1e52b733afa30fa"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 231,
+      "line": 237,
       "column": 23,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -5284,21 +5284,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e66e8f2a4e600397"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "dcda24dc17164439"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 293,
+      "line": 299,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "initialStateCopy.entityVisibilityAriaLabel.replace(\"{item}\", item.label)",
+      "expression": "formatAdminCopy(initialStateCopy.entityVisibilityAriaLabel, { item: item.label })",
       "value": null,
-      "literalSegments": [
-        "{item}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -5309,12 +5307,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "19379b06bbb0be70"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "70ed4d3f09ae9991"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 296,
+      "line": 302,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5331,21 +5329,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f0fb8adf7afbce46"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e68313d04e805ed5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 303,
+      "line": 309,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "initialStateCopy.viewerVisibilityAriaLabel.replace(\"{item}\", item.label)",
+      "expression": "formatAdminCopy(initialStateCopy.viewerVisibilityAriaLabel, { item: item.label })",
       "value": null,
-      "literalSegments": [
-        "{item}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -5356,12 +5352,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b651184d134184bf"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e2dd22fdbb5bb6f4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 306,
+      "line": 312,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5378,21 +5374,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6b92623beba3f581"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ca252470a14f642c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 315,
+      "line": 321,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "initialStateCopy.serviceActiveAriaLabel.replace(\"{item}\", item.label)",
+      "expression": "formatAdminCopy(initialStateCopy.serviceActiveAriaLabel, { item: item.label })",
       "value": null,
-      "literalSegments": [
-        "{item}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -5403,12 +5397,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6e2ced568d09323e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "037323258c254a35"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 318,
+      "line": 324,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5425,12 +5419,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "aef1fe9cb762db6d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ea909178122b79f8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 329,
+      "line": 335,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5447,12 +5441,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "674d40243d6e5e25"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "13228e547f85bda3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 333,
+      "line": 339,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5469,12 +5463,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "961cec24b578ecad"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f662ebb32d381e0b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 339,
+      "line": 345,
       "column": 23,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5491,22 +5485,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "c8bc7c6f8efb7718"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "737bc1b5cb45afdf"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 348,
+      "line": 354,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "nominalDimensionsCopy.axisAriaLabel.replace(\"{module}\", () => label).replace(\"{axis}\", () => axisLabel)",
+      "expression": "formatAdminCopy(nominalDimensionsCopy.axisAriaLabel, { module: label, axis: axisLabel })",
       "value": null,
-      "literalSegments": [
-        "{module}",
-        "{axis}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -5516,12 +5507,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "d0b849ba8f73bb35"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ea789e2a7d62b035"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 360,
+      "line": 366,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5541,12 +5532,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "8f7419f6e518457c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "1edd6f3b51b4567d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 361,
+      "line": 367,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -5565,12 +5556,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "fce2bd60855c9fbc"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "3d66ab842b6fd153"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 362,
+      "line": 368,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -5587,12 +5578,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e58c74d1cf339cc8"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a0c64b1b2ec74d34"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 367,
+      "line": 373,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5612,12 +5603,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "7179f43179c666c7"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "000ced9bad7b8bdc"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 368,
+      "line": 374,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -5636,12 +5627,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "bae1ea0c7a501a03"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5d93a68100052390"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 369,
+      "line": 375,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -5658,12 +5649,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "2c4ec9ee537a2e15"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "d54b492d9dbef6ab"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 432,
+      "line": 438,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5682,12 +5673,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "1e86f3f497aa5e54"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a638a757036e15b0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 436,
+      "line": 442,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5704,12 +5695,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6f56a5cea984c109"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8ff14a3805f1ee4f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 447,
+      "line": 453,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5726,12 +5717,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "fc4979ff848e46c4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2f3f56759f99a403"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 450,
+      "line": 456,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5748,12 +5739,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "23ae9ea928295a27"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "1987e873dd2c4e70"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 468,
+      "line": 474,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5771,12 +5762,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "71b5e17586ae9a9c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "1c42e1d3315b82bd"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 484,
+      "line": 490,
       "column": 20,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5793,12 +5784,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "603ee751f841574d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2265a1c97db62d91"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 491,
+      "line": 497,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5815,12 +5806,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "afce6596ad2cd7f7"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "011b19e4f06730a0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 504,
+      "line": 510,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5837,12 +5828,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "06499aa0fd78c35a"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "702c40498072e25d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 514,
+      "line": 520,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5859,12 +5850,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a97a51a9579669a3"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ef62d8688317ae7c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 530,
+      "line": 536,
       "column": 15,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5881,12 +5872,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "139755a6fb667a54"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f9793be793ee7981"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 540,
+      "line": 546,
       "column": 23,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5903,12 +5894,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9fdee7ed7513cab6"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a7b39d9ccc90a9b5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 546,
+      "line": 552,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5925,12 +5916,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "55c7ca7df7aede3e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "25003b65625b4ef0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 565,
+      "line": 571,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -5947,12 +5938,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4b087b14a30dd72b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "1354794989257142"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 571,
+      "line": 577,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5969,12 +5960,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "460db6b8248177e3"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "231efa4b27ff474e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 590,
+      "line": 596,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -5991,12 +5982,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6ab47e000da2a1ae"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "751851fdd0d29f01"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 597,
+      "line": 603,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6013,12 +6004,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "1d4a3316f4c72c92"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "9a5b45eaf5794427"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 614,
+      "line": 620,
       "column": 15,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6035,12 +6026,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "51f7b9a763c25a63"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "efd72562ebb3c91f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 624,
+      "line": 630,
       "column": 15,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6057,12 +6048,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "52d2f8177ccc6c6d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f96b377a29f05940"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 630,
+      "line": 636,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6079,12 +6070,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9e25907ee4cc25e0"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b4f439dbf3d61335"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 655,
+      "line": 661,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6101,12 +6092,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "fa8b187461b45d76"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5fc9a67c51f3e6b9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 663,
+      "line": 669,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6123,12 +6114,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f5e425f6104fa9be"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "40ee45fa413b3124"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 677,
+      "line": 683,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6145,12 +6136,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "80ef6ecdf6dbf037"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b080132e8ddc230a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 679,
+      "line": 685,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6167,12 +6158,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "aeac83e917ff99c3"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "659b9e1af81648a3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 682,
+      "line": 688,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6189,12 +6180,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "d74d316b761a85f4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2a6f31bc42970aad"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 690,
+      "line": 696,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6212,12 +6203,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4f618f8aae63908f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "64a0121e1050398c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 696,
+      "line": 702,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6234,12 +6225,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f22b3c5aebe2c37f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "87df394bc356e048"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 702,
+      "line": 708,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6256,12 +6247,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "80591d89ff2cffaa"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b62a58021f8cd361"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 711,
+      "line": 717,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6278,12 +6269,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "42854910adfbe3d4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5bb1619386097152"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 726,
+      "line": 732,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6302,12 +6293,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "c26c554aa60935a5"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "568567b4a7afc549"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 730,
+      "line": 736,
       "column": 22,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6324,12 +6315,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a156b5a4703fd9d9"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c10eb14f88ea3630"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 736,
+      "line": 742,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6349,12 +6340,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "da88f5f6d3d4ce59"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "73e1888e34ae9d48"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 760,
+      "line": 766,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6371,12 +6362,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e7970f74c02bd201"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6b18e9ffc1f29153"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 763,
+      "line": 769,
       "column": 44,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6395,21 +6386,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e2be5a666d71bcf1"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ae62c2806aa1ce7c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 773,
+      "line": 779,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "stageAvailabilityCopy.availabilityAriaLabel.replace(\"{stage}\", stage.label)",
+      "expression": "formatAdminCopy(stageAvailabilityCopy.availabilityAriaLabel, { stage: stage.label })",
       "value": null,
-      "literalSegments": [
-        "{stage}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -6420,12 +6409,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "1efe162d7c1ecfd4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "15e4069c16da8a83"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 774,
+      "line": 780,
       "column": 50,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6444,12 +6433,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "0f525bac6407c203"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0f18a2fbe2836236"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 775,
+      "line": 781,
       "column": 39,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6467,12 +6456,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "d99ddbcd07101373"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6e63e3e505c9f651"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 784,
+      "line": 790,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6489,12 +6478,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4091366469bbc8b4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "37081939f4349b6e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 795,
+      "line": 801,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6511,12 +6500,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "dcd0804670d09671"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "90ff0170580050a0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 803,
+      "line": 809,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6533,12 +6522,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b96421301086478f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ac9ff692c478f1c4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 805,
+      "line": 811,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6555,12 +6544,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "11d3be2731c1232e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a9e4b191958b9a8a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 808,
+      "line": 814,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6577,12 +6566,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "91581e4a0ccd82ff"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "9483ec39934ffe35"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 814,
+      "line": 820,
       "column": 16,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6599,12 +6588,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "5b01352709f032cc"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "87a385154aa652d5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 851,
+      "line": 857,
       "column": 84,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6622,12 +6611,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4479c68ca5b61c99"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "83c3afdbad5d6e73"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 866,
+      "line": 872,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6644,12 +6633,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "cd5f8aceef655507"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "22a3bbbf052e3fc0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 876,
+      "line": 882,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6666,12 +6655,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "bdc470fcbd103320"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e37c57d14eed3e68"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 878,
+      "line": 884,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6692,21 +6681,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "15b89a74c69bfb1f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "9f886dd6cb3afd53"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 890,
+      "line": 896,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
       "attribute": "text-content",
-      "expression": "objectAssetsCopy.heading.replace(\"{item}\", label)",
+      "expression": "formatAdminCopy(objectAssetsCopy.heading, { item: label })",
       "value": null,
-      "literalSegments": [
-        "{item}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -6716,12 +6703,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "72cb20bd7e1a699e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c65cfb04ca7d2863"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 896,
+      "line": 902,
       "column": 109,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6738,12 +6725,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "13a93a4f997f7c66"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "282f542a51ab38bc"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 898,
+      "line": 904,
       "column": 71,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6760,12 +6747,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9bf2c07517227c9e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "213ba6869731ac02"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 899,
+      "line": 905,
       "column": 103,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6782,12 +6769,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "d874cbfecbc35667"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a0deeeee5fb29260"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 901,
+      "line": 907,
       "column": 26,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6806,22 +6793,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "437cc36c8466127f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ec6c771fff37ccde"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 906,
+      "line": 912,
       "column": 77,
       "kind": "javascript-sink",
       "sink": "property:alt",
       "attribute": "alt",
-      "expression": "objectAssetsCopy.previewAlt.replace(\"{asset}\", title).replace(\"{item}\", label)",
+      "expression": "formatAdminCopy(objectAssetsCopy.previewAlt, { asset: title, item: label })",
       "value": null,
-      "literalSegments": [
-        "{asset}",
-        "{item}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -6831,12 +6815,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "05110392b76abe07"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "03ff8f208be451ae"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 907,
+      "line": 913,
       "column": 47,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6853,12 +6837,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "2bf4fcff13166ef8"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6a3f393318ca1f9c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 908,
+      "line": 914,
       "column": 60,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6875,12 +6859,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "63f7bd5af0b4ea48"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "fc13ed32ca8b64ba"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 912,
+      "line": 918,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6898,12 +6882,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f30c61daabad3d71"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "9b33babb6ef4a368"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 928,
+      "line": 934,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -6920,21 +6904,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e1fb32565287e181"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "025446b5987c545a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 942,
+      "line": 948,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "finishAvailabilityCopy.customerAvailabilityAriaLabel.replace(\"{finish}\", source.label)",
+      "expression": "formatAdminCopy(finishAvailabilityCopy.customerAvailabilityAriaLabel, { finish: source.label })",
       "value": null,
-      "literalSegments": [
-        "{finish}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -6944,12 +6926,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "708b4932cd645646"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "91b3c4b7b2b34eed"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 943,
+      "line": 949,
       "column": 27,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -6968,12 +6950,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "962317f2b015200d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6cd0e5c8dc1dd944"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 944,
+      "line": 950,
       "column": 28,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -6990,12 +6972,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "eacf3c65f1d65bd9"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "737c5bb6e89fdb81"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 947,
+      "line": 953,
       "column": 23,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7012,21 +6994,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "aa484ec60fa4f995"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b0a7088615c9c48a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 950,
+      "line": 956,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "finishAvailabilityCopy.scopeAriaLabel.replace(\"{finish}\", source.label)",
+      "expression": "formatAdminCopy(finishAvailabilityCopy.scopeAriaLabel, { finish: source.label })",
       "value": null,
-      "literalSegments": [
-        "{finish}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -7036,12 +7016,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "dc380f81c5df4a2f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "aa8e47fe2d52b482"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 953,
+      "line": 959,
       "column": 78,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7058,12 +7038,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e074767425083854"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f53e8dc8edfc73c6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 956,
+      "line": 962,
       "column": 25,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7082,12 +7062,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "0fb03d31121fedb9"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "63b02153a49c8cfa"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 964,
+      "line": 970,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7104,21 +7084,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e6471b884bd5de63"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a66549f1a91b8c54"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 970,
+      "line": 976,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "finishAvailabilityCopy.moduleOptionsAriaLabel.replace(\"{finish}\", source.label)",
+      "expression": "formatAdminCopy(finishAvailabilityCopy.moduleOptionsAriaLabel, { finish: source.label })",
       "value": null,
-      "literalSegments": [
-        "{finish}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -7128,22 +7106,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a57a47fed3224b97"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "7665dd90df7d9788"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 980,
+      "line": 986,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "finishAvailabilityCopy.moduleAvailabilityAriaLabel\n          .replace(\"{finish}\", source.label).replace(\"{module}\", module.referenceLabel)",
+      "expression": "formatAdminCopy(finishAvailabilityCopy.moduleAvailabilityAriaLabel,\n          { finish: source.label, module: module.referenceLabel })",
       "value": null,
-      "literalSegments": [
-        "{finish}",
-        "{module}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -7154,12 +7129,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "51bd7b8fbe36d753"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "aa4c8a67e00ddd84"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 982,
+      "line": 988,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7179,12 +7154,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "53d42bc1b6660c4d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8aa9eb21970465e3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 983,
+      "line": 989,
       "column": 29,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7202,12 +7177,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "00cafca8797c49ed"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e9c64a7dd5ff3ac8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 991,
+      "line": 997,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7224,12 +7199,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f5205b0e88308178"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "d31d1ede9a76ba19"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1003,
+      "line": 1009,
       "column": 129,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7246,12 +7221,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "12068daa7e196c76"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "3e07bc7c712888f3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1005,
+      "line": 1011,
       "column": 50,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7271,12 +7246,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "230209b8d1daf862"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "3051b5a373fe4c5b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1006,
+      "line": 1012,
       "column": 117,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7293,12 +7268,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a85a793a4cd8918d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2890dc0d5110107e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1025,
+      "line": 1031,
       "column": 58,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -7315,12 +7290,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "651c7d55d1f67de6"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "4d70aca9625dc7a7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1046,
+      "line": 1052,
       "column": 95,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7337,12 +7312,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "1b706abd153ce98c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "60d2a6b615f1f711"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1048,
+      "line": 1054,
       "column": 105,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7359,12 +7334,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "029fd9a34b80d8d2"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "1453c4b4e7b9ba5c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1060,
+      "line": 1066,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7381,12 +7356,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "23570dfd0242654d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f4b7d6c2dee366db"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1062,
+      "line": 1068,
       "column": 112,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7403,12 +7378,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e3ad301b6485f5b7"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "ff2683291a65cf11"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1066,
+      "line": 1072,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7425,12 +7400,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "61c3be5abac121d9"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f9601ea7ded74c1b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1067,
+      "line": 1073,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7447,12 +7422,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "560b309fb157583e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "167036fad0c93022"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1071,
+      "line": 1077,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7472,12 +7447,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4c63a077c4ec0760"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "02052aab78a273ae"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1072,
+      "line": 1078,
       "column": 109,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7494,12 +7469,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6cd01bd6543b1d2a"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "9c3ddcb91b86a2b0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1074,
+      "line": 1080,
       "column": 225,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7516,12 +7491,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6f9328b7eab0c811"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5be3c87b3f16c2c7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1078,
+      "line": 1084,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7538,12 +7513,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e869c605ec58ddd9"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e7fd0574033d156b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1079,
+      "line": 1085,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -7560,12 +7535,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a3055e32d75581f3"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "91e9c3d3815dd42f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1081,
+      "line": 1087,
       "column": 112,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7582,12 +7557,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "8c649f52e0024627"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5521231512f05976"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1083,
+      "line": 1089,
       "column": 79,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7604,12 +7579,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "25c06ff52d77da45"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "76b960a59d26e0d3"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1084,
+      "line": 1090,
       "column": 118,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7626,12 +7601,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4afc80635dbda76b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "bc3cd1f158089f24"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1086,
+      "line": 1092,
       "column": 160,
       "kind": "javascript-sink",
       "sink": "property:alt",
@@ -7650,12 +7625,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "2d3d08466e8e42ca"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "7ec4533f432fea28"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1088,
+      "line": 1094,
       "column": 56,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7672,12 +7647,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "e26b50edf8b13e43"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b0eb07c9625c763e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1095,
+      "line": 1101,
       "column": 33,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7694,12 +7669,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "d77ba66ba06de769"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "96627977c6a2d374"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1098,
+      "line": 1104,
       "column": 137,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7716,12 +7691,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "346beedee821236b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "4f15d58aaeac4187"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1114,
+      "line": 1120,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7741,12 +7716,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a8857667d261b23c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f8e1f285dd15ecaa"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1120,
+      "line": 1126,
       "column": 30,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7763,12 +7738,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9b7bb260918d4d5f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "7c57071718fb32e1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1121,
+      "line": 1127,
       "column": 78,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7785,12 +7760,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "c3ff935fce414f54"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "92af832cef205cb6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1134,
+      "line": 1140,
       "column": 80,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7807,12 +7782,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "31fa6cc98d4a2a57"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c061d4b829e77556"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1143,
+      "line": 1149,
       "column": 49,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7833,12 +7808,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9609360acba50f97"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b98cf559b9d16ce2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1153,
+      "line": 1159,
       "column": 50,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7855,12 +7830,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "8e0bfee3002eef9e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "62f3502464e4f3a7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1163,
+      "line": 1169,
       "column": 54,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7881,12 +7856,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "277138193f510a7b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "15282cec1e40ad17"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1169,
+      "line": 1175,
       "column": 34,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -7903,12 +7878,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "af590b333eb007f3"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "fa397b835d96c035"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1199,
+      "line": 1205,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7925,12 +7900,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "78bd76ae350de013"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "37e64fcdcbfdfd92"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1200,
+      "line": 1206,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7947,12 +7922,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "738af11a4638779f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8ba28f42a5e5193d"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1201,
+      "line": 1207,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7969,12 +7944,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "945239373b77141f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e76f204f05c85cf8"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1206,
+      "line": 1212,
       "column": 51,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -7991,12 +7966,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "0dfee15cb74d1fdd"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0feb9f9502847731"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1208,
+      "line": 1214,
       "column": 147,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8013,12 +7988,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "bb59a24a14be250c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c68c947b9a59ad5c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1214,
+      "line": 1220,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8035,12 +8010,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f57a04194ae9dd0a"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "04c8445eeea9ed35"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1215,
+      "line": 1221,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8057,12 +8032,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "d28c334623811121"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "306b4ef03c19d81a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1216,
+      "line": 1222,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8079,12 +8054,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "56af75201025ba46"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0ec9c26f005e04df"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1223,
+      "line": 1229,
       "column": 51,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8101,12 +8076,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "355d6c9891f8f966"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e07278517d0e0d70"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1231,
+      "line": 1237,
       "column": 21,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8125,12 +8100,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "4371bfa727eafcd9"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "90eefe884c8650c1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1240,
+      "line": 1246,
       "column": 102,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8147,12 +8122,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a076d1e90ab44967"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "036a632ee3521b0c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1243,
+      "line": 1249,
       "column": 137,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8169,12 +8144,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "ab94aa02db4f6120"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b264ad055718beab"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1274,
+      "line": 1280,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8191,12 +8166,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "304f16d68473b01f"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b94c7f190bcec325"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1282,
+      "line": 1288,
       "column": 45,
       "kind": "javascript-sink",
       "sink": "call:createTextNode",
@@ -8213,12 +8188,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "31cf4876da5b680c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "470381ee71ec7c97"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1285,
+      "line": 1291,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
@@ -8235,12 +8210,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f9fb2daccb88d2dd"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "838ec166d173a842"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1287,
+      "line": 1293,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8257,12 +8232,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "37191cccc1b962dc"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "e8ab91991471a77a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1295,
+      "line": 1301,
       "column": 51,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8279,12 +8254,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "c26e3cc2ea85c442"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2607141ea6c1b7a1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1305,
+      "line": 1311,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8301,21 +8276,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "795cd2b4e0d476d6"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "edbcbc98e0ebb97f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1313,
+      "line": 1319,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "pricingEditorCopy.typeAriaLabel.replace(\"{label}\", publicLabel)",
+      "expression": "formatAdminCopy(pricingEditorCopy.typeAriaLabel, { label: publicLabel })",
       "value": null,
-      "literalSegments": [
-        "{label}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -8325,12 +8298,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9cb7a2299aa9782b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8f9ca9e7307534a2"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1317,
+      "line": 1323,
       "column": 11,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8347,21 +8320,19 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "5f8181d2fb802ac2"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "68cea8be5ade5038"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1334,
+      "line": 1340,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "call:setAttribute",
       "attribute": "aria-label",
-      "expression": "pricingEditorCopy.valueAriaLabel.replace(\"{label}\", publicLabel)",
+      "expression": "formatAdminCopy(pricingEditorCopy.valueAriaLabel, { label: publicLabel })",
       "value": null,
-      "literalSegments": [
-        "{label}"
-      ],
+      "literalSegments": [],
       "constantCandidates": [],
       "classification": "unreviewed",
       "classificationHints": [
@@ -8371,12 +8342,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "21adc7c34285921c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8753a88b2d0ce197"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1338,
+      "line": 1344,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8396,12 +8367,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f112a1b71d8c2d18"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "959e0177ad5556da"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1344,
+      "line": 1350,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8420,12 +8391,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "64e3be9e3b5e6aa6"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "d392fc18136e6758"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1353,
+      "line": 1359,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8442,12 +8413,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "3e06490de41578e0"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f05363ace554e612"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1424,
+      "line": 1430,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8464,12 +8435,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "2480570a52ebf091"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "60c3957a1bdcb304"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1451,
+      "line": 1457,
       "column": 45,
       "kind": "javascript-sink",
       "sink": "property:title",
@@ -8486,12 +8457,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "afbff6560a1fc9c5"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "49e3eae97e61cd6c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1532,
+      "line": 1538,
       "column": 106,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8508,12 +8479,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "07177c007d572c35"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f71940fd5aacaf88"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1572,
+      "line": 1578,
       "column": 41,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8533,12 +8504,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "ec091a6cb0a1f26d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "64707e05fd1e7b20"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1576,
+      "line": 1582,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -8555,12 +8526,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "ac89da161b675b20"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "fa59c7ed3684acac"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1576,
+      "line": 1582,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -8581,12 +8552,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "3f54de262e5dd46e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "3826dc750822e816"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1584,
+      "line": 1590,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -8603,12 +8574,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "3b41ab502ae20846"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "82634ff9f48e7c6c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1584,
+      "line": 1590,
       "column": 17,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -8625,12 +8596,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b1d77a17b47be136"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f0ae08846de5c3a7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1630,
+      "line": 1636,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8647,12 +8618,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "72209506fc5630e2"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6c45682412af2100"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1650,
+      "line": 1656,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8669,12 +8640,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6d1acb3f7da027bd"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "21bea46aa0793e58"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1683,
+      "line": 1689,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8691,12 +8662,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b549b06e3f927109"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "7b9a3b4e5223c72c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1693,
+      "line": 1699,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8714,12 +8685,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f05fe7cd02d5f017"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "873b59d46a5c7a8a"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1698,
+      "line": 1704,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8736,12 +8707,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9342d6896b9043d4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2d34b9883e427e20"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1732,
+      "line": 1738,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8760,12 +8731,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "0d09c1e03b1e68f4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c85fa04d94a53bde"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1735,
+      "line": 1741,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "property:textContent",
@@ -8784,12 +8755,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "c9d3f47714215922"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8a321a57fbf302d4"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1742,
+      "line": 1748,
       "column": 3,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8806,12 +8777,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "0057e0568ea02bb4"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "98091f0262ba38f7"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1747,
+      "line": 1753,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8829,12 +8800,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "1e3f616705586377"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5c0a8c0aaae7e87c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1755,
+      "line": 1761,
       "column": 22,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8851,12 +8822,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "fa61104a4769b4bb"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0aa0bc8e5ba4c34c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1758,
+      "line": 1764,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8873,12 +8844,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "5c7119aea2156325"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2bd55f93627b0e33"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1760,
+      "line": 1766,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8896,12 +8867,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "86337d082f5f00cd"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c5fdaacbb4a47ba5"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1774,
+      "line": 1780,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8919,12 +8890,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "89e22310fc107e00"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "8db68974f5d03745"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1864,
+      "line": 1870,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -8941,12 +8912,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "79d86eabc1ed7150"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "48ba443fce8f6fef"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1930,
+      "line": 1936,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -8963,12 +8934,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "dedbac74f33a9223"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "59e92dadfe4954f6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1930,
+      "line": 1936,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -8986,12 +8957,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "552f893080e9b603"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "3d7a2503192624cc"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1952,
+      "line": 1958,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt",
@@ -9008,12 +8979,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "f6a6f206ff20ab37"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "73cdcc45fafc38d9"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 1952,
+      "line": 1958,
       "column": 19,
       "kind": "javascript-sink",
       "sink": "native-dialog:prompt-default",
@@ -9033,12 +9004,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "b3c43dca318a0f5b"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "1973f29c23a742fb"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2000,
+      "line": 2006,
       "column": 25,
       "kind": "javascript-sink",
       "sink": "native-dialog:confirm",
@@ -9055,12 +9026,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "bc00467e1b630e38"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "b71feb93a1edc98f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2004,
+      "line": 2010,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9077,12 +9048,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "16fda1c22845108e"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0a8aa2e8203144f0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2009,
+      "line": 2015,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9099,12 +9070,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "7a51d9ebe8d2a6e1"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "07e9349f81c032a0"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2029,
+      "line": 2035,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9121,12 +9092,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "a7b29f9dccc1dd19"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "c8c4d68d8b695210"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2039,
+      "line": 2045,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9143,12 +9114,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "ca917070c22ee0fc"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "90395cc044587c9b"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2072,
+      "line": 2078,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9165,12 +9136,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "1bd8dd168aaa905d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f09e7aa2935f050c"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2078,
+      "line": 2084,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9188,12 +9159,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "6cf42b38d90a5ff1"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6a24b71d163007e1"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2100,
+      "line": 2106,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9210,12 +9181,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9702e81caab59846"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f15872905a4186af"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2134,
+      "line": 2140,
       "column": 7,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9232,12 +9203,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "be39a0b627d31249"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "5409f9fd5351ed4f"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2153,
+      "line": 2159,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9254,12 +9225,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "05aa135cc9043042"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "f31c37fa27b1528e"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2161,
+      "line": 2167,
       "column": 9,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9276,12 +9247,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "9501ab5360a5b78d"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "0ed1a9a45f7cc5ac"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2171,
+      "line": 2177,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9298,12 +9269,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "7f66ebcb6f78103c"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "2feddf84eca3baec"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2189,
+      "line": 2195,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9320,12 +9291,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "34f77b2fe92e5bf6"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "344e16522dcbab10"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2192,
+      "line": 2198,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9343,12 +9314,12 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "7fbe077317a0ffaa"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "6cd9c618a92b2aa6"
     },
     {
       "source": "app/admin/admin.js",
-      "line": 2227,
+      "line": 2233,
       "column": 5,
       "kind": "javascript-sink",
       "sink": "helper:setMessage",
@@ -9366,8 +9337,8 @@
       "routeConsumers": [
         "/admin"
       ],
-      "sourceSha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0",
-      "id": "bc719f40f64c0cc3"
+      "sourceSha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385",
+      "id": "a3086a92bced0f55"
     },
     {
       "source": "app/app.js",
@@ -35470,7 +35441,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
+      "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35487,20 +35458,7 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "4ad7e5278061990f",
-      "consumerRefs": [
-        {
-          "sinkId": "f05fe7cd02d5f017",
-          "source": "app/admin/admin.js",
-          "line": 1693,
-          "sink": "helper:setMessage",
-          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "bounded-custom-error-to-admin-status"
-        }
-      ]
+      "id": "4ad7e5278061990f"
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35521,7 +35479,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
+      "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35538,20 +35496,7 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "1c6fcc49671070d8",
-      "consumerRefs": [
-        {
-          "sinkId": "f05fe7cd02d5f017",
-          "source": "app/admin/admin.js",
-          "line": 1693,
-          "sink": "helper:setMessage",
-          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "bounded-custom-error-to-admin-status"
-        }
-      ]
+      "id": "1c6fcc49671070d8"
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35572,7 +35517,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
+      "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35589,20 +35534,7 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "c472d91ff308865d",
-      "consumerRefs": [
-        {
-          "sinkId": "f05fe7cd02d5f017",
-          "source": "app/admin/admin.js",
-          "line": 1693,
-          "sink": "helper:setMessage",
-          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "bounded-custom-error-to-admin-status"
-        }
-      ]
+      "id": "c472d91ff308865d"
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35623,7 +35555,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
+      "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35640,20 +35572,7 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "4fc5236525fa383f",
-      "consumerRefs": [
-        {
-          "sinkId": "f05fe7cd02d5f017",
-          "source": "app/admin/admin.js",
-          "line": 1693,
-          "sink": "helper:setMessage",
-          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "bounded-custom-error-to-admin-status"
-        }
-      ]
+      "id": "4fc5236525fa383f"
     },
     {
       "source": "app/core/ui-copy.js",
@@ -35674,7 +35593,7 @@
         "user-visible-operational-message",
         "catalog-error-copy-to-admin-status"
       ],
-      "consumerLinkStatus": "bounded-custom-error-to-admin-status",
+      "consumerLinkStatus": "declared-sink-not-indexed",
       "useStatus": "active",
       "consumerEvidence": [
         "Exact fixed bootstrap failure copy is passed to AdminBootstrapRequestError and displayed by showUser() through the Admin status helper."
@@ -35691,20 +35610,7 @@
         "/viewer/"
       ],
       "sourceSha256": "30bd5dbb6d5a960a19ebf1951efc4b8a70baa226f5a617eb6041506a08aedd73",
-      "id": "2d8f84487ec73a55",
-      "consumerRefs": [
-        {
-          "sinkId": "f05fe7cd02d5f017",
-          "source": "app/admin/admin.js",
-          "line": 1693,
-          "sink": "helper:setMessage",
-          "expression": "error.message || adminLoadCopy.adminDataLoadFallback",
-          "routeConsumers": [
-            "/admin"
-          ],
-          "flow": "bounded-custom-error-to-admin-status"
-        }
-      ]
+      "id": "2d8f84487ec73a55"
     },
     {
       "source": "app/core/ui-copy.js",
@@ -44141,11 +44047,11 @@
     },
     {
       "path": "app/admin.html",
-      "sha256": "af0951407d41339ab3be6e3cbed66d107ec549c1d9e3b3b873ea37315044e499"
+      "sha256": "6be1cb12e69a7af21d2f6521c62bdc5de8b9693d3cb8a8be5ca5d1ef2820eb97"
     },
     {
       "path": "app/admin/admin.js",
-      "sha256": "23667aa59b10bb6cf67b382f2a0d3d8fd333ad644e11177bbcbbd318a96718d0"
+      "sha256": "ac184f80e09892bea9a623f491f0540c501bd3a990f4155a2cf2b55a40c4f385"
     },
     {
       "path": "app/app.js",
