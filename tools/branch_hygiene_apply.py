@@ -63,13 +63,98 @@ def remote_refs() -> dict[str, str]:
 
 
 
+def verify_squash_delta(head: str, parent: str, merged: str) -> dict:
+    """Prove an exact disjoint three-tree union, never infer semantic equivalence.
+
+    Only a unique common ancestor, complete immutable trees and disjoint changes
+    are accepted. Every resulting leaf (including mode/type/object and deletion)
+    must equal the independently reconstructed union. No PR-files API or patch
+    similarity is used. This proves tree content preservation, not commit history.
+    """
+    env = dict(os.environ, GIT_NO_REPLACE_OBJECTS="1", GIT_NO_LAZY_FETCH="1",
+               GIT_OPTIONAL_LOCKS="0", GIT_TERMINAL_PROMPT="0")
+
+    def git(*args: str) -> bytes:
+        proc = subprocess.run(["git", *args], capture_output=True, check=False, env=env)
+        if proc.returncode:
+            raise RuntimeError("SQUASH_DELTA_GIT_FAILED:" + args[0])
+        return proc.stdout
+
+    if git("rev-parse", "--is-shallow-repository").strip() != b"false":
+        raise RuntimeError("SQUASH_DELTA_INCOMPLETE_HISTORY")
+    bases = git("merge-base", "--all", head, parent).splitlines()
+    if len(bases) != 1 or not re.fullmatch(rb"[0-9a-f]{40}", bases[0]):
+        raise RuntimeError("SQUASH_ANCESTRY_MISMATCH:delta-base")
+    base = bases[0].decode("ascii")
+    if base in {head, parent}:
+        raise RuntimeError("SQUASH_ANCESTRY_MISMATCH:delta-not-diverged")
+
+    def leaves(commit: str) -> dict[bytes, bytes]:
+        raw = git("ls-tree", "-r", "-t", "-z", "--full-tree", commit)
+        result = {}
+        for record in raw.split(b"\0"):
+            if not record:
+                continue
+            metadata, separator, name = record.partition(b"\t")
+            fields = metadata.split(b" ")
+            if (not separator or not name or len(fields) != 3
+                    or not re.fullmatch(rb"[0-9a-f]{40}", fields[2])):
+                raise RuntimeError("SQUASH_DELTA_INVALID_TREE")
+            mode, kind, oid = fields
+            if kind == b"tree":
+                # Ordinary directory identities follow from their leaves. Reject
+                # explicit empty subtrees, which a flat leaf proof cannot model.
+                if oid == b"4b825dc642cb6eb9a060e54bf8d69288fbee4904":
+                    raise RuntimeError("SQUASH_DELTA_EMPTY_SUBTREE")
+                continue
+            if kind not in {b"blob", b"commit"} or name in result:
+                raise RuntimeError("SQUASH_DELTA_INVALID_TREE")
+            result[name] = metadata
+        return result
+
+    before, candidate, control, actual = map(leaves, (base, head, parent, merged))
+    def changed(left, right):
+        return {p for p in left.keys() | right.keys() if left.get(p) != right.get(p)}
+
+    contribution, concurrent = changed(before, candidate), changed(before, control)
+    if not contribution or not concurrent:
+        raise RuntimeError("SQUASH_TREE_MISMATCH:empty-delta")
+    if contribution & concurrent:
+        raise RuntimeError("SQUASH_TREE_MISMATCH:overlapping-delta")
+
+    # Reject cross-side file/directory transitions as well as same-path edits.
+    def ancestors(path: bytes):
+        parts = path.split(b"/")
+        return {b"/".join(parts[:i]) for i in range(1, len(parts))}
+
+    if (any(ancestors(p) & concurrent for p in contribution)
+            or any(ancestors(p) & contribution for p in concurrent)):
+        raise RuntimeError("SQUASH_TREE_MISMATCH:path-prefix-overlap")
+
+    expected = dict(control)
+    for name in contribution:
+        if name in candidate:
+            expected[name] = candidate[name]
+        else:
+            expected.pop(name, None)
+    if expected != actual:
+        raise RuntimeError("SQUASH_TREE_MISMATCH:delta-union")
+    return {
+        "proof": "SQUASH_DELTA_PRESERVED",
+        "commonBase": base,
+        "squashParent": parent,
+        "contributionPathCount": len(contribution),
+        "concurrentPathCount": len(concurrent),
+    }
+
+
 def verify_squash_merge(repository: str, token: str, entry: dict,
                         control_sha: str, control_branch: str = "main") -> dict | None:
     """Verify an opt-in squash proof against real PR metadata and Git objects.
 
-    Both the original head and the already-merged commit must resolve to the
-    *identical full tree*. A stale PR, missing ref or live workflow dependency
-    aborts. The planner never promotes this to general auto-delete eligibility.
+    Require either identical full trees with the original parent present, or an
+    exact disjoint delta union when the control advanced independently. A stale
+    PR, missing ref or workflow dependency aborts. Discovery stays conservative.
     """
     proof = entry.get("squashMerge")
     if proof is None:
@@ -86,8 +171,7 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
             or (pr_base.get("repo") or {}).get("full_name") != repository):
         raise RuntimeError("SQUASH_PR_IDENTITY_MISMATCH:" + name)
 
-    # A real squash merge has exactly one parent. Its resulting tree must be
-    # identical to the PR head; the merge and its base must belong to the control branch.
+    # A real squash merge has exactly one parent and belongs to the control branch.
     merge_parents = subprocess.run(
         ["git", "rev-list", "--parents", "-n", "1", merge_sha],
         text=True, capture_output=True, check=True,
@@ -102,7 +186,7 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
         ["git", "merge-base", "--is-ancestor", merge_parents[1], head_sha],
         check=False,
     ).returncode == 0
-    if not merged_into_control or not original_base_present:
+    if not merged_into_control:
         raise RuntimeError("SQUASH_ANCESTRY_MISMATCH:" + name)
 
     def tree(sha: str) -> str:
@@ -110,17 +194,24 @@ def verify_squash_merge(repository: str, token: str, entry: dict,
                               text=True, capture_output=True, check=True).stdout.strip()
 
     original_tree, merged_tree = tree(head_sha), tree(merge_sha)
-    if (original_tree != merged_tree
-            or original_tree != entry.get("treeSha")
-            or len(original_tree) != 40):
+    if (original_tree != entry.get("treeSha")
+            or not re.fullmatch(r"[0-9a-f]{40}", original_tree)
+            or not re.fullmatch(r"[0-9a-f]{40}", merged_tree)):
         raise RuntimeError("SQUASH_TREE_MISMATCH:" + name)
+    if original_base_present:
+        if original_tree != merged_tree:
+            raise RuntimeError("SQUASH_TREE_MISMATCH:" + name)
+        preservation = {"proof": "SQUASH_TREE_IDENTICAL"}
+    else:
+        preservation = verify_squash_delta(head_sha, merge_parents[1], merge_sha)
 
     verify_no_workflow_dependency(name)
     return {
         "branch": name, "sha": head_sha, "pullRequest": pr_number,
         "mergeCommit": merge_sha, "treeSha": original_tree,
         "controlSha": control_sha, "controlBranch": control_branch,
-        "proof": "SQUASH_TREE_IDENTICAL",
+        "mergedTreeSha": merged_tree,
+        **preservation,
     }
 
 
