@@ -909,8 +909,8 @@
       "route": "/viewer/",
       "source": "architecture/pages/viewer.page.html",
       "output": "app/viewer/index.html",
-      "sourceGitBlobSha": "b8b14eb793fdb3fbdcd0c2084e0a218e97b988d0",
-      "outputGitBlobSha": "76bbf7d7260cad5042fe5972dd2ad620e968fe72",
+      "sourceGitBlobSha": "005fdb361a08f1c68255cb9379c922d14c1a3568",
+      "outputGitBlobSha": "14a0a7724dfdd6d484446b84b600a2233a8e97fb",
       "sourceMap": {
         "segments": [
           {
